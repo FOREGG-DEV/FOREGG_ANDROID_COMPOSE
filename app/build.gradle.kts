@@ -46,7 +46,7 @@ android {
 }
 
 dependencies {
-
+    implementation(project(":feature"))
     implementation(AndroidX.CORE)
     implementation(AndroidX.LIFECYCLE_RUNTIME_KTX)
     implementation(AndroidX.ACTIVITY_COMPOSE)

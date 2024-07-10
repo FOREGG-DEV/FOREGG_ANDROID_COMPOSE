@@ -1,4 +1,4 @@
-package com.hugg.data
+package com.hugg.home
 
 import org.junit.Test
 

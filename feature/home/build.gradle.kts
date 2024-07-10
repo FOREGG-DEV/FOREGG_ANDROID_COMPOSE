@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.hugg.feature"
+    namespace = "com.hugg.home"
     compileSdk = 34
 
     defaultConfig {

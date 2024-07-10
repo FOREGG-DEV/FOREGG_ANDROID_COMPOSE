@@ -1,4 +1,4 @@
-package com.hugg.hugg
+package com.hugg.home
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
