@@ -15,4 +15,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "hugg"
 include(":app")
- 
+include(":domain")
+include(":data")
+include(":feature")
