@@ -52,14 +52,14 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.13.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.3")
-    implementation("androidx.activity:activity-compose:1.9.0")
-    implementation(platform("androidx.compose:compose-bom:2024.06.00"))
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
+    implementation(AndroidX.CORE)
+    implementation(AndroidX.LIFECYCLE_RUNTIME_KTX)
+    implementation(AndroidX.ACTIVITY_COMPOSE)
+    implementation(platform(AndroidX.COMPOSE_BOM))
+    implementation(AndroidX.COMPOSE_UI)
+    implementation(AndroidX.COMPOSE_GRAPHICS)
+    implementation(AndroidX.COMPOSE_PREVIEW)
+    implementation(AndroidX.COMPOSE_MATERIAL)
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
