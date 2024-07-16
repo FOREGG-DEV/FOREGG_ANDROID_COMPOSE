@@ -1,10 +1,11 @@
 plugins {
     id("com.android.library")
-    id("org.jetbrains.kotlin.android")
+    kotlin("android")
+    kotlin("kapt")
 }
 
 android {
-    namespace = "com.hugg.data"
+    namespace = "com.foregg.data"
     compileSdk = 34
 
     defaultConfig {
@@ -33,13 +34,21 @@ android {
 }
 
 dependencies {
-
+    implementation(project(":domain"))
     implementation(AndroidX.CORE)
-    implementation(AndroidX.LIFECYCLE_RUNTIME_KTX)
-    implementation(AndroidX.ACTIVITY_COMPOSE)
-    implementation(platform(AndroidX.COMPOSE_BOM))
-    implementation(AndroidX.COMPOSE_UI)
-    implementation(AndroidX.COMPOSE_GRAPHICS)
-    implementation(AndroidX.COMPOSE_PREVIEW)
-    implementation(AndroidX.COMPOSE_MATERIAL)
+    implementation(AndroidX.APPCOMPAT)
+    implementation(Google.MATERIAL)
+    implementation(AndroidX.CONSTRAINT_LAYOUT)
+    implementation(AndroidX.DATA_STORE_PREFERENCES)
+
+    //힐트
+    implementation(Google.HILT_ANDROID)
+    implementation(Google.HILT_CORE)
+    kapt(Google.HILT_COMPILER)
+
+    //RETROFIT
+    implementation(Libraries.RETROFIT)
+    implementation(Libraries.RETROFIT_CONVERTER_GSON)
+    implementation(Libraries.OKHTTP)
+    implementation(Libraries.OKHTTP_LOGGING_INTERCEPTOR)
 }

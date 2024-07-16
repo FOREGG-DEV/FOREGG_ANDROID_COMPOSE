@@ -1,7 +1,8 @@
 plugins {
     id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("org.jetbrains.kotlin.plugin.compose") version "2.0.0"
+    kotlin("android")
+    kotlin("kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -41,25 +42,62 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.14"
+    }
+
+    packagingOptions {
+        exclude("META-INF/gradle/incremental.annotation.processors")
     }
 }
 
 dependencies {
-    implementation(project(":feature"))
+    implementation(project(":feature:home"))
     implementation(AndroidX.CORE)
+    implementation(AndroidX.APPCOMPAT)
+    implementation(Google.MATERIAL)
+    implementation(AndroidX.CONSTRAINT_LAYOUT)
+    implementation(AndroidX.FRAGMENT_KTX)
+    implementation(AndroidX.NAVIGATION_UI_KTX)
+    implementation(AndroidX.NAVIGATION_FRAGMENT_KTX)
+    implementation(AndroidX.LIFECYCLE_VIEW_MODEL_KTX)
     implementation(AndroidX.LIFECYCLE_RUNTIME_KTX)
-    implementation(AndroidX.ACTIVITY_COMPOSE)
-    implementation(platform(AndroidX.COMPOSE_BOM))
+    implementation(AndroidX.SPLASH)
+    implementation(AndroidX.THREE_TEN)
+    implementation(AndroidX.SWIPE_REFRESH)
+    implementation(AndroidX.DATA_STORE_PREFERENCES)
+
+    //코루틴
+    implementation(Kotlin.COROUTINES_CORE)
+    implementation(Kotlin.COROUTINES)
+
+    //힐트
+    implementation(Google.HILT_ANDROID)
+    implementation(Google.HILT_CORE)
+    implementation(Google.FCM)
+    implementation(Google.FCM_KTX)
+    implementation(Google.FIREBASE_ANALYTICS)
+    implementation(platform(Google.FIREBASE_BOM))
+
+    implementation(AndroidX.COMPOSE_BOM)
+    implementation(AndroidX.COMPOSE_MATERIAL)
     implementation(AndroidX.COMPOSE_UI)
     implementation(AndroidX.COMPOSE_GRAPHICS)
     implementation(AndroidX.COMPOSE_PREVIEW)
-    implementation(AndroidX.COMPOSE_MATERIAL)
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.2.1")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
+    implementation(AndroidX.ACTIVITY_COMPOSE)
+
+
+
+    kapt(Google.HILT_COMPILER)
+
+    implementation(KAKAO.AUTH)
+    implementation(KAKAO.SHARE)
+    implementation(Google.GLIDE)
+
+    implementation(Libraries.VIEWPAGER_INDICATOR)
+    implementation(Libraries.FLEX_BOX)
+
+    //Lottie
+    implementation(Libraries.LOTTIE)
+    implementation(Libraries.COIL_SVG)
+    implementation(Libraries.COIL)
 }

@@ -24,12 +24,6 @@ object AndroidX{
         "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.LIFECYCLE_KTX}"
     const val LIFECYCLE_VIEW_MODEL_KTX =
         "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.VIEW_MODEL_KTX}"
-    const val ACTIVITY_COMPOSE = "androidx.activity:activity-compose:${Versions.ACTIVITY_COMPOSE}"
-    const val COMPOSE_BOM = "androidx.compose:compose-bom:${Versions.COMPOSE_BOM}"
-    const val COMPOSE_UI = "androidx.compose.ui:ui"
-    const val COMPOSE_GRAPHICS = "androidx.compose.ui:ui-graphics"
-    const val COMPOSE_PREVIEW = "androidx.compose.ui:ui-tooling-preview"
-    const val COMPOSE_MATERIAL = "androidx.compose.material3:material3"
     const val CONSTRAINT_LAYOUT = "androidx.constraintlayout:constraintlayout:${Versions.CONSTRAINT_LAYOUT}"
     const val DATA_STORE_PROTO = "androidx.datastore:datastore:${Versions.DATA_STORE}"
     const val DATA_STORE_PREFERENCES = "androidx.datastore:datastore-preferences:${Versions.DATA_STORE}"
@@ -39,6 +33,12 @@ object AndroidX{
     const val SPLASH = "androidx.core:core-splashscreen:1.0.0"
     const val THREE_TEN = "com.jakewharton.threetenabp:threetenabp:1.3.1"
     const val SWIPE_REFRESH = "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.REFRESH}"
+    const val ACTIVITY_COMPOSE = "androidx.activity:activity-compose:${Versions.ACTIVITY_COMPOSE}"
+    const val COMPOSE_BOM = "androidx.compose:compose-bom:${Versions.COMPOSE_BOM}"
+    const val COMPOSE_UI = "androidx.compose.ui:ui"
+    const val COMPOSE_GRAPHICS = "androidx.compose.ui:ui-graphics"
+    const val COMPOSE_PREVIEW = "androidx.compose.ui:ui-tooling-preview"
+    const val COMPOSE_MATERIAL = "androidx.compose.material3:material3"
 }
 
 object Libraries {

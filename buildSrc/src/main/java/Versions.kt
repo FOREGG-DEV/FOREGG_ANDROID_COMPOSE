@@ -2,8 +2,8 @@ object Versions {
     const val GRADLE = "7.4.2"
 
     /* [ Kotlin } */
-    const val KOTLIN_VERSION = "2.0.0"
-    const val K_STDLIB = "1.7.10"
+    const val KOTLIN_VERSION = "1.9.24"
+    const val K_STDLIB = "1.9.24"
     const val K_COROUTINES_CORE = "1.6.4"
     const val K_COROUTINES = "1.3.9"
 
@@ -15,17 +15,17 @@ object Versions {
     const val FIREBASE = "32.3.1"
 
     /* [ Android ] */
-    const val CORE = "1.13.1"
+    const val CORE = "1.12.0"
     const val APPCOMPAT = "1.6.1"
-    const val LIFECYCLE_KTX = "2.8.3"
+    const val LIFECYCLE_KTX = "2.5.1"
     const val VIEW_MODEL_KTX = "2.5.1"
     const val CONSTRAINT_LAYOUT = "2.1.4"
     const val FRAGMENT_KTX = "1.5.2"
     const val NAVIGATION = "2.5.1"
     const val REFRESH = "1.1.0"
     const val DATA_STORE = "1.0.0"
-    const val ACTIVITY_COMPOSE = "1.9.0"
-    const val COMPOSE_BOM = "2024.06.00"
+    const val ACTIVITY_COMPOSE = "1.8.2"
+    const val COMPOSE_BOM = "2023.08.00"
 
     /* [ Libraries ] */
     const val RETROFIT = "2.9.0"
