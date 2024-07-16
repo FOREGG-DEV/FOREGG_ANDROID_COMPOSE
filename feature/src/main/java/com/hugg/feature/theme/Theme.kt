@@ -1,4 +1,4 @@
-package com.hugg.hugg.ui.theme
+package com.hugg.feature.theme
 
 import android.app.Activity
 import android.os.Build

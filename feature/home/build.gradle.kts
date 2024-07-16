@@ -43,6 +43,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":feature"))
     implementation(project(":data"))
     implementation(project(":domain"))
     implementation(AndroidX.CORE)

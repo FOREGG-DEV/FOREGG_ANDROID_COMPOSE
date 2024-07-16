@@ -30,6 +30,16 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.14"
+    }
+
+    packagingOptions {
+        exclude("META-INF/gradle/incremental.annotation.processors")
+    }
 }
 
 dependencies {
