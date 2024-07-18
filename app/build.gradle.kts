@@ -52,6 +52,8 @@ android {
 
 dependencies {
     implementation(project(":feature:home"))
+    implementation(project(":data"))
+    implementation(project(":domain"))
     implementation(AndroidX.CORE)
     implementation(AndroidX.APPCOMPAT)
     implementation(Google.MATERIAL)
