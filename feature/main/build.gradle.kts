@@ -1,25 +1,18 @@
 plugins {
-    id("com.android.application")
+    id("com.android.library")
     kotlin("android")
     kotlin("kapt")
     id("dagger.hilt.android.plugin")
 }
 
 android {
-    namespace = "com.hugg.hugg"
+    namespace = "com.hugg.main"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.hugg.hugg"
         minSdk = 24
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
     }
 
     buildTypes {
@@ -44,14 +37,13 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.14"
     }
-
     packagingOptions {
         exclude("META-INF/gradle/incremental.annotation.processors")
     }
 }
 
 dependencies {
-    implementation(project(":feature:main"))
+    implementation(project(":feature"))
     implementation(project(":data"))
     implementation(project(":domain"))
     implementation(AndroidX.CORE)

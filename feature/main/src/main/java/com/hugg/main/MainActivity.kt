@@ -1,4 +1,4 @@
-package com.hugg.home
+package com.hugg.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -43,6 +43,6 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview() {
     HuggTheme {
-        Greeting("ㅁㅁ")
+        Greeting("Android")
     }
 }
