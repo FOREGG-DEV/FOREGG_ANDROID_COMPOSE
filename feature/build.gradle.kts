@@ -46,6 +46,7 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":domain"))
 
+    implementation(AndroidX.NAVIGATION_COMPOSE)
     implementation(AndroidX.CORE)
     implementation(AndroidX.LIFECYCLE_RUNTIME_KTX)
     implementation(AndroidX.ACTIVITY_COMPOSE)

@@ -43,16 +43,16 @@ android {
 }
 
 dependencies {
-    implementation(project(":feature"))
     implementation(project(":data"))
     implementation(project(":domain"))
+
+    implementation(project(":feature"))
+    implementation(project(":feature:sign"))
+
     implementation(AndroidX.CORE)
     implementation(AndroidX.APPCOMPAT)
     implementation(Google.MATERIAL)
-    implementation(AndroidX.CONSTRAINT_LAYOUT)
-    implementation(AndroidX.FRAGMENT_KTX)
-    implementation(AndroidX.NAVIGATION_UI_KTX)
-    implementation(AndroidX.NAVIGATION_FRAGMENT_KTX)
+    implementation(AndroidX.NAVIGATION_COMPOSE)
     implementation(AndroidX.LIFECYCLE_VIEW_MODEL_KTX)
     implementation(AndroidX.LIFECYCLE_RUNTIME_KTX)
     implementation(AndroidX.SPLASH)

@@ -21,7 +21,7 @@ object Versions {
     const val VIEW_MODEL_KTX = "2.5.1"
     const val CONSTRAINT_LAYOUT = "2.1.4"
     const val FRAGMENT_KTX = "1.5.2"
-    const val NAVIGATION = "2.5.1"
+    const val NAVIGATION = "2.4.0-alpha10"
     const val REFRESH = "1.1.0"
     const val DATA_STORE = "1.0.0"
     const val ACTIVITY_COMPOSE = "1.8.2"
