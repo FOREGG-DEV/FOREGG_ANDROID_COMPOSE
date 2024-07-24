@@ -55,4 +55,5 @@ dependencies {
     implementation(AndroidX.COMPOSE_GRAPHICS)
     implementation(AndroidX.COMPOSE_PREVIEW)
     implementation(AndroidX.COMPOSE_MATERIAL)
+    debugImplementation("androidx.compose.ui:ui-tooling:1.6.8")
 }

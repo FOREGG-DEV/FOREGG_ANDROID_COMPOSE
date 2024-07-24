@@ -4,11 +4,11 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.hugg.sign.SignScreen
+import com.hugg.sign.OnboardingScreen
 
 fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
     navigation(startDestination = Routes.Sign.ONBOARDING, route = Routes.Sign.GRAPH) {
-        composable(Routes.Sign.ONBOARDING) { SignScreen(navController) }
+        composable(Routes.Sign.ONBOARDING) { OnboardingScreen(navController) }
     }
 }
 
