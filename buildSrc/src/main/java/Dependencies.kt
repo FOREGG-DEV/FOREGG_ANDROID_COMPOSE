@@ -10,6 +10,7 @@ object Google {
     const val HILT_CORE = "com.google.dagger:hilt-core:${Versions.HILT}"
     const val HILT_COMPILER = "com.google.dagger:hilt-compiler:${Versions.HILT}"
     const val HILT_ANDROID = "com.google.dagger:hilt-android:${Versions.HILT}"
+    const val HILT_COMPOSE = "androidx.hilt:hilt-navigation-compose:${Versions.HILT_COMPOSE}"
     const val GLIDE = "com.github.bumptech.glide:glide:${Versions.GLIDE}"
     const val FCM = "com.google.firebase:firebase-messaging:${Versions.FCM}"
     const val FCM_KTX = "com.google.firebase:firebase-messaging-ktx:${Versions.FCM}"
@@ -22,6 +23,7 @@ object AndroidX{
     const val APPCOMPAT = "androidx.appcompat:appcompat:${Versions.APPCOMPAT}"
     const val LIFECYCLE_RUNTIME_KTX =
         "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.LIFECYCLE_KTX}"
+    const val LIFECYCLE_RUNTIME_COMPOSE = "androidx.lifecycle:lifecycle-runtime-compose:${Versions.LIFECYCLE_COMPOSE}"
     const val LIFECYCLE_VIEW_MODEL_KTX =
         "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.VIEW_MODEL_KTX}"
     const val CONSTRAINT_LAYOUT = "androidx.constraintlayout:constraintlayout:${Versions.CONSTRAINT_LAYOUT}"
@@ -46,7 +48,7 @@ object Libraries {
     const val OKHTTP = "com.squareup.okhttp3:okhttp:${Versions.OKHTTP}"
     const val OKHTTP_LOGGING_INTERCEPTOR =
         "com.squareup.okhttp3:logging-interceptor:${Versions.OKHTTP}"
-    const val VIEWPAGER_INDICATOR = "com.tbuonomo:dotsindicator:${Versions.VIEW_PAGER_INDICATOR}"
+    const val PAGER = "com.google.accompanist:accompanist-pager:${Versions.PAGER}"
     const val LOTTIE = "com.airbnb.android:lottie:${Versions.LOTTIE}"
     const val COIL = "io.coil-kt:coil:${Versions.COIL}"
     const val COIL_SVG = "io.coil-kt:coil-svg:${Versions.COIL}"

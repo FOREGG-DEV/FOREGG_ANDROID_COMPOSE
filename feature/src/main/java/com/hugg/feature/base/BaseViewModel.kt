@@ -7,12 +7,17 @@ import androidx.lifecycle.viewModelScope
 import com.hugg.data.base.StatusCode
 import com.hugg.domain.base.ApiState
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-abstract class BaseViewModel<STATE: PageState> : ViewModel() {
+abstract class BaseViewModel<STATE: PageState>(
+    initialPageState : STATE
+) : ViewModel() {
 
-    abstract val uiState:STATE
+    protected val _uiState = MutableStateFlow(initialPageState)
+    val uiState = _uiState.asStateFlow()
 
     private val _eventFlow = MutableSharedFlow<Event>(replay = 1)
     val eventFlow = _eventFlow.asSharedFlow()
@@ -23,6 +28,11 @@ abstract class BaseViewModel<STATE: PageState> : ViewModel() {
     private val _commonError = MutableLiveData<String>()
     val commonError: LiveData<String> = _commonError
 
+    protected fun updateState(state: STATE) {
+        viewModelScope.launch {
+            _uiState.emit(state)
+        }
+    }
     protected fun emitEventFlow(event: Event) {
         viewModelScope.launch {
             _eventFlow.emit(event)

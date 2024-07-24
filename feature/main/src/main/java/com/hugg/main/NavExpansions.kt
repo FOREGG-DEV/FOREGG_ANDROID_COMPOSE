@@ -8,7 +8,7 @@ import com.hugg.sign.OnboardingScreen
 
 fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
     navigation(startDestination = Routes.Sign.ONBOARDING, route = Routes.Sign.GRAPH) {
-        composable(Routes.Sign.ONBOARDING) { OnboardingScreen(navController) }
+        composable(Routes.Sign.ONBOARDING) { OnboardingScreen() }
     }
 }
 
