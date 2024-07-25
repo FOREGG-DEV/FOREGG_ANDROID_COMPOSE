@@ -28,7 +28,8 @@ fun BlankBtn(
     radius : Dp = 8.dp,
     text : String = "테스트",
     textStyle: TextStyle = HuggTypography.btn,
-    textColor : Color = Black
+    textColor : Color = Black,
+    contentPadding : PaddingValues = PaddingValues(horizontal = 0.dp, vertical = 16.dp)
 ) {
     Button(
         modifier = modifier,
@@ -37,7 +38,33 @@ fun BlankBtn(
             .buttonColors(containerColor = White),
         shape = RoundedCornerShape(radius),
         border = BorderStroke(1.dp, Main),
-        contentPadding = PaddingValues(horizontal = 0.dp, vertical = 16.dp)
+        contentPadding = contentPadding
+    ) {
+        Text(
+            text = text,
+            color = textColor,
+            style = textStyle
+        )
+    }
+}
+
+@Composable
+fun FilledBtn(
+    modifier: Modifier = Modifier,
+    onClickBtn : () -> Unit = {},
+    radius : Dp = 8.dp,
+    text : String = "테스트",
+    textStyle: TextStyle = HuggTypography.btn,
+    textColor : Color = White,
+    contentPadding : PaddingValues = PaddingValues(horizontal = 0.dp, vertical = 16.dp)
+) {
+    Button(
+        modifier = modifier,
+        onClick = onClickBtn,
+        colors = ButtonDefaults
+            .buttonColors(containerColor = Main),
+        shape = RoundedCornerShape(radius),
+        contentPadding = contentPadding
     ) {
         Text(
             text = text,
@@ -51,6 +78,6 @@ fun BlankBtn(
 @Composable
 internal fun Hi() {
     HuggTheme {
-        BlankBtn()
+        FilledBtn()
     }
 }

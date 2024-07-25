@@ -3,6 +3,7 @@ package com.hugg.feature.theme
 // --------- 단어 --------- //
 const val WORD_SKIP = "skip"
 const val WORD_NEXT = "다음"
+const val WORD_DAILY_RECORD = "하루기록"
 
 // --------- 온보딩 --------- //
 const val ONBOARDING_TITLE_1 = "주사 맞을 시간엔 알람이 울려요"
