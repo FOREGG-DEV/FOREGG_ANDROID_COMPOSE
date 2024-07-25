@@ -1,4 +1,4 @@
-package com.hugg.hugg
+package com.hugg.app
 
 import org.junit.Test
 

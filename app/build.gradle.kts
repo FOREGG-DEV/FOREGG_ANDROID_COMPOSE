@@ -1,15 +1,27 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("kapt")
     id("dagger.hilt.android.plugin")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
-    namespace = "com.hugg.hugg"
+    namespace = "com.hugg.app"
     compileSdk = 34
 
+    val localPropsFile = rootProject.file("local.properties")
+    val localProps = Properties()
+    if (localPropsFile.exists()) {
+        localProps.load(FileInputStream(localPropsFile))
+    }
+
     defaultConfig {
+        buildConfigField("String", "KAKAO_NATIVE_KEY", localProps.getProperty("kakao_native_key"))
+        manifestPlaceholders["Key"]
         applicationId = "com.hugg.hugg"
         minSdk = 24
         targetSdk = 34

@@ -1,4 +1,4 @@
-package com.hugg.hugg.module
+package com.hugg.app.module
 
 import com.hugg.data.api.*
 import dagger.Module

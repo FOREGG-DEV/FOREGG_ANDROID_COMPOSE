@@ -1,6 +1,9 @@
 package com.hugg.sign
 
+import android.content.Context
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,8 +14,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -28,6 +33,9 @@ import com.hugg.feature.component.PageIndicator
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
 import com.hugg.feature.uiItem.OnBoardingItem
+import com.hugg.feature.component.KaKaoLoginBtn
+import com.hugg.feature.util.ForeggLog
+import com.kakao.sdk.user.UserApiClient
 
 const val PAGE_COUNT = 4
 
@@ -36,6 +44,7 @@ const val PAGE_COUNT = 4
 fun OnboardingScreen(
     viewModel: OnboardingViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val pagerState = rememberPagerState()
 
@@ -81,8 +90,7 @@ fun OnboardingScreen(
         }
 
         Spacer(modifier = Modifier.height(39.dp))
-
-        BlankBtn(
+        if(pagerState.currentPage != PAGE_COUNT - 1) BlankBtn(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
@@ -91,6 +99,56 @@ fun OnboardingScreen(
             },
             text = WORD_NEXT
         )
+        else KaKaoLoginBtn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .clickable(
+                    onClick = {
+                        signInKakao(
+                            context = context,
+                            onLoginSuccess = { token ->
+                                viewModel.login(token)
+                            }
+                        )
+                    },
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null
+                ),
+        )
+    }
+}
+
+private fun signInKakao(
+    context : Context,
+    onLoginSuccess : (String) -> Unit
+) {
+    if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
+        signInKakaoApp(context, onLoginSuccess)
+    } else {
+        signInKakaoEmail(context, onLoginSuccess)
+    }
+}
+
+private fun signInKakaoApp(
+    context : Context,
+    onLoginSuccess : (String) -> Unit
+) {
+    UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
+        token?.let {
+            onLoginSuccess(token.accessToken)
+        }
+    }
+}
+
+private fun signInKakaoEmail(
+    context : Context,
+    onLoginSuccess : (String) -> Unit
+) {
+    UserApiClient.instance.loginWithKakaoAccount(context) { token, error ->
+        token?.let {
+            onLoginSuccess(token.accessToken)
+        }
     }
 }
 

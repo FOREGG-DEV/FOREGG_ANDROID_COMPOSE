@@ -1,4 +1,4 @@
-package com.hugg.hugg.module
+package com.hugg.app.module
 
 import javax.inject.Qualifier
 
