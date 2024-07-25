@@ -5,6 +5,7 @@ plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("kapt")
+    id("com.google.gms.google-services")
     id("dagger.hilt.android.plugin")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
@@ -22,7 +23,7 @@ android {
     defaultConfig {
         buildConfigField("String", "KAKAO_NATIVE_KEY", localProps.getProperty("kakao_native_key"))
         manifestPlaceholders["Key"]
-        applicationId = "com.hugg.hugg"
+        applicationId = "com.hugg.app"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
