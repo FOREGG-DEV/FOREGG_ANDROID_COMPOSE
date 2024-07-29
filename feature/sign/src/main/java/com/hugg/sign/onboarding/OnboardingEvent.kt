@@ -1,4 +1,4 @@
-package com.hugg.sign
+package com.hugg.sign.onboarding
 
 import com.hugg.feature.base.Event
 

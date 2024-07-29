@@ -1,4 +1,4 @@
-package com.hugg.sign
+package com.hugg.sign.onboarding
 
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.messaging.FirebaseMessaging
@@ -78,15 +78,18 @@ class OnboardingViewModel @Inject constructor(
     }
 
     fun onClickMoveNextPage(nowPage : Int){
+        ForeggLog.D("다음")
         if(nowPage == 3) return
         emitEventFlow(OnboardingEvent.MoveNextPage)
     }
 
     fun onClickMovePrevPage(){
+        ForeggLog.D("이전")
         emitEventFlow(OnboardingEvent.MovePrevPage)
     }
 
     fun onClickLastPage(){
+        ForeggLog.D("스킵")
         emitEventFlow(OnboardingEvent.MoveLastPage)
     }
 

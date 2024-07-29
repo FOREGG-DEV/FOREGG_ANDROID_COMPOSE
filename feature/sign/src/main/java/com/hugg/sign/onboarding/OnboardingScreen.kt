@@ -1,4 +1,4 @@
-package com.hugg.sign
+package com.hugg.sign.onboarding
 
 import android.content.Context
 import androidx.compose.foundation.background
@@ -24,6 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import com.hugg.domain.model.enums.TopBarLeftType
 import com.hugg.domain.model.enums.TopBarMiddleType
@@ -34,14 +35,13 @@ import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
 import com.hugg.feature.uiItem.OnBoardingItem
 import com.hugg.feature.component.KaKaoLoginBtn
-import com.hugg.feature.util.ForeggLog
 import com.kakao.sdk.user.UserApiClient
 
 const val PAGE_COUNT = 4
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun OnboardingScreen(
+fun OnboardingContainer(
     viewModel: OnboardingViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
@@ -58,6 +58,29 @@ fun OnboardingScreen(
         }
     }
 
+    OnboardingScreen(
+        uiState = uiState,
+        pagerState = pagerState,
+        onClickTopBarLeftBtn = { viewModel.onClickMovePrevPage() },
+        onClickTopBarRightBtn = { viewModel.onClickLastPage() },
+        onClickNextPageBtn = { viewModel.onClickMoveNextPage(pagerState.currentPage) },
+        onClickLogin = { signInKakao(context = context, onLoginSuccess = { token ->
+                viewModel.login(token)
+            })
+        }
+    )
+}
+
+@OptIn(ExperimentalPagerApi::class)
+@Composable
+fun OnboardingScreen(
+    uiState : OnboardingPageState = OnboardingPageState(),
+    pagerState: PagerState = rememberPagerState(),
+    onClickTopBarLeftBtn : () -> Unit = {},
+    onClickTopBarRightBtn : () -> Unit = {},
+    onClickNextPageBtn : () -> Unit = {},
+    onClickLogin : () -> Unit = {},
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -65,10 +88,10 @@ fun OnboardingScreen(
     ) {
         TopBar(
             leftItemType = if(pagerState.currentPage != 0) TopBarLeftType.BACK else TopBarLeftType.NONE,
-            leftBtnClicked = { viewModel.onClickMovePrevPage() },
+            leftBtnClicked = onClickTopBarLeftBtn,
             middleItemType = TopBarMiddleType.LOGO,
             rightItemType = if(pagerState.currentPage != PAGE_COUNT - 1) TopBarRightType.SKIP else TopBarRightType.NONE,
-            rightBtnClicked = { viewModel.onClickLastPage() }
+            rightBtnClicked = onClickTopBarRightBtn
         )
 
         Spacer(modifier = Modifier.height(38.dp))
@@ -94,9 +117,7 @@ fun OnboardingScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
-            onClickBtn = {
-                viewModel.onClickMoveNextPage(pagerState.currentPage)
-            },
+            onClickBtn = onClickNextPageBtn,
             text = WORD_NEXT
         )
         else KaKaoLoginBtn(
@@ -104,14 +125,7 @@ fun OnboardingScreen(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
                 .clickable(
-                    onClick = {
-                        signInKakao(
-                            context = context,
-                            onLoginSuccess = { token ->
-                                viewModel.login(token)
-                            }
-                        )
-                    },
+                    onClick = onClickLogin,
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null
                 ),
@@ -152,6 +166,7 @@ private fun signInKakaoEmail(
     }
 }
 
+@OptIn(ExperimentalPagerApi::class)
 @Preview
 @Composable
 internal fun PreviewMainContainer() {

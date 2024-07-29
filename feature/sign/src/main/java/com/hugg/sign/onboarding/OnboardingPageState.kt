@@ -1,4 +1,4 @@
-package com.hugg.sign
+package com.hugg.sign.onboarding
 
 import com.hugg.domain.model.vo.onboarding.OnboardingTutorialVo
 import com.hugg.feature.base.PageState
