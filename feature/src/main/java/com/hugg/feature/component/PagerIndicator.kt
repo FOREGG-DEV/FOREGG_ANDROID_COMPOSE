@@ -18,14 +18,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.hugg.feature.theme.Gs30
-import com.hugg.feature.theme.Main
+import com.hugg.feature.theme.MainNormal
 
 @Composable
 fun PageIndicator(
     numberOfPages: Int,
     modifier: Modifier = Modifier,
     selectedPage: Int = 0,
-    selectedColor: Color = Main,
+    selectedColor: Color = MainNormal,
     defaultColor: Color = Gs30,
     defaultRadius: Dp = 8.dp,
     selectedLength: Dp = 24.dp,

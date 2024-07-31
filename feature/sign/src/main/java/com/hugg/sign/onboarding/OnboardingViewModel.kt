@@ -45,11 +45,9 @@ class OnboardingViewModel @Inject constructor(
     }
 
     private fun initData(){
-        viewModelScope.launch {
-            _uiState.update { it.copy(
-                onboardingList = getOnboardingList()
-            ) }
-        }
+        updateState(
+            uiState.value.copy(onboardingList = getOnboardingList())
+        )
     }
 
     private fun getOnboardingList() : List<OnboardingTutorialVo> {
@@ -78,23 +76,19 @@ class OnboardingViewModel @Inject constructor(
     }
 
     fun onClickMoveNextPage(nowPage : Int){
-        ForeggLog.D("다음")
         if(nowPage == 3) return
         emitEventFlow(OnboardingEvent.MoveNextPage)
     }
 
     fun onClickMovePrevPage(){
-        ForeggLog.D("이전")
         emitEventFlow(OnboardingEvent.MovePrevPage)
     }
 
     fun onClickLastPage(){
-        ForeggLog.D("스킵")
         emitEventFlow(OnboardingEvent.MoveLastPage)
     }
 
     fun login(token : String){
-        ForeggLog.D("나 로그인 실행")
         accessToken = token
         viewModelScope.launch {
             authRepository.login(token).collect {
@@ -147,12 +141,10 @@ class OnboardingViewModel @Inject constructor(
     }
 
     private fun goToMain(){
-        ForeggLog.D("메인으로 이동")
-        //emitEventFlow(OnboardingEvent.GoToMainEvent)
+        emitEventFlow(OnboardingEvent.GoToMainEvent)
     }
 
     private fun goToSignUp(){
-        ForeggLog.D("회원가입으로 이동")
-        //emitEventFlow(OnboardingEvent.GoToSignUpEvent(accessToken))
+        emitEventFlow(OnboardingEvent.GoToSignUpEvent(accessToken))
     }
 }

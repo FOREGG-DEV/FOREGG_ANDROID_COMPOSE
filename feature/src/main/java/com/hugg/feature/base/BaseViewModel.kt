@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 abstract class BaseViewModel<STATE: PageState>(
@@ -30,7 +31,7 @@ abstract class BaseViewModel<STATE: PageState>(
 
     protected fun updateState(state: STATE) {
         viewModelScope.launch {
-            _uiState.emit(state)
+            _uiState.update { state }
         }
     }
     protected fun emitEventFlow(event: Event) {
