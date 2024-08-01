@@ -20,8 +20,8 @@ abstract class BaseViewModel<STATE: PageState>(
     protected val _uiState = MutableStateFlow(initialPageState)
     val uiState = _uiState.asStateFlow()
 
-    private val _eventFlow = MutableSharedFlow<Event>(replay = 1)
-    val eventFlow = _eventFlow.asSharedFlow()
+    private val _eventFlow = MutableEventFlow<Event>()
+    val eventFlow: EventFlow<Event> = _eventFlow.asEventFlow()
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading

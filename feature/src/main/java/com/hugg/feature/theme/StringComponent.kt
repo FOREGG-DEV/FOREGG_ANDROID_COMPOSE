@@ -34,3 +34,4 @@ val SIGN_UP_INPUT_SSN = buildAnnotatedString {
     }
 }
 const val SIGN_UP_DIVIDE_SSN = "-"
+const val SUGH_UP_CHOOSE_SURGERY = "현재 받고 있는 시술을\n선택해주세요."

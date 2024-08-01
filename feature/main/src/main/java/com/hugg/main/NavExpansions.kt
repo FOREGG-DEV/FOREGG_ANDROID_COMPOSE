@@ -6,6 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
+import com.hugg.sign.femaleSignUp.chooseSurgery.ChooseSurgeryContainer
 import com.hugg.sign.inputSsn.InputSsnContainer
 import com.hugg.sign.onboarding.OnboardingContainer
 
@@ -23,9 +24,20 @@ fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
             )
         ) {
             InputSsnContainer(
-                //accessToken = it.arguments?.getString("accessToken") ?: "",
-                navigateFemaleSignUpPage = {},
+                navigateFemaleSignUpPage = { ssn -> navController.navigate(route = Routes.Sign.getRouteChooseSurgery(it.arguments?.getString("accessToken") ?: "", ssn)) },
                 navigateMaleSignUpPage = {},
+                goToBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = Routes.Sign.FEMALE_SIGN_UP_CHOOSE_SURGERY,
+            arguments = listOf(
+                navArgument("accessToken") { type = NavType.StringType },
+                navArgument("ssn") { type = NavType.StringType },
+            )
+        ) {
+            ChooseSurgeryContainer(
                 goToBack = { navController.popBackStack() }
             )
         }
@@ -44,7 +56,9 @@ object Routes {
         const val GRAPH = "sign_graph"
         const val ONBOARDING = "onboarding"
         const val INPUT_SSN = "input_ssn/{accessToken}"
+        const val FEMALE_SIGN_UP_CHOOSE_SURGERY = "choose_surgery/{accessToken}/{ssn}"
 
         fun getRouteInputSsn(accessToken : String) = "input_ssn/$accessToken"
+        fun getRouteChooseSurgery(accessToken : String, ssn : String) = "choose_surgery/$accessToken/$ssn"
     }
 }
