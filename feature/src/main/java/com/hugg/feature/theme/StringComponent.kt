@@ -9,6 +9,7 @@ const val WORD_SKIP = "skip"
 const val WORD_NEXT = "다음"
 const val WORD_DAILY_RECORD = "하루기록"
 const val WORD_SIGN_UP = "회원가입"
+const val WORD_ROUND = "회차"
 
 // --------- 온보딩 --------- //
 const val ONBOARDING_TITLE_1 = "주사 맞을 시간엔 알람이 울려요"
@@ -34,4 +35,5 @@ val SIGN_UP_INPUT_SSN = buildAnnotatedString {
     }
 }
 const val SIGN_UP_DIVIDE_SSN = "-"
-const val SUGH_UP_CHOOSE_SURGERY = "현재 받고 있는 시술을\n선택해주세요."
+const val SIGN_UP_CHOOSE_SURGERY = "현재 받고 있는 시술을\n선택해주세요."
+const val SIGN_UP_SURGERY_COUNT = "현재 진행중인 회차를\n알려주세요."

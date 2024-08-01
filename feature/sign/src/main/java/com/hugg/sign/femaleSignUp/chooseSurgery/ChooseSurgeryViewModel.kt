@@ -24,5 +24,7 @@ class ChooseSurgeryViewModel @Inject constructor() : BaseViewModel<ChooseSurgery
     }
 
     fun onClickNextBtn(){
+        if(uiState.value.surgeryType == SurgeryType.THINK_SURGERY) emitEventFlow(ChooseSurgeryEvent.GoToSpouseCodePage)
+        else emitEventFlow(ChooseSurgeryEvent.GoToSpouseCodePage)
     }
 }

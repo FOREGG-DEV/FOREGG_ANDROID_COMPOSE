@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.hugg.sign.femaleSignUp.chooseSurgery.ChooseSurgeryContainer
+import com.hugg.sign.femaleSignUp.surgeryCount.SurgeryCountContainer
 import com.hugg.sign.inputSsn.InputSsnContainer
 import com.hugg.sign.onboarding.OnboardingContainer
 
@@ -23,8 +24,9 @@ fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
                 navArgument("accessToken") { type = NavType.StringType },
             )
         ) {
+            val accessToken = it.arguments?.getString("accessToken") ?: ""
             InputSsnContainer(
-                navigateFemaleSignUpPage = { ssn -> navController.navigate(route = Routes.Sign.getRouteChooseSurgery(it.arguments?.getString("accessToken") ?: "", ssn)) },
+                navigateFemaleSignUpPage = { ssn -> navController.navigate(route = Routes.Sign.getRouteChooseSurgery(accessToken, ssn)) },
                 navigateMaleSignUpPage = {},
                 goToBack = { navController.popBackStack() }
             )
@@ -37,7 +39,26 @@ fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
                 navArgument("ssn") { type = NavType.StringType },
             )
         ) {
+            val accessToken = it.arguments?.getString("accessToken") ?: ""
+            val ssn = it.arguments?.getString("ssn") ?: ""
             ChooseSurgeryContainer(
+                navigateSurgeryCountPage = { type -> navController.navigate(Routes.Sign.getRouteSurgeryCount(accessToken, ssn, type)) },
+                goToBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = Routes.Sign.FEMALE_SIGN_UP_SURGERY_COUNT,
+            arguments = listOf(
+                navArgument("accessToken") { type = NavType.StringType },
+                navArgument("ssn") { type = NavType.StringType },
+                navArgument("type") { type = NavType.StringType },
+            )
+        ) {
+            val accessToken = it.arguments?.getString("accessToken") ?: ""
+            val ssn = it.arguments?.getString("ssn") ?: ""
+            val type = it.arguments?.getString("type") ?: ""
+            SurgeryCountContainer(
                 goToBack = { navController.popBackStack() }
             )
         }
@@ -57,8 +78,10 @@ object Routes {
         const val ONBOARDING = "onboarding"
         const val INPUT_SSN = "input_ssn/{accessToken}"
         const val FEMALE_SIGN_UP_CHOOSE_SURGERY = "choose_surgery/{accessToken}/{ssn}"
+        const val FEMALE_SIGN_UP_SURGERY_COUNT = "surgery_count/{accessToken}/{ssn}/{type}"
 
         fun getRouteInputSsn(accessToken : String) = "input_ssn/$accessToken"
         fun getRouteChooseSurgery(accessToken : String, ssn : String) = "choose_surgery/$accessToken/$ssn"
+        fun getRouteSurgeryCount(accessToken : String, ssn : String, type : String) = "surgery_count/$accessToken/$ssn/$type"
     }
 }

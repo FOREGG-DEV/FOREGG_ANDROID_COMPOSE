@@ -52,8 +52,8 @@ fun ChooseSurgeryContainer(
     LaunchedEffect(Unit) {
         viewModel.eventFlow.collect { event ->
             when(event) {
-                is ChooseSurgeryEvent.GoToSurgeryCountPage -> navigateSpouseCodePage(event.ssn)
-                is ChooseSurgeryEvent.GoToSpouseCodePage -> navigateSurgeryCountPage(event.ssn)
+                ChooseSurgeryEvent.GoToSurgeryCountPage -> navigateSpouseCodePage(uiState.surgeryType.type)
+                ChooseSurgeryEvent.GoToSpouseCodePage -> navigateSurgeryCountPage(uiState.surgeryType.type)
             }
         }
     }
@@ -105,7 +105,7 @@ fun ChooseSurgeryScreen(
             Text(
                 color = Gs80,
                 style = HuggTypography.h1,
-                text = SUGH_UP_CHOOSE_SURGERY
+                text = SIGN_UP_CHOOSE_SURGERY
             )
 
             Spacer(modifier = Modifier.height(24.dp))
