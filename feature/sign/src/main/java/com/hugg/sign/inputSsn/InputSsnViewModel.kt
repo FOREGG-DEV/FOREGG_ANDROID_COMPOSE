@@ -38,6 +38,14 @@ class InputSsnViewModel @Inject constructor() : BaseViewModel<InputSsnPageState>
         }
     }
 
+    fun onClickNextBtn(){
+        val ssn = uiState.value.run {
+            "$ssn1$ssn2$ssn3$ssn4$ssn5$ssn6-$ssn7"
+        }
+        if(uiState.value.ssn7.toInt() % 2 == 0) emitEventFlow(InputSsnEvent.GoToFemaleSignUp(ssn))
+        else emitEventFlow(InputSsnEvent.GoToMaleSignUp(ssn))
+    }
+
     private fun updateSsn(position : Int, value : String){
         when(position){
             0 -> updateState(uiState.value.copy(ssn1 = value))

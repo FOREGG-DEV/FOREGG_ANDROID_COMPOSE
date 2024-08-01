@@ -11,16 +11,23 @@ import com.hugg.sign.onboarding.OnboardingContainer
 
 fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
     navigation(startDestination = Routes.Sign.ONBOARDING, route = Routes.Sign.GRAPH) {
+
         composable(Routes.Sign.ONBOARDING) { OnboardingContainer(
             navigateInputSsn = { accessToken -> navController.navigate(route = Routes.Sign.getRouteInputSsn(accessToken)) }
         ) }
+
         composable(
             route = Routes.Sign.INPUT_SSN,
             arguments = listOf(
                 navArgument("accessToken") { type = NavType.StringType },
             )
         ) {
-            InputSsnContainer(accessToken = it.arguments?.getString("accessToken") ?: "")
+            InputSsnContainer(
+                //accessToken = it.arguments?.getString("accessToken") ?: "",
+                navigateFemaleSignUpPage = {},
+                navigateMaleSignUpPage = {},
+                goToBack = { navController.popBackStack() }
+            )
         }
     }
 }

@@ -33,3 +33,4 @@ val SIGN_UP_INPUT_SSN = buildAnnotatedString {
         append("를\n적어주세요")
     }
 }
+const val SIGN_UP_DIVIDE_SSN = "-"

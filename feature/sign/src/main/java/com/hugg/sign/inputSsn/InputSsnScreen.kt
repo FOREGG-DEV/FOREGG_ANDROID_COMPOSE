@@ -24,9 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.onPreviewKeyEvent
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -44,10 +44,11 @@ import com.hugg.feature.theme.*
 
 @Composable
 fun InputSsnContainer(
-    accessToken : String = "",
+    navigateFemaleSignUpPage : (String) -> Unit = {},
+    navigateMaleSignUpPage : (String) -> Unit = {},
+    goToBack : () -> Unit = {},
     viewModel: InputSsnViewModel = hiltViewModel()
 ) {
-    val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val focusRequesters = remember { List(7) { FocusRequester() } }
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -58,28 +59,23 @@ fun InputSsnContainer(
     }
 
     LaunchedEffect(Unit) {
-        viewModel.eventFlow.collect {
-            handleEvent(it as InputSsnEvent, focusRequesters)
+        viewModel.eventFlow.collect { event ->
+            when(event) {
+                is InputSsnEvent.GoToFemaleSignUp -> navigateFemaleSignUpPage(event.ssn)
+                is InputSsnEvent.GoToMaleSignUp -> navigateMaleSignUpPage(event.ssn)
+                is InputSsnEvent.FocusTextFiled -> focusRequesters[event.position].requestFocus()
+            }
         }
     }
 
     InputSsnScreen(
         uiState = uiState,
         focusRequesters = focusRequesters,
+        onClickTopBarLeftBtn = goToBack,
+        onClickNextPageBtn = { viewModel.onClickNextBtn() },
         onClickKey = { event, position -> viewModel.onClickKey(event, position) },
         onChangedValue = { value, position -> viewModel.onChangedText(value, position) },
     )
-}
-
-fun handleEvent(
-    event: InputSsnEvent,
-    focusRequesters : List<FocusRequester>,
-){
-    when(event) {
-        InputSsnEvent.GoToFemaleSignUp -> {}
-        InputSsnEvent.GoToMaleSignUp -> {}
-        is InputSsnEvent.FocusTextFiled -> focusRequesters[event.position].requestFocus()
-    }
 }
 
 @Composable
@@ -157,7 +153,10 @@ fun SsnInputView(
     onChangedValue : (String, Int) -> Unit = {_, _ -> },
 ) {
 
-    Row {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         SsnItemView(value = uiState.ssn1, focusRequester = focusRequesters[0], position = 0, onClickKey = onClickKey, onChangedValue = onChangedValue)
         Spacer(modifier = Modifier.width(2.dp))
 
@@ -176,8 +175,22 @@ fun SsnInputView(
         SsnItemView(value = uiState.ssn6, focusRequester = focusRequesters[5], position = 5, onClickKey = onClickKey, onChangedValue = onChangedValue)
         Spacer(modifier = Modifier.width(6.dp))
 
+        Text(
+            color = Gs50,
+            style = HuggTypography.h3,
+            text = SIGN_UP_DIVIDE_SSN
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+
         SsnItemView(value = uiState.ssn7, focusRequester = focusRequesters[6], position = 6, onClickKey = onClickKey, onChangedValue = onChangedValue)
         Spacer(modifier = Modifier.width(2.dp))
+
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .height(48.dp)
+                .background(Color(0xFFF2F2F2), shape = RoundedCornerShape(4.dp))
+        )
     }
 }
 
@@ -210,6 +223,7 @@ fun SsnItemView(
                 onChangedValue(value, position)
             },
             textStyle = HuggTypography.h3.copy(
+                color = Gs90,
                 textAlign = TextAlign.Center
             ),
             singleLine = true,

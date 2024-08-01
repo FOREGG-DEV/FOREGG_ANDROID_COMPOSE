@@ -51,7 +51,13 @@ fun OnboardingContainer(
 
     LaunchedEffect(key1 = Unit) {
         viewModel.eventFlow.collect { event ->
-            handleEvent(event as OnboardingEvent, pagerState, navigateInputSsn)
+            when(event) {
+                OnboardingEvent.MoveNextPage -> pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                OnboardingEvent.MoveLastPage -> pagerState.animateScrollToPage(pagerState.pageCount - 1)
+                OnboardingEvent.MovePrevPage -> pagerState.animateScrollToPage(pagerState.currentPage - 1)
+                OnboardingEvent.GoToMainEvent -> {} // 메인으로 이동
+                is OnboardingEvent.GoToSignUpEvent -> { navigateInputSsn(event.accessToken) }
+            }
         }
     }
 
@@ -66,21 +72,6 @@ fun OnboardingContainer(
             })
         }
     )
-}
-
-@OptIn(ExperimentalPagerApi::class)
-suspend fun handleEvent(
-    event: OnboardingEvent,
-    pagerState: PagerState,
-    navigateInputSsn: (String) -> Unit
-){
-    when(event) {
-        OnboardingEvent.MoveNextPage -> pagerState.animateScrollToPage(pagerState.currentPage + 1)
-        OnboardingEvent.MoveLastPage -> pagerState.animateScrollToPage(pagerState.pageCount - 1)
-        OnboardingEvent.MovePrevPage -> pagerState.animateScrollToPage(pagerState.currentPage - 1)
-        OnboardingEvent.GoToMainEvent -> {} // 메인으로 이동
-        is OnboardingEvent.GoToSignUpEvent -> { navigateInputSsn(event.accessToken) }
-    }
 }
 
 @OptIn(ExperimentalPagerApi::class)
