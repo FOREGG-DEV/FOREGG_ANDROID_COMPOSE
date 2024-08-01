@@ -35,7 +35,6 @@ import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
 import com.hugg.feature.uiItem.OnBoardingItem
 import com.hugg.feature.component.KaKaoLoginBtn
-import com.hugg.feature.util.ForeggLog
 import com.kakao.sdk.user.UserApiClient
 
 const val PAGE_COUNT = 4
@@ -57,10 +56,7 @@ fun OnboardingContainer(
                 OnboardingEvent.MoveLastPage -> pagerState.animateScrollToPage(pagerState.pageCount - 1)
                 OnboardingEvent.MovePrevPage -> pagerState.animateScrollToPage(pagerState.currentPage - 1)
                 OnboardingEvent.GoToMainEvent -> {} // 메인으로 이동
-                is OnboardingEvent.GoToSignUpEvent -> {
-                    ForeggLog.D("하이")
-                    navigateInputSsn(event.accessToken)
-                }
+                is OnboardingEvent.GoToSignUpEvent -> { navigateInputSsn(event.accessToken) }
             }
         }
     }
