@@ -64,6 +64,7 @@ fun InputSsnContainer(
                 is InputSsnEvent.GoToFemaleSignUp -> navigateFemaleSignUpPage(event.ssn)
                 is InputSsnEvent.GoToMaleSignUp -> navigateMaleSignUpPage(event.ssn)
                 is InputSsnEvent.FocusTextFiled -> focusRequesters[event.position].requestFocus()
+                InputSsnEvent.HideKeyboard -> keyboardController?.hide()
             }
         }
     }

@@ -35,6 +35,7 @@ class InputSsnViewModel @Inject constructor() : BaseViewModel<InputSsnPageState>
             if (value.isNotEmpty() && position < OTP_LENGTH - 1) {
                 emitEventFlow(InputSsnEvent.FocusTextFiled(position + 1))
             }
+            if(position == OTP_LENGTH - 1) emitEventFlow(InputSsnEvent.HideKeyboard)
         }
     }
 
