@@ -17,14 +17,14 @@ abstract class BaseViewModel<STATE: PageState>(
     initialPageState : STATE
 ) : ViewModel() {
 
-    protected val _uiState = MutableStateFlow(initialPageState)
+    private val _uiState = MutableStateFlow(initialPageState)
     val uiState = _uiState.asStateFlow()
 
     private val _eventFlow = MutableEventFlow<Event>()
     val eventFlow: EventFlow<Event> = _eventFlow.asEventFlow()
 
-    private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading: LiveData<Boolean> = _isLoading
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading = _isLoading.asStateFlow()
 
     private val _commonError = MutableLiveData<String>()
     val commonError: LiveData<String> = _commonError
