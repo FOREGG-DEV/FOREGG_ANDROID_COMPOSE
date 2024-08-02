@@ -1,16 +1,9 @@
-package com.hugg.sign.femaleSignUp.spouseCodeFemale
+package com.hugg.sign.maleSignUp
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,61 +11,59 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hugg.domain.model.enums.TopBarLeftType
 import com.hugg.domain.model.enums.TopBarMiddleType
-import com.hugg.domain.model.request.sign.SignUpRequestVo
+import com.hugg.domain.model.request.sign.SignUpMaleRequestVo
+import com.hugg.feature.component.FilledBtn
 import com.hugg.feature.component.SignUpIndicator
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
-import com.hugg.feature.R
-import com.hugg.feature.component.FilledBtn
-import com.hugg.feature.component.HuggSnackBar
 
 
 @Composable
-fun SpouseCodeFemaleContainer(
+fun MaleSignUpContainer(
     navigateGoToHome : () -> Unit = {},
     accessToken : String,
-    signUpRequestVo: SignUpRequestVo,
+    signUpMaleRequestVo : SignUpMaleRequestVo,
     goToBack : () -> Unit = {},
-    viewModel: SpouseCodeFemaleViewModel = hiltViewModel()
+    viewModel: MaleSignUpViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.eventFlow.collect { event ->
             when(event) {
-                SpouseCodeFemaleEvent.GoToMainEvent -> navigateGoToHome
+                MaleSignUpEvent.GoToMainEvent -> navigateGoToHome
             }
         }
     }
 
-    SpouseCodeFemaleScreen(
+    MaleSignUpScreen(
         uiState = uiState,
         onClickTopBarLeftBtn = goToBack,
-        onClickSignUpBtn = { viewModel.onClickSignUp(accessToken, signUpRequestVo) },
-        onClickCopyBtn = { viewModel.onClickCopyBtn() }
+        onClickSignUpBtn = { viewModel.onClickSignUp(accessToken, signUpMaleRequestVo) },
+        onChangedSpouseCode = { value -> viewModel.onChangedSpouseCode(value) }
     )
 }
 
 @Composable
-fun SpouseCodeFemaleScreen(
-    uiState : SpouseCodeFemalePageState = SpouseCodeFemalePageState(),
+fun MaleSignUpScreen(
+    uiState : MaleSignUpPageState = MaleSignUpPageState(),
     onClickTopBarLeftBtn : () -> Unit = {},
     onClickSignUpBtn : () -> Unit = {},
-    onClickCopyBtn: () -> Unit = {}
+    onChangedSpouseCode : (String) -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -104,33 +95,40 @@ fun SpouseCodeFemaleScreen(
             Text(
                 color = Gs80,
                 style = HuggTypography.h1,
-                text = SIGN_UP_SPOUSE_CODE_FEMALE
+                text = SIGN_UP_MALE
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            SpouseCodeCopyView(
-                uiState = uiState,
-                onClickCopyBtn = onClickCopyBtn
-            )
+            Box(modifier = Modifier
+                .width(176.dp)
+                .height(48.dp)
+                .background(
+                    color = White,
+                    shape = RoundedCornerShape(8.dp)
+                ),
+                contentAlignment = Alignment.Center
+            ){
+                BasicTextField(
+                    value = uiState.spouseCode,
+                    onValueChange = { value ->
+                        onChangedSpouseCode(value)
+                    },
+                    textStyle = HuggTypography.h3.copy(
+                        color = Black,
+                        textAlign = TextAlign.Center
+                    ),
+                    singleLine = true,
+                )
+            }
 
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
                 color = Gs90,
                 style = HuggTypography.p2_l,
-                text = SIGN_UP_SPOUSE_CODE_FEMALE_HINT
+                text = SIGN_UP_SPOUSE_CODE_MALE_HINT
             )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            AnimatedVisibility(
-                visible = uiState.isShowSnackBar,
-                enter = fadeIn(),
-                exit = fadeOut()
-            ) {
-                HuggSnackBar(text = COPY_COMPLETE_TEXT)
-            }
         }
 
         Column(
@@ -148,55 +146,8 @@ fun SpouseCodeFemaleScreen(
     }
 }
 
-@Composable
-fun SpouseCodeCopyView(
-    uiState: SpouseCodeFemalePageState,
-    onClickCopyBtn: () -> Unit,
-){
-    Row(
-        modifier = Modifier
-            .height(48.dp)
-            .background(color = White, shape = RoundedCornerShape(8.dp))
-            .clickable(
-                onClick = onClickCopyBtn,
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null
-            ),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Row(
-            horizontalArrangement = Arrangement.Start
-        ){
-            Box(
-                modifier = Modifier
-                    .width(48.dp)
-                    .height(48.dp)
-                    .background(
-                        color = MainNormal,
-                        shape = RoundedCornerShape(topStart = 8.dp, bottomStart = 8.dp)
-                    ),
-                contentAlignment = Alignment.Center
-            ){
-                Image(
-                    painter = painterResource(id = R.drawable.ic_calendar_white),
-                    contentDescription = null
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.width(30.dp))
-
-        Text(
-            modifier = Modifier.padding(end = 39.dp),
-            color = Black,
-            style = HuggTypography.h3,
-            text = uiState.spouseCode
-        )
-    }
-}
-
 @Preview
 @Composable
 internal fun PreviewMainContainer() {
-    SpouseCodeFemaleScreen()
+    MaleSignUpScreen()
 }

@@ -43,4 +43,6 @@ const val SIGN_UP_SURGERY_COUNT = "현재 진행중인 회차를\n알려주세�
 const val SIGN_UP_SURGERY_START = "치료 시작 날짜를\n알려주세요."
 const val SIGN_UP_SPOUSE_CODE_FEMALE = "배우자 코드를 남편에게\n공유해주세요."
 const val SIGN_UP_SPOUSE_CODE_FEMALE_HINT = "남편 회원가입시 붙여넣기 해주세요.\n아내 가입 완료 시 남편 로그인이 가능합니다."
+const val SIGN_UP_SPOUSE_CODE_MALE_HINT = "아내에게 받은 공유 코드를 입력해주세요."
 const val SIGN_UP_COMPLETE = "가입 완료"
+const val SIGN_UP_MALE = "아내에게 받은 배우자 코드를\n입력해주세요."
