@@ -18,6 +18,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,6 +28,8 @@ import com.hugg.domain.model.enums.TopBarLeftType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.domain.model.request.sign.SignUpMaleRequestVo
 import com.hugg.feature.component.FilledBtn
+import com.hugg.feature.component.HuggSnackBar
+import com.hugg.feature.component.HuggToast
 import com.hugg.feature.component.SignUpIndicator
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
@@ -144,6 +147,11 @@ fun MaleSignUpScreen(
             Spacer(modifier = Modifier.height(80.dp))
         }
     }
+
+    HuggToast(
+        visible = uiState.isShowErrorSpouseCode,
+        text = TOAST_ERROR_NOR_CORRECT_SPOUSE_CODE
+    )
 }
 
 @Preview

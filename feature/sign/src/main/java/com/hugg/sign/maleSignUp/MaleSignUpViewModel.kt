@@ -15,6 +15,7 @@ import com.hugg.domain.repository.ProfileRepository
 import com.hugg.feature.base.BaseViewModel
 import com.hugg.feature.util.UserInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -49,7 +50,19 @@ class MaleSignUpViewModel @Inject constructor(
 
     private fun handleJoinError(error : String){
         when(error){
-            StatusCode.AUTH.NOT_CORRECT_SHARE_CODE -> emitEventFlow(MaleSignUpEvent.ErrorShareCode)
+            StatusCode.AUTH.NOT_CORRECT_SHARE_CODE -> showErrorSpouseCodeError()
+        }
+    }
+
+    private fun showErrorSpouseCodeError(){
+        viewModelScope.launch {
+            updateState(uiState.value.copy(
+                isShowErrorSpouseCode = true
+            ))
+            delay(1000)
+            updateState(uiState.value.copy(
+                isShowErrorSpouseCode = false
+            ))
         }
     }
 
