@@ -1,5 +1,8 @@
-package com.hugg.sign.femaleSignUp.surgeryCount
+package com.hugg.sign.femaleSignUp.startSurgery
 
+import android.app.DatePickerDialog
+import android.view.ContextThemeWrapper
+import android.widget.DatePicker
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -35,40 +39,55 @@ import com.hugg.feature.component.SignUpIndicator
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
 import com.hugg.feature.R
+import com.hugg.feature.util.ForeggLog
+import java.util.Calendar
 
 
 @Composable
-fun SurgeryCountContainer(
-    navigateSurgeryStart : (Int) -> Unit = {},
+fun SurgeryStartContainer(
+    navigateFemaleSpouseCode : (String) -> Unit = {},
     goToBack : () -> Unit = {},
-    viewModel: SurgeryCountViewModel = hiltViewModel()
+    viewModel: SurgeryStartViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val calendar = Calendar.getInstance()
+
+    val datePickerDialog = DatePickerDialog(
+        context,
+        R.style.DatePickerStyle,
+        { view, year, month, day ->
+            val formattedMonth = String.format("%02d", month + 1)
+            val formattedDay = String.format("%02d", day)
+            viewModel.selectStartDate("$year-$formattedMonth-$formattedDay")
+        },
+        calendar.get(Calendar.YEAR),
+        calendar.get(Calendar.MONTH),
+        calendar.get(Calendar.DAY_OF_MONTH)
+    )
 
     LaunchedEffect(Unit) {
         viewModel.eventFlow.collect { event ->
             when(event) {
-                SurgeryCountEvent.GoToSurgeryStartDayPage -> navigateSurgeryStart(uiState.count)
+                SurgeryStartEvent.GoToSpouseCodePage -> navigateFemaleSpouseCode(uiState.date)
             }
         }
     }
 
-    SurgeryCountScreen(
+    SurgeryStartScreen(
         uiState = uiState,
         onClickTopBarLeftBtn = goToBack,
         onClickNextPageBtn = { viewModel.onClickNextBtn() },
-        onClickPlusBtn = { viewModel.onClickPlusBtn() },
-        onClickMinusBtn = { viewModel.onClickMinusBtn() }
+        onClickDatePickerBtn = { datePickerDialog.show() }
     )
 }
 
 @Composable
-fun SurgeryCountScreen(
-    uiState : SurgeryCountPageState = SurgeryCountPageState(),
+fun SurgeryStartScreen(
+    uiState : SurgeryStartPageState = SurgeryStartPageState(),
     onClickTopBarLeftBtn : () -> Unit = {},
     onClickNextPageBtn : () -> Unit = {},
-    onClickPlusBtn : () -> Unit = {},
-    onClickMinusBtn : () -> Unit = {}
+    onClickDatePickerBtn: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -100,30 +119,15 @@ fun SurgeryCountScreen(
             Text(
                 color = Gs80,
                 style = HuggTypography.h1,
-                text = SIGN_UP_SURGERY_COUNT
+                text = SIGN_UP_SURGERY_START
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Row(
-                verticalAlignment = Alignment.Bottom
-            ) {
-
-                CountingView(
-                    uiState = uiState,
-                    onClickMinusBtn = onClickMinusBtn,
-                    onClickPlusBtn = onClickPlusBtn
-                )
-
-                Spacer(modifier = Modifier.width(8.dp))
-
-                Text(
-                    style = HuggTypography.h3,
-                    color = Gs70,
-                    text = WORD_ROUND
-                )
-
-            }
+            DatePickerView(
+                uiState = uiState,
+                onClickDatePickerBtn = onClickDatePickerBtn
+            )
         }
 
         Column(
@@ -142,82 +146,54 @@ fun SurgeryCountScreen(
 }
 
 @Composable
-fun CountingView(
-    uiState: SurgeryCountPageState,
-    onClickMinusBtn: () -> Unit,
-    onClickPlusBtn: () -> Unit,
+fun DatePickerView(
+    uiState: SurgeryStartPageState,
+    onClickDatePickerBtn: () -> Unit,
 ){
     Row(
         modifier = Modifier
-            .width(168.dp)
             .height(48.dp)
-            .background(color = White, shape = RoundedCornerShape(8.dp)),
+            .background(color = White, shape = RoundedCornerShape(8.dp))
+            .clickable(
+                onClick = onClickDatePickerBtn,
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+            ),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Row(
-            modifier = Modifier
-                .weight(1f),
             horizontalArrangement = Arrangement.Start
         ){
             Box(
                 modifier = Modifier
-                    .width(51.dp)
+                    .width(48.dp)
                     .height(48.dp)
                     .background(
-                        color = if (uiState.count == 0) Color(0xFFF2F2F2) else MainNormal,
+                        color = MainNormal,
                         shape = RoundedCornerShape(topStart = 8.dp, bottomStart = 8.dp)
-                    )
-                    .clickable(
-                        onClick = onClickMinusBtn,
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null
                     ),
                 contentAlignment = Alignment.Center
             ){
                 Image(
-                    painter = painterResource(id = R.drawable.ic_minus_white),
+                    painter = painterResource(id = R.drawable.ic_calendar_white),
                     contentDescription = null
                 )
             }
         }
+
+        Spacer(modifier = Modifier.width(16.dp))
 
         Text(
+            modifier = Modifier.padding(end = 27.dp),
             color = Black,
             style = HuggTypography.h3,
-            text = uiState.count.toString()
+            text = uiState.date
         )
-
-        Row(
-            modifier = Modifier
-                .weight(1f),
-            horizontalArrangement = Arrangement.End
-        ) {
-            Box(
-                modifier = Modifier
-                    .width(51.dp)
-                    .height(48.dp)
-                    .background(
-                        color = if (uiState.count == 99) Color(0xFFF2F2F2) else MainNormal,
-                        shape = RoundedCornerShape(topEnd = 8.dp, bottomEnd = 8.dp)
-                    )
-                    .clickable(
-                        onClick = onClickPlusBtn,
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_plus_white),
-                    contentDescription = null
-                )
-            }
-        }
     }
 }
 
 @Preview
 @Composable
 internal fun PreviewMainContainer() {
-    SurgeryCountScreen()
+    SurgeryStartScreen()
 }

@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.hugg.sign.femaleSignUp.chooseSurgery.ChooseSurgeryContainer
+import com.hugg.sign.femaleSignUp.startSurgery.SurgeryStartContainer
 import com.hugg.sign.femaleSignUp.surgeryCount.SurgeryCountContainer
 import com.hugg.sign.inputSsn.InputSsnContainer
 import com.hugg.sign.onboarding.OnboardingContainer
@@ -59,6 +60,26 @@ fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
             val ssn = it.arguments?.getString("ssn") ?: ""
             val type = it.arguments?.getString("type") ?: ""
             SurgeryCountContainer(
+                navigateSurgeryStart = { count -> navController.navigate(Routes.Sign.getRouteSurgeryStart(accessToken, ssn, type, count))},
+                goToBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = Routes.Sign.FEMALE_SIGN_UP_SURGERY_START,
+            arguments = listOf(
+                navArgument("accessToken") { type = NavType.StringType },
+                navArgument("ssn") { type = NavType.StringType },
+                navArgument("type") { type = NavType.StringType },
+                navArgument("count") { type = NavType.IntType },
+            )
+        ) {
+            val accessToken = it.arguments?.getString("accessToken") ?: ""
+            val ssn = it.arguments?.getString("ssn") ?: ""
+            val type = it.arguments?.getString("type") ?: ""
+            val count = it.arguments?.getInt("count") ?: 0
+            SurgeryStartContainer(
+                navigateFemaleSpouseCode = { date -> },
                 goToBack = { navController.popBackStack() }
             )
         }
@@ -79,9 +100,11 @@ object Routes {
         const val INPUT_SSN = "input_ssn/{accessToken}"
         const val FEMALE_SIGN_UP_CHOOSE_SURGERY = "choose_surgery/{accessToken}/{ssn}"
         const val FEMALE_SIGN_UP_SURGERY_COUNT = "surgery_count/{accessToken}/{ssn}/{type}"
+        const val FEMALE_SIGN_UP_SURGERY_START = "surgery_start/{accessToken}/{ssn}/{type}/{count}"
 
         fun getRouteInputSsn(accessToken : String) = "input_ssn/$accessToken"
         fun getRouteChooseSurgery(accessToken : String, ssn : String) = "choose_surgery/$accessToken/$ssn"
         fun getRouteSurgeryCount(accessToken : String, ssn : String, type : String) = "surgery_count/$accessToken/$ssn/$type"
+        fun getRouteSurgeryStart(accessToken : String, ssn : String, type : String, count : Int) = "surgery_start/$accessToken/$ssn/$type/$count"
     }
 }

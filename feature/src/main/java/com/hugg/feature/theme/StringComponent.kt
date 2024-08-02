@@ -37,3 +37,4 @@ val SIGN_UP_INPUT_SSN = buildAnnotatedString {
 const val SIGN_UP_DIVIDE_SSN = "-"
 const val SIGN_UP_CHOOSE_SURGERY = "현재 받고 있는 시술을\n선택해주세요."
 const val SIGN_UP_SURGERY_COUNT = "현재 진행중인 회차를\n알려주세요."
+const val SIGN_UP_SURGERY_START = "치료 시작 날짜를\n알려주세요."
