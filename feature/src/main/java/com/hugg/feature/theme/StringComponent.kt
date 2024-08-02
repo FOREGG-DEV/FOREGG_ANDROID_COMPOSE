@@ -11,6 +11,9 @@ const val WORD_DAILY_RECORD = "하루기록"
 const val WORD_SIGN_UP = "회원가입"
 const val WORD_ROUND = "회차"
 
+// --------- 기타 --------- //
+const val COPY_COMPLETE_TEXT = "클립보드에 배우자 코드가 복사되었어요!"
+
 // --------- 온보딩 --------- //
 const val ONBOARDING_TITLE_1 = "주사 맞을 시간엔 알람이 울려요"
 const val ONBOARDING_TITLE_2 = "여보, 우리 내일부터 과배란 주사지?"
@@ -38,3 +41,6 @@ const val SIGN_UP_DIVIDE_SSN = "-"
 const val SIGN_UP_CHOOSE_SURGERY = "현재 받고 있는 시술을\n선택해주세요."
 const val SIGN_UP_SURGERY_COUNT = "현재 진행중인 회차를\n알려주세요."
 const val SIGN_UP_SURGERY_START = "치료 시작 날짜를\n알려주세요."
+const val SIGN_UP_SPOUSE_CODE_FEMALE = "배우자 코드를 남편에게\n공유해주세요."
+const val SIGN_UP_SPOUSE_CODE_FEMALE_HINT = "남편 회원가입시 붙여넣기 해주세요.\n아내 가입 완료 시 남편 로그인이 가능합니다."
+const val SIGN_UP_COMPLETE = "가입 완료"

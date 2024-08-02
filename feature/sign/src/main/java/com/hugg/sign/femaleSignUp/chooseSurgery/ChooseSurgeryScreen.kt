@@ -52,8 +52,8 @@ fun ChooseSurgeryContainer(
     LaunchedEffect(Unit) {
         viewModel.eventFlow.collect { event ->
             when(event) {
-                ChooseSurgeryEvent.GoToSurgeryCountPage -> navigateSpouseCodePage(uiState.surgeryType.type)
-                ChooseSurgeryEvent.GoToSpouseCodePage -> navigateSurgeryCountPage(uiState.surgeryType.type)
+                ChooseSurgeryEvent.GoToSurgeryCountPage -> navigateSurgeryCountPage(uiState.surgeryType.type)
+                ChooseSurgeryEvent.GoToSpouseCodePage -> navigateSpouseCodePage(uiState.surgeryType.type)
             }
         }
     }

@@ -84,6 +84,14 @@ object HuggTypography {
         fontWeight = FontWeight.Medium,
     )
 
+    val p2_l: TextStyle = TextStyle(
+        fontSize = 14.dp.toSp(),
+        lineHeight = 19.dp.toSp(),
+        letterSpacing = -0.03.dp.toSp(),
+        fontFamily = huggFontFamily,
+        fontWeight = FontWeight.Light,
+    )
+
     val p3: TextStyle = TextStyle(
         fontSize = 12.dp.toSp(),
         lineHeight = 16.dp.toSp(),
@@ -97,7 +105,7 @@ object HuggTypography {
         lineHeight = 16.dp.toSp(),
         letterSpacing = -0.03.dp.toSp(),
         fontFamily = huggFontFamily,
-        fontWeight = FontWeight.Light,
+        fontWeight = FontWeight(300),
     )
 
     val p4: TextStyle = TextStyle(
