@@ -46,6 +46,7 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":domain"))
 
+    implementation(AndroidX.NAVIGATION_COMPOSE)
     implementation(AndroidX.CORE)
     implementation(AndroidX.LIFECYCLE_RUNTIME_KTX)
     implementation(AndroidX.ACTIVITY_COMPOSE)
@@ -54,4 +55,7 @@ dependencies {
     implementation(AndroidX.COMPOSE_GRAPHICS)
     implementation(AndroidX.COMPOSE_PREVIEW)
     implementation(AndroidX.COMPOSE_MATERIAL)
+
+    implementation(AndroidX.THREE_TEN)
+    debugImplementation("androidx.compose.ui:ui-tooling:1.6.8")
 }
