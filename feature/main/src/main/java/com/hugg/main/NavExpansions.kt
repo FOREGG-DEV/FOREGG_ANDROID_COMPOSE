@@ -19,28 +19,28 @@ import com.hugg.sign.maleSignUp.MaleSignUpScreen
 import com.hugg.sign.onboarding.OnboardingContainer
 
 fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
-    navigation(startDestination = Routes.Sign.ONBOARDING, route = Routes.Sign.GRAPH) {
+    navigation(startDestination = Routes.OnboardingScreen.route, route = Routes.SignGraph.route) {
 
-        composable(Routes.Sign.ONBOARDING) { OnboardingContainer(
-            navigateInputSsn = { accessToken -> navController.navigate(route = Routes.Sign.getRouteInputSsn(accessToken)) }
+        composable(Routes.OnboardingScreen.route) { OnboardingContainer(
+            navigateInputSsn = { accessToken : String -> navController.navigate(route = Routes.InputSsnScreen.getRouteInputSsn(accessToken)) }
         ) }
 
         composable(
-            route = Routes.Sign.INPUT_SSN,
+            route = Routes.InputSsnScreen.route,
             arguments = listOf(
                 navArgument("accessToken") { type = NavType.StringType },
             )
         ) {
             val accessToken = it.arguments?.getString("accessToken") ?: ""
             InputSsnContainer(
-                navigateFemaleSignUpPage = { ssn -> navController.navigate(route = Routes.Sign.getRouteChooseSurgery(accessToken, ssn)) },
-                navigateMaleSignUpPage = { ssn -> navController.navigate(route = Routes.Sign.getRouteMaleSignUp(accessToken, ssn)) },
+                navigateFemaleSignUpPage = { ssn : String -> navController.navigate(route = Routes.FemaleSignUpChooseSurgery.getRouteChooseSurgery(accessToken, ssn)) },
+                navigateMaleSignUpPage = { ssn : String -> navController.navigate(route = Routes.MaleSignUp.getRouteMaleSignUp(accessToken, ssn)) },
                 goToBack = { navController.popBackStack() }
             )
         }
 
         composable(
-            route = Routes.Sign.FEMALE_SIGN_UP_CHOOSE_SURGERY,
+            route = Routes.FemaleSignUpChooseSurgery.route,
             arguments = listOf(
                 navArgument("accessToken") { type = NavType.StringType },
                 navArgument("ssn") { type = NavType.StringType },
@@ -49,14 +49,14 @@ fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
             val accessToken = it.arguments?.getString("accessToken") ?: ""
             val ssn = it.arguments?.getString("ssn") ?: ""
             ChooseSurgeryContainer(
-                navigateSpouseCodePage = { type -> navController.navigate(Routes.Sign.getRouteFemaleSpouseCode(accessToken, ssn, type, null, null))},
-                navigateSurgeryCountPage = { type -> navController.navigate(Routes.Sign.getRouteSurgeryCount(accessToken, ssn, type)) },
+                navigateSpouseCodePage = { type : String -> navController.navigate(Routes.FemaleSignUpSpouseCode.getRouteFemaleSpouseCode(accessToken, ssn, type, null, null))},
+                navigateSurgeryCountPage = { type : String -> navController.navigate(Routes.FemaleSignUpSurgeryCount.getRouteSurgeryCount(accessToken, ssn, type)) },
                 goToBack = { navController.popBackStack() }
             )
         }
 
         composable(
-            route = Routes.Sign.FEMALE_SIGN_UP_SURGERY_COUNT,
+            route = Routes.FemaleSignUpSurgeryCount.route,
             arguments = listOf(
                 navArgument("accessToken") { type = NavType.StringType },
                 navArgument("ssn") { type = NavType.StringType },
@@ -67,13 +67,13 @@ fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
             val ssn = it.arguments?.getString("ssn") ?: ""
             val type = it.arguments?.getString("type") ?: ""
             SurgeryCountContainer(
-                navigateSurgeryStart = { count -> navController.navigate(Routes.Sign.getRouteSurgeryStart(accessToken, ssn, type, count))},
+                navigateSurgeryStart = { count : Int -> navController.navigate(Routes.FemaleSignUpStartSurgery.getRouteSurgeryStart(accessToken, ssn, type, count))},
                 goToBack = { navController.popBackStack() }
             )
         }
 
         composable(
-            route = Routes.Sign.FEMALE_SIGN_UP_SURGERY_START,
+            route = Routes.FemaleSignUpStartSurgery.route,
             arguments = listOf(
                 navArgument("accessToken") { type = NavType.StringType },
                 navArgument("ssn") { type = NavType.StringType },
@@ -86,13 +86,13 @@ fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
             val type = it.arguments?.getString("type") ?: ""
             val count = it.arguments?.getInt("count") ?: 0
             SurgeryStartContainer(
-                navigateFemaleSpouseCode = { date -> navController.navigate(Routes.Sign.getRouteFemaleSpouseCode(accessToken, ssn, type, count, date)) },
+                navigateFemaleSpouseCode = { date : String -> navController.navigate(Routes.FemaleSignUpSpouseCode.getRouteFemaleSpouseCode(accessToken, ssn, type, count, date)) },
                 goToBack = { navController.popBackStack() }
             )
         }
 
         composable(
-            route = Routes.Sign.FEMALE_SIGN_UP_SPOUSE_CODE,
+            route = Routes.FemaleSignUpSpouseCode.route,
             arguments = listOf(
                 navArgument("accessToken") { type = NavType.StringType },
                 navArgument("ssn") { type = NavType.StringType },
@@ -122,7 +122,7 @@ fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
         }
 
         composable(
-            route = Routes.Sign.MALE_SIGN_UP,
+            route = Routes.MaleSignUp.route,
             arguments = listOf(
                 navArgument("accessToken") { type = NavType.StringType },
                 navArgument("ssn") { type = NavType.StringType },
@@ -147,23 +147,27 @@ fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
 //    }
 //}
 
-object Routes {
-    object Sign {
-        const val GRAPH = "sign_graph"
-        const val ONBOARDING = "onboarding"
-        const val INPUT_SSN = "input_ssn/{accessToken}"
-        const val FEMALE_SIGN_UP_CHOOSE_SURGERY = "choose_surgery/{accessToken}/{ssn}"
-        const val FEMALE_SIGN_UP_SURGERY_COUNT = "surgery_count/{accessToken}/{ssn}/{type}"
-        const val FEMALE_SIGN_UP_SURGERY_START = "surgery_start/{accessToken}/{ssn}/{type}/{count}"
-        const val FEMALE_SIGN_UP_SPOUSE_CODE = "female_spouse_code/{accessToken}/{ssn}/{type}/{count}/{date}"
+sealed class Routes(val route : String){
 
-        const val MALE_SIGN_UP = "male_sign_up/{accessToken}/{ssn}"
-
-        fun getRouteInputSsn(accessToken : String) = "input_ssn/$accessToken"
-        fun getRouteChooseSurgery(accessToken : String, ssn : String) = "choose_surgery/$accessToken/$ssn"
-        fun getRouteSurgeryCount(accessToken : String, ssn : String, type : String) = "surgery_count/$accessToken/$ssn/$type"
-        fun getRouteSurgeryStart(accessToken : String, ssn : String, type : String, count : Int) = "surgery_start/$accessToken/$ssn/$type/$count"
+    //----------------SIGN_GRAPH----------------//
+    data object SignGraph : Routes("sign_graph")
+    data object OnboardingScreen : Routes("onboarding")
+    data object InputSsnScreen : Routes("input_ssn/{accessToken}"){
+        fun getRouteInputSsn(accessToken : String) : String = "input_ssn/$accessToken"
+    }
+    data object FemaleSignUpChooseSurgery : Routes("choose_surgery/{accessToken}/{ssn}"){
+        fun getRouteChooseSurgery(accessToken : String, ssn : String) : String = "choose_surgery/$accessToken/$ssn"
+    }
+    data object FemaleSignUpSurgeryCount : Routes("surgery_count/{accessToken}/{ssn}/{type}"){
+        fun getRouteSurgeryCount(accessToken : String, ssn : String, type : String) : String = "surgery_count/$accessToken/$ssn/$type"
+    }
+    data object FemaleSignUpStartSurgery : Routes("surgery_start/{accessToken}/{ssn}/{type}/{count}"){
+        fun getRouteSurgeryStart(accessToken : String, ssn : String, type : String, count : Int) : String = "surgery_start/$accessToken/$ssn/$type/$count"
+    }
+    data object FemaleSignUpSpouseCode : Routes("female_spouse_code/{accessToken}/{ssn}/{type}/{count}/{date}"){
         fun getRouteFemaleSpouseCode(accessToken : String, ssn : String, type : String, count : Int?, date : String?) = "female_spouse_code/$accessToken/$ssn/$type/${count ?: -1}/${date ?: "null"}\""
+    }
+    data object MaleSignUp : Routes("male_sign_up/{accessToken}/{ssn}"){
         fun getRouteMaleSignUp(accessToken: String, ssn: String) = "male_sign_up/$accessToken/$ssn"
     }
 }

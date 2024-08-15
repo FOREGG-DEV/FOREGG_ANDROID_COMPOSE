@@ -6,15 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hugg.data.base.StatusCode
 import com.hugg.domain.base.ApiState
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 abstract class BaseViewModel<STATE: PageState>(
-    initialPageState : STATE
+    initialPageState : STATE,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(initialPageState)
@@ -22,9 +20,6 @@ abstract class BaseViewModel<STATE: PageState>(
 
     private val _eventFlow = MutableEventFlow<Event>()
     val eventFlow: EventFlow<Event> = _eventFlow.asEventFlow()
-
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading = _isLoading.asStateFlow()
 
     private val _commonError = MutableLiveData<String>()
     val commonError: LiveData<String> = _commonError
@@ -41,14 +36,18 @@ abstract class BaseViewModel<STATE: PageState>(
     }
 
     private fun showLoading(){
-        _isLoading.value = true
+        viewModelScope.launch {
+            LoadingManager.setLoadingState(true)
+        }
     }
 
     private fun endLoading(){
-        _isLoading.value = false
+        viewModelScope.launch {
+            LoadingManager.setLoadingState(false)
+        }
     }
 
-    protected fun<D> resultResponse(response: ApiState<D>, successCallback : (D) -> Unit, errorCallback : ((String) -> Unit)? = null, needLoading : Boolean = false){
+    protected fun<D> resultResponse(response: ApiState<D>, successCallback : (D) -> Unit, errorCallback : ((String) -> Unit)? = null, needLoading : Boolean = true){
         when(response){
             is ApiState.Error -> {
                 if(response.errorCode == StatusCode.ERROR_404 ||
