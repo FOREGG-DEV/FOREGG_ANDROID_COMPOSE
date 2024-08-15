@@ -20,8 +20,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.hugg.feature.theme.COPY_COMPLETE_TEXT
 import com.hugg.feature.theme.HuggTypography
+import com.hugg.feature.theme.SnackBar
 import com.hugg.feature.theme.White
 
 @Composable
@@ -65,7 +65,7 @@ fun HuggToast(
                 Box(
                     modifier = Modifier
                         .height(40.dp)
-                        .background(color = Color(0xCC2C2C2C), shape = RoundedCornerShape(8.dp)),
+                        .background(color = SnackBar, shape = RoundedCornerShape(8.dp)),
                     contentAlignment = Alignment.Center
                 ){
                     Text(

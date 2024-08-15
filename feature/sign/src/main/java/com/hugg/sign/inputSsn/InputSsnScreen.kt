@@ -158,39 +158,24 @@ fun SsnInputView(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        SsnItemView(value = uiState.ssn1, focusRequester = focusRequesters[0], position = 0, onClickKey = onClickKey, onChangedValue = onChangedValue)
-        Spacer(modifier = Modifier.width(2.dp))
-
-        SsnItemView(value = uiState.ssn2, focusRequester = focusRequesters[1], position = 1, onClickKey = onClickKey, onChangedValue = onChangedValue)
-        Spacer(modifier = Modifier.width(2.dp))
-
-        SsnItemView(value = uiState.ssn3, focusRequester = focusRequesters[2], position = 2, onClickKey = onClickKey, onChangedValue = onChangedValue)
-        Spacer(modifier = Modifier.width(2.dp))
-
-        SsnItemView(value = uiState.ssn4, focusRequester = focusRequesters[3], position = 3, onClickKey = onClickKey, onChangedValue = onChangedValue)
-        Spacer(modifier = Modifier.width(2.dp))
-
-        SsnItemView(value = uiState.ssn5, focusRequester = focusRequesters[4], position = 4, onClickKey = onClickKey, onChangedValue = onChangedValue)
-        Spacer(modifier = Modifier.width(2.dp))
-
-        SsnItemView(value = uiState.ssn6, focusRequester = focusRequesters[5], position = 5, onClickKey = onClickKey, onChangedValue = onChangedValue)
-        Spacer(modifier = Modifier.width(6.dp))
-
-        Text(
-            color = Gs50,
-            style = HuggTypography.h3,
-            text = SIGN_UP_DIVIDE_SSN
-        )
-        Spacer(modifier = Modifier.width(4.dp))
-
-        SsnItemView(value = uiState.ssn7, focusRequester = focusRequesters[6], position = 6, onClickKey = onClickKey, onChangedValue = onChangedValue)
-        Spacer(modifier = Modifier.width(2.dp))
+        repeat(7){ index ->
+            if(index == 6) {
+                Text(
+                    color = Gs50,
+                    style = HuggTypography.h3,
+                    text = SIGN_UP_DIVIDE_SSN
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+            }
+            SsnItemView(value = uiState.ssnList[index], focusRequester = focusRequesters[index], position = index, onClickKey = onClickKey, onChangedValue = onChangedValue)
+            if(index == 5) Spacer(modifier = Modifier.width(6.dp)) else Spacer(modifier = Modifier.width(2.dp))
+        }
 
         Box(
             modifier = Modifier
                 .weight(1f)
                 .height(48.dp)
-                .background(Color(0xFFF2F2F2), shape = RoundedCornerShape(4.dp))
+                .background(color = Disabled, shape = RoundedCornerShape(4.dp))
         )
     }
 }

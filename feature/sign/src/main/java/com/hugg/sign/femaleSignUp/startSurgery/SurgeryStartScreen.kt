@@ -40,6 +40,7 @@ import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
 import com.hugg.feature.R
 import com.hugg.feature.util.ForeggLog
+import com.hugg.feature.util.TimeFormatter
 import java.util.Calendar
 
 
@@ -56,10 +57,8 @@ fun SurgeryStartContainer(
     val datePickerDialog = DatePickerDialog(
         context,
         R.style.DatePickerStyle,
-        { view, year, month, day ->
-            val formattedMonth = String.format("%02d", month + 1)
-            val formattedDay = String.format("%02d", day)
-            viewModel.selectStartDate("$year-$formattedMonth-$formattedDay")
+        { _, year, month, day ->
+            viewModel.selectStartDate(TimeFormatter.getDatePickerDashDate(year, month, day))
         },
         calendar.get(Calendar.YEAR),
         calendar.get(Calendar.MONTH),

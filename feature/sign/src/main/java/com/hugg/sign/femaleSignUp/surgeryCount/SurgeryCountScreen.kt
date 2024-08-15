@@ -164,7 +164,7 @@ fun CountingView(
                     .width(51.dp)
                     .height(48.dp)
                     .background(
-                        color = if (uiState.count == 0) Color(0xFFF2F2F2) else MainNormal,
+                        color = if (uiState.count == 0) Disabled else MainNormal,
                         shape = RoundedCornerShape(topStart = 8.dp, bottomStart = 8.dp)
                     )
                     .clickable(
@@ -197,7 +197,7 @@ fun CountingView(
                     .width(51.dp)
                     .height(48.dp)
                     .background(
-                        color = if (uiState.count == 99) Color(0xFFF2F2F2) else MainNormal,
+                        color = if (uiState.count == 99) Disabled else MainNormal,
                         shape = RoundedCornerShape(topEnd = 8.dp, bottomEnd = 8.dp)
                     )
                     .clickable(
