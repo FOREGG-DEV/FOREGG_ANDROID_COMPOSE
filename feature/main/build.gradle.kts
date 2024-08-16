@@ -43,22 +43,24 @@ android {
 }
 
 dependencies {
-    implementation(project(":feature"))
     implementation(project(":data"))
     implementation(project(":domain"))
+
+    implementation(project(":feature"))
+    implementation(project(":feature:sign"))
+
     implementation(AndroidX.CORE)
     implementation(AndroidX.APPCOMPAT)
     implementation(Google.MATERIAL)
-    implementation(AndroidX.CONSTRAINT_LAYOUT)
-    implementation(AndroidX.FRAGMENT_KTX)
-    implementation(AndroidX.NAVIGATION_UI_KTX)
-    implementation(AndroidX.NAVIGATION_FRAGMENT_KTX)
+    implementation(AndroidX.NAVIGATION_COMPOSE)
     implementation(AndroidX.LIFECYCLE_VIEW_MODEL_KTX)
     implementation(AndroidX.LIFECYCLE_RUNTIME_KTX)
+    implementation(AndroidX.LIFECYCLE_RUNTIME_COMPOSE)
     implementation(AndroidX.SPLASH)
     implementation(AndroidX.THREE_TEN)
     implementation(AndroidX.SWIPE_REFRESH)
     implementation(AndroidX.DATA_STORE_PREFERENCES)
+    implementation(AndroidX.FRAGMENT_KTX)
 
     //코루틴
     implementation(Kotlin.COROUTINES_CORE)
@@ -67,6 +69,7 @@ dependencies {
     //힐트
     implementation(Google.HILT_ANDROID)
     implementation(Google.HILT_CORE)
+    implementation(Google.HILT_COMPOSE)
     implementation(Google.FCM)
     implementation(Google.FCM_KTX)
     implementation(Google.FIREBASE_ANALYTICS)
@@ -87,7 +90,6 @@ dependencies {
     implementation(KAKAO.SHARE)
     implementation(Google.GLIDE)
 
-    implementation(Libraries.VIEWPAGER_INDICATOR)
     implementation(Libraries.FLEX_BOX)
 
     //Lottie

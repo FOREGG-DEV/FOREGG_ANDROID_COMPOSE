@@ -1,16 +1,29 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("kapt")
+    id("com.google.gms.google-services")
     id("dagger.hilt.android.plugin")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
-    namespace = "com.hugg.hugg"
+    namespace = "com.hugg.app"
     compileSdk = 34
 
+    val localPropsFile = rootProject.file("local.properties")
+    val localProps = Properties()
+    if (localPropsFile.exists()) {
+        localProps.load(FileInputStream(localPropsFile))
+    }
+
     defaultConfig {
-        applicationId = "com.hugg.hugg"
+        buildConfigField("String", "KAKAO_NATIVE_KEY", localProps.getProperty("kakao_native_key"))
+        manifestPlaceholders["Key"]
+        applicationId = "com.hugg.app"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -57,16 +70,16 @@ dependencies {
     implementation(AndroidX.CORE)
     implementation(AndroidX.APPCOMPAT)
     implementation(Google.MATERIAL)
-    implementation(AndroidX.CONSTRAINT_LAYOUT)
-    implementation(AndroidX.FRAGMENT_KTX)
-    implementation(AndroidX.NAVIGATION_UI_KTX)
-    implementation(AndroidX.NAVIGATION_FRAGMENT_KTX)
+    implementation(AndroidX.NAVIGATION_COMPOSE)
     implementation(AndroidX.LIFECYCLE_VIEW_MODEL_KTX)
     implementation(AndroidX.LIFECYCLE_RUNTIME_KTX)
+    implementation(AndroidX.LIFECYCLE_RUNTIME_COMPOSE)
     implementation(AndroidX.SPLASH)
     implementation(AndroidX.THREE_TEN)
     implementation(AndroidX.SWIPE_REFRESH)
     implementation(AndroidX.DATA_STORE_PREFERENCES)
+    implementation(AndroidX.FRAGMENT_KTX)
+
 
     //코루틴
     implementation(Kotlin.COROUTINES_CORE)
@@ -75,6 +88,7 @@ dependencies {
     //힐트
     implementation(Google.HILT_ANDROID)
     implementation(Google.HILT_CORE)
+    implementation(Google.HILT_COMPOSE)
     implementation(Google.FCM)
     implementation(Google.FCM_KTX)
     implementation(Google.FIREBASE_ANALYTICS)
@@ -95,7 +109,6 @@ dependencies {
     implementation(KAKAO.SHARE)
     implementation(Google.GLIDE)
 
-    implementation(Libraries.VIEWPAGER_INDICATOR)
     implementation(Libraries.FLEX_BOX)
 
     //Lottie
