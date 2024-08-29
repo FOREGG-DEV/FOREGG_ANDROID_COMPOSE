@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.hugg.sign"
+    namespace = "com.hugg.calendar"
     compileSdk = 34
 
     defaultConfig {
