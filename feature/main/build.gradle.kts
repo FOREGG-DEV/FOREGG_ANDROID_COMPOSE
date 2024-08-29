@@ -48,6 +48,7 @@ dependencies {
 
     implementation(project(":feature"))
     implementation(project(":feature:sign"))
+    implementation(project(":feature:calendar"))
 
     implementation(AndroidX.CORE)
     implementation(AndroidX.APPCOMPAT)
@@ -90,7 +91,6 @@ dependencies {
     implementation(KAKAO.SHARE)
     implementation(Google.GLIDE)
 
-    implementation(Libraries.FLEX_BOX)
 
     //Lottie
     implementation(Libraries.LOTTIE)

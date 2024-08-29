@@ -88,7 +88,6 @@ dependencies {
     implementation(Google.GLIDE)
 
     implementation(Libraries.PAGER)
-    implementation(Libraries.FLEX_BOX)
 
     //Lottie
     implementation(Libraries.LOTTIE)

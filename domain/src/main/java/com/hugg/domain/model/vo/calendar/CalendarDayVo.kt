@@ -7,5 +7,5 @@ data class CalendarDayVo(
     val day : String = "",
     val scheduleList : List<ScheduleDetailVo> = emptyList(),
     val isToday : Boolean = false,
-    val isClicked : Boolean = false
+    val isSunday : Boolean = false
 )
