@@ -39,6 +39,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cheonjaeung.compose.grid.SimpleGridCells
 import com.cheonjaeung.compose.grid.VerticalGrid
 import com.hugg.domain.model.enums.DayType
+import com.hugg.domain.model.enums.RecordType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.domain.model.vo.calendar.CalendarDayVo
 import com.hugg.feature.R
@@ -115,14 +116,17 @@ fun CalendarScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     columns = SimpleGridCells.Fixed(7),
                 ) {
+                    val expand = uiState.calendarDayList.any { it.scheduleList.size >= 6 }
                     uiState.calendarDayList.forEachIndexed { index, item ->
                         if (index >= uiState.calendarDayList.size - 7) {
                             CalendarDayItem(
+                                expand = expand,
                                 showDivideLine = false,
                                 item = item
                             )
                         } else {
                             CalendarDayItem(
+                                expand = expand,
                                 showDivideLine = true,
                                 item = item
                             )
@@ -202,13 +206,14 @@ fun CalendarHeadItem(
 
 @Composable
 fun CalendarDayItem(
+    expand : Boolean = false,
     showDivideLine : Boolean = false,
     item : CalendarDayVo = CalendarDayVo()
 ){
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .defaultMinSize(minHeight = 106.dp),
+            .height(if (expand) 133.dp else 106.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
@@ -228,7 +233,35 @@ fun CalendarDayItem(
             )
         }
 
-        Spacer(modifier = Modifier.weight(1f)) // 남은 공간을 채우는 Spacer
+        Spacer(modifier = Modifier.size(4.dp))
+
+        item.scheduleList.forEach {
+            val background = when(it.recordType){
+                RecordType.MEDICINE -> CalendarPill
+                RecordType.INJECTION -> CalendarInjection
+                RecordType.HOSPITAL -> CalendarHospital
+                RecordType.ETC -> CalendarEtc
+            }
+
+            Box(
+                modifier = Modifier
+                    .background(background)
+                    .padding(start = 4.dp)
+                    .fillMaxWidth()
+                    .height(14.dp),
+                contentAlignment = Alignment.CenterStart
+            ){
+                Text(
+                    text = it.name,
+                    color = Gs70,
+                    style = HuggTypography.p5
+                )
+            }
+
+            Spacer(modifier = Modifier.size(1.dp))
+        }
+
+        Spacer(modifier = Modifier.weight(1f))
 
         if(showDivideLine) Box(
             modifier = Modifier
@@ -252,13 +285,4 @@ fun getDayTextColor(calendarDayVo: CalendarDayVo) : Color {
 @Composable
 internal fun PreviewMainContainer() {
     CalendarScreen()
-}
-
-@Preview
-@Composable
-internal fun PreviewDay() {
-    CalendarDayItem(
-        showDivideLine = false,
-        CalendarDayVo(day = "20", isToday = true)
-    )
 }

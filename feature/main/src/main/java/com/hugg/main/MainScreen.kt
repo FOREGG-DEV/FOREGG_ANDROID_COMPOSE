@@ -19,7 +19,7 @@ fun MainScreen() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            NavHost(navController = navController, startDestination = Routes.CalendarGraph.route) {
+            NavHost(navController = navController, startDestination = Routes.SignGraph.route) {
                 signNavGraph(navController)
                 calendarGraph(navController)
             }

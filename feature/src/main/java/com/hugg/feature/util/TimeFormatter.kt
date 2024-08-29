@@ -1,5 +1,7 @@
 package com.hugg.feature.util
 
+import com.hugg.domain.model.vo.calendar.ScheduleDetailVo
+import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 
@@ -44,5 +46,39 @@ object TimeFormatter {
         val formattedMonth = String.format("%02d", month + 1)
         val formattedDay = String.format("%02d", day)
         return "$year-$formattedMonth-$formattedDay"
+    }
+
+    fun getDatesBetween(vo : ScheduleDetailVo): List<ScheduleDetailVo> {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val startLocalDate = LocalDate.parse(vo.startDate, formatter)
+        val endLocalDate = LocalDate.parse(vo.endDate, formatter)
+
+        val datesBetween = mutableListOf<ScheduleDetailVo>()
+        var currentDate = startLocalDate
+
+        while (!currentDate.isAfter(endLocalDate)) {
+            if (isContainDayOfWeek(vo.repeatDate?.split(", ")?.map { it.trim() }, currentDate)) datesBetween.add(vo.copy(date = currentDate.toString()))
+            currentDate = currentDate.plusDays(1)
+        }
+
+        return datesBetween
+    }
+
+    private fun isContainDayOfWeek(weekdays : List<String>?, day : LocalDate) : Boolean{
+        val dayOfWeekKorean = getKoreanDayOfWeek(day.dayOfWeek)
+        return weekdays?.contains("매일") == true ||
+                weekdays?.contains(dayOfWeekKorean) == true
+    }
+
+    fun getKoreanDayOfWeek(dayOfWeek: DayOfWeek): String {
+        return when (dayOfWeek) {
+            DayOfWeek.MONDAY -> "월"
+            DayOfWeek.TUESDAY -> "화"
+            DayOfWeek.WEDNESDAY -> "수"
+            DayOfWeek.THURSDAY -> "목"
+            DayOfWeek.FRIDAY -> "금"
+            DayOfWeek.SATURDAY -> "토"
+            DayOfWeek.SUNDAY -> "일"
+        }
     }
 }

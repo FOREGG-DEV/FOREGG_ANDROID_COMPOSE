@@ -115,4 +115,12 @@ object HuggTypography {
         fontFamily = huggFontFamily,
         fontWeight = FontWeight.Medium,
     )
+
+    val p5: TextStyle = TextStyle(
+        fontSize = 8.dp.toSp(),
+        lineHeight = (11.2).dp.toSp(),
+        letterSpacing = -0.03.dp.toSp(),
+        fontFamily = huggFontFamily,
+        fontWeight = FontWeight.Normal,
+    )
 }
