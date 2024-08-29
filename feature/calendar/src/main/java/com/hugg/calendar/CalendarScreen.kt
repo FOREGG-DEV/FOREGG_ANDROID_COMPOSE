@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,8 +17,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -118,10 +115,18 @@ fun CalendarScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     columns = SimpleGridCells.Fixed(7),
                 ) {
-                    uiState.calendarDayList.forEach {
-                        CalendarDayItem(
-                            item = it
-                        )
+                    uiState.calendarDayList.forEachIndexed { index, item ->
+                        if (index >= uiState.calendarDayList.size - 7) {
+                            CalendarDayItem(
+                                showDivideLine = false,
+                                item = item
+                            )
+                        } else {
+                            CalendarDayItem(
+                                showDivideLine = true,
+                                item = item
+                            )
+                        }
                     }
                 }
             }
@@ -197,6 +202,7 @@ fun CalendarHeadItem(
 
 @Composable
 fun CalendarDayItem(
+    showDivideLine : Boolean = false,
     item : CalendarDayVo = CalendarDayVo()
 ){
     Column(
@@ -224,18 +230,18 @@ fun CalendarDayItem(
 
         Spacer(modifier = Modifier.weight(1f)) // 남은 공간을 채우는 Spacer
 
-        Box(
+        if(showDivideLine) Box(
             modifier = Modifier
                 .background(Gs10)
                 .fillMaxWidth()
-                .height(1.dp) // Box의 높이를 설정
+                .height(1.dp)
         )
     }
 }
 
 fun getDayTextColor(calendarDayVo: CalendarDayVo) : Color {
-    if(calendarDayVo.dayType == DayType.PREV_NEXT && calendarDayVo.isSunday) return Sub
-    if(calendarDayVo.dayType == DayType.PREV_NEXT) return Gs50
+    if(calendarDayVo.dayType == DayType.PREV_NEXT && calendarDayVo.isSunday) return PrevNextSunday
+    if(calendarDayVo.dayType == DayType.PREV_NEXT) return PrevNextNormalDay
     if(calendarDayVo.isToday) return White
     if(calendarDayVo.isSunday) return Sunday
 
@@ -252,6 +258,7 @@ internal fun PreviewMainContainer() {
 @Composable
 internal fun PreviewDay() {
     CalendarDayItem(
+        showDivideLine = false,
         CalendarDayVo(day = "20", isToday = true)
     )
 }
