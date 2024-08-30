@@ -202,4 +202,12 @@ class CalendarViewModel @Inject constructor(
             )
         )
     }
+
+    fun onClickCreateCancelScheduleBtn(){
+        updateState(
+            uiState.value.copy(
+                isCreateMode = !uiState.value.isCreateMode,
+            )
+        )
+    }
 }

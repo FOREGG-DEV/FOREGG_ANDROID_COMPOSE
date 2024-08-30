@@ -1,8 +1,13 @@
 package com.hugg.calendar
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -34,6 +39,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -45,18 +51,21 @@ import com.cheonjaeung.compose.grid.VerticalGrid
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
+import com.hugg.domain.model.enums.CalendarType
 import com.hugg.domain.model.enums.DayType
 import com.hugg.domain.model.enums.RecordType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.domain.model.vo.calendar.CalendarDayVo
+import com.hugg.domain.model.vo.calendar.ScheduleDetailVo
 import com.hugg.feature.R
+import com.hugg.feature.component.CancelBtn
+import com.hugg.feature.component.PlusBtn
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
-import com.hugg.feature.uiItem.OnBoardingItem
-import com.hugg.feature.util.ForeggLog
+import com.hugg.feature.uiItem.ScheduleDetailItem
+import com.hugg.feature.util.TimeFormatter
 
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun CalendarContainer(
     navigateCreateSchedule : () -> Unit = {},
@@ -69,6 +78,7 @@ fun CalendarContainer(
         onClickNextMonthBtn = { viewModel.onClickNextMonth() },
         onClickDay = { position -> viewModel.onClickDay(position) },
         onClickCancel = { viewModel.onClickDialogCancel() },
+        onClickCreateCancelScheduleBtn = { viewModel.onClickCreateCancelScheduleBtn() },
         uiState = uiState
     )
 }
@@ -81,6 +91,7 @@ fun CalendarScreen(
     onClickNextMonthBtn : () -> Unit = {},
     onClickDay : ( Int ) -> Unit = {},
     onClickCancel: () -> Unit = {},
+    onClickCreateCancelScheduleBtn: () -> Unit = {},
     uiState : CalendarPageState = CalendarPageState()
 ) {
     Column(
@@ -158,7 +169,8 @@ fun CalendarScreen(
     if(uiState.isShowDetailDialog) ScheduleDetailDialog(
         uiState = uiState,
         pagerState = rememberPagerState(initialPage = uiState.clickedPosition),
-        onClickCancel = onClickCancel
+        onClickCancel = onClickCancel,
+        onClickCreateCancelScheduleBtn = onClickCreateCancelScheduleBtn,
     )
 }
 
@@ -324,6 +336,7 @@ fun ScheduleDetailDialog(
     uiState: CalendarPageState = CalendarPageState(),
     pagerState : PagerState = rememberPagerState(),
     onClickCancel: () -> Unit = {},
+    onClickCreateCancelScheduleBtn: () -> Unit = {},
 ) {
     Dialog(
         onDismissRequest = onClickCancel,
@@ -339,7 +352,9 @@ fun ScheduleDetailDialog(
                     .padding(horizontal = 16.dp)
                     .background(color = White, shape = RoundedCornerShape(20.dp))
                     .height(454.dp),
-                calendarDayVo = uiState.calendarDayList[page]
+                calendarDayVo = uiState.calendarDayList[page],
+                onClickCreateCancelScheduleBtn = onClickCreateCancelScheduleBtn,
+                uiState = uiState
             )
         }
     }
@@ -349,7 +364,9 @@ fun ScheduleDetailDialog(
 fun ScheduleDialogPagerItem(
     modifier : Modifier = Modifier,
     calendarDayVo: CalendarDayVo = CalendarDayVo(),
-){
+    uiState: CalendarPageState = CalendarPageState(),
+    onClickCreateCancelScheduleBtn : () -> Unit = {},
+) {
     Column(
         modifier = modifier
     ) {
@@ -365,25 +382,44 @@ fun ScheduleDialogPagerItem(
 
         Spacer(modifier = Modifier.size(16.dp))
 
-        if(calendarDayVo.scheduleList.isEmpty()) Text(
+        if (calendarDayVo.scheduleList.isEmpty()) Text(
             modifier = Modifier
                 .padding(start = 16.dp),
             text = CALENDAR_EMPTY_SCHEDULE,
             style = HuggTypography.h4,
             color = Gs50
         )
-        else LazyColumn{
+        else LazyColumn {
             itemsIndexed(
                 items = calendarDayVo.scheduleList,
                 key = { _, scheduleVo ->
                     scheduleVo.id
                 }
-            ) { _, scheduleVo ->
-                //CustomItem(person = person)
+            ) { index, scheduleVo ->
+                ScheduleDetailItem(
+                    scheduleDetailVo = scheduleVo,
+                    isLastItem = calendarDayVo.scheduleList.size - 1 == index
+                )
             }
         }
     }
 
+    DialogNormalMode(
+        uiState = uiState,
+        onClickCreateCancelScheduleBtn = onClickCreateCancelScheduleBtn
+    )
+
+    DialogCreateMode(
+        uiState = uiState,
+        onClickCreateCancelScheduleBtn = onClickCreateCancelScheduleBtn
+    )
+}
+
+@Composable
+fun DialogNormalMode(
+    uiState : CalendarPageState = CalendarPageState(),
+    onClickCreateCancelScheduleBtn : () -> Unit = {},
+){
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -391,7 +427,98 @@ fun ScheduleDialogPagerItem(
             .height(454.dp)
     ) {
         Spacer(modifier = Modifier.weight(1f))
+
+        AnimatedVisibility(
+            visible = !uiState.isCreateMode,
+            enter = fadeIn(animationSpec = tween(300)),
+            exit = fadeOut(animationSpec = tween(300))
+        ) {
+
+            Row(
+                modifier = Modifier.padding(end = 16.dp),
+            ) {
+                Spacer(modifier = Modifier.weight(1f))
+                PlusBtn(onClickBtn = onClickCreateCancelScheduleBtn)
+            }
+        }
+
+        Spacer(modifier = Modifier.size(16.dp))
     }
+}
+
+@Composable
+fun DialogCreateMode(
+    uiState : CalendarPageState = CalendarPageState(),
+    onClickCreateCancelScheduleBtn : () -> Unit = {},
+){
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .height(454.dp)
+    ) {
+        Spacer(modifier = Modifier.weight(1f))
+
+        AnimatedVisibility(
+            visible = uiState.isCreateMode,
+            enter = fadeIn(animationSpec = tween(300)),
+            exit = fadeOut(animationSpec = tween(300))
+        ) {
+
+            Row(
+                modifier = Modifier.padding(start = 14.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                CancelBtn(onClickBtn = onClickCreateCancelScheduleBtn)
+
+                Spacer(modifier = Modifier.size(8.dp))
+
+                CreateScheduleBtnByType(RecordType.HOSPITAL)
+                CreateScheduleBtnByType(RecordType.INJECTION)
+                CreateScheduleBtnByType(RecordType.MEDICINE)
+                CreateScheduleBtnByType(RecordType.ETC)
+            }
+        }
+
+        Spacer(modifier = Modifier.size(16.dp))
+    }
+}
+
+@Composable
+fun CreateScheduleBtnByType(
+    type : RecordType = RecordType.ETC
+){
+    val text = when(type){
+        RecordType.MEDICINE -> WORD_MEDICINE
+        RecordType.INJECTION -> WORD_INJECTION
+        RecordType.HOSPITAL -> WORD_HOSPITAL
+        RecordType.ETC -> WORD_ETC
+    }
+    Row(
+        modifier = Modifier
+            .border(
+                width = 1.dp,
+                color = MainNormal,
+                shape = RoundedCornerShape(999.dp)
+            )
+            .background(color = White)
+            .padding(horizontal = 9.dp, vertical = 6.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier
+                .size(16.dp)
+                .background(Gs10)
+        )
+        Spacer(modifier = Modifier.size(4.dp))
+        Text(
+            text = text,
+            style = HuggTypography.h4,
+            color = Gs80
+        )
+    }
+
+    Spacer(modifier = Modifier.size(8.dp))
 }
 
 fun getDayTextColor(calendarDayVo: CalendarDayVo) : Color {

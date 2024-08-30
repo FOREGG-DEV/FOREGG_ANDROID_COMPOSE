@@ -11,6 +11,10 @@ const val WORD_DAILY_RECORD = "하루기록"
 const val WORD_SIGN_UP = "회원가입"
 const val WORD_ROUND = "회차"
 const val WORD_CALENDAR = "캘린더"
+const val WORD_HOSPITAL = "병원"
+const val WORD_INJECTION = "주사"
+const val WORD_MEDICINE = "약"
+const val WORD_ETC = "기타"
 
 // --------- 기타 --------- //
 const val COPY_COMPLETE_TEXT = "클립보드에 배우자 코드가 복사되었어요!"
