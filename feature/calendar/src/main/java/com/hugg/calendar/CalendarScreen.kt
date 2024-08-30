@@ -269,7 +269,7 @@ fun CalendarDayItem(
                 RecordType.ETC -> CalendarEtc
             }
 
-            if(scheduleDetailVo.blankCount != index) {
+            if(scheduleDetailVo.blankCount != index && (scheduleDetailVo.isStartContinueSchedule || scheduleDetailVo.isContinueSchedule)) {
                 val minusCount = if(index != 0) item.scheduleList[index - 1].blankCount + 1 else 0
                 repeat(scheduleDetailVo.blankCount - minusCount) {
                     Box(

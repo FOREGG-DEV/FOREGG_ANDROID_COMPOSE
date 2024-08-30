@@ -155,19 +155,7 @@ class CalendarViewModel @Inject constructor(
             newList.addAll(TimeFormatter.getDatesBetween(vo))
         }
 
-        return getSplitTimeScheduleList(normalScheduleList + newList)
-    }
-
-    private fun getSplitTimeScheduleList(list: List<ScheduleDetailVo>) : List<ScheduleDetailVo>{
-        val newList = mutableListOf<ScheduleDetailVo>()
-        list.forEach {
-            it.repeatTimes.forEach { time ->
-                val newSchedule = it.copy(repeatTimes = listOf(time))
-                newList.add(newSchedule)
-            }
-        }
-
-        return newList
+        return normalScheduleList + newList
     }
 
 

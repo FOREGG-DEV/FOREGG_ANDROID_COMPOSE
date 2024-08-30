@@ -55,10 +55,12 @@ object TimeFormatter {
 
         val datesBetween = mutableListOf<ScheduleDetailVo>()
         var currentDate = startLocalDate
+        var prevDate = startLocalDate
 
         while (!currentDate.isAfter(endLocalDate)) {
             if (isContainDayOfWeek(vo.repeatDate?.split(", ")?.map { it.trim() }, currentDate)) {
-                datesBetween.add(vo.copy(date = currentDate.toString(), isContinueSchedule = currentDate != startLocalDate, isStartContinueSchedule = currentDate == startLocalDate))
+                datesBetween.add(vo.copy(date = currentDate.toString(), isContinueSchedule = (currentDate != startLocalDate && prevDate == currentDate.minusDays(1)), isStartContinueSchedule = currentDate == startLocalDate))
+                prevDate = currentDate
             }
             currentDate = currentDate.plusDays(1)
         }
