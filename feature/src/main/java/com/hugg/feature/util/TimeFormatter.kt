@@ -4,6 +4,8 @@ import com.hugg.domain.model.vo.calendar.ScheduleDetailVo
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.TextStyle
+import java.util.Locale
 
 object TimeFormatter {
 
@@ -30,6 +32,14 @@ object TimeFormatter {
     fun getDay(date : String) : Int {
         val dates = date.split("-")
         return dates[DAY_INDEX].toInt()
+    }
+
+    fun getDateFormattedMDWKor(date : String) : String {
+        val date = LocalDate.parse(date)
+        val month = date.monthValue
+        val day = date.dayOfMonth
+        val dayOfWeek = date.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.KOREAN)
+        return "${month}월 ${day}일 ${dayOfWeek}"
     }
 
     fun getWeekListKor() : List<String>{

@@ -1,6 +1,5 @@
 package com.hugg.calendar
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
@@ -11,13 +10,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import com.google.accompanist.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -53,6 +53,7 @@ import com.hugg.feature.R
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
 import com.hugg.feature.uiItem.OnBoardingItem
+import com.hugg.feature.util.ForeggLog
 
 
 @OptIn(ExperimentalPagerApi::class)
@@ -66,7 +67,7 @@ fun CalendarContainer(
     CalendarScreen(
         onClickPrevMonthBtn = { viewModel.onClickPrevMonth() },
         onClickNextMonthBtn = { viewModel.onClickNextMonth() },
-        onClickDay = { viewModel.onClickDay() },
+        onClickDay = { position -> viewModel.onClickDay(position) },
         onClickCancel = { viewModel.onClickDialogCancel() },
         uiState = uiState
     )
@@ -78,7 +79,7 @@ fun CalendarScreen(
     scrollState: ScrollState = rememberScrollState(),
     onClickPrevMonthBtn : () -> Unit = {},
     onClickNextMonthBtn : () -> Unit = {},
-    onClickDay : () -> Unit = {},
+    onClickDay : ( Int ) -> Unit = {},
     onClickCancel: () -> Unit = {},
     uiState : CalendarPageState = CalendarPageState()
 ) {
@@ -154,7 +155,11 @@ fun CalendarScreen(
         }
     }
 
-    if(uiState.isShowDetailDialog) DetailScheduleDialog(onClickCancel = onClickCancel)
+    if(uiState.isShowDetailDialog) ScheduleDetailDialog(
+        uiState = uiState,
+        pagerState = rememberPagerState(initialPage = uiState.clickedPosition),
+        onClickCancel = onClickCancel
+    )
 }
 
 @Composable
@@ -228,13 +233,13 @@ fun CalendarDayItem(
     expand : Boolean = false,
     showDivideLine : Boolean = false,
     item : CalendarDayVo = CalendarDayVo(),
-    isClicked : () -> Unit = {},
+    isClicked : ( Int ) -> Unit = {},
     position : Int = 0
 ){
     Column(
         modifier = Modifier
             .clickable(
-                onClick = isClicked,
+                onClick = { isClicked(position) },
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null
             )
@@ -315,44 +320,78 @@ fun CalendarDayItem(
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun DetailScheduleDialog(
+fun ScheduleDetailDialog(
     uiState: CalendarPageState = CalendarPageState(),
     pagerState : PagerState = rememberPagerState(),
     onClickCancel: () -> Unit = {},
 ) {
-//    Dialog(
-//        onDismissRequest = onClickCancel,
-//        properties = DialogProperties(usePlatformDefaultWidth = false) // 기본 너비 사용 안 함
-//    ) {
-//        HorizontalPager(
-//            count = uiState.calendarDayList.size,
-//            state = pagerState,
-//        ) { page ->
-//            OnBoardingItem(uiState.onboardingList[page].img, uiState.onboardingList[page].title, uiState.onboardingList[page].content)
-//        }
-//        HorizontalPager(
-//            count = 3,
-//            state = pagerState,
-//        ) { page ->
-//            when (page) {
-//                0 -> Text("Page 1 Content", modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(horizontal = 16.dp)
-//                    .background(color = White, shape = RoundedCornerShape(20.dp))
-//                    .height(454.dp))
-//                1 -> Text("Page 2 Content", modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(horizontal = 16.dp)
-//                    .background(color = White, shape = RoundedCornerShape(20.dp))
-//                    .height(454.dp))
-//                2 -> Text("Page 3 Content", modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(horizontal = 16.dp)
-//                    .background(color = White, shape = RoundedCornerShape(20.dp))
-//                    .height(454.dp))
-//            }
-//        }
-//    }
+    Dialog(
+        onDismissRequest = onClickCancel,
+        properties = DialogProperties(usePlatformDefaultWidth = false)
+    ) {
+        HorizontalPager(
+            count = uiState.calendarDayList.size,
+            state = pagerState,
+        ) { page ->
+            ScheduleDialogPagerItem(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .background(color = White, shape = RoundedCornerShape(20.dp))
+                    .height(454.dp),
+                calendarDayVo = uiState.calendarDayList[page]
+            )
+        }
+    }
+}
+
+@Composable
+fun ScheduleDialogPagerItem(
+    modifier : Modifier = Modifier,
+    calendarDayVo: CalendarDayVo = CalendarDayVo(),
+){
+    Column(
+        modifier = modifier
+    ) {
+        Spacer(modifier = Modifier.size(20.dp))
+
+        Text(
+            modifier = Modifier
+                .padding(start = 16.dp),
+            text = calendarDayVo.realDate,
+            style = HuggTypography.h2,
+            color = Gs80
+        )
+
+        Spacer(modifier = Modifier.size(16.dp))
+
+        if(calendarDayVo.scheduleList.isEmpty()) Text(
+            modifier = Modifier
+                .padding(start = 16.dp),
+            text = CALENDAR_EMPTY_SCHEDULE,
+            style = HuggTypography.h4,
+            color = Gs50
+        )
+        else LazyColumn{
+            itemsIndexed(
+                items = calendarDayVo.scheduleList,
+                key = { _, scheduleVo ->
+                    scheduleVo.id
+                }
+            ) { _, scheduleVo ->
+                //CustomItem(person = person)
+            }
+        }
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .height(454.dp)
+    ) {
+        Spacer(modifier = Modifier.weight(1f))
+    }
 }
 
 fun getDayTextColor(calendarDayVo: CalendarDayVo) : Color {

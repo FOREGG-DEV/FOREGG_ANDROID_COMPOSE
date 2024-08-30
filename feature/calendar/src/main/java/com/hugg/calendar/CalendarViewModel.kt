@@ -118,7 +118,7 @@ class CalendarViewModel @Inject constructor(
             val isToday = dateString == TimeFormatter.getToday()
             val scheduleList = newScheduleList.filter { it.date == dateString }.sortedWith(compareBy({ it.recordType.priority }, { it.repeatTimes.first().time }))
             val isSunday = currentDate.dayOfWeek == DayOfWeek.SUNDAY
-            dayList.add(CalendarDayVo(day = TimeFormatter.getDay(dateString).toString(), scheduleList = scheduleList, isToday = isToday, isSunday = isSunday, dayType = DayType.NORMAL))
+            dayList.add(CalendarDayVo(day = TimeFormatter.getDay(dateString).toString(), realDate = TimeFormatter.getDateFormattedMDWKor(dateString), scheduleList = scheduleList, isToday = isToday, isSunday = isSunday, dayType = DayType.NORMAL))
             currentDate = currentDate.plusDays(1)
         }
 
@@ -168,7 +168,7 @@ class CalendarViewModel @Inject constructor(
             val day = lastDayOfPreviousMonth.minusDays((startDay - i).toLong()).toString()
             val scheduleListForDay = list.filter { it.date == day }.sortedWith(compareBy({ it.recordType.priority }, { it.repeatTimes.first().time }))
             val isSunday = lastDayOfPreviousMonth.minusDays((startDay - i).toLong()).dayOfWeek == DayOfWeek.SUNDAY
-            dayList.add(CalendarDayVo(day = TimeFormatter.getDay(day).toString(), scheduleList = scheduleListForDay, isSunday = isSunday, dayType = DayType.PREV_NEXT))
+            dayList.add(CalendarDayVo(day = TimeFormatter.getDay(day).toString(), realDate = TimeFormatter.getDateFormattedMDWKor(day), scheduleList = scheduleListForDay, isSunday = isSunday, dayType = DayType.PREV_NEXT))
         }
         return dayList
     }
@@ -181,15 +181,16 @@ class CalendarViewModel @Inject constructor(
             val day = firstDayOfNextMonth.plusDays(i.toLong()).toString()
             val scheduleListForDay = list.filter { it.date == day }.sortedWith(compareBy({ it.recordType.priority }, { it.repeatTimes.first().time }))
             val isSunday = firstDayOfNextMonth.plusDays(i.toLong()).dayOfWeek == DayOfWeek.SUNDAY
-            dayList.add(CalendarDayVo(day = TimeFormatter.getDay(day).toString(), scheduleList = scheduleListForDay, isSunday = isSunday, dayType = DayType.PREV_NEXT))
+            dayList.add(CalendarDayVo(day = TimeFormatter.getDay(day).toString(), realDate = TimeFormatter.getDateFormattedMDWKor(day), scheduleList = scheduleListForDay, isSunday = isSunday, dayType = DayType.PREV_NEXT))
         }
         return dayList
     }
 
-    fun onClickDay(){
+    fun onClickDay(position : Int){
         updateState(
             uiState.value.copy(
                 isShowDetailDialog = true,
+                clickedPosition = position
             )
         )
     }

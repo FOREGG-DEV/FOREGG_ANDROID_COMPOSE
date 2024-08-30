@@ -48,5 +48,8 @@ const val SIGN_UP_SPOUSE_CODE_MALE_HINT = "아내에게 받은 공유 코드를 
 const val SIGN_UP_COMPLETE = "가입 완료"
 const val SIGN_UP_MALE = "아내에게 받은 배우자 코드를\n입력해주세요."
 
+// --------- 캘린더 --------- //
+const val CALENDAR_EMPTY_SCHEDULE = "이날은 일정이 없어요"
+
 // --------- 에러 Toast --------- //
 const val TOAST_ERROR_NOR_CORRECT_SPOUSE_CODE = "유효하지 않은 배우자코드입니다."
