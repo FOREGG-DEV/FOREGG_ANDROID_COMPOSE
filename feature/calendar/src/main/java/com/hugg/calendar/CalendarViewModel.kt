@@ -6,6 +6,7 @@ import com.hugg.domain.model.vo.calendar.CalendarDayVo
 import com.hugg.domain.model.vo.calendar.ScheduleDetailVo
 import com.hugg.domain.repository.ScheduleRepository
 import com.hugg.feature.base.BaseViewModel
+import com.hugg.feature.util.ForeggLog
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.TimeFormatter.getWeekListKor
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -120,7 +121,30 @@ class CalendarViewModel @Inject constructor(
             dayList.add(CalendarDayVo(day = TimeFormatter.getDay(dateString).toString(), scheduleList = scheduleList, isToday = isToday, isSunday = isSunday, dayType = DayType.NORMAL))
             currentDate = currentDate.plusDays(1)
         }
-        return getPreviousMonthDays(newScheduleList) + dayList + getNextMonthDays(newScheduleList)
+
+        val monthDayList = getPreviousMonthDays(newScheduleList) + dayList + getNextMonthDays(newScheduleList)
+        return getBlankCount(monthDayList)
+    }
+
+    private fun getBlankCount(list: List<CalendarDayVo>): List<CalendarDayVo> {
+        val idToMaxBlankCountMap = mutableMapOf<Long, Int>()
+
+        list.forEach { calendarDayVo ->
+            calendarDayVo.scheduleList.forEachIndexed { index, scheduleDetailVo ->
+                if (scheduleDetailVo.isContinueSchedule || scheduleDetailVo.isStartContinueSchedule) {
+                    idToMaxBlankCountMap[scheduleDetailVo.id] = maxOf(idToMaxBlankCountMap.getOrDefault(scheduleDetailVo.id, 0), index)
+                }
+            }
+        }
+        val updatedCalendarDayVoList = list.map { calendarDayVo ->
+            val updatedScheduleList = calendarDayVo.scheduleList.map { scheduleDetailVo ->
+                scheduleDetailVo.copy(blankCount = idToMaxBlankCountMap.getOrDefault(scheduleDetailVo.id, 0))
+            }
+
+            calendarDayVo.copy(scheduleList = updatedScheduleList)
+        }
+
+        return updatedCalendarDayVoList
     }
 
     private fun getArrangeRepeatScheduleList(list : List<ScheduleDetailVo>) : List<ScheduleDetailVo>{
@@ -172,5 +196,21 @@ class CalendarViewModel @Inject constructor(
             dayList.add(CalendarDayVo(day = TimeFormatter.getDay(day).toString(), scheduleList = scheduleListForDay, isSunday = isSunday, dayType = DayType.PREV_NEXT))
         }
         return dayList
+    }
+
+    fun onClickDay(){
+        updateState(
+            uiState.value.copy(
+                isShowDetailDialog = true,
+            )
+        )
+    }
+
+    fun onClickDialogCancel(){
+        updateState(
+            uiState.value.copy(
+                isShowDetailDialog = false,
+            )
+        )
     }
 }

@@ -84,6 +84,7 @@ dependencies {
     kapt(Google.HILT_COMPILER)
 
     implementation(Libraries.GRID_LAYOUT)
+    implementation(Libraries.PAGER)
 
     //Lottie
     implementation(Libraries.LOTTIE)

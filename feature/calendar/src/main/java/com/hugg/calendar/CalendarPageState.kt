@@ -7,4 +7,5 @@ data class CalendarPageState(
     val selectedYearMonth : String = "",
     val calendarHeadList : List<CalendarDayVo> = emptyList(),
     val calendarDayList : List<CalendarDayVo> = emptyList(),
+    val isShowDetailDialog : Boolean = false
 ) : PageState

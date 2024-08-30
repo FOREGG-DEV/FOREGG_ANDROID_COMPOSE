@@ -57,7 +57,9 @@ object TimeFormatter {
         var currentDate = startLocalDate
 
         while (!currentDate.isAfter(endLocalDate)) {
-            if (isContainDayOfWeek(vo.repeatDate?.split(", ")?.map { it.trim() }, currentDate)) datesBetween.add(vo.copy(date = currentDate.toString()))
+            if (isContainDayOfWeek(vo.repeatDate?.split(", ")?.map { it.trim() }, currentDate)) {
+                datesBetween.add(vo.copy(date = currentDate.toString(), isContinueSchedule = currentDate != startLocalDate, isStartContinueSchedule = currentDate == startLocalDate))
+            }
             currentDate = currentDate.plusDays(1)
         }
 

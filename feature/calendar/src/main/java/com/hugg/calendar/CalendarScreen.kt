@@ -1,5 +1,6 @@
 package com.hugg.calendar
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import com.google.accompanist.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -34,10 +36,15 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cheonjaeung.compose.grid.SimpleGridCells
 import com.cheonjaeung.compose.grid.VerticalGrid
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.PagerState
 import com.hugg.domain.model.enums.DayType
 import com.hugg.domain.model.enums.RecordType
 import com.hugg.domain.model.enums.TopBarMiddleType
@@ -45,8 +52,10 @@ import com.hugg.domain.model.vo.calendar.CalendarDayVo
 import com.hugg.feature.R
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
+import com.hugg.feature.uiItem.OnBoardingItem
 
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun CalendarContainer(
     navigateCreateSchedule : () -> Unit = {},
@@ -54,19 +63,23 @@ fun CalendarContainer(
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
     CalendarScreen(
         onClickPrevMonthBtn = { viewModel.onClickPrevMonth() },
         onClickNextMonthBtn = { viewModel.onClickNextMonth() },
+        onClickDay = { viewModel.onClickDay() },
+        onClickCancel = { viewModel.onClickDialogCancel() },
         uiState = uiState
     )
 }
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun CalendarScreen(
     scrollState: ScrollState = rememberScrollState(),
     onClickPrevMonthBtn : () -> Unit = {},
     onClickNextMonthBtn : () -> Unit = {},
+    onClickDay : () -> Unit = {},
+    onClickCancel: () -> Unit = {},
     uiState : CalendarPageState = CalendarPageState()
 ) {
     Column(
@@ -122,13 +135,17 @@ fun CalendarScreen(
                             CalendarDayItem(
                                 expand = expand,
                                 showDivideLine = false,
-                                item = item
+                                item = item,
+                                isClicked = onClickDay,
+                                position = index
                             )
                         } else {
                             CalendarDayItem(
                                 expand = expand,
                                 showDivideLine = true,
-                                item = item
+                                item = item,
+                                isClicked = onClickDay,
+                                position = index
                             )
                         }
                     }
@@ -136,6 +153,8 @@ fun CalendarScreen(
             }
         }
     }
+
+    if(uiState.isShowDetailDialog) DetailScheduleDialog(onClickCancel = onClickCancel)
 }
 
 @Composable
@@ -208,10 +227,17 @@ fun CalendarHeadItem(
 fun CalendarDayItem(
     expand : Boolean = false,
     showDivideLine : Boolean = false,
-    item : CalendarDayVo = CalendarDayVo()
+    item : CalendarDayVo = CalendarDayVo(),
+    isClicked : () -> Unit = {},
+    position : Int = 0
 ){
     Column(
         modifier = Modifier
+            .clickable(
+                onClick = isClicked,
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+            )
             .fillMaxWidth()
             .height(if (expand) 133.dp else 106.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -235,12 +261,27 @@ fun CalendarDayItem(
 
         Spacer(modifier = Modifier.size(4.dp))
 
-        item.scheduleList.forEach {
-            val background = when(it.recordType){
+        item.scheduleList.forEachIndexed { index, scheduleDetailVo ->
+            val background = when(scheduleDetailVo.recordType){
                 RecordType.MEDICINE -> CalendarPill
                 RecordType.INJECTION -> CalendarInjection
                 RecordType.HOSPITAL -> CalendarHospital
                 RecordType.ETC -> CalendarEtc
+            }
+
+            if(scheduleDetailVo.blankCount != index) {
+                val minusCount = if(index != 0) item.scheduleList[index - 1].blankCount + 1 else 0
+                repeat(scheduleDetailVo.blankCount - minusCount) {
+                    Box(
+                        modifier = Modifier
+                            .background(White)
+                            .padding(start = 4.dp)
+                            .fillMaxWidth()
+                            .height(14.dp),
+                    )
+
+                    Spacer(modifier = Modifier.size(1.dp))
+                }
             }
 
             Box(
@@ -251,8 +292,8 @@ fun CalendarDayItem(
                     .height(14.dp),
                 contentAlignment = Alignment.CenterStart
             ){
-                Text(
-                    text = it.name,
+                if(!scheduleDetailVo.isContinueSchedule) Text(
+                    text = scheduleDetailVo.name,
                     color = Gs70,
                     style = HuggTypography.p5
                 )
@@ -270,6 +311,48 @@ fun CalendarDayItem(
                 .height(1.dp)
         )
     }
+}
+
+@OptIn(ExperimentalPagerApi::class)
+@Composable
+fun DetailScheduleDialog(
+    uiState: CalendarPageState = CalendarPageState(),
+    pagerState : PagerState = rememberPagerState(),
+    onClickCancel: () -> Unit = {},
+) {
+//    Dialog(
+//        onDismissRequest = onClickCancel,
+//        properties = DialogProperties(usePlatformDefaultWidth = false) // 기본 너비 사용 안 함
+//    ) {
+//        HorizontalPager(
+//            count = uiState.calendarDayList.size,
+//            state = pagerState,
+//        ) { page ->
+//            OnBoardingItem(uiState.onboardingList[page].img, uiState.onboardingList[page].title, uiState.onboardingList[page].content)
+//        }
+//        HorizontalPager(
+//            count = 3,
+//            state = pagerState,
+//        ) { page ->
+//            when (page) {
+//                0 -> Text("Page 1 Content", modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(horizontal = 16.dp)
+//                    .background(color = White, shape = RoundedCornerShape(20.dp))
+//                    .height(454.dp))
+//                1 -> Text("Page 2 Content", modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(horizontal = 16.dp)
+//                    .background(color = White, shape = RoundedCornerShape(20.dp))
+//                    .height(454.dp))
+//                2 -> Text("Page 3 Content", modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(horizontal = 16.dp)
+//                    .background(color = White, shape = RoundedCornerShape(20.dp))
+//                    .height(454.dp))
+//            }
+//        }
+//    }
 }
 
 fun getDayTextColor(calendarDayVo: CalendarDayVo) : Color {

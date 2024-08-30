@@ -24,4 +24,7 @@ data class ScheduleDetailVo(
     val dose : String? = null,
     @SerializedName("memo")
     val memo : String = "",
+    val isStartContinueSchedule : Boolean = false,
+    val isContinueSchedule : Boolean = false,
+    val blankCount : Int = 0
 )
