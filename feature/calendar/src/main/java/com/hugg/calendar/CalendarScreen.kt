@@ -358,7 +358,7 @@ fun ScheduleDetailDialog(
 
             Box(
                 modifier = Modifier
-                    .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+                    .padding(horizontal = 16.dp)
                     .fillMaxWidth()
                     .height(40.dp)
                     .clickable(
@@ -378,6 +378,16 @@ fun ScheduleDetailDialog(
                     color = if (uiState.showErrorMaxScheduleSnackBar) White else Color.Transparent
                 )
             }
+
+            Spacer(
+                modifier = Modifier
+                .size(16.dp)
+                .clickable(
+                    onClick = onClickCancel,
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null
+                )
+            )
 
             HorizontalPager(
                 count = uiState.calendarDayList.size,

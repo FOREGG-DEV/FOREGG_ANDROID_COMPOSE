@@ -201,7 +201,8 @@ class CalendarViewModel @Inject constructor(
         updateState(
             uiState.value.copy(
                 isShowDetailDialog = false,
-                isCreateMode = false
+                isCreateMode = false,
+                showErrorMaxScheduleSnackBar = false
             )
         )
     }
