@@ -79,6 +79,7 @@ fun CalendarContainer(
         onClickDay = { position -> viewModel.onClickDay(position) },
         onClickCancel = { viewModel.onClickDialogCancel() },
         onClickCreateCancelScheduleBtn = { viewModel.onClickCreateCancelScheduleBtn() },
+        onClickCreateScheduleBtn = { type, size -> viewModel.onClickCreateScheduleBtn(type, size)},
         uiState = uiState
     )
 }
@@ -92,6 +93,7 @@ fun CalendarScreen(
     onClickDay : ( Int ) -> Unit = {},
     onClickCancel: () -> Unit = {},
     onClickCreateCancelScheduleBtn: () -> Unit = {},
+    onClickCreateScheduleBtn: (RecordType, Int) -> Unit = {_,_ -> },
     uiState : CalendarPageState = CalendarPageState()
 ) {
     Column(
@@ -171,6 +173,7 @@ fun CalendarScreen(
         pagerState = rememberPagerState(initialPage = uiState.clickedPosition),
         onClickCancel = onClickCancel,
         onClickCreateCancelScheduleBtn = onClickCreateCancelScheduleBtn,
+        onClickCreateScheduleBtn = onClickCreateScheduleBtn
     )
 }
 
@@ -337,24 +340,55 @@ fun ScheduleDetailDialog(
     pagerState : PagerState = rememberPagerState(),
     onClickCancel: () -> Unit = {},
     onClickCreateCancelScheduleBtn: () -> Unit = {},
+    onClickCreateScheduleBtn: (RecordType, Int) -> Unit = {_,_ -> }
 ) {
     Dialog(
         onDismissRequest = onClickCancel,
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
-        HorizontalPager(
-            count = uiState.calendarDayList.size,
-            state = pagerState,
-        ) { page ->
-            ScheduleDialogPagerItem(
+        Column {
+
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth()
+                    .height(40.dp)
+                    .background(
+                        if (uiState.showErrorMaxScheduleSnackBar) ErrorSnackBar else Color.Transparent,
+                        shape = RoundedCornerShape(8.dp)
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = CALENDAR_MAX_SCHEDULE,
+                    style = HuggTypography.p2,
+                    color = if (uiState.showErrorMaxScheduleSnackBar) White else Color.Transparent
+                )
+            }
+
+            Spacer(modifier = Modifier.size(16.dp))
+            HorizontalPager(
+                count = uiState.calendarDayList.size,
+                state = pagerState,
+            ) { page ->
+                ScheduleDialogPagerItem(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .background(color = White, shape = RoundedCornerShape(20.dp))
+                        .height(454.dp),
+                    calendarDayVo = uiState.calendarDayList[page],
+                    onClickCreateCancelScheduleBtn = onClickCreateCancelScheduleBtn,
+                    uiState = uiState,
+                    onClickCreateScheduleBtn = onClickCreateScheduleBtn
+                )
+            }
+            Spacer(modifier = Modifier.size(16.dp))
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .background(color = White, shape = RoundedCornerShape(20.dp))
-                    .height(454.dp),
-                calendarDayVo = uiState.calendarDayList[page],
-                onClickCreateCancelScheduleBtn = onClickCreateCancelScheduleBtn,
-                uiState = uiState
+                    .height(40.dp)
+                    .background(Color.Transparent)
             )
         }
     }
@@ -366,6 +400,7 @@ fun ScheduleDialogPagerItem(
     calendarDayVo: CalendarDayVo = CalendarDayVo(),
     uiState: CalendarPageState = CalendarPageState(),
     onClickCreateCancelScheduleBtn : () -> Unit = {},
+    onClickCreateScheduleBtn: (RecordType, Int) -> Unit = {_,_ -> }
 ) {
     Column(
         modifier = modifier
@@ -411,7 +446,8 @@ fun ScheduleDialogPagerItem(
 
     DialogCreateMode(
         uiState = uiState,
-        onClickCreateCancelScheduleBtn = onClickCreateCancelScheduleBtn
+        onClickCreateCancelScheduleBtn = onClickCreateCancelScheduleBtn,
+        onClickCreateScheduleBtn = { recordType, _ -> onClickCreateScheduleBtn(recordType, calendarDayVo.scheduleList.size)}
     )
 }
 
@@ -450,6 +486,7 @@ fun DialogNormalMode(
 fun DialogCreateMode(
     uiState : CalendarPageState = CalendarPageState(),
     onClickCreateCancelScheduleBtn : () -> Unit = {},
+    onClickCreateScheduleBtn: (RecordType, Int) -> Unit = {_,_ -> }
 ){
     Column(
         modifier = Modifier
@@ -473,10 +510,10 @@ fun DialogCreateMode(
 
                 Spacer(modifier = Modifier.size(8.dp))
 
-                CreateScheduleBtnByType(RecordType.HOSPITAL)
-                CreateScheduleBtnByType(RecordType.INJECTION)
-                CreateScheduleBtnByType(RecordType.MEDICINE)
-                CreateScheduleBtnByType(RecordType.ETC)
+                CreateScheduleBtnByType(RecordType.HOSPITAL, onClickCreateScheduleBtn)
+                CreateScheduleBtnByType(RecordType.INJECTION, onClickCreateScheduleBtn)
+                CreateScheduleBtnByType(RecordType.MEDICINE, onClickCreateScheduleBtn)
+                CreateScheduleBtnByType(RecordType.ETC, onClickCreateScheduleBtn)
             }
         }
 
@@ -486,7 +523,8 @@ fun DialogCreateMode(
 
 @Composable
 fun CreateScheduleBtnByType(
-    type : RecordType = RecordType.ETC
+    type : RecordType = RecordType.ETC,
+    onClickCreateScheduleBtn: (RecordType, Int) -> Unit = {_,_ -> }
 ){
     val text = when(type){
         RecordType.MEDICINE -> WORD_MEDICINE
@@ -500,6 +538,11 @@ fun CreateScheduleBtnByType(
                 width = 1.dp,
                 color = MainNormal,
                 shape = RoundedCornerShape(999.dp)
+            )
+            .clickable(
+                onClick = { onClickCreateScheduleBtn(type, 0) },
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
             )
             .background(color = White)
             .padding(horizontal = 9.dp, vertical = 6.dp),

@@ -54,6 +54,7 @@ const val SIGN_UP_MALE = "아내에게 받은 배우자 코드를\n입력해주�
 
 // --------- 캘린더 --------- //
 const val CALENDAR_EMPTY_SCHEDULE = "이날은 일정이 없어요"
+const val CALENDAR_MAX_SCHEDULE = "일정을 더 추가할 수 없어요 (하루 최대 7개)"
 
 // --------- 에러 Toast --------- //
 const val TOAST_ERROR_NOR_CORRECT_SPOUSE_CODE = "유효하지 않은 배우자코드입니다."

@@ -9,5 +9,6 @@ data class CalendarPageState(
     val calendarDayList : List<CalendarDayVo> = emptyList(),
     val isShowDetailDialog : Boolean = false,
     val clickedPosition : Int = 0,
-    val isCreateMode : Boolean = false
+    val isCreateMode : Boolean = false,
+    val showErrorMaxScheduleSnackBar : Boolean = false
 ) : PageState

@@ -2,6 +2,7 @@ package com.hugg.calendar
 
 import androidx.lifecycle.viewModelScope
 import com.hugg.domain.model.enums.DayType
+import com.hugg.domain.model.enums.RecordType
 import com.hugg.domain.model.vo.calendar.CalendarDayVo
 import com.hugg.domain.model.vo.calendar.ScheduleDetailVo
 import com.hugg.domain.repository.ScheduleRepository
@@ -10,6 +11,7 @@ import com.hugg.feature.util.ForeggLog
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.TimeFormatter.getWeekListKor
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.YearMonth
@@ -209,5 +211,22 @@ class CalendarViewModel @Inject constructor(
                 isCreateMode = !uiState.value.isCreateMode,
             )
         )
+    }
+
+    fun onClickCreateScheduleBtn(type : RecordType, size : Int){
+        if(size == 7) {
+            viewModelScope.launch {
+                updateState(uiState.value.copy(
+                    showErrorMaxScheduleSnackBar = true
+                ))
+                delay(2000)
+                updateState(uiState.value.copy(
+                    showErrorMaxScheduleSnackBar = false
+                ))
+            }
+        }
+        else{
+
+        }
     }
 }
