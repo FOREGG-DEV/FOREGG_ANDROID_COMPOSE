@@ -103,6 +103,7 @@ object TimeFormatter {
         val minute = time.minute
         val period = if (hour < 12) "오전" else "오후"
         val hour12 = if (hour % 12 == 0) 12 else hour % 12
-        return "$period ${hour12}:${minute}"
+        val formattedMinute = String.format("%02d", minute)
+        return "$period ${hour12}:${formattedMinute}"
     }
 }

@@ -34,6 +34,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -304,18 +305,25 @@ fun CalendarDayItem(
                 }
             }
 
+            val text = when(scheduleDetailVo.recordType){
+                RecordType.MEDICINE -> "${scheduleDetailVo.dose + CALENDAR_MEDICINE_UNIT} / ${scheduleDetailVo.name}"
+                RecordType.INJECTION -> "${scheduleDetailVo.dose + CALENDAR_INJECTION_UNIT} / ${scheduleDetailVo.name}"
+                else -> scheduleDetailVo.name
+            }
+
             Box(
                 modifier = Modifier
                     .background(background)
-                    .padding(start = 4.dp)
+                    .padding(horizontal = 4.dp)
                     .fillMaxWidth()
                     .height(14.dp),
                 contentAlignment = Alignment.CenterStart
             ){
                 if(!scheduleDetailVo.isContinueSchedule) Text(
-                    text = scheduleDetailVo.name,
+                    text = text,
                     color = Gs70,
-                    style = HuggTypography.p5
+                    maxLines = 1,
+                    style = HuggTypography.p5,
                 )
             }
 
@@ -350,9 +358,14 @@ fun ScheduleDetailDialog(
 
             Box(
                 modifier = Modifier
-                    .padding(horizontal = 16.dp)
+                    .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
                     .fillMaxWidth()
                     .height(40.dp)
+                    .clickable(
+                        onClick = onClickCancel,
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    )
                     .background(
                         if (uiState.showErrorMaxScheduleSnackBar) ErrorSnackBar else Color.Transparent,
                         shape = RoundedCornerShape(8.dp)
@@ -366,7 +379,6 @@ fun ScheduleDetailDialog(
                 )
             }
 
-            Spacer(modifier = Modifier.size(16.dp))
             HorizontalPager(
                 count = uiState.calendarDayList.size,
                 state = pagerState,
@@ -375,6 +387,7 @@ fun ScheduleDetailDialog(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
+                        .clip(RoundedCornerShape(20.dp))
                         .background(color = White, shape = RoundedCornerShape(20.dp))
                         .height(454.dp),
                     calendarDayVo = uiState.calendarDayList[page],
@@ -383,11 +396,15 @@ fun ScheduleDetailDialog(
                     onClickCreateScheduleBtn = onClickCreateScheduleBtn
                 )
             }
-            Spacer(modifier = Modifier.size(16.dp))
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(40.dp)
+                    .height(56.dp)
+                    .clickable(
+                        onClick = onClickCancel,
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    )
                     .background(Color.Transparent)
             )
         }
