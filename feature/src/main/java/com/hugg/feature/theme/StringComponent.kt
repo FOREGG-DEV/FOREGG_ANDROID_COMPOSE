@@ -10,6 +10,9 @@ const val WORD_NEXT = "다음"
 const val WORD_DAILY_RECORD = "하루기록"
 const val WORD_SIGN_UP = "회원가입"
 const val WORD_ROUND = "회차"
+const val WORD_NO = "아니요"
+const val WORD_YES = "네"
+const val WORD_REMOVE = "삭제"
 
 // --------- 기타 --------- //
 const val COPY_COMPLETE_TEXT = "클립보드에 배우자 코드가 복사되었어요!"
