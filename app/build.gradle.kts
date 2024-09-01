@@ -109,7 +109,6 @@ dependencies {
     implementation(KAKAO.SHARE)
     implementation(Google.GLIDE)
 
-    implementation(Libraries.FLEX_BOX)
 
     //Lottie
     implementation(Libraries.LOTTIE)

@@ -6,6 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
+import com.hugg.calendar.CalendarContainer
 import com.hugg.domain.model.enums.SurgeryType
 import com.hugg.domain.model.request.sign.SignUpMaleRequestVo
 import com.hugg.domain.model.request.sign.SignUpRequestVo
@@ -15,14 +16,14 @@ import com.hugg.sign.femaleSignUp.startSurgery.SurgeryStartContainer
 import com.hugg.sign.femaleSignUp.surgeryCount.SurgeryCountContainer
 import com.hugg.sign.inputSsn.InputSsnContainer
 import com.hugg.sign.maleSignUp.MaleSignUpContainer
-import com.hugg.sign.maleSignUp.MaleSignUpScreen
 import com.hugg.sign.onboarding.OnboardingContainer
 
 fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
     navigation(startDestination = Routes.OnboardingScreen.route, route = Routes.SignGraph.route) {
 
         composable(Routes.OnboardingScreen.route) { OnboardingContainer(
-            navigateInputSsn = { accessToken : String -> navController.navigate(route = Routes.InputSsnScreen.getRouteInputSsn(accessToken)) }
+            navigateInputSsn = { accessToken : String -> navController.navigate(route = Routes.InputSsnScreen.getRouteInputSsn(accessToken)) },
+            navigateHome = { navController.navigate(route = Routes.CalendarGraph.route) } // 임시!
         ) }
 
         composable(
@@ -107,7 +108,7 @@ fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
             val count = it.arguments?.getInt("count") ?: 0
             val date = it.arguments?.getString("date") ?: ""
             SpouseCodeFemaleContainer(
-                navigateGoToHome = {  },
+                navigateGoToHome = { navController.navigate(route = Routes.CalendarGraph.route) }, // 임시!
                 accessToken = accessToken,
                 signUpRequestVo = SignUpRequestVo(
                     surgeryType = type,
@@ -140,34 +141,8 @@ fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
     }
 }
 
-//fun NavGraphBuilder.homeNavGraph(navController: NavHostController) {
-//    navigation(startDestination = "home", route = "home_graph") {
-//        composable("home") { HomeScreen(navController) }
-//        composable("home_details") { HomeDetailsScreen(navController) }
-//    }
-//}
-
-sealed class Routes(val route : String){
-
-    //----------------SIGN_GRAPH----------------//
-    data object SignGraph : Routes("sign_graph")
-    data object OnboardingScreen : Routes("onboarding")
-    data object InputSsnScreen : Routes("input_ssn/{accessToken}"){
-        fun getRouteInputSsn(accessToken : String) : String = "input_ssn/$accessToken"
-    }
-    data object FemaleSignUpChooseSurgery : Routes("choose_surgery/{accessToken}/{ssn}"){
-        fun getRouteChooseSurgery(accessToken : String, ssn : String) : String = "choose_surgery/$accessToken/$ssn"
-    }
-    data object FemaleSignUpSurgeryCount : Routes("surgery_count/{accessToken}/{ssn}/{type}"){
-        fun getRouteSurgeryCount(accessToken : String, ssn : String, type : String) : String = "surgery_count/$accessToken/$ssn/$type"
-    }
-    data object FemaleSignUpStartSurgery : Routes("surgery_start/{accessToken}/{ssn}/{type}/{count}"){
-        fun getRouteSurgeryStart(accessToken : String, ssn : String, type : String, count : Int) : String = "surgery_start/$accessToken/$ssn/$type/$count"
-    }
-    data object FemaleSignUpSpouseCode : Routes("female_spouse_code/{accessToken}/{ssn}/{type}/{count}/{date}"){
-        fun getRouteFemaleSpouseCode(accessToken : String, ssn : String, type : String, count : Int?, date : String?) = "female_spouse_code/$accessToken/$ssn/$type/${count ?: -1}/${date ?: "null"}\""
-    }
-    data object MaleSignUp : Routes("male_sign_up/{accessToken}/{ssn}"){
-        fun getRouteMaleSignUp(accessToken: String, ssn: String) = "male_sign_up/$accessToken/$ssn"
+fun NavGraphBuilder.calendarGraph(navController: NavHostController) {
+    navigation(startDestination = Routes.CalendarScreen.route, route = Routes.CalendarGraph.route) {
+        composable(Routes.CalendarScreen.route) { CalendarContainer() }
     }
 }

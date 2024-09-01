@@ -43,6 +43,7 @@ const val PAGE_COUNT = 4
 @Composable
 fun OnboardingContainer(
     navigateInputSsn : (String) -> Unit = {},
+    navigateHome : () -> Unit = {},
     viewModel: OnboardingViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
@@ -55,7 +56,7 @@ fun OnboardingContainer(
                 OnboardingEvent.MoveNextPage -> pagerState.animateScrollToPage(pagerState.currentPage + 1)
                 OnboardingEvent.MoveLastPage -> pagerState.animateScrollToPage(pagerState.pageCount - 1)
                 OnboardingEvent.MovePrevPage -> pagerState.animateScrollToPage(pagerState.currentPage - 1)
-                OnboardingEvent.GoToMainEvent -> {} // 메인으로 이동
+                OnboardingEvent.GoToMainEvent -> navigateHome()
                 is OnboardingEvent.GoToSignUpEvent -> { navigateInputSsn(event.accessToken) }
             }
         }

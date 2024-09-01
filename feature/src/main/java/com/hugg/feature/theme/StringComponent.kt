@@ -13,6 +13,11 @@ const val WORD_ROUND = "회차"
 const val WORD_NO = "아니요"
 const val WORD_YES = "네"
 const val WORD_REMOVE = "삭제"
+const val WORD_CALENDAR = "캘린더"
+const val WORD_HOSPITAL = "병원"
+const val WORD_INJECTION = "주사"
+const val WORD_MEDICINE = "약"
+const val WORD_ETC = "기타"
 
 // --------- 기타 --------- //
 const val COPY_COMPLETE_TEXT = "클립보드에 배우자 코드가 복사되었어요!"
@@ -49,6 +54,12 @@ const val SIGN_UP_SPOUSE_CODE_FEMALE_HINT = "남편 회원가입시 붙여넣기
 const val SIGN_UP_SPOUSE_CODE_MALE_HINT = "아내에게 받은 공유 코드를 입력해주세요."
 const val SIGN_UP_COMPLETE = "가입 완료"
 const val SIGN_UP_MALE = "아내에게 받은 배우자 코드를\n입력해주세요."
+
+// --------- 캘린더 --------- //
+const val CALENDAR_EMPTY_SCHEDULE = "이날은 일정이 없어요"
+const val CALENDAR_MAX_SCHEDULE = "일정을 더 추가할 수 없어요 (하루 최대 7개)"
+const val CALENDAR_MEDICINE_UNIT = "정"
+const val CALENDAR_INJECTION_UNIT = "IU"
 
 // --------- 에러 Toast --------- //
 const val TOAST_ERROR_NOR_CORRECT_SPOUSE_CODE = "유효하지 않은 배우자코드입니다."

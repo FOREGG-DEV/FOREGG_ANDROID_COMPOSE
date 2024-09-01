@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.hugg.main"
+    namespace = "com.hugg.calendar"
     compileSdk = 34
 
     defaultConfig {
@@ -43,13 +43,9 @@ android {
 }
 
 dependencies {
+    implementation(project(":feature"))
     implementation(project(":data"))
     implementation(project(":domain"))
-
-    implementation(project(":feature"))
-    implementation(project(":feature:sign"))
-    implementation(project(":feature:calendar"))
-
     implementation(AndroidX.CORE)
     implementation(AndroidX.APPCOMPAT)
     implementation(Google.MATERIAL)
@@ -87,10 +83,8 @@ dependencies {
 
     kapt(Google.HILT_COMPILER)
 
-    implementation(KAKAO.AUTH)
-    implementation(KAKAO.SHARE)
-    implementation(Google.GLIDE)
-
+    implementation(Libraries.GRID_LAYOUT)
+    implementation(Libraries.PAGER)
 
     //Lottie
     implementation(Libraries.LOTTIE)

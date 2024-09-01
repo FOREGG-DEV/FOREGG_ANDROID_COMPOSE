@@ -21,6 +21,7 @@ fun MainScreen() {
         ) {
             NavHost(navController = navController, startDestination = Routes.SignGraph.route) {
                 signNavGraph(navController)
+                calendarGraph(navController)
             }
         }
     }

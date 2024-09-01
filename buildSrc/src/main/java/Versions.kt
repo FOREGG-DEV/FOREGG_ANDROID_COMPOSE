@@ -33,10 +33,9 @@ object Versions {
     const val RETROFIT = "2.9.0"
     const val OKHTTP = "4.10.0"
     const val PAGER = "0.28.0"
-    const val VIEW_PAGER_INDICATOR = "5.0"
     const val LOTTIE = "3.7.0"
     const val COIL = "2.3.0"
-    const val FLEX_BOX = "3.0.0"
+    const val GRID = "2.0.0"
 
     /* [ Kakao ] */
     const val KAKAO = "2.20.1"

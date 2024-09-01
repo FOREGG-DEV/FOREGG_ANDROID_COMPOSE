@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.hugg.home"
+    namespace = "com.hugg.sign"
     compileSdk = 34
 
     defaultConfig {
@@ -88,7 +88,6 @@ dependencies {
     implementation(Google.GLIDE)
 
     implementation(Libraries.PAGER)
-    implementation(Libraries.FLEX_BOX)
 
     //Lottie
     implementation(Libraries.LOTTIE)
