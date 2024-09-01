@@ -3,7 +3,10 @@ package com.hugg.feature.util
 import com.hugg.domain.model.vo.calendar.ScheduleDetailVo
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalTime
 import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.TextStyle
+import java.util.Locale
 
 object TimeFormatter {
 
@@ -30,6 +33,14 @@ object TimeFormatter {
     fun getDay(date : String) : Int {
         val dates = date.split("-")
         return dates[DAY_INDEX].toInt()
+    }
+
+    fun getDateFormattedMDWKor(date : String) : String {
+        val date = LocalDate.parse(date)
+        val month = date.monthValue
+        val day = date.dayOfMonth
+        val dayOfWeek = date.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.KOREAN)
+        return "${month}월 ${day}일 ${dayOfWeek}"
     }
 
     fun getWeekListKor() : List<String>{
@@ -84,5 +95,15 @@ object TimeFormatter {
             DayOfWeek.SATURDAY -> "토"
             DayOfWeek.SUNDAY -> "일"
         }
+    }
+
+    fun formatTimeToKor(timeString: String): String {
+        val time = LocalTime.parse(timeString, DateTimeFormatter.ofPattern("HH:mm"))
+        val hour = time.hour
+        val minute = time.minute
+        val period = if (hour < 12) "오전" else "오후"
+        val hour12 = if (hour % 12 == 0) 12 else hour % 12
+        val formattedMinute = String.format("%02d", minute)
+        return "$period ${hour12}:${formattedMinute}"
     }
 }

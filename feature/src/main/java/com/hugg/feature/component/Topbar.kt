@@ -230,7 +230,9 @@ fun DrawDailyRecordBtn(
     rightBtnClicked : () -> Unit = {},
 ){
     FilledBtn(
-        modifier = Modifier.width(80.dp).height(32.dp),
+        modifier = Modifier
+            .width(80.dp)
+            .height(32.dp),
         onClickBtn = rightBtnClicked,
         radius = 6.dp,
         text = WORD_DAILY_RECORD,
@@ -244,18 +246,8 @@ fun DrawDailyRecordBtn(
 fun DrawCreateBtn(
     rightBtnClicked : () -> Unit = {},
 ){
-    Image(
-        modifier = Modifier
-            .width(48.dp)
-            .height(48.dp)
-            .padding(8.dp)
-            .clickable(
-                onClick = rightBtnClicked,
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null
-            ),
-        imageVector = ImageVector.vectorResource(R.drawable.ic_add_main),
-        contentDescription = null
+    PlusBtn(
+        onClickBtn = rightBtnClicked
     )
     Spacer(modifier = Modifier.width(16.dp))
 }

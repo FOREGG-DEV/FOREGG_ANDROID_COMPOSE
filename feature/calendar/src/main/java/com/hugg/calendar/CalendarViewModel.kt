@@ -2,6 +2,7 @@ package com.hugg.calendar
 
 import androidx.lifecycle.viewModelScope
 import com.hugg.domain.model.enums.DayType
+import com.hugg.domain.model.enums.RecordType
 import com.hugg.domain.model.vo.calendar.CalendarDayVo
 import com.hugg.domain.model.vo.calendar.ScheduleDetailVo
 import com.hugg.domain.repository.ScheduleRepository
@@ -10,6 +11,7 @@ import com.hugg.feature.util.ForeggLog
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.TimeFormatter.getWeekListKor
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.YearMonth
@@ -118,7 +120,7 @@ class CalendarViewModel @Inject constructor(
             val isToday = dateString == TimeFormatter.getToday()
             val scheduleList = newScheduleList.filter { it.date == dateString }.sortedWith(compareBy({ it.recordType.priority }, { it.repeatTimes.first().time }))
             val isSunday = currentDate.dayOfWeek == DayOfWeek.SUNDAY
-            dayList.add(CalendarDayVo(day = TimeFormatter.getDay(dateString).toString(), scheduleList = scheduleList, isToday = isToday, isSunday = isSunday, dayType = DayType.NORMAL))
+            dayList.add(CalendarDayVo(day = TimeFormatter.getDay(dateString).toString(), realDate = TimeFormatter.getDateFormattedMDWKor(dateString), scheduleList = scheduleList, isToday = isToday, isSunday = isSunday, dayType = DayType.NORMAL))
             currentDate = currentDate.plusDays(1)
         }
 
@@ -165,7 +167,7 @@ class CalendarViewModel @Inject constructor(
             val day = lastDayOfPreviousMonth.minusDays((startDay - i).toLong()).toString()
             val scheduleListForDay = list.filter { it.date == day }.sortedWith(compareBy({ it.recordType.priority }, { it.repeatTimes.first().time }))
             val isSunday = lastDayOfPreviousMonth.minusDays((startDay - i).toLong()).dayOfWeek == DayOfWeek.SUNDAY
-            dayList.add(CalendarDayVo(day = TimeFormatter.getDay(day).toString(), scheduleList = scheduleListForDay, isSunday = isSunday, dayType = DayType.PREV_NEXT))
+            dayList.add(CalendarDayVo(day = TimeFormatter.getDay(day).toString(), realDate = TimeFormatter.getDateFormattedMDWKor(day), scheduleList = scheduleListForDay, isSunday = isSunday, dayType = DayType.PREV_NEXT))
         }
         return dayList
     }
@@ -178,15 +180,16 @@ class CalendarViewModel @Inject constructor(
             val day = firstDayOfNextMonth.plusDays(i.toLong()).toString()
             val scheduleListForDay = list.filter { it.date == day }.sortedWith(compareBy({ it.recordType.priority }, { it.repeatTimes.first().time }))
             val isSunday = firstDayOfNextMonth.plusDays(i.toLong()).dayOfWeek == DayOfWeek.SUNDAY
-            dayList.add(CalendarDayVo(day = TimeFormatter.getDay(day).toString(), scheduleList = scheduleListForDay, isSunday = isSunday, dayType = DayType.PREV_NEXT))
+            dayList.add(CalendarDayVo(day = TimeFormatter.getDay(day).toString(), realDate = TimeFormatter.getDateFormattedMDWKor(day), scheduleList = scheduleListForDay, isSunday = isSunday, dayType = DayType.PREV_NEXT))
         }
         return dayList
     }
 
-    fun onClickDay(){
+    fun onClickDay(position : Int){
         updateState(
             uiState.value.copy(
                 isShowDetailDialog = true,
+                clickedPosition = position
             )
         )
     }
@@ -195,7 +198,34 @@ class CalendarViewModel @Inject constructor(
         updateState(
             uiState.value.copy(
                 isShowDetailDialog = false,
+                isCreateMode = false,
+                showErrorMaxScheduleSnackBar = false
             )
         )
+    }
+
+    fun onClickCreateCancelScheduleBtn(){
+        updateState(
+            uiState.value.copy(
+                isCreateMode = !uiState.value.isCreateMode,
+            )
+        )
+    }
+
+    fun onClickCreateScheduleBtn(type : RecordType, size : Int){
+        if(size == 7) {
+            viewModelScope.launch {
+                updateState(uiState.value.copy(
+                    showErrorMaxScheduleSnackBar = true
+                ))
+                delay(2000)
+                updateState(uiState.value.copy(
+                    showErrorMaxScheduleSnackBar = false
+                ))
+            }
+        }
+        else{
+
+        }
     }
 }
