@@ -9,6 +9,7 @@ import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -530,7 +531,9 @@ fun DialogCreateMode(
         ) {
 
             Row(
-                modifier = Modifier.padding(start = 14.dp),
+                modifier = Modifier
+                    .padding(start = 14.dp)
+                    .horizontalScroll(rememberScrollState()),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 CancelBtn(onClickBtn = onClickCreateCancelScheduleBtn)
@@ -541,6 +544,8 @@ fun DialogCreateMode(
                 CreateScheduleBtnByType(RecordType.INJECTION, onClickCreateScheduleBtn)
                 CreateScheduleBtnByType(RecordType.MEDICINE, onClickCreateScheduleBtn)
                 CreateScheduleBtnByType(RecordType.ETC, onClickCreateScheduleBtn)
+
+                Spacer(modifier = Modifier.size(16.dp))
             }
         }
 
