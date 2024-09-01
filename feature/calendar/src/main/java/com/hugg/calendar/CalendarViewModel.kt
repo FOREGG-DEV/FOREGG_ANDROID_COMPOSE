@@ -149,11 +149,8 @@ class CalendarViewModel @Inject constructor(
 
     private fun getArrangeRepeatScheduleList(list : List<ScheduleDetailVo>) : List<ScheduleDetailVo>{
         val normalScheduleList = list.filter { it.date != null }
-        val repeatScheduleList = list.filter { it.date == null }
-        val newList = mutableListOf<ScheduleDetailVo>()
-        repeatScheduleList.forEach { vo ->
-            newList.addAll(TimeFormatter.getDatesBetween(vo))
-        }
+        val newList = list.filter { it.date == null }
+            .flatMap { vo -> TimeFormatter.getDatesBetween(vo) }
 
         return normalScheduleList + newList
     }
