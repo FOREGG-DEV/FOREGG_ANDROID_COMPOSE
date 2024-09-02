@@ -114,11 +114,35 @@ object TimeFormatter {
         return oneMonthAgo.format(formatter)
     }
 
+    fun getPreviousThreeMonthDate() : String {
+        val today = LocalDate.now()
+        val oneMonthAgo = today.minusMonths(3)
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        return oneMonthAgo.format(formatter)
+    }
+
     fun getDotsDate(dateString : String) : String {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val date = LocalDate.parse(dateString, formatter)
         val newFormat = DateTimeFormatter.ofPattern("yyyy. MM. dd")
         return date.format(newFormat)
+    }
+
+    fun getPreviousMonthStartDay() : String {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val currentMonthStart = LocalDate.now().withDayOfMonth(1)
+        val previousMonthEnd = currentMonthStart.minusDays(1)
+        val previousMonthStart = previousMonthEnd.withDayOfMonth(1)
+
+        return previousMonthStart.format(formatter)
+    }
+
+    fun getPreviousMonthEndDay() : String {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val currentMonthStart = LocalDate.now().withDayOfMonth(1)
+        val previousMonthEnd = currentMonthStart.minusDays(1)
+
+        return previousMonthEnd.format(formatter)
     }
 
     fun getDashDate(dateString : String) : String {

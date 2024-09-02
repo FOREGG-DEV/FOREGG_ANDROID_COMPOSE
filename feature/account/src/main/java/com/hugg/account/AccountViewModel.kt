@@ -1,11 +1,16 @@
 package com.hugg.account
 
 import androidx.lifecycle.viewModelScope
+import com.hugg.domain.model.enums.AccountBottomSheetType
 import com.hugg.domain.model.enums.AccountTabType
+import com.hugg.domain.model.enums.AccountType
 import com.hugg.domain.model.request.account.AccountGetConditionRequestVo
 import com.hugg.domain.model.response.account.AccountResponseVo
 import com.hugg.domain.repository.AccountRepository
 import com.hugg.feature.base.BaseViewModel
+import com.hugg.feature.theme.ACCOUNT_ALL
+import com.hugg.feature.theme.ACCOUNT_PERSONAL
+import com.hugg.feature.theme.ACCOUNT_SUBSIDY
 import com.hugg.feature.util.TimeFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
@@ -50,6 +55,13 @@ class AccountViewModel @Inject constructor(
         updateState(
             uiState.value.copy(filterText = filterText)
         )
+        getAccountByCondition()
+    }
+
+    fun onClickBottomSheetOnOff(){
+        updateState(
+            uiState.value.copy(isShowBottomSheet = !uiState.value.isShowBottomSheet)
+        )
     }
 
     fun getAccountByCondition(){
@@ -64,9 +76,22 @@ class AccountViewModel @Inject constructor(
         }
     }
 
-    private fun handleGetSuccessAccount(result : AccountResponseVo){
+    fun updateSelectedBottomSheetType(type : AccountBottomSheetType){
         updateState(
-            uiState.value.copy(accountList = result.accountList)
+            uiState.value.copy(selectedBottomSheetType = type)
+        )
+    }
+
+    private fun handleGetSuccessAccount(result : AccountResponseVo){
+        val filterList = result.accountList.filter {
+            when(uiState.value.filterText) {
+                ACCOUNT_PERSONAL -> it.type == AccountType.PERSONAL_EXPENSE
+                ACCOUNT_SUBSIDY -> it.type == AccountType.SUBSIDY
+                else -> true
+            }
+        }
+        updateState(
+            uiState.value.copy(accountList = filterList)
         )
     }
 

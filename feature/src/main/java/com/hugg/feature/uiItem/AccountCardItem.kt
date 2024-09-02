@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import com.hugg.domain.model.enums.AccountType
 import com.hugg.domain.model.vo.account.AccountCardVo
 import com.hugg.feature.theme.ACCOUNT_PERSONAL
-import com.hugg.feature.theme.ACCOUNT_ROUND
 import com.hugg.feature.theme.ACCOUNT_ROUND_UNIT
 import com.hugg.feature.theme.Black
 import com.hugg.feature.theme.CalendarPill
@@ -54,7 +53,7 @@ fun AccountCardItem(
             Spacer(modifier = Modifier.size(4.dp))
 
             Text(
-                text = "${item.round} + $ACCOUNT_ROUND_UNIT",
+                text = "${item.round}$ACCOUNT_ROUND_UNIT",
                 style = HuggTypography.p3_l,
                 color = Gs70
             )
