@@ -13,5 +13,7 @@ data class AccountPageState(
     val endDay : String = "",
     val accountList : List<AccountCardVo> = emptyList(),
     val isShowBottomSheet : Boolean = false,
-    val selectedBottomSheetType: AccountBottomSheetType = AccountBottomSheetType.ONE_MONTH
+    val selectedBottomSheetType: AccountBottomSheetType = AccountBottomSheetType.ONE_MONTH,
+    val totalExpense : String = "",
+    val personalExpense : String = "",
 ) : PageState

@@ -102,10 +102,6 @@ fun AccountContainer(
         onClickDateFilter = { viewModel.onClickBottomSheetOnOff() }
     )
 
-    LaunchedEffect(Unit) {
-        viewModel.getAccountByCondition()
-    }
-
     LaunchedEffect(scrollState) {
         snapshotFlow { scrollState.firstVisibleItemIndex }
             .collect { index ->
@@ -263,11 +259,11 @@ fun AccountTotalBox(
             )
         }
 
-        TotalBoxItem(AccountColorType.PERSONAL)
+        TotalBoxItem(AccountColorType.PERSONAL, uiState)
 
         Spacer(modifier = Modifier.size(18.dp))
 
-        TotalBoxItem(AccountColorType.ALL)
+        TotalBoxItem(AccountColorType.ALL, uiState)
 
         Spacer(modifier = Modifier.size(9.dp))
 
@@ -302,7 +298,7 @@ fun AccountTotalBox(
             Spacer(modifier = Modifier.weight(1f))
 
             Text(
-                text = "203,000,500원",
+                text = uiState.totalExpense,
                 style = HuggTypography.h2,
                 color = Gs90
             )
@@ -314,7 +310,8 @@ fun AccountTotalBox(
 
 @Composable
 fun TotalBoxItem(
-    colorType: AccountColorType = AccountColorType.PERSONAL
+    colorType: AccountColorType = AccountColorType.PERSONAL,
+    uiState: AccountPageState = AccountPageState()
 ){
     val color = when(colorType){
         AccountColorType.PERSONAL -> CalendarPill
@@ -352,7 +349,7 @@ fun TotalBoxItem(
         Spacer(modifier = Modifier.weight(1f))
 
         Text(
-            text = "200,000,000원",
+            text = if(colorType == AccountColorType.PERSONAL) uiState.personalExpense else "1,000원", // 아직 서버 미반영
             style = HuggTypography.p1,
             color = Gs80
         )
@@ -433,8 +430,8 @@ fun DatePickBottomSheet(
 ){
     val scope = rememberCoroutineScope()
     var activeType by remember { mutableStateOf(uiState.selectedBottomSheetType) }
-    var startDay = uiState.startDay
-    var endDay = uiState.endDay
+    var startDay = uiState.startDay // [직접입력]에서 쓰일 예정
+    var endDay = uiState.endDay // [직접입력]에서 쓰일 예정
     val onClickBox = { type : AccountBottomSheetType -> activeType = type }
 
     ModalBottomSheet(

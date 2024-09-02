@@ -43,6 +43,7 @@ class AccountViewModel @Inject constructor(
                 endDay = end,
             )
         )
+        getAccountByCondition()
     }
 
     fun onClickTabType(type : AccountTabType){
@@ -91,7 +92,11 @@ class AccountViewModel @Inject constructor(
             }
         }
         updateState(
-            uiState.value.copy(accountList = filterList)
+            uiState.value.copy(
+                personalExpense = getMoneyFormat(result.personalMoney),
+                totalExpense = getMoneyFormat(result.allExpendMoney),
+                accountList = filterList
+            )
         )
     }
 
