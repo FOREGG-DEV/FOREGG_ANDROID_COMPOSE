@@ -54,6 +54,7 @@ fun HuggTabBar(
                 )
                 .clickable(
                     onClick = {
+                        if(tabType == HuggTabClickedType.LEFT) return@clickable
                         tabType = HuggTabClickedType.LEFT
                         onClickLeftTab()
                     },
@@ -79,6 +80,7 @@ fun HuggTabBar(
                     )
                     .clickable(
                         onClick = {
+                            if(tabType == HuggTabClickedType.MIDDLE) return@clickable
                             tabType = HuggTabClickedType.MIDDLE
                             onClickMiddleTab()
                         },
@@ -104,6 +106,7 @@ fun HuggTabBar(
                 )
                 .clickable(
                     onClick = {
+                        if(tabType == HuggTabClickedType.RIGHT) return@clickable
                         tabType = HuggTabClickedType.RIGHT
                         onClickRightTab()
                     },
