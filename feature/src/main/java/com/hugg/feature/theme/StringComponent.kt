@@ -14,6 +14,7 @@ const val WORD_NO = "아니요"
 const val WORD_YES = "네"
 const val WORD_REMOVE = "삭제"
 const val WORD_CALENDAR = "캘린더"
+const val WORD_ACCOUNT = "가계부"
 const val WORD_HOSPITAL = "병원"
 const val WORD_INJECTION = "주사"
 const val WORD_MEDICINE = "약"
@@ -60,6 +61,11 @@ const val CALENDAR_EMPTY_SCHEDULE = "이날은 일정이 없어요"
 const val CALENDAR_MAX_SCHEDULE = "일정을 더 추가할 수 없어요 (하루 최대 7개)"
 const val CALENDAR_MEDICINE_UNIT = "정"
 const val CALENDAR_INJECTION_UNIT = "IU"
+
+// --------- 가계부 --------- //
+const val ACCOUNT_UNIT_ALL = "전체"
+const val ACCOUNT_UNIT_COUNT = "회차별"
+const val ACCOUNT_UNIT_MONTH = "월별"
 
 // --------- 에러 Toast --------- //
 const val TOAST_ERROR_NOR_CORRECT_SPOUSE_CODE = "유효하지 않은 배우자코드입니다."

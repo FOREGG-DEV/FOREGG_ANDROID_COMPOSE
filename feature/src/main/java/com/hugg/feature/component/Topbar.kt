@@ -246,8 +246,18 @@ fun DrawDailyRecordBtn(
 fun DrawCreateBtn(
     rightBtnClicked : () -> Unit = {},
 ){
-    PlusBtn(
-        onClickBtn = rightBtnClicked
+    Image(
+        modifier = Modifier
+            .width(48.dp)
+            .height(48.dp)
+            .padding(8.dp)
+            .clickable(
+                onClick = rightBtnClicked,
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+            ),
+        imageVector = ImageVector.vectorResource(R.drawable.ic_create_box_top_bar),
+        contentDescription = null
     )
     Spacer(modifier = Modifier.width(16.dp))
 }

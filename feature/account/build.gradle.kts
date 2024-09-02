@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.hugg.main"
+    namespace = "com.hugg.account"
     compileSdk = 34
 
     defaultConfig {
@@ -43,14 +43,9 @@ android {
 }
 
 dependencies {
+    implementation(project(":feature"))
     implementation(project(":data"))
     implementation(project(":domain"))
-
-    implementation(project(":feature"))
-    implementation(project(":feature:sign"))
-    implementation(project(":feature:calendar"))
-    implementation(project(":feature:account"))
-
     implementation(AndroidX.CORE)
     implementation(AndroidX.APPCOMPAT)
     implementation(Google.MATERIAL)
@@ -84,17 +79,5 @@ dependencies {
     implementation(AndroidX.COMPOSE_PREVIEW)
     implementation(AndroidX.ACTIVITY_COMPOSE)
 
-
-
     kapt(Google.HILT_COMPILER)
-
-    implementation(KAKAO.AUTH)
-    implementation(KAKAO.SHARE)
-    implementation(Google.GLIDE)
-
-
-    //Lottie
-    implementation(Libraries.LOTTIE)
-    implementation(Libraries.COIL_SVG)
-    implementation(Libraries.COIL)
 }
