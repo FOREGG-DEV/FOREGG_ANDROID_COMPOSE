@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -36,6 +37,7 @@ fun HuggTabBar(
     initialTabType : HuggTabClickedType = HuggTabClickedType.LEFT
 ){
     var tabType by remember { mutableStateOf(initialTabType) }
+    val onClickSelectTab = { type : HuggTabClickedType -> tabType = type}
 
     Row(
         modifier = Modifier
@@ -44,82 +46,63 @@ fun HuggTabBar(
             .background(color = White, shape = RoundedCornerShape(8.dp))
             .padding(horizontal = 4.dp, vertical = 4.dp)
     ) {
-        Box(
-            modifier = Modifier
-                .weight(1f)
-                .height(40.dp)
-                .background(
-                    color = if (tabType == HuggTabClickedType.LEFT) MainNormal else White,
-                    shape = RoundedCornerShape(8.dp)
-                )
-                .clickable(
-                    onClick = {
-                        if(tabType == HuggTabClickedType.LEFT) return@clickable
-                        tabType = HuggTabClickedType.LEFT
-                        onClickLeftTab()
-                    },
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null
-                ),
-            contentAlignment = Alignment.Center
-        ){
-            Text(
-                text = leftText,
-                style = HuggTypography.h2,
-                color = if(tabType == HuggTabClickedType.LEFT) White else Gs50
-            )
-        }
+        TabItem(
+            type = HuggTabClickedType.LEFT,
+            clickedType = tabType,
+            onClickSelectTab = onClickSelectTab,
+            onClickTab = onClickLeftTab,
+            text = leftText
+        )
         if(tabCount == 3) {
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .height(40.dp)
-                    .background(
-                        color = if (tabType == HuggTabClickedType.MIDDLE) MainNormal else White,
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .clickable(
-                        onClick = {
-                            if(tabType == HuggTabClickedType.MIDDLE) return@clickable
-                            tabType = HuggTabClickedType.MIDDLE
-                            onClickMiddleTab()
-                        },
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null
-                    ),
-                contentAlignment = Alignment.Center
-            ){
-                Text(
-                    text = middleText,
-                    style = HuggTypography.h2,
-                    color = if(tabType == HuggTabClickedType.MIDDLE) White else Gs50
-                )
-            }
-        }
-        Box(
-            modifier = Modifier
-                .weight(1f)
-                .height(40.dp)
-                .background(
-                    color = if (tabType == HuggTabClickedType.RIGHT) MainNormal else White,
-                    shape = RoundedCornerShape(8.dp)
-                )
-                .clickable(
-                    onClick = {
-                        if(tabType == HuggTabClickedType.RIGHT) return@clickable
-                        tabType = HuggTabClickedType.RIGHT
-                        onClickRightTab()
-                    },
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null
-                ),
-            contentAlignment = Alignment.Center
-        ){
-            Text(
-                text = rightText,
-                style = HuggTypography.h2,
-                color = if(tabType == HuggTabClickedType.RIGHT) White else Gs50
+            TabItem(
+                type = HuggTabClickedType.MIDDLE,
+                clickedType = tabType,
+                onClickSelectTab = onClickSelectTab,
+                onClickTab = onClickMiddleTab,
+                text = middleText
             )
         }
+        TabItem(
+            type = HuggTabClickedType.RIGHT,
+            clickedType = tabType,
+            onClickSelectTab = onClickSelectTab,
+            onClickTab = onClickRightTab,
+            text = rightText
+        )
+    }
+}
+
+@Composable
+fun RowScope.TabItem(
+    type : HuggTabClickedType = HuggTabClickedType.LEFT,
+    clickedType: HuggTabClickedType = HuggTabClickedType.LEFT,
+    onClickSelectTab : (HuggTabClickedType) -> Unit = {},
+    onClickTab : () -> Unit = {},
+    text : String = ""
+){
+    Box(
+        modifier = Modifier
+            .weight(1f)
+            .height(40.dp)
+            .background(
+                color = if (type == clickedType) MainNormal else White,
+                shape = RoundedCornerShape(8.dp)
+            )
+            .clickable(
+                onClick = {
+                    if (type == clickedType) return@clickable
+                    onClickSelectTab(type)
+                    onClickTab()
+                },
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+            ),
+        contentAlignment = Alignment.Center
+    ){
+        Text(
+            text = text,
+            style = HuggTypography.h2,
+            color = if(type == clickedType) White else Gs50
+        )
     }
 }
