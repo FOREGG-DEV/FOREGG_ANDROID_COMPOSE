@@ -106,4 +106,25 @@ object TimeFormatter {
         val formattedMinute = String.format("%02d", minute)
         return "$period ${hour12}:${formattedMinute}"
     }
+
+    fun getPreviousMonthDate() : String {
+        val today = LocalDate.now()
+        val oneMonthAgo = today.minusMonths(1)
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        return oneMonthAgo.format(formatter)
+    }
+
+    fun getDotsDate(dateString : String) : String {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val date = LocalDate.parse(dateString, formatter)
+        val newFormat = DateTimeFormatter.ofPattern("yyyy. MM. dd")
+        return date.format(newFormat)
+    }
+
+    fun getDashDate(dateString : String) : String {
+        val formatter = DateTimeFormatter.ofPattern("yyyy. MM. dd")
+        val date = LocalDate.parse(dateString, formatter)
+        val newFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        return date.format(newFormat)
+    }
 }

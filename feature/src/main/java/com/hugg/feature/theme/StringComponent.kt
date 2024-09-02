@@ -63,9 +63,10 @@ const val CALENDAR_MEDICINE_UNIT = "정"
 const val CALENDAR_INJECTION_UNIT = "IU"
 
 // --------- 가계부 --------- //
-const val ACCOUNT_UNIT_ALL = "전체"
-const val ACCOUNT_UNIT_ROUND = "회차별"
-const val ACCOUNT_UNIT_MONTH = "월별"
+const val ACCOUNT_ALL = "전체"
+const val ACCOUNT_ROUND = "회차별"
+const val ACCOUNT_ROUND_UNIT = "회차"
+const val ACCOUNT_MONTH = "월별"
 const val ACCOUNT_PERSONAL = "개인"
 const val ACCOUNT_SUBSIDY_ALL = "지원금 전체"
 const val ACCOUNT_ALL_EXPENSE = "총 지출"
