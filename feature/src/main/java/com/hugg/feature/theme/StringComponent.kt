@@ -73,6 +73,7 @@ const val ACCOUNT_SUBSIDY_ALL = "지원금 전체"
 const val ACCOUNT_ALL_EXPENSE = "총 지출"
 const val ACCOUNT_SUBSIDY = "지원"
 const val ACCOUNT_CHOOSE_DATE = "기간 선택"
+const val ACCOUNT_DIVIDE_DATE = "-"
 
 // --------- 에러 Toast --------- //
 const val TOAST_ERROR_NOR_CORRECT_SPOUSE_CODE = "유효하지 않은 배우자코드입니다."

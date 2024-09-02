@@ -1,5 +1,7 @@
 package com.hugg.account
 
+import android.app.DatePickerDialog
+import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -42,12 +44,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.hugg.account.bottomSheet.DatePickBottomSheet
 import com.hugg.domain.model.enums.AccountBottomSheetType
 import com.hugg.domain.model.enums.AccountColorType
 import com.hugg.domain.model.enums.AccountTabType
@@ -59,6 +63,7 @@ import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.ACCOUNT_ALL
 import com.hugg.feature.theme.ACCOUNT_ALL_EXPENSE
 import com.hugg.feature.theme.ACCOUNT_CHOOSE_DATE
+import com.hugg.feature.theme.ACCOUNT_DIVIDE_DATE
 import com.hugg.feature.theme.ACCOUNT_MONTH
 import com.hugg.feature.theme.ACCOUNT_PERSONAL
 import com.hugg.feature.theme.ACCOUNT_ROUND
@@ -83,6 +88,7 @@ import com.hugg.feature.theme.White
 import com.hugg.feature.uiItem.AccountCardItem
 import com.hugg.feature.util.TimeFormatter
 import kotlinx.coroutines.launch
+import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -91,6 +97,7 @@ fun AccountContainer(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val scrollState = rememberLazyListState()
+    val context = LocalContext.current
     var isFilterAtTop by remember { mutableStateOf(false) }
 
     AccountScreen(
@@ -116,7 +123,8 @@ fun AccountContainer(
                 viewModel.initDay(startDay, endDay)
                 viewModel.updateSelectedBottomSheetType(selectedType)
             },
-            uiState = uiState
+            uiState = uiState,
+            context = context
         )
     }
 }
@@ -417,180 +425,6 @@ fun FilterItem(
             style = if (uiState.filterText == text) HuggTypography.h3 else HuggTypography.p2,
             color = if (uiState.filterText == text) White else Gs60
         )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DatePickBottomSheet(
-    onClickClose : () -> Unit = {},
-    sheetState: SheetState = rememberModalBottomSheetState(),
-    uiState: AccountPageState = AccountPageState(),
-    onClickConfirm : (AccountBottomSheetType, String, String) -> Unit = {_, _, _-> }
-){
-    val scope = rememberCoroutineScope()
-    var activeType by remember { mutableStateOf(uiState.selectedBottomSheetType) }
-    var startDay = uiState.startDay // [직접입력]에서 쓰일 예정
-    var endDay = uiState.endDay // [직접입력]에서 쓰일 예정
-    val onClickBox = { type : AccountBottomSheetType -> activeType = type }
-
-    ModalBottomSheet(
-        onDismissRequest = onClickClose,
-        shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-        dragHandle = null,
-        sheetState = sheetState
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(210.dp)
-        ) {
-            Spacer(modifier = Modifier.size(4.dp))
-
-            Row(
-                modifier = Modifier.padding(horizontal = 12.dp),
-            ) {
-                Image(
-                    modifier = Modifier
-                        .size(48.dp)
-                        .padding(12.dp)
-                        .clickable(
-                            onClick = {
-                                scope
-                                    .launch { sheetState.hide() }
-                                    .invokeOnCompletion {
-                                        if (!sheetState.isVisible) {
-                                            onClickClose()
-                                        }
-                                    }
-                            },
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null
-                        ),
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_close_gs_60),
-                    contentDescription = null
-                )
-
-                Spacer(modifier = Modifier.weight(1f))
-
-                Text(
-                    modifier = Modifier.padding(top = 12.dp),
-                    text = ACCOUNT_CHOOSE_DATE,
-                    style = HuggTypography.h2,
-                    color = Black
-                )
-
-                Spacer(modifier = Modifier.weight(1f))
-
-                Box(
-                    modifier = Modifier
-                        .size(48.dp)
-                        .clickable(
-                            onClick = {
-                                scope
-                                    .launch { sheetState.hide() }
-                                    .invokeOnCompletion {
-                                        if (!sheetState.isVisible) {
-                                            onClickConfirm(activeType, getCustomStartDay(activeType), getCustomEndDay(activeType))
-                                            onClickClose()
-                                        }
-                                    }
-                            },
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null
-                        ),
-                    contentAlignment = Alignment.Center
-                ){
-                    Text(
-                        text = WORD_CONFIRM,
-                        style = HuggTypography.h4,
-                        color = Gs60
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.size(28.dp))
-
-            Row(modifier = Modifier.padding(horizontal = 16.dp)) {
-                BottomSheetDatePickItem(
-                    activeType = activeType,
-                    itemType = AccountBottomSheetType.ONE_MONTH,
-                    onClickBox = onClickBox
-                )
-                Spacer(modifier = Modifier.size(4.dp))
-                BottomSheetDatePickItem(
-                    activeType = activeType,
-                    itemType = AccountBottomSheetType.THREE_MONTH,
-                    onClickBox = onClickBox
-                )
-                Spacer(modifier = Modifier.size(4.dp))
-                BottomSheetDatePickItem(
-                    activeType = activeType,
-                    itemType = AccountBottomSheetType.LAST_MONTH,
-                    onClickBox = onClickBox
-                )
-                Spacer(modifier = Modifier.size(4.dp))
-                BottomSheetDatePickItem(
-                    activeType = activeType,
-                    itemType = AccountBottomSheetType.CUSTOM_INPUT,
-                    onClickBox = onClickBox
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun RowScope.BottomSheetDatePickItem(
-    activeType : AccountBottomSheetType = AccountBottomSheetType.ONE_MONTH,
-    itemType : AccountBottomSheetType = AccountBottomSheetType.ONE_MONTH,
-    onClickBox : (AccountBottomSheetType) -> Unit = {}
-){
-    Box(
-        modifier = Modifier
-            .weight(1f)
-            .height(40.dp)
-            .border(
-                width = if (activeType == itemType) 0.dp else 1.dp,
-                color = Gs30,
-                shape = RoundedCornerShape(4.dp)
-            )
-            .background(
-                color = if (activeType == itemType) Gs70 else White,
-                shape = RoundedCornerShape(4.dp)
-            )
-            .clickable(
-                onClick = {
-                    onClickBox(itemType)
-                },
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null
-            ),
-        contentAlignment = Alignment.Center
-    ){
-        Text(
-            text = itemType.text,
-            style = HuggTypography.h3,
-            color = if (activeType == itemType) White else Gs70
-        )
-    }
-}
-
-fun getCustomStartDay(itemType : AccountBottomSheetType) : String {
-    return when(itemType){
-        AccountBottomSheetType.ONE_MONTH -> TimeFormatter.getPreviousMonthDate()
-        AccountBottomSheetType.THREE_MONTH -> TimeFormatter.getPreviousThreeMonthDate()
-        AccountBottomSheetType.LAST_MONTH -> TimeFormatter.getPreviousMonthStartDay()
-        AccountBottomSheetType.CUSTOM_INPUT -> ""
-    }
-}
-
-fun getCustomEndDay(itemType : AccountBottomSheetType) : String {
-    return when(itemType){
-        AccountBottomSheetType.ONE_MONTH -> TimeFormatter.getToday()
-        AccountBottomSheetType.THREE_MONTH -> TimeFormatter.getToday()
-        AccountBottomSheetType.LAST_MONTH -> TimeFormatter.getPreviousMonthEndDay()
-        AccountBottomSheetType.CUSTOM_INPUT -> ""
     }
 }
 
