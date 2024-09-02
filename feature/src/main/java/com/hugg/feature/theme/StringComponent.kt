@@ -64,8 +64,12 @@ const val CALENDAR_INJECTION_UNIT = "IU"
 
 // --------- 가계부 --------- //
 const val ACCOUNT_UNIT_ALL = "전체"
-const val ACCOUNT_UNIT_COUNT = "회차별"
+const val ACCOUNT_UNIT_ROUND = "회차별"
 const val ACCOUNT_UNIT_MONTH = "월별"
+const val ACCOUNT_PERSONAL = "개인"
+const val ACCOUNT_SUBSIDY_ALL = "지원금 전체"
+const val ACCOUNT_ALL_EXPENSE = "총 지출"
+const val ACCOUNT_SUBSIDY ="지원"
 
 // --------- 에러 Toast --------- //
 const val TOAST_ERROR_NOR_CORRECT_SPOUSE_CODE = "유효하지 않은 배우자코드입니다."

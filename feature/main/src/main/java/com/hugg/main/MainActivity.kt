@@ -26,7 +26,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             LaunchedEffect(Unit){
                 LoadingManager.loadingState.collect {
-                    ForeggLog.D(it.toString())
+
                 }
             }
             MainScreen()
