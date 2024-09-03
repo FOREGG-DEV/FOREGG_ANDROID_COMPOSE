@@ -100,7 +100,8 @@ fun KaKaoLoginBtn(
 @Composable
 fun PlusBtn(
     modifier: Modifier = Modifier,
-    onClickBtn: () -> Unit = {}
+    onClickBtn: () -> Unit = {},
+    interactionSource : MutableInteractionSource
 ){
     Box(
         modifier = if(modifier != Modifier) modifier else Modifier
@@ -108,7 +109,7 @@ fun PlusBtn(
             .background(color = MainNormal, shape = RoundedCornerShape(8.dp))
             .clickable(
                 onClick = onClickBtn,
-                interactionSource = remember { MutableInteractionSource() },
+                interactionSource = interactionSource,
                 indication = null
             ),
         contentAlignment = Alignment.Center
@@ -123,7 +124,8 @@ fun PlusBtn(
 @Composable
 fun CancelBtn(
     modifier: Modifier = Modifier,
-    onClickBtn: () -> Unit = {}
+    onClickBtn: () -> Unit = {},
+    interactionSource : MutableInteractionSource
 ){
     Box(
         modifier = if(modifier != Modifier) modifier else Modifier
@@ -131,7 +133,7 @@ fun CancelBtn(
             .background(color = Gs70, shape = RoundedCornerShape(8.dp))
             .clickable(
                 onClick = onClickBtn,
-                interactionSource = remember { MutableInteractionSource() },
+                interactionSource = interactionSource,
                 indication = null
             ),
         contentAlignment = Alignment.Center
@@ -140,13 +142,5 @@ fun CancelBtn(
             imageVector = ImageVector.vectorResource(R.drawable.ic_close_white),
             contentDescription = null
         )
-    }
-}
-
-@Preview
-@Composable
-internal fun Hi() {
-    HuggTheme {
-        CancelBtn()
     }
 }

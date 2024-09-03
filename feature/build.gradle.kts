@@ -58,4 +58,10 @@ dependencies {
 
     implementation(AndroidX.THREE_TEN)
     debugImplementation("androidx.compose.ui:ui-tooling:1.6.8")
+
+    //힐트
+    implementation(Google.HILT_ANDROID)
+    implementation(Google.HILT_CORE)
+    implementation(Google.HILT_COMPOSE)
+    kapt(Google.HILT_COMPILER)
 }

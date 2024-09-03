@@ -153,7 +153,8 @@ fun AccountScreen(
         TopBar(
             middleItemType = TopBarMiddleType.TEXT,
             middleText = WORD_ACCOUNT,
-            rightItemType = TopBarRightType.CREATE
+            rightItemType = TopBarRightType.CREATE,
+            interactionSource = interactionSource
         )
 
         Spacer(modifier = Modifier.size(16.dp))
@@ -170,7 +171,8 @@ fun AccountScreen(
                     rightText = ACCOUNT_MONTH,
                     onClickLeftTab = { onClickTab(AccountTabType.ALL) },
                     onClickMiddleTab = { onClickTab(AccountTabType.ROUND) },
-                    onClickRightTab = { onClickTab(AccountTabType.MONTH) }
+                    onClickRightTab = { onClickTab(AccountTabType.MONTH) },
+                    interactionSource = interactionSource
                 )
 
                 Spacer(modifier = Modifier.size(12.dp))

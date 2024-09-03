@@ -54,16 +54,18 @@ fun SurgeryStartContainer(
     val context = LocalContext.current
     val calendar = Calendar.getInstance()
 
-    val datePickerDialog = DatePickerDialog(
-        context,
-        R.style.DatePickerStyle,
-        { _, year, month, day ->
-            viewModel.selectStartDate(TimeFormatter.getDatePickerDashDate(year, month, day))
-        },
-        calendar.get(Calendar.YEAR),
-        calendar.get(Calendar.MONTH),
-        calendar.get(Calendar.DAY_OF_MONTH)
-    )
+    val datePickerDialog = remember {
+        DatePickerDialog(
+            context,
+            R.style.DatePickerStyle,
+            { _, year, month, day ->
+                viewModel.selectStartDate(TimeFormatter.getDatePickerDashDate(year, month, day))
+            },
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        )
+    }
 
     LaunchedEffect(Unit) {
         viewModel.eventFlow.collect { event ->
@@ -99,7 +101,8 @@ fun SurgeryStartScreen(
             leftItemType = TopBarLeftType.BACK,
             leftBtnClicked = onClickTopBarLeftBtn,
             middleItemType = TopBarMiddleType.TEXT,
-            middleText = WORD_SIGN_UP
+            middleText = WORD_SIGN_UP,
+            interactionSource = interactionSource
         )
 
         Column(

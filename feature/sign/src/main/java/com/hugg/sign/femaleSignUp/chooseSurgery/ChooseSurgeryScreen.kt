@@ -88,7 +88,8 @@ fun ChooseSurgeryScreen(
             leftItemType = TopBarLeftType.BACK,
             leftBtnClicked = onClickTopBarLeftBtn,
             middleItemType = TopBarMiddleType.TEXT,
-            middleText = WORD_SIGN_UP
+            middleText = WORD_SIGN_UP,
+            interactionSource = interactionSource
         )
 
         Column(

@@ -12,6 +12,7 @@ import com.hugg.feature.theme.ACCOUNT_ALL
 import com.hugg.feature.theme.ACCOUNT_PERSONAL
 import com.hugg.feature.theme.ACCOUNT_SUBSIDY
 import com.hugg.feature.util.TimeFormatter
+import com.hugg.feature.util.UnitFormatter.getMoneyFormat
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -37,12 +38,8 @@ class AccountViewModel @Inject constructor(
     }
 
     fun initDay(start : String, end : String){
-        updateState(
-            uiState.value.copy(
-                startDay = start,
-                endDay = end,
-            )
-        )
+        if(uiState.value.startDay != start) updateStartDay(start)
+        if(uiState.value.endDay != end) updateEndDay(end)
         getAccountByCondition()
     }
 
@@ -100,8 +97,15 @@ class AccountViewModel @Inject constructor(
         )
     }
 
-    private fun getMoneyFormat(money : Int) : String {
-        val koreanFormat = NumberFormat.getNumberInstance(Locale("ko"))
-        return koreanFormat.format(money) + "원"
+    private fun updateStartDay(start: String){
+        updateState(
+            uiState.value.copy(startDay = start,)
+        )
+    }
+
+    private fun updateEndDay(end : String){
+        updateState(
+            uiState.value.copy(endDay = end)
+        )
     }
 }

@@ -67,6 +67,7 @@ dependencies {
     implementation(Google.HILT_ANDROID)
     implementation(Google.HILT_CORE)
     implementation(Google.HILT_COMPOSE)
+    kapt(Google.HILT_COMPILER)
     implementation(Google.FCM)
     implementation(Google.FCM_KTX)
     implementation(Google.FIREBASE_ANALYTICS)
@@ -79,5 +80,4 @@ dependencies {
     implementation(AndroidX.COMPOSE_PREVIEW)
     implementation(AndroidX.ACTIVITY_COMPOSE)
 
-    kapt(Google.HILT_COMPILER)
 }

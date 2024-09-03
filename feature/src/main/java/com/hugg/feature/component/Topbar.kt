@@ -44,6 +44,7 @@ fun TopBar(
     leftBtnClicked : () -> Unit = {},
     middleText : String = "",
     rightBtnClicked : () -> Unit = {},
+    interactionSource : MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
     Column(
         modifier = Modifier
@@ -62,7 +63,7 @@ fun TopBar(
                 horizontalArrangement = Arrangement.Start
             ) {
                 DrawLeftItem(
-                    leftItemType = leftItemType, leftBtnClicked = leftBtnClicked
+                    leftItemType = leftItemType, leftBtnClicked = leftBtnClicked, interactionSource = interactionSource
                 )
             }
 
@@ -75,7 +76,7 @@ fun TopBar(
                 horizontalArrangement = Arrangement.End
             ) {
                 DrawRightItem(
-                    rightItemType = rightItemType, rightBtnClicked = rightBtnClicked
+                    rightItemType = rightItemType, rightBtnClicked = rightBtnClicked, interactionSource = interactionSource
                 )
             }
         }
@@ -93,11 +94,12 @@ fun TopBar(
 fun DrawLeftItem(
     leftItemType : TopBarLeftType = TopBarLeftType.NONE,
     leftBtnClicked : () -> Unit = {},
+    interactionSource : MutableInteractionSource
 ){
     when(leftItemType){
-        TopBarLeftType.BACK -> DrawLeftBackBtn(leftBtnClicked)
+        TopBarLeftType.BACK -> DrawLeftBackBtn(leftBtnClicked, interactionSource)
         TopBarLeftType.LOGO -> DrawLeftLogo()
-        TopBarLeftType.CLOSE -> DrawLeftCloseBtn(leftBtnClicked)
+        TopBarLeftType.CLOSE -> DrawLeftCloseBtn(leftBtnClicked, interactionSource)
         TopBarLeftType.NONE -> {}
     }
 }
@@ -118,13 +120,14 @@ fun DrawMiddleItem(
 fun DrawRightItem(
     rightItemType : TopBarRightType = TopBarRightType.NONE,
     rightBtnClicked : () -> Unit = {},
+    interactionSource : MutableInteractionSource
 ){
     when(rightItemType){
-        TopBarRightType.SKIP -> DrawRightSkipBtn(rightBtnClicked)
+        TopBarRightType.SKIP -> DrawRightSkipBtn(rightBtnClicked, interactionSource)
         TopBarRightType.DAILY_RECORD -> DrawDailyRecordBtn(rightBtnClicked)
-        TopBarRightType.CREATE -> DrawCreateBtn(rightBtnClicked)
-        TopBarRightType.CHECK -> DrawCheckBtn(rightBtnClicked)
-        TopBarRightType.DELETE -> DrawDeleteBtn(rightBtnClicked)
+        TopBarRightType.CREATE -> DrawCreateBtn(rightBtnClicked, interactionSource)
+        TopBarRightType.CHECK -> DrawCheckBtn(rightBtnClicked, interactionSource)
+        TopBarRightType.DELETE -> DrawDeleteBtn(rightBtnClicked, interactionSource)
         TopBarRightType.NONE -> {}
     }
 }
@@ -132,7 +135,8 @@ fun DrawRightItem(
 // ----- 왼쪽 버튼들 ----- //
 @Composable
 fun DrawLeftBackBtn(
-    onClickBtn : () -> Unit
+    onClickBtn : () -> Unit,
+    interactionSource : MutableInteractionSource
 ){
     Spacer(modifier = Modifier.width(16.dp))
     Image(
@@ -142,7 +146,7 @@ fun DrawLeftBackBtn(
             .padding(12.dp)
             .clickable(
                 onClick = onClickBtn,
-                interactionSource = remember { MutableInteractionSource() },
+                interactionSource = interactionSource,
                 indication = null
             ),
         imageVector = ImageVector.vectorResource(R.drawable.ic_back_arrow_gs_60),
@@ -162,7 +166,8 @@ fun DrawLeftLogo(){
 
 @Composable
 fun DrawLeftCloseBtn(
-    onClickBtn : () -> Unit
+    onClickBtn : () -> Unit,
+    interactionSource : MutableInteractionSource
 ){
     Spacer(modifier = Modifier.width(16.dp))
     Image(
@@ -172,7 +177,7 @@ fun DrawLeftCloseBtn(
             .padding(12.dp)
             .clickable(
                 onClick = onClickBtn,
-                interactionSource = remember { MutableInteractionSource() },
+                interactionSource = interactionSource,
                 indication = null
             ),
         imageVector = ImageVector.vectorResource(R.drawable.ic_close_gs_60),
@@ -209,13 +214,14 @@ fun DrawMiddleText(
 @Composable
 fun DrawRightSkipBtn(
     rightBtnClicked : () -> Unit = {},
+    interactionSource : MutableInteractionSource
 ){
     Text(
         modifier = Modifier
             .padding(horizontal = 11.dp, vertical = 14.dp)
             .clickable(
                 onClick = rightBtnClicked,
-                interactionSource = remember { MutableInteractionSource() },
+                interactionSource = interactionSource,
                 indication = null
             ),
         text = WORD_SKIP,
@@ -245,6 +251,7 @@ fun DrawDailyRecordBtn(
 @Composable
 fun DrawCreateBtn(
     rightBtnClicked : () -> Unit = {},
+    interactionSource : MutableInteractionSource
 ){
     Image(
         modifier = Modifier
@@ -253,7 +260,7 @@ fun DrawCreateBtn(
             .padding(8.dp)
             .clickable(
                 onClick = rightBtnClicked,
-                interactionSource = remember { MutableInteractionSource() },
+                interactionSource = interactionSource,
                 indication = null
             ),
         imageVector = ImageVector.vectorResource(R.drawable.ic_create_box_top_bar),
@@ -265,6 +272,7 @@ fun DrawCreateBtn(
 @Composable
 fun DrawCheckBtn(
     rightBtnClicked : () -> Unit = {},
+    interactionSource : MutableInteractionSource
 ){
     Image(
         modifier = Modifier
@@ -273,7 +281,7 @@ fun DrawCheckBtn(
             .padding(8.dp)
             .clickable(
                 onClick = rightBtnClicked,
-                interactionSource = remember { MutableInteractionSource() },
+                interactionSource = interactionSource,
                 indication = null
             ),
         imageVector = ImageVector.vectorResource(R.drawable.ic_check_circle_main),
@@ -285,6 +293,7 @@ fun DrawCheckBtn(
 @Composable
 fun DrawDeleteBtn(
     rightBtnClicked : () -> Unit = {},
+    interactionSource : MutableInteractionSource
 ){
     Image(
         modifier = Modifier
@@ -293,7 +302,7 @@ fun DrawDeleteBtn(
             .padding(8.dp)
             .clickable(
                 onClick = rightBtnClicked,
-                interactionSource = remember { MutableInteractionSource() },
+                interactionSource = interactionSource,
                 indication = null
             ),
         imageVector = ImageVector.vectorResource(R.drawable.ic_delete),

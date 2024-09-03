@@ -96,7 +96,8 @@ fun OnboardingScreen(
             leftBtnClicked = onClickTopBarLeftBtn,
             middleItemType = TopBarMiddleType.LOGO,
             rightItemType = if(pagerState.currentPage != PAGE_COUNT - 1) TopBarRightType.SKIP else TopBarRightType.NONE,
-            rightBtnClicked = onClickTopBarRightBtn
+            rightBtnClicked = onClickTopBarRightBtn,
+            interactionSource = interactionSource
         )
 
         Spacer(modifier = Modifier.height(38.dp))

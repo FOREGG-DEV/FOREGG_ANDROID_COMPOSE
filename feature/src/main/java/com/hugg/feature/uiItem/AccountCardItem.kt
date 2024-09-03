@@ -28,6 +28,7 @@ import com.hugg.feature.theme.Gs80
 import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.White
 import com.hugg.feature.util.TimeFormatter
+import com.hugg.feature.util.UnitFormatter.getMoneyFormat
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -99,11 +100,6 @@ fun AccountCardItem(
         }
 
     }
-}
-
-private fun getMoneyFormat(money : Int) : String {
-    val koreanFormat = NumberFormat.getNumberInstance(Locale("ko"))
-    return koreanFormat.format(money) + "원"
 }
 
 @Preview

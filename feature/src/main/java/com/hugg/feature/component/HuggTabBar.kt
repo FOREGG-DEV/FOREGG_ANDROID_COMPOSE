@@ -34,7 +34,8 @@ fun HuggTabBar(
     onClickMiddleTab : () -> Unit = {},
     onClickRightTab : () -> Unit = {},
     tabCount : Int = 3,
-    initialTabType : HuggTabClickedType = HuggTabClickedType.LEFT
+    initialTabType : HuggTabClickedType = HuggTabClickedType.LEFT,
+    interactionSource : MutableInteractionSource
 ){
     var tabType by remember { mutableStateOf(initialTabType) }
     val onClickSelectTab = { type : HuggTabClickedType -> tabType = type}
@@ -51,7 +52,8 @@ fun HuggTabBar(
             clickedType = tabType,
             onClickSelectTab = onClickSelectTab,
             onClickTab = onClickLeftTab,
-            text = leftText
+            text = leftText,
+            interactionSource = interactionSource
         )
         if(tabCount == 3) {
             TabItem(
@@ -59,7 +61,8 @@ fun HuggTabBar(
                 clickedType = tabType,
                 onClickSelectTab = onClickSelectTab,
                 onClickTab = onClickMiddleTab,
-                text = middleText
+                text = middleText,
+                interactionSource = interactionSource
             )
         }
         TabItem(
@@ -67,7 +70,8 @@ fun HuggTabBar(
             clickedType = tabType,
             onClickSelectTab = onClickSelectTab,
             onClickTab = onClickRightTab,
-            text = rightText
+            text = rightText,
+            interactionSource = interactionSource
         )
     }
 }
@@ -78,7 +82,8 @@ fun RowScope.TabItem(
     clickedType: HuggTabClickedType = HuggTabClickedType.LEFT,
     onClickSelectTab : (HuggTabClickedType) -> Unit = {},
     onClickTab : () -> Unit = {},
-    text : String = ""
+    text : String = "",
+    interactionSource : MutableInteractionSource
 ){
     Box(
         modifier = Modifier
@@ -94,7 +99,7 @@ fun RowScope.TabItem(
                     onClickSelectTab(type)
                     onClickTab()
                 },
-                interactionSource = remember { MutableInteractionSource() },
+                interactionSource = interactionSource,
                 indication = null
             ),
         contentAlignment = Alignment.Center

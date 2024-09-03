@@ -109,7 +109,8 @@ fun CalendarScreen(
     ) {
         TopBar(
             middleItemType = TopBarMiddleType.TEXT,
-            middleText = WORD_CALENDAR
+            middleText = WORD_CALENDAR,
+            interactionSource = interactionSource
         )
 
         Column(
@@ -482,7 +483,8 @@ fun ScheduleDialogPagerItem(
 
     DialogNormalMode(
         uiState = uiState,
-        onClickCreateCancelScheduleBtn = onClickCreateCancelScheduleBtn
+        onClickCreateCancelScheduleBtn = onClickCreateCancelScheduleBtn,
+        interactionSource = interactionSource
     )
 
     DialogCreateMode(
@@ -497,6 +499,7 @@ fun ScheduleDialogPagerItem(
 fun DialogNormalMode(
     uiState : CalendarPageState = CalendarPageState(),
     onClickCreateCancelScheduleBtn : () -> Unit = {},
+    interactionSource: MutableInteractionSource
 ){
     Column(
         modifier = Modifier
@@ -516,7 +519,7 @@ fun DialogNormalMode(
                 modifier = Modifier.padding(end = 16.dp),
             ) {
                 Spacer(modifier = Modifier.weight(1f))
-                PlusBtn(onClickBtn = onClickCreateCancelScheduleBtn)
+                PlusBtn(onClickBtn = onClickCreateCancelScheduleBtn, interactionSource = interactionSource)
             }
         }
 
@@ -551,7 +554,7 @@ fun DialogCreateMode(
                     .horizontalScroll(rememberScrollState()),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                CancelBtn(onClickBtn = onClickCreateCancelScheduleBtn)
+                CancelBtn(onClickBtn = onClickCreateCancelScheduleBtn, interactionSource = interactionSource)
 
                 Spacer(modifier = Modifier.size(8.dp))
 
