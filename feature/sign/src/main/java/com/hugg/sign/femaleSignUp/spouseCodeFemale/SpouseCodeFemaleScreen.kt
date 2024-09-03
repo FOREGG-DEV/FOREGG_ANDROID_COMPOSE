@@ -72,7 +72,8 @@ fun SpouseCodeFemaleScreen(
     uiState : SpouseCodeFemalePageState = SpouseCodeFemalePageState(),
     onClickTopBarLeftBtn : () -> Unit = {},
     onClickSignUpBtn : () -> Unit = {},
-    onClickCopyBtn: () -> Unit = {}
+    onClickCopyBtn: () -> Unit = {},
+    interactionSource : MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
     Column(
         modifier = Modifier
@@ -84,7 +85,8 @@ fun SpouseCodeFemaleScreen(
             leftItemType = TopBarLeftType.BACK,
             leftBtnClicked = onClickTopBarLeftBtn,
             middleItemType = TopBarMiddleType.TEXT,
-            middleText = WORD_SIGN_UP
+            middleText = WORD_SIGN_UP,
+            interactionSource = interactionSource
         )
 
         Column(
@@ -111,7 +113,8 @@ fun SpouseCodeFemaleScreen(
 
             SpouseCodeCopyView(
                 uiState = uiState,
-                onClickCopyBtn = onClickCopyBtn
+                onClickCopyBtn = onClickCopyBtn,
+                interactionSource = interactionSource
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -152,6 +155,7 @@ fun SpouseCodeFemaleScreen(
 fun SpouseCodeCopyView(
     uiState: SpouseCodeFemalePageState,
     onClickCopyBtn: () -> Unit,
+    interactionSource : MutableInteractionSource
 ){
     Row(
         modifier = Modifier
@@ -159,7 +163,7 @@ fun SpouseCodeCopyView(
             .background(color = White, shape = RoundedCornerShape(8.dp))
             .clickable(
                 onClick = onClickCopyBtn,
-                interactionSource = remember { MutableInteractionSource() },
+                interactionSource = interactionSource,
                 indication = null
             ),
         verticalAlignment = Alignment.CenterVertically

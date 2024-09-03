@@ -2,10 +2,11 @@ plugins {
     id("com.android.library")
     kotlin("android")
     kotlin("kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
-    namespace = "com.hugg.feature"
+    namespace = "com.hugg.account"
     compileSdk = 34
 
     defaultConfig {
@@ -36,32 +37,47 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.14"
     }
-
     packagingOptions {
         exclude("META-INF/gradle/incremental.annotation.processors")
     }
 }
 
 dependencies {
+    implementation(project(":feature"))
     implementation(project(":data"))
     implementation(project(":domain"))
-
-    implementation(AndroidX.NAVIGATION_COMPOSE)
     implementation(AndroidX.CORE)
+    implementation(AndroidX.APPCOMPAT)
+    implementation(Google.MATERIAL)
+    implementation(AndroidX.NAVIGATION_COMPOSE)
+    implementation(AndroidX.LIFECYCLE_VIEW_MODEL_KTX)
     implementation(AndroidX.LIFECYCLE_RUNTIME_KTX)
-    implementation(AndroidX.ACTIVITY_COMPOSE)
-    implementation(platform(AndroidX.COMPOSE_BOM))
-    implementation(AndroidX.COMPOSE_UI)
-    implementation(AndroidX.COMPOSE_GRAPHICS)
-    implementation(AndroidX.COMPOSE_PREVIEW)
-    implementation(AndroidX.COMPOSE_MATERIAL)
-
+    implementation(AndroidX.LIFECYCLE_RUNTIME_COMPOSE)
+    implementation(AndroidX.SPLASH)
     implementation(AndroidX.THREE_TEN)
-    debugImplementation("androidx.compose.ui:ui-tooling:1.6.8")
+    implementation(AndroidX.SWIPE_REFRESH)
+    implementation(AndroidX.DATA_STORE_PREFERENCES)
+    implementation(AndroidX.FRAGMENT_KTX)
+
+    //코루틴
+    implementation(Kotlin.COROUTINES_CORE)
+    implementation(Kotlin.COROUTINES)
 
     //힐트
     implementation(Google.HILT_ANDROID)
     implementation(Google.HILT_CORE)
     implementation(Google.HILT_COMPOSE)
     kapt(Google.HILT_COMPILER)
+    implementation(Google.FCM)
+    implementation(Google.FCM_KTX)
+    implementation(Google.FIREBASE_ANALYTICS)
+    implementation(platform(Google.FIREBASE_BOM))
+
+    implementation(AndroidX.COMPOSE_BOM)
+    implementation(AndroidX.COMPOSE_MATERIAL)
+    implementation(AndroidX.COMPOSE_UI)
+    implementation(AndroidX.COMPOSE_GRAPHICS)
+    implementation(AndroidX.COMPOSE_PREVIEW)
+    implementation(AndroidX.ACTIVITY_COMPOSE)
+
 }

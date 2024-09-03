@@ -24,7 +24,11 @@ sealed class Routes(val route : String){
         fun getRouteMaleSignUp(accessToken: String, ssn: String) = "male_sign_up/$accessToken/$ssn"
     }
 
-    //----------------CALENDAR_GRAPH----------------//\
+    //----------------CALENDAR_GRAPH----------------//
     data object CalendarGraph : Routes("calendar_graph")
     data object CalendarScreen : Routes("calendar")
+
+    //----------------ACCOUNT_GRAPH----------------//
+    data object AccountGraph : Routes("account_graph")
+    data object AccountScreen : Routes("account")
 }

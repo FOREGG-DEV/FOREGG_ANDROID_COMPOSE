@@ -75,6 +75,8 @@ fun CalendarContainer(
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val interactionSource = remember { MutableInteractionSource() }
+
     CalendarScreen(
         onClickPrevMonthBtn = { viewModel.onClickPrevMonth() },
         onClickNextMonthBtn = { viewModel.onClickNextMonth() },
@@ -82,7 +84,8 @@ fun CalendarContainer(
         onClickCancel = { viewModel.onClickDialogCancel() },
         onClickCreateCancelScheduleBtn = { viewModel.onClickCreateCancelScheduleBtn() },
         onClickCreateScheduleBtn = { type, size -> viewModel.onClickCreateScheduleBtn(type, size)},
-        uiState = uiState
+        uiState = uiState,
+        interactionSource = interactionSource
     )
 }
 
@@ -96,7 +99,8 @@ fun CalendarScreen(
     onClickCancel: () -> Unit = {},
     onClickCreateCancelScheduleBtn: () -> Unit = {},
     onClickCreateScheduleBtn: (RecordType, Int) -> Unit = {_,_ -> },
-    uiState : CalendarPageState = CalendarPageState()
+    uiState : CalendarPageState = CalendarPageState(),
+    interactionSource : MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
     Column(
         modifier = Modifier
@@ -105,7 +109,8 @@ fun CalendarScreen(
     ) {
         TopBar(
             middleItemType = TopBarMiddleType.TEXT,
-            middleText = WORD_CALENDAR
+            middleText = WORD_CALENDAR,
+            interactionSource = interactionSource
         )
 
         Column(
@@ -117,7 +122,8 @@ fun CalendarScreen(
             RemoteCalendar(
                 onClickPrevMonthBtn = onClickPrevMonthBtn,
                 onClickNextMonthBtn = onClickNextMonthBtn,
-                uiState = uiState
+                uiState = uiState,
+                interactionSource = interactionSource
             )
 
             Spacer(modifier = Modifier.size(13.dp))
@@ -153,7 +159,8 @@ fun CalendarScreen(
                                 showDivideLine = false,
                                 item = item,
                                 isClicked = onClickDay,
-                                position = index
+                                position = index,
+                                interactionSource = interactionSource
                             )
                         } else {
                             CalendarDayItem(
@@ -161,7 +168,8 @@ fun CalendarScreen(
                                 showDivideLine = true,
                                 item = item,
                                 isClicked = onClickDay,
-                                position = index
+                                position = index,
+                                interactionSource = interactionSource
                             )
                         }
                     }
@@ -175,7 +183,8 @@ fun CalendarScreen(
         pagerState = rememberPagerState(initialPage = uiState.clickedPosition),
         onClickCancel = onClickCancel,
         onClickCreateCancelScheduleBtn = onClickCreateCancelScheduleBtn,
-        onClickCreateScheduleBtn = onClickCreateScheduleBtn
+        onClickCreateScheduleBtn = onClickCreateScheduleBtn,
+        interactionSource = interactionSource
     )
 }
 
@@ -183,7 +192,8 @@ fun CalendarScreen(
 fun RemoteCalendar(
     onClickPrevMonthBtn : () -> Unit = {},
     onClickNextMonthBtn : () -> Unit = {},
-    uiState : CalendarPageState = CalendarPageState()
+    uiState : CalendarPageState = CalendarPageState(),
+    interactionSource : MutableInteractionSource
 ){
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -196,7 +206,7 @@ fun RemoteCalendar(
                 .padding(12.dp)
                 .clickable(
                     onClick = onClickPrevMonthBtn,
-                    interactionSource = remember { MutableInteractionSource() },
+                    interactionSource = interactionSource,
                     indication = null
                 ),
             imageVector = ImageVector.vectorResource(R.drawable.ic_back_arrow_gs_70),
@@ -222,7 +232,7 @@ fun RemoteCalendar(
                 .graphicsLayer(scaleX = -1f)
                 .clickable(
                     onClick = onClickNextMonthBtn,
-                    interactionSource = remember { MutableInteractionSource() },
+                    interactionSource = interactionSource,
                     indication = null
                 ),
             imageVector = ImageVector.vectorResource(R.drawable.ic_back_arrow_gs_70),
@@ -251,13 +261,14 @@ fun CalendarDayItem(
     showDivideLine : Boolean = false,
     item : CalendarDayVo = CalendarDayVo(),
     isClicked : ( Int ) -> Unit = {},
-    position : Int = 0
+    position : Int = 0,
+    interactionSource : MutableInteractionSource
 ){
     Column(
         modifier = Modifier
             .clickable(
                 onClick = { isClicked(position) },
-                interactionSource = remember { MutableInteractionSource() },
+                interactionSource = interactionSource,
                 indication = null
             )
             .fillMaxWidth()
@@ -349,7 +360,8 @@ fun ScheduleDetailDialog(
     pagerState : PagerState = rememberPagerState(),
     onClickCancel: () -> Unit = {},
     onClickCreateCancelScheduleBtn: () -> Unit = {},
-    onClickCreateScheduleBtn: (RecordType, Int) -> Unit = {_,_ -> }
+    onClickCreateScheduleBtn: (RecordType, Int) -> Unit = {_,_ -> },
+    interactionSource : MutableInteractionSource
 ) {
     Dialog(
         onDismissRequest = onClickCancel,
@@ -364,7 +376,7 @@ fun ScheduleDetailDialog(
                     .height(40.dp)
                     .clickable(
                         onClick = onClickCancel,
-                        interactionSource = remember { MutableInteractionSource() },
+                        interactionSource = interactionSource,
                         indication = null
                     )
                     .background(
@@ -385,7 +397,7 @@ fun ScheduleDetailDialog(
                 .size(16.dp)
                 .clickable(
                     onClick = onClickCancel,
-                    interactionSource = remember { MutableInteractionSource() },
+                    interactionSource = interactionSource,
                     indication = null
                 )
             )
@@ -404,7 +416,8 @@ fun ScheduleDetailDialog(
                     calendarDayVo = uiState.calendarDayList[page],
                     onClickCreateCancelScheduleBtn = onClickCreateCancelScheduleBtn,
                     uiState = uiState,
-                    onClickCreateScheduleBtn = onClickCreateScheduleBtn
+                    onClickCreateScheduleBtn = onClickCreateScheduleBtn,
+                    interactionSource = interactionSource
                 )
             }
             Box(
@@ -413,7 +426,7 @@ fun ScheduleDetailDialog(
                     .height(56.dp)
                     .clickable(
                         onClick = onClickCancel,
-                        interactionSource = remember { MutableInteractionSource() },
+                        interactionSource = interactionSource,
                         indication = null
                     )
                     .background(Color.Transparent)
@@ -428,7 +441,8 @@ fun ScheduleDialogPagerItem(
     calendarDayVo: CalendarDayVo = CalendarDayVo(),
     uiState: CalendarPageState = CalendarPageState(),
     onClickCreateCancelScheduleBtn : () -> Unit = {},
-    onClickCreateScheduleBtn: (RecordType, Int) -> Unit = {_,_ -> }
+    onClickCreateScheduleBtn: (RecordType, Int) -> Unit = {_,_ -> },
+    interactionSource : MutableInteractionSource
 ) {
     Column(
         modifier = modifier
@@ -469,13 +483,15 @@ fun ScheduleDialogPagerItem(
 
     DialogNormalMode(
         uiState = uiState,
-        onClickCreateCancelScheduleBtn = onClickCreateCancelScheduleBtn
+        onClickCreateCancelScheduleBtn = onClickCreateCancelScheduleBtn,
+        interactionSource = interactionSource
     )
 
     DialogCreateMode(
         uiState = uiState,
         onClickCreateCancelScheduleBtn = onClickCreateCancelScheduleBtn,
-        onClickCreateScheduleBtn = { recordType, _ -> onClickCreateScheduleBtn(recordType, calendarDayVo.scheduleList.size)}
+        onClickCreateScheduleBtn = { recordType, _ -> onClickCreateScheduleBtn(recordType, calendarDayVo.scheduleList.size)},
+        interactionSource = interactionSource
     )
 }
 
@@ -483,6 +499,7 @@ fun ScheduleDialogPagerItem(
 fun DialogNormalMode(
     uiState : CalendarPageState = CalendarPageState(),
     onClickCreateCancelScheduleBtn : () -> Unit = {},
+    interactionSource: MutableInteractionSource
 ){
     Column(
         modifier = Modifier
@@ -502,7 +519,7 @@ fun DialogNormalMode(
                 modifier = Modifier.padding(end = 16.dp),
             ) {
                 Spacer(modifier = Modifier.weight(1f))
-                PlusBtn(onClickBtn = onClickCreateCancelScheduleBtn)
+                PlusBtn(onClickBtn = onClickCreateCancelScheduleBtn, interactionSource = interactionSource)
             }
         }
 
@@ -514,7 +531,8 @@ fun DialogNormalMode(
 fun DialogCreateMode(
     uiState : CalendarPageState = CalendarPageState(),
     onClickCreateCancelScheduleBtn : () -> Unit = {},
-    onClickCreateScheduleBtn: (RecordType, Int) -> Unit = {_,_ -> }
+    onClickCreateScheduleBtn: (RecordType, Int) -> Unit = {_,_ -> },
+    interactionSource : MutableInteractionSource
 ){
     Column(
         modifier = Modifier
@@ -536,14 +554,14 @@ fun DialogCreateMode(
                     .horizontalScroll(rememberScrollState()),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                CancelBtn(onClickBtn = onClickCreateCancelScheduleBtn)
+                CancelBtn(onClickBtn = onClickCreateCancelScheduleBtn, interactionSource = interactionSource)
 
                 Spacer(modifier = Modifier.size(8.dp))
 
-                CreateScheduleBtnByType(RecordType.HOSPITAL, onClickCreateScheduleBtn)
-                CreateScheduleBtnByType(RecordType.INJECTION, onClickCreateScheduleBtn)
-                CreateScheduleBtnByType(RecordType.MEDICINE, onClickCreateScheduleBtn)
-                CreateScheduleBtnByType(RecordType.ETC, onClickCreateScheduleBtn)
+                CreateScheduleBtnByType(RecordType.HOSPITAL, onClickCreateScheduleBtn, interactionSource)
+                CreateScheduleBtnByType(RecordType.INJECTION, onClickCreateScheduleBtn, interactionSource)
+                CreateScheduleBtnByType(RecordType.MEDICINE, onClickCreateScheduleBtn, interactionSource)
+                CreateScheduleBtnByType(RecordType.ETC, onClickCreateScheduleBtn, interactionSource)
 
                 Spacer(modifier = Modifier.size(16.dp))
             }
@@ -556,7 +574,8 @@ fun DialogCreateMode(
 @Composable
 fun CreateScheduleBtnByType(
     type : RecordType = RecordType.ETC,
-    onClickCreateScheduleBtn: (RecordType, Int) -> Unit = {_,_ -> }
+    onClickCreateScheduleBtn: (RecordType, Int) -> Unit = {_,_ -> },
+    interactionSource : MutableInteractionSource
 ){
     val text = when(type){
         RecordType.MEDICINE -> WORD_MEDICINE
@@ -573,7 +592,7 @@ fun CreateScheduleBtnByType(
             )
             .clickable(
                 onClick = { onClickCreateScheduleBtn(type, 0) },
-                interactionSource = remember { MutableInteractionSource() },
+                interactionSource = interactionSource,
                 indication = null
             )
             .background(color = White)

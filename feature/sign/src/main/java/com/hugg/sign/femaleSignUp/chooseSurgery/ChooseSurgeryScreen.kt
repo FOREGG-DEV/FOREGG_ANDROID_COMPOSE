@@ -48,6 +48,7 @@ fun ChooseSurgeryContainer(
     viewModel: ChooseSurgeryViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val interactionSource = remember { MutableInteractionSource() }
 
     LaunchedEffect(Unit) {
         viewModel.eventFlow.collect { event ->
@@ -64,6 +65,7 @@ fun ChooseSurgeryContainer(
         onClickNextPageBtn = { viewModel.onClickNextBtn() },
         onClickDropDown = { viewModel.onClickDropDown() },
         onClickMenuType = { type -> viewModel.onClickType(type)},
+        interactionSource = interactionSource
     )
 }
 
@@ -74,6 +76,7 @@ fun ChooseSurgeryScreen(
     onClickNextPageBtn : () -> Unit = {},
     onClickDropDown : () -> Unit = {},
     onClickMenuType : (SurgeryType) -> Unit = {},
+    interactionSource : MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
     Column(
         modifier = Modifier
@@ -85,7 +88,8 @@ fun ChooseSurgeryScreen(
             leftItemType = TopBarLeftType.BACK,
             leftBtnClicked = onClickTopBarLeftBtn,
             middleItemType = TopBarMiddleType.TEXT,
-            middleText = WORD_SIGN_UP
+            middleText = WORD_SIGN_UP,
+            interactionSource = interactionSource
         )
 
         Column(
@@ -145,7 +149,7 @@ fun ChooseSurgeryScreen(
                                 .padding(top = 4.dp, bottom = 1.dp, start = 2.dp, end = 2.dp)
                                 .clickable(
                                     onClick = onClickDropDown,
-                                    interactionSource = remember { MutableInteractionSource() },
+                                    interactionSource = interactionSource,
                                     indication = null
                                 ),
                             painter = painterResource(R.drawable.ic_drop_down_white),
@@ -155,7 +159,7 @@ fun ChooseSurgeryScreen(
                 }
             }
 
-            if(uiState.isExpandMenu) SurgeryDropDown(onClickMenuType)
+            if(uiState.isExpandMenu) SurgeryDropDown(onClickMenuType, interactionSource)
         }
 
         Column(
@@ -175,7 +179,8 @@ fun ChooseSurgeryScreen(
 
 @Composable
 fun SurgeryDropDown(
-    onClickType : (SurgeryType) -> Unit = {}
+    onClickType : (SurgeryType) -> Unit = {},
+    interactionSource : MutableInteractionSource
 ){
     Column(
         modifier = Modifier
@@ -191,7 +196,7 @@ fun SurgeryDropDown(
             .background(White)
             .clickable(
                 onClick = { onClickType(SurgeryType.THINK_SURGERY) },
-                interactionSource = remember { MutableInteractionSource() },
+                interactionSource = interactionSource,
                 indication = null
             ),
             contentAlignment = Alignment.CenterStart
@@ -210,7 +215,7 @@ fun SurgeryDropDown(
             .background(White)
             .clickable(
                 onClick = { onClickType(SurgeryType.IUI) },
-                interactionSource = remember { MutableInteractionSource() },
+                interactionSource = interactionSource,
                 indication = null
             ),
             contentAlignment = Alignment.CenterStart
@@ -229,7 +234,7 @@ fun SurgeryDropDown(
             .background(White)
             .clickable(
                 onClick = { onClickType(SurgeryType.EGG_FREEZING) },
-                interactionSource = remember { MutableInteractionSource() },
+                interactionSource = interactionSource,
                 indication = null
             ),
             contentAlignment = Alignment.CenterStart
@@ -248,7 +253,7 @@ fun SurgeryDropDown(
             .background(White)
             .clickable(
                 onClick = { onClickType(SurgeryType.IN_VITRO_FERTILIZATION) },
-                interactionSource = remember { MutableInteractionSource() },
+                interactionSource = interactionSource,
                 indication = null
             ),
             contentAlignment = Alignment.CenterStart

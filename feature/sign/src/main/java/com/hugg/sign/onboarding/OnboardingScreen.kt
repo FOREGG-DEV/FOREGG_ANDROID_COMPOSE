@@ -84,6 +84,7 @@ fun OnboardingScreen(
     onClickTopBarRightBtn : () -> Unit = {},
     onClickNextPageBtn : () -> Unit = {},
     onClickLogin : () -> Unit = {},
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
     Column(
         modifier = Modifier
@@ -95,7 +96,8 @@ fun OnboardingScreen(
             leftBtnClicked = onClickTopBarLeftBtn,
             middleItemType = TopBarMiddleType.LOGO,
             rightItemType = if(pagerState.currentPage != PAGE_COUNT - 1) TopBarRightType.SKIP else TopBarRightType.NONE,
-            rightBtnClicked = onClickTopBarRightBtn
+            rightBtnClicked = onClickTopBarRightBtn,
+            interactionSource = interactionSource
         )
 
         Spacer(modifier = Modifier.height(38.dp))
@@ -130,7 +132,7 @@ fun OnboardingScreen(
                 .padding(horizontal = 16.dp)
                 .clickable(
                     onClick = onClickLogin,
-                    interactionSource = remember { MutableInteractionSource() },
+                    interactionSource = interactionSource,
                     indication = null
                 ),
         )

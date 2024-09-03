@@ -68,7 +68,8 @@ fun SurgeryCountScreen(
     onClickTopBarLeftBtn : () -> Unit = {},
     onClickNextPageBtn : () -> Unit = {},
     onClickPlusBtn : () -> Unit = {},
-    onClickMinusBtn : () -> Unit = {}
+    onClickMinusBtn : () -> Unit = {},
+    interactionSource : MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
     Column(
         modifier = Modifier
@@ -80,7 +81,8 @@ fun SurgeryCountScreen(
             leftItemType = TopBarLeftType.BACK,
             leftBtnClicked = onClickTopBarLeftBtn,
             middleItemType = TopBarMiddleType.TEXT,
-            middleText = WORD_SIGN_UP
+            middleText = WORD_SIGN_UP,
+            interactionSource = interactionSource
         )
 
         Column(
@@ -112,7 +114,8 @@ fun SurgeryCountScreen(
                 CountingView(
                     uiState = uiState,
                     onClickMinusBtn = onClickMinusBtn,
-                    onClickPlusBtn = onClickPlusBtn
+                    onClickPlusBtn = onClickPlusBtn,
+                    interactionSource = interactionSource
                 )
 
                 Spacer(modifier = Modifier.width(8.dp))
@@ -146,6 +149,7 @@ fun CountingView(
     uiState: SurgeryCountPageState,
     onClickMinusBtn: () -> Unit,
     onClickPlusBtn: () -> Unit,
+    interactionSource : MutableInteractionSource
 ){
     Row(
         modifier = Modifier
@@ -169,7 +173,7 @@ fun CountingView(
                     )
                     .clickable(
                         onClick = onClickMinusBtn,
-                        interactionSource = remember { MutableInteractionSource() },
+                        interactionSource = interactionSource,
                         indication = null
                     ),
                 contentAlignment = Alignment.Center
@@ -202,7 +206,7 @@ fun CountingView(
                     )
                     .clickable(
                         onClick = onClickPlusBtn,
-                        interactionSource = remember { MutableInteractionSource() },
+                        interactionSource = interactionSource,
                         indication = null
                     ),
                 contentAlignment = Alignment.Center
