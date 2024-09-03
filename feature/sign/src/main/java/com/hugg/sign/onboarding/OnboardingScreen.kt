@@ -84,6 +84,7 @@ fun OnboardingScreen(
     onClickTopBarRightBtn : () -> Unit = {},
     onClickNextPageBtn : () -> Unit = {},
     onClickLogin : () -> Unit = {},
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
     Column(
         modifier = Modifier
@@ -130,7 +131,7 @@ fun OnboardingScreen(
                 .padding(horizontal = 16.dp)
                 .clickable(
                     onClick = onClickLogin,
-                    interactionSource = remember { MutableInteractionSource() },
+                    interactionSource = interactionSource,
                     indication = null
                 ),
         )

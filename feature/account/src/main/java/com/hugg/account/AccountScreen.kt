@@ -87,6 +87,7 @@ import com.hugg.feature.theme.WORD_CONFIRM
 import com.hugg.feature.theme.White
 import com.hugg.feature.uiItem.AccountCardItem
 import com.hugg.feature.util.TimeFormatter
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
@@ -99,6 +100,7 @@ fun AccountContainer(
     val scrollState = rememberLazyListState()
     val context = LocalContext.current
     var isFilterAtTop by remember { mutableStateOf(false) }
+    val interactionSource = remember { MutableInteractionSource() }
 
     AccountScreen(
         onClickTab = { type -> viewModel.onClickTabType(type) },
@@ -106,11 +108,13 @@ fun AccountContainer(
         uiState = uiState,
         scrollState = scrollState,
         isFilterAtTop = isFilterAtTop,
-        onClickDateFilter = { viewModel.onClickBottomSheetOnOff() }
+        onClickDateFilter = { viewModel.onClickBottomSheetOnOff() },
+        interactionSource = interactionSource
     )
 
     LaunchedEffect(scrollState) {
         snapshotFlow { scrollState.firstVisibleItemIndex }
+            .distinctUntilChanged()
             .collect { index ->
                 isFilterAtTop = index >= 2
             }
@@ -136,7 +140,8 @@ fun AccountScreen(
     onClickFilterBox: (String) -> Unit = {},
     scrollState: LazyListState = rememberLazyListState(),
     isFilterAtTop : Boolean = false,
-    onClickDateFilter : () -> Unit = {}
+    onClickDateFilter : () -> Unit = {},
+    interactionSource : MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
 
     Column(
@@ -174,7 +179,8 @@ fun AccountScreen(
             item {
                 AccountTotalBox(
                     uiState = uiState,
-                    onClickDateFilter = onClickDateFilter
+                    onClickDateFilter = onClickDateFilter,
+                    interactionSource = interactionSource
                 )
 
                 Spacer(modifier = Modifier.size(16.dp))
@@ -183,7 +189,8 @@ fun AccountScreen(
             item {
                 AccountItemFilter(
                     uiState = uiState,
-                    onClickFilterBox = onClickFilterBox
+                    onClickFilterBox = onClickFilterBox,
+                    interactionSource = interactionSource
                 )
 
                 Spacer(modifier = Modifier.size(8.dp))
@@ -215,7 +222,8 @@ fun AccountScreen(
         ) {
             AccountItemFilter(
                 uiState = uiState,
-                onClickFilterBox = onClickFilterBox
+                onClickFilterBox = onClickFilterBox,
+                interactionSource = interactionSource
             )
 
             Box(
@@ -231,7 +239,8 @@ fun AccountScreen(
 @Composable
 fun AccountTotalBox(
     uiState: AccountPageState = AccountPageState(),
-    onClickDateFilter : () -> Unit = {}
+    onClickDateFilter : () -> Unit = {},
+    interactionSource : MutableInteractionSource
 ) {
     Column(
         modifier = Modifier
@@ -259,7 +268,7 @@ fun AccountTotalBox(
                     .padding(12.dp)
                     .clickable(
                         onClick = onClickDateFilter,
-                        interactionSource = remember { MutableInteractionSource() },
+                        interactionSource = interactionSource,
                         indication = null
                     ),
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_filter),
@@ -369,7 +378,8 @@ fun TotalBoxItem(
 @Composable
 fun AccountItemFilter(
     uiState: AccountPageState = AccountPageState(),
-    onClickFilterBox: (String) -> Unit = {}
+    onClickFilterBox: (String) -> Unit = {},
+    interactionSource : MutableInteractionSource
 ) {
     Row(
         modifier = Modifier
@@ -379,20 +389,23 @@ fun AccountItemFilter(
         FilterItem(
             text = ACCOUNT_ALL,
             uiState = uiState,
-            onClickFilterBox = onClickFilterBox
+            onClickFilterBox = onClickFilterBox,
+            interactionSource = interactionSource
         )
 
         FilterItem(
             text = ACCOUNT_PERSONAL,
             uiState = uiState,
-            onClickFilterBox = onClickFilterBox
+            onClickFilterBox = onClickFilterBox,
+            interactionSource = interactionSource
         )
 
         if (uiState.tabType == AccountTabType.ALL || uiState.tabType == AccountTabType.MONTH){
             FilterItem(
                 text = ACCOUNT_SUBSIDY,
                 uiState = uiState,
-                onClickFilterBox = onClickFilterBox
+                onClickFilterBox = onClickFilterBox,
+                interactionSource = interactionSource
             )
         }
     }
@@ -402,7 +415,8 @@ fun AccountItemFilter(
 fun FilterItem(
     text : String = "",
     uiState: AccountPageState = AccountPageState(),
-    onClickFilterBox: (String) -> Unit = {}
+    onClickFilterBox: (String) -> Unit = {},
+    interactionSource : MutableInteractionSource
 ){
     Box(
         modifier = Modifier
@@ -414,7 +428,7 @@ fun FilterItem(
             )
             .clickable(
                 onClick = { onClickFilterBox(text) },
-                interactionSource = remember { MutableInteractionSource() },
+                interactionSource = interactionSource,
                 indication = null
             ),
         contentAlignment = Alignment.Center

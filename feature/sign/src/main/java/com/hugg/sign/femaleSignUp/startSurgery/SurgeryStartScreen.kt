@@ -86,7 +86,8 @@ fun SurgeryStartScreen(
     uiState : SurgeryStartPageState = SurgeryStartPageState(),
     onClickTopBarLeftBtn : () -> Unit = {},
     onClickNextPageBtn : () -> Unit = {},
-    onClickDatePickerBtn: () -> Unit = {}
+    onClickDatePickerBtn: () -> Unit = {},
+    interactionSource : MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
     Column(
         modifier = Modifier
@@ -125,7 +126,8 @@ fun SurgeryStartScreen(
 
             DatePickerView(
                 uiState = uiState,
-                onClickDatePickerBtn = onClickDatePickerBtn
+                onClickDatePickerBtn = onClickDatePickerBtn,
+                interactionSource = interactionSource
             )
         }
 
@@ -148,6 +150,7 @@ fun SurgeryStartScreen(
 fun DatePickerView(
     uiState: SurgeryStartPageState,
     onClickDatePickerBtn: () -> Unit,
+    interactionSource : MutableInteractionSource
 ){
     Row(
         modifier = Modifier
@@ -155,7 +158,7 @@ fun DatePickerView(
             .background(color = White, shape = RoundedCornerShape(8.dp))
             .clickable(
                 onClick = onClickDatePickerBtn,
-                interactionSource = remember { MutableInteractionSource() },
+                interactionSource = interactionSource,
                 indication = null
             ),
         verticalAlignment = Alignment.CenterVertically
