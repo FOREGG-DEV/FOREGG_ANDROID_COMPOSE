@@ -11,6 +11,7 @@ data class AccountPageState(
     val filterText : String = ACCOUNT_ALL,
     val startDay : String = "",
     val endDay : String = "",
+    val selectedYearMonth : String = "",
     val accountList : List<AccountCardVo> = emptyList(),
     val isShowBottomSheet : Boolean = false,
     val selectedBottomSheetType: AccountBottomSheetType = AccountBottomSheetType.ONE_MONTH,

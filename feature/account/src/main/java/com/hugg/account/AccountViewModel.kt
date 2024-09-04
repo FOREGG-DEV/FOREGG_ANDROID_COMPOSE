@@ -28,32 +28,47 @@ class AccountViewModel @Inject constructor(
     AccountPageState()
 ) {
 
+    companion object{
+        const val JANUARY = 1
+        const val DECEMBER = 12
+    }
+
     private val today = TimeFormatter.getToday()
     private var year = TimeFormatter.getYear(today)
-    private var month =  TimeFormatter.getMonth(today)
+    private var month = TimeFormatter.getMonth(today)
     private var round by Delegates.notNull<Int>()
 
     init {
         initDay(TimeFormatter.getPreviousMonthDate(), today)
+        updateSelectedYearMonth()
     }
 
     fun initDay(start : String, end : String){
         if(uiState.value.startDay != start) updateStartDay(start)
         if(uiState.value.endDay != end) updateEndDay(end)
-        getAccountByCondition()
+        setView()
+    }
+
+    private fun setView(){
+        when(uiState.value.tabType){
+            AccountTabType.ALL -> getAccountByCondition()
+            AccountTabType.ROUND -> {}
+            AccountTabType.MONTH -> getAccountByMonth()
+        }
     }
 
     fun onClickTabType(type : AccountTabType){
         updateState(
             uiState.value.copy(tabType = type)
         )
+        setView()
     }
 
     fun onClickFilterBox(filterText : String){
         updateState(
             uiState.value.copy(filterText = filterText)
         )
-        getAccountByCondition()
+        setView()
     }
 
     fun onClickBottomSheetOnOff(){
@@ -62,7 +77,7 @@ class AccountViewModel @Inject constructor(
         )
     }
 
-    fun getAccountByCondition(){
+    private fun getAccountByCondition(){
         val request = AccountGetConditionRequestVo(
             from = uiState.value.startDay,
             to = uiState.value.endDay
@@ -72,6 +87,28 @@ class AccountViewModel @Inject constructor(
                 resultResponse(it, ::handleGetSuccessAccount)
             }
         }
+    }
+
+    fun onClickNextMonth(){
+        if(month == DECEMBER){
+            year++
+            month = JANUARY
+        }
+        else{
+            month++
+        }
+        updateSelectedYearMonth(true)
+    }
+
+    fun onClickPrevMonth(){
+        if(month == JANUARY){
+            year--
+            month = DECEMBER
+        }
+        else{
+            month--
+        }
+        updateSelectedYearMonth(true)
     }
 
     fun updateSelectedBottomSheetType(type : AccountBottomSheetType){
@@ -107,5 +144,27 @@ class AccountViewModel @Inject constructor(
         updateState(
             uiState.value.copy(endDay = end)
         )
+    }
+
+    private fun updateSelectedYearMonth(isChange : Boolean = false){
+        updateState(
+            uiState.value.copy(selectedYearMonth = TimeFormatter.getTodayYearAndMonthKor(year, month))
+        )
+
+        if(isChange) setView()
+    }
+
+    private fun getAccountByMonth(){
+        val request = getByMonthRequest()
+        viewModelScope.launch {
+            accountRepository.getByMonth(request).collect{
+                resultResponse(it, ::handleGetSuccessAccount)
+            }
+        }
+    }
+
+    private fun getByMonthRequest() : String{
+        val requestMonth = String.format("%02d", month)
+        return "$year-$requestMonth"
     }
 }

@@ -1,7 +1,5 @@
 package com.hugg.account
 
-import android.app.DatePickerDialog
-import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -9,40 +7,39 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
@@ -52,25 +49,23 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hugg.account.bottomSheet.DatePickBottomSheet
-import com.hugg.domain.model.enums.AccountBottomSheetType
 import com.hugg.domain.model.enums.AccountColorType
 import com.hugg.domain.model.enums.AccountTabType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.domain.model.enums.TopBarRightType
 import com.hugg.feature.R
 import com.hugg.feature.component.HuggTabBar
+import com.hugg.feature.component.PlusBtn
+import com.hugg.feature.component.RemoteYearMonth
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.ACCOUNT_ALL
 import com.hugg.feature.theme.ACCOUNT_ALL_EXPENSE
-import com.hugg.feature.theme.ACCOUNT_CHOOSE_DATE
-import com.hugg.feature.theme.ACCOUNT_DIVIDE_DATE
 import com.hugg.feature.theme.ACCOUNT_MONTH
 import com.hugg.feature.theme.ACCOUNT_PERSONAL
 import com.hugg.feature.theme.ACCOUNT_ROUND
 import com.hugg.feature.theme.ACCOUNT_SUBSIDY
 import com.hugg.feature.theme.ACCOUNT_SUBSIDY_ALL
 import com.hugg.feature.theme.Background
-import com.hugg.feature.theme.Black
 import com.hugg.feature.theme.CalendarEtc
 import com.hugg.feature.theme.CalendarHospital
 import com.hugg.feature.theme.CalendarInjection
@@ -82,14 +77,12 @@ import com.hugg.feature.theme.Gs70
 import com.hugg.feature.theme.Gs80
 import com.hugg.feature.theme.Gs90
 import com.hugg.feature.theme.HuggTypography
+import com.hugg.feature.theme.MainNormal
 import com.hugg.feature.theme.WORD_ACCOUNT
-import com.hugg.feature.theme.WORD_CONFIRM
 import com.hugg.feature.theme.White
 import com.hugg.feature.uiItem.AccountCardItem
 import com.hugg.feature.util.TimeFormatter
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.launch
-import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -108,6 +101,8 @@ fun AccountContainer(
         uiState = uiState,
         scrollState = scrollState,
         isFilterAtTop = isFilterAtTop,
+        onClickPrevMonthBtn = { viewModel.onClickPrevMonth() },
+        onClickNextMonthBtn = { viewModel.onClickNextMonth() },
         onClickDateFilter = { viewModel.onClickBottomSheetOnOff() },
         interactionSource = interactionSource
     )
@@ -135,6 +130,8 @@ fun AccountContainer(
 
 @Composable
 fun AccountScreen(
+    onClickPrevMonthBtn: () -> Unit = {},
+    onClickNextMonthBtn: () -> Unit = {},
     onClickTab: (AccountTabType) -> Unit = {},
     uiState: AccountPageState = AccountPageState(),
     onClickFilterBox: (String) -> Unit = {},
@@ -153,7 +150,6 @@ fun AccountScreen(
         TopBar(
             middleItemType = TopBarMiddleType.TEXT,
             middleText = WORD_ACCOUNT,
-            rightItemType = TopBarRightType.CREATE,
             interactionSource = interactionSource
         )
 
@@ -175,7 +171,21 @@ fun AccountScreen(
                     interactionSource = interactionSource
                 )
 
-                Spacer(modifier = Modifier.size(12.dp))
+                if(uiState.tabType == AccountTabType.MONTH){
+                    Spacer(modifier = Modifier.size(6.dp))
+
+                    RemoteYearMonth(
+                        onClickPrevMonthBtn = onClickPrevMonthBtn,
+                        onClickNextMonthBtn = onClickNextMonthBtn,
+                        date = uiState.selectedYearMonth,
+                        interactionSource = interactionSource
+                    )
+
+                    Spacer(modifier = Modifier.size(6.dp))
+                }
+                else{
+                    Spacer(modifier = Modifier.size(12.dp))
+                }
             }
 
             item {
@@ -236,6 +246,30 @@ fun AccountScreen(
             )
         }
     }
+
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.End
+    ) {
+        Spacer(modifier = Modifier.weight(1f))
+        PlusBtn(
+            interactionSource = interactionSource,
+            modifier = Modifier
+                .padding(end = 16.dp)
+                .shadow(
+                    elevation = 6.dp,
+                    shape = RoundedCornerShape(8.dp)
+                )
+                .size(56.dp)
+                .background(color = MainNormal)
+                .clickable(
+                    onClick = { },
+                    interactionSource = interactionSource,
+                    indication = null
+                )
+        )
+        Spacer(modifier = Modifier.size(24.dp))
+    }
 }
 
 @Composable
@@ -251,32 +285,36 @@ fun AccountTotalBox(
             .background(color = White, shape = RoundedCornerShape(8.dp))
             .padding(start = 12.dp, bottom = 16.dp)
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+        if(uiState.tabType == AccountTabType.ALL) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
 
-            Text(
-                text = "${TimeFormatter.getDotsDate(uiState.startDay)} - ${TimeFormatter.getDotsDate(uiState.endDay)}",
-                style = HuggTypography.h4,
-                color = Gs70
-            )
+                Text(
+                    text = "${TimeFormatter.getDotsDate(uiState.startDay)} - ${TimeFormatter.getDotsDate(uiState.endDay)}",
+                    style = HuggTypography.h4,
+                    color = Gs70
+                )
 
-            Spacer(modifier = Modifier.weight(1f))
+                Spacer(modifier = Modifier.weight(1f))
 
-            Image(
-                modifier = Modifier
-                    .size(48.dp)
-                    .padding(12.dp)
-                    .clickable(
-                        onClick = onClickDateFilter,
-                        interactionSource = interactionSource,
-                        indication = null
-                    ),
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_filter),
-                contentDescription = null
-            )
+                Image(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .padding(12.dp)
+                        .clickable(
+                            onClick = onClickDateFilter,
+                            interactionSource = interactionSource,
+                            indication = null
+                        ),
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_filter),
+                    contentDescription = null
+                )
+            }
         }
+
+        if(uiState.tabType != AccountTabType.ALL) Spacer(modifier = Modifier.size(22.dp))
 
         TotalBoxItem(AccountColorType.PERSONAL, uiState)
 

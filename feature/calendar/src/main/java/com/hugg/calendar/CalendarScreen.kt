@@ -62,6 +62,7 @@ import com.hugg.domain.model.vo.calendar.ScheduleDetailVo
 import com.hugg.feature.R
 import com.hugg.feature.component.CancelBtn
 import com.hugg.feature.component.PlusBtn
+import com.hugg.feature.component.RemoteYearMonth
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
 import com.hugg.feature.uiItem.ScheduleDetailItem
@@ -119,10 +120,10 @@ fun CalendarScreen(
         ) {
             Spacer(modifier = Modifier.size(12.dp))
 
-            RemoteCalendar(
+            RemoteYearMonth(
                 onClickPrevMonthBtn = onClickPrevMonthBtn,
                 onClickNextMonthBtn = onClickNextMonthBtn,
-                uiState = uiState,
+                date = uiState.selectedYearMonth,
                 interactionSource = interactionSource
             )
 
@@ -186,62 +187,6 @@ fun CalendarScreen(
         onClickCreateScheduleBtn = onClickCreateScheduleBtn,
         interactionSource = interactionSource
     )
-}
-
-@Composable
-fun RemoteCalendar(
-    onClickPrevMonthBtn : () -> Unit = {},
-    onClickNextMonthBtn : () -> Unit = {},
-    uiState : CalendarPageState = CalendarPageState(),
-    interactionSource : MutableInteractionSource
-){
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center
-    ) {
-        Image(
-            modifier = Modifier
-                .width(48.dp)
-                .height(48.dp)
-                .padding(12.dp)
-                .clickable(
-                    onClick = onClickPrevMonthBtn,
-                    interactionSource = interactionSource,
-                    indication = null
-                ),
-            imageVector = ImageVector.vectorResource(R.drawable.ic_back_arrow_gs_70),
-            contentDescription = null
-        )
-
-        Spacer(modifier = Modifier.size(9.dp))
-
-        Text(
-            modifier = Modifier.align(Alignment.CenterVertically),
-            text = uiState.selectedYearMonth,
-            color = Gs90,
-            style = HuggTypography.h2
-        )
-
-        Spacer(modifier = Modifier.size(9.dp))
-
-        Image(
-            modifier = Modifier
-                .width(48.dp)
-                .height(48.dp)
-                .padding(12.dp)
-                .graphicsLayer(scaleX = -1f)
-                .clickable(
-                    onClick = onClickNextMonthBtn,
-                    interactionSource = interactionSource,
-                    indication = null
-                ),
-            imageVector = ImageVector.vectorResource(R.drawable.ic_back_arrow_gs_70),
-            contentDescription = null
-        )
-
-        Spacer(modifier = Modifier.size(9.dp))
-
-    }
 }
 
 @Composable
