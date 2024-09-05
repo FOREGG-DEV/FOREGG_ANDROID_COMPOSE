@@ -45,39 +45,3 @@ fun HuggSnackBar(
         )
     }
 }
-
-@Composable
-fun HuggToast(
-    text : String = "",
-    visible : Boolean = false
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize(),
-        contentAlignment = Alignment.BottomCenter
-    ){
-        Column {
-            AnimatedVisibility(
-                visible = visible,
-                enter = fadeIn(),
-                exit = fadeOut()
-            ) {
-                Box(
-                    modifier = Modifier
-                        .height(40.dp)
-                        .background(color = SnackBar, shape = RoundedCornerShape(8.dp)),
-                    contentAlignment = Alignment.Center
-                ){
-                    Text(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        color = White,
-                        style = HuggTypography.p2,
-                        text = text,
-                        textAlign = TextAlign.Center,
-                    )
-                }
-            }
-            Spacer(modifier = Modifier.height(59.dp))
-        }
-    }
-}

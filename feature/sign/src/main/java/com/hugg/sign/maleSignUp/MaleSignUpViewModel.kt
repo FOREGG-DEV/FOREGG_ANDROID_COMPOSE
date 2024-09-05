@@ -49,19 +49,7 @@ class MaleSignUpViewModel @Inject constructor(
 
     private fun handleJoinError(error : String){
         when(error){
-            StatusCode.AUTH.NOT_CORRECT_SHARE_CODE -> showErrorSpouseCodeError()
-        }
-    }
-
-    private fun showErrorSpouseCodeError(){
-        viewModelScope.launch {
-            updateState(uiState.value.copy(
-                isShowErrorSpouseCode = true
-            ))
-            delay(1000)
-            updateState(uiState.value.copy(
-                isShowErrorSpouseCode = false
-            ))
+            StatusCode.AUTH.NOT_CORRECT_SHARE_CODE -> emitEventFlow(MaleSignUpEvent.ShowErrorSpouseCodeEvent)
         }
     }
 

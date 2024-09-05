@@ -4,4 +4,5 @@ import com.hugg.feature.base.Event
 
 sealed class MaleSignUpEvent : Event{
     data object GoToMainEvent : MaleSignUpEvent()
+    data object ShowErrorSpouseCodeEvent : MaleSignUpEvent()
 }
