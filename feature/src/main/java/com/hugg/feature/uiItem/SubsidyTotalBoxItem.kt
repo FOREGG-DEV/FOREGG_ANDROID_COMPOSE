@@ -33,7 +33,7 @@ import com.hugg.feature.util.UnitFormatter
 @Composable
 fun SubsidyTotalBoxItem(
     item: SubsidyListResponseVo = SubsidyListResponseVo(),
-    onClickSubsidyDetail : (Long) -> Unit = {},
+    onClickGoToSubsidyList : () -> Unit = {},
     interactionSource: MutableInteractionSource
 ) {
     val color = when (item.color) {
@@ -47,7 +47,7 @@ fun SubsidyTotalBoxItem(
             .padding(start = 12.dp)
             .fillMaxWidth()
             .clickable(
-                onClick = {onClickSubsidyDetail(item.id)},
+                onClick = onClickGoToSubsidyList,
                 interactionSource = interactionSource,
                 indication = null
             ),

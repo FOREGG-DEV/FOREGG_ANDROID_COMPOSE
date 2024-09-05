@@ -1,4 +1,4 @@
-package com.hugg.account
+package com.hugg.account.accountMain
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -84,6 +84,7 @@ import com.hugg.feature.theme.MainNormal
 import com.hugg.feature.theme.WORD_ACCOUNT
 import com.hugg.feature.theme.White
 import com.hugg.feature.uiItem.AccountCardItem
+import com.hugg.feature.uiItem.RemoteRound
 import com.hugg.feature.uiItem.SubsidyTotalBoxItem
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UnitFormatter
@@ -93,6 +94,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountContainer(
+    navigateToSubsidyList : (Int) -> Unit = {},
     viewModel: AccountViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -112,8 +114,7 @@ fun AccountContainer(
         onClickPrevRoundBtn = { viewModel.onClickPrevRound() },
         onClickNextRoundBtn = { viewModel.onClickNextRound() },
         onClickDateFilter = { viewModel.onClickBottomSheetOnOff() },
-        onClickCreateSubsidyBtn = {},
-        onClickSubsidyDetail = {},
+        onClickGoToSubsidyList = { navigateToSubsidyList(uiState.nowRound) },
         interactionSource = interactionSource
     )
 
@@ -145,11 +146,10 @@ fun AccountScreen(
     onClickPrevRoundBtn: () -> Unit = {},
     onClickNextRoundBtn: () -> Unit = {},
     onClickCreateRoundBtn: () -> Unit = {},
-    onClickCreateSubsidyBtn : () -> Unit = {},
+    onClickGoToSubsidyList : () -> Unit = {},
     onClickTab: (AccountTabType) -> Unit = {},
     uiState: AccountPageState = AccountPageState(),
     onClickFilterBox: (String) -> Unit = {},
-    onClickSubsidyDetail : (Long) -> Unit = {},
     scrollState: LazyListState = rememberLazyListState(),
     isFilterAtTop: Boolean = false,
     onClickDateFilter: () -> Unit = {},
@@ -197,14 +197,13 @@ fun AccountScreen(
                     )
                 }
                 if (uiState.tabType == AccountTabType.ROUND) {
-
-                        RemoteRound(
-                            onClickPrevRoundBtn = onClickPrevRoundBtn,
-                            onClickNextRoundBtn = onClickNextRoundBtn,
-                            onClickCreateRoundBtn = onClickCreateRoundBtn,
-                            interactionSource = interactionSource,
-                            uiState = uiState
-                        )
+                    RemoteRound(
+                        onClickPrevRoundBtn = onClickPrevRoundBtn,
+                        onClickNextRoundBtn = onClickNextRoundBtn,
+                        onClickCreateRoundBtn = onClickCreateRoundBtn,
+                        interactionSource = interactionSource,
+                        nowRound = uiState.nowRound
+                    )
                 }
                 Spacer(modifier = Modifier.size(6.dp))
             }
@@ -213,8 +212,7 @@ fun AccountScreen(
                 AccountTotalBox(
                     uiState = uiState,
                     onClickDateFilter = onClickDateFilter,
-                    onClickCreateSubsidyBtn = onClickCreateSubsidyBtn,
-                    onClickSubsidyDetail = onClickSubsidyDetail,
+                    onClickGoToSubsidyList = onClickGoToSubsidyList,
                     interactionSource = interactionSource
                 )
 
@@ -296,102 +294,10 @@ fun AccountScreen(
 }
 
 @Composable
-fun RemoteRound(
-    onClickPrevRoundBtn: () -> Unit = {},
-    onClickNextRoundBtn: () -> Unit = {},
-    onClickCreateRoundBtn: () -> Unit = {},
-    interactionSource: MutableInteractionSource,
-    uiState: AccountPageState = AccountPageState()
-) {
-    Box(
-        modifier = Modifier.fillMaxWidth()
-    ){
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(modifier = Modifier.size(48.dp)) {
-                if (uiState.nowRound != 0) Image(
-                    modifier = Modifier
-                        .width(48.dp)
-                        .height(48.dp)
-                        .padding(12.dp)
-                        .clickable(
-                            onClick = onClickPrevRoundBtn,
-                            interactionSource = interactionSource,
-                            indication = null
-                        ),
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_back_arrow_gs_60),
-                    contentDescription = null
-                )
-            }
-
-            Spacer(modifier = Modifier.size(35.dp))
-
-            Text(
-                modifier = Modifier.align(Alignment.CenterVertically),
-                text = UnitFormatter.getRoundFormat(uiState.nowRound),
-                color = Gs90,
-                style = HuggTypography.h2
-            )
-
-            Spacer(modifier = Modifier.size(35.dp))
-
-            Box(modifier = Modifier.size(48.dp)) {
-                if (uiState.nowRound != UserInfo.info.round) Image(
-                    modifier = Modifier
-                        .width(48.dp)
-                        .height(48.dp)
-                        .padding(12.dp)
-                        .graphicsLayer(scaleX = -1f)
-                        .clickable(
-                            onClick = onClickNextRoundBtn,
-                            interactionSource = interactionSource,
-                            indication = null
-                        ),
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_back_arrow_gs_60),
-                    contentDescription = null
-                )
-            }
-        }
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Spacer(modifier = Modifier.weight(1f))
-            if (uiState.nowRound == UserInfo.info.round) {
-                Box(
-                    modifier = Modifier
-                        .padding(end = 16.dp, top = 8.dp)
-                        .border(width = 0.5.dp, color = Gs20, shape = RoundedCornerShape(4.dp))
-                        .background(color = White, shape = RoundedCornerShape(4.dp)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        modifier = Modifier
-                            .padding(horizontal = 8.dp, vertical = 6.dp)
-                            .clickable(
-                                onClick = onClickCreateRoundBtn,
-                                interactionSource = interactionSource,
-                                indication = null
-                            ),
-                        text = ACCOUNT_ADD_ROUND,
-                        style = HuggTypography.p2,
-                        color = Gs50
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
 fun AccountTotalBox(
     uiState: AccountPageState = AccountPageState(),
     onClickDateFilter: () -> Unit = {},
-    onClickCreateSubsidyBtn: () -> Unit = {},
-    onClickSubsidyDetail : (Long) -> Unit = {},
+    onClickGoToSubsidyList: () -> Unit = {},
     interactionSource: MutableInteractionSource
 ) {
     Column(
@@ -445,7 +351,7 @@ fun AccountTotalBox(
         }
         else{
             if(uiState.subsidyList.isEmpty()) EmptySubsidyBox(
-                onClickCreateSubsidyBtn = onClickCreateSubsidyBtn,
+                onClickGoToSubsidyList = onClickGoToSubsidyList,
                 interactionSource = interactionSource
             )
             else{
@@ -453,7 +359,7 @@ fun AccountTotalBox(
                     SubsidyTotalBoxItem(
                         item = it,
                         interactionSource = interactionSource,
-                        onClickSubsidyDetail = onClickSubsidyDetail
+                        onClickGoToSubsidyList = onClickGoToSubsidyList
                     )
                 }
             }
@@ -558,7 +464,7 @@ fun TotalBoxItem(
 
 @Composable
 fun EmptySubsidyBox(
-    onClickCreateSubsidyBtn : () -> Unit = {},
+    onClickGoToSubsidyList : () -> Unit = {},
     interactionSource: MutableInteractionSource,
 ){
     Row(
@@ -568,7 +474,7 @@ fun EmptySubsidyBox(
             .background(color = EmptySubsidyBoxColor, shape = RoundedCornerShape(4.dp))
             .padding(vertical = 6.dp)
             .clickable(
-                onClick = onClickCreateSubsidyBtn,
+                onClick = onClickGoToSubsidyList,
                 interactionSource = interactionSource,
                 indication = null
             ),

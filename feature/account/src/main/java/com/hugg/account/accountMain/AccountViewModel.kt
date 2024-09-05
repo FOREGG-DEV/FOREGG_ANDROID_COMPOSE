@@ -1,4 +1,4 @@
-package com.hugg.account
+package com.hugg.account.accountMain
 
 import androidx.lifecycle.viewModelScope
 import com.hugg.domain.model.enums.AccountBottomSheetType
@@ -9,19 +9,14 @@ import com.hugg.domain.model.response.account.AccountResponseVo
 import com.hugg.domain.model.response.account.SubsidyListResponseVo
 import com.hugg.domain.repository.AccountRepository
 import com.hugg.feature.base.BaseViewModel
-import com.hugg.feature.theme.ACCOUNT_ALL
 import com.hugg.feature.theme.ACCOUNT_PERSONAL
 import com.hugg.feature.theme.ACCOUNT_SUBSIDY
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UnitFormatter.getMoneyFormat
 import com.hugg.feature.util.UserInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.text.NumberFormat
-import java.util.Locale
 import javax.inject.Inject
-import kotlin.properties.Delegates
 
 @HiltViewModel
 class AccountViewModel @Inject constructor(

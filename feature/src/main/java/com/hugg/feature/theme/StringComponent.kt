@@ -78,5 +78,8 @@ const val ACCOUNT_ADD_ROUND = "회차 추가"
 const val ACCOUNT_SUGGEST_ADD_SUBSIDY = "지원금을 추가해보세요"
 const val ACCOUNT_AVAILABLE_MONEY = "사용 가능 금액"
 
+// --------- 지원급 --------- //
+const val ACCOUNT_SUBSIDY_MONEY = "지원금"
+
 // --------- 에러 Toast --------- //
 const val TOAST_ERROR_NOR_CORRECT_SPOUSE_CODE = "유효하지 않은 배우자코드입니다."

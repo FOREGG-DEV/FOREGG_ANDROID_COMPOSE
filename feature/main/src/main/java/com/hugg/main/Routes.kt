@@ -31,4 +31,7 @@ sealed class Routes(val route : String){
     //----------------ACCOUNT_GRAPH----------------//
     data object AccountGraph : Routes("account_graph")
     data object AccountScreen : Routes("account")
+    data object AccountSubsidyList : Routes("accountSubsidyList/{round}"){
+        fun getRouteAccountSubsidyList(round: Int) = "accountSubsidyList/$round"
+    }
 }
