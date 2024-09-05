@@ -7,10 +7,8 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,7 +18,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -39,7 +36,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.PathEffect
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
@@ -55,9 +51,8 @@ import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.feature.R
 import com.hugg.feature.component.HuggTabBar
 import com.hugg.feature.component.PlusBtn
-import com.hugg.feature.component.RemoteYearMonth
+import com.hugg.feature.uiItem.RemoteYearMonth
 import com.hugg.feature.component.TopBar
-import com.hugg.feature.theme.ACCOUNT_ADD_ROUND
 import com.hugg.feature.theme.ACCOUNT_ALL
 import com.hugg.feature.theme.ACCOUNT_ALL_EXPENSE
 import com.hugg.feature.theme.ACCOUNT_MONTH
@@ -74,7 +69,6 @@ import com.hugg.feature.theme.CalendarPill
 import com.hugg.feature.theme.EmptySubsidyBoxColor
 import com.hugg.feature.theme.Gs20
 import com.hugg.feature.theme.Gs30
-import com.hugg.feature.theme.Gs50
 import com.hugg.feature.theme.Gs60
 import com.hugg.feature.theme.Gs70
 import com.hugg.feature.theme.Gs80
@@ -87,8 +81,6 @@ import com.hugg.feature.uiItem.AccountCardItem
 import com.hugg.feature.uiItem.RemoteRound
 import com.hugg.feature.uiItem.SubsidyTotalBoxItem
 import com.hugg.feature.util.TimeFormatter
-import com.hugg.feature.util.UnitFormatter
-import com.hugg.feature.util.UserInfo
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 @OptIn(ExperimentalMaterial3Api::class)

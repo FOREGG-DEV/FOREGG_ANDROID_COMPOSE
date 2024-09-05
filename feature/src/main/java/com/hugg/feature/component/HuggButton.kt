@@ -7,6 +7,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -19,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -55,6 +58,38 @@ fun BlankBtn(
             color = textColor,
             style = textStyle
         )
+    }
+}
+
+@Composable
+fun BlankBtnWithIcon(
+    modifier: Modifier = Modifier,
+    onClickBtn : () -> Unit = {},
+    radius : Dp = 8.dp,
+    text : String = "테스트",
+    textStyle: TextStyle = HuggTypography.btn,
+    textColor : Color = Gs70,
+    icon : Int = R.drawable.ic_create_box_top_bar,
+    contentPadding : PaddingValues = PaddingValues(horizontal = 0.dp, vertical = 16.dp)
+) {
+    Button(
+        modifier = modifier,
+        onClick = onClickBtn,
+        colors = ButtonDefaults
+            .buttonColors(containerColor = White),
+        shape = RoundedCornerShape(radius),
+        border = BorderStroke(1.dp, MainNormal),
+        contentPadding = contentPadding
+    ) {
+        Row {
+            Image(painter = painterResource(id = icon), contentDescription = null)
+            Spacer(modifier = Modifier.size(4.dp))
+            Text(
+                text = text,
+                color = textColor,
+                style = textStyle
+            )
+        }
     }
 }
 
@@ -143,4 +178,10 @@ fun CancelBtn(
             contentDescription = null
         )
     }
+}
+
+@Preview
+@Composable
+fun testt(){
+    BlankBtnWithIcon()
 }
