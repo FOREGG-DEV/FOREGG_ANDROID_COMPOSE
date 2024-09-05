@@ -7,4 +7,5 @@ data class UserVo(
     val ssn : String = "",
     val genderType: GenderType = GenderType.FEMALE,
     val spouse : String = "",
+    val round : Int = -1,
 )

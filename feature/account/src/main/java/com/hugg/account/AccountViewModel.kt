@@ -6,6 +6,7 @@ import com.hugg.domain.model.enums.AccountTabType
 import com.hugg.domain.model.enums.AccountType
 import com.hugg.domain.model.request.account.AccountGetConditionRequestVo
 import com.hugg.domain.model.response.account.AccountResponseVo
+import com.hugg.domain.model.response.account.SubsidyListResponseVo
 import com.hugg.domain.repository.AccountRepository
 import com.hugg.feature.base.BaseViewModel
 import com.hugg.feature.theme.ACCOUNT_ALL
@@ -13,6 +14,7 @@ import com.hugg.feature.theme.ACCOUNT_PERSONAL
 import com.hugg.feature.theme.ACCOUNT_SUBSIDY
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UnitFormatter.getMoneyFormat
+import com.hugg.feature.util.UserInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -36,7 +38,7 @@ class AccountViewModel @Inject constructor(
     private val today = TimeFormatter.getToday()
     private var year = TimeFormatter.getYear(today)
     private var month = TimeFormatter.getMonth(today)
-    private var round by Delegates.notNull<Int>()
+    private var round = UserInfo.info.round
 
     init {
         initDay(TimeFormatter.getPreviousMonthDate(), today)
@@ -52,7 +54,9 @@ class AccountViewModel @Inject constructor(
     private fun setView(){
         when(uiState.value.tabType){
             AccountTabType.ALL -> getAccountByCondition()
-            AccountTabType.ROUND -> {}
+            AccountTabType.ROUND -> {
+                getSubsidies()
+            }
             AccountTabType.MONTH -> getAccountByMonth()
         }
     }
@@ -89,6 +93,14 @@ class AccountViewModel @Inject constructor(
         }
     }
 
+    private fun getSubsidies(){
+        viewModelScope.launch {
+            accountRepository.getSubsidies(uiState.value.nowRound).collect {
+                resultResponse(it, ::handleGetSuccessSubsidies)
+            }
+        }
+    }
+
     fun onClickNextMonth(){
         if(month == DECEMBER){
             year++
@@ -109,6 +121,17 @@ class AccountViewModel @Inject constructor(
             month--
         }
         updateSelectedYearMonth(true)
+    }
+
+    fun onClickNextRound(){
+        round++
+        updateSelectedRound()
+    }
+
+    fun onClickPrevRound(){
+        if(round == 0) return
+        round--
+        updateSelectedRound()
     }
 
     fun updateSelectedBottomSheetType(type : AccountBottomSheetType){
@@ -134,6 +157,12 @@ class AccountViewModel @Inject constructor(
         )
     }
 
+    private fun handleGetSuccessSubsidies(result : List<SubsidyListResponseVo>){
+        updateState(
+            uiState.value.copy(subsidyList = result)
+        )
+    }
+
     private fun updateStartDay(start: String){
         updateState(
             uiState.value.copy(startDay = start,)
@@ -150,8 +179,14 @@ class AccountViewModel @Inject constructor(
         updateState(
             uiState.value.copy(selectedYearMonth = TimeFormatter.getTodayYearAndMonthKor(year, month))
         )
-
         if(isChange) setView()
+    }
+
+    private fun updateSelectedRound(){
+        updateState(
+            uiState.value.copy(nowRound = round)
+        )
+        setView()
     }
 
     private fun getAccountByMonth(){

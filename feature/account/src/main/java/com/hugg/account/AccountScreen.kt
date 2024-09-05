@@ -7,6 +7,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -37,7 +38,6 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -52,12 +52,12 @@ import com.hugg.account.bottomSheet.DatePickBottomSheet
 import com.hugg.domain.model.enums.AccountColorType
 import com.hugg.domain.model.enums.AccountTabType
 import com.hugg.domain.model.enums.TopBarMiddleType
-import com.hugg.domain.model.enums.TopBarRightType
 import com.hugg.feature.R
 import com.hugg.feature.component.HuggTabBar
 import com.hugg.feature.component.PlusBtn
 import com.hugg.feature.component.RemoteYearMonth
 import com.hugg.feature.component.TopBar
+import com.hugg.feature.theme.ACCOUNT_ADD_ROUND
 import com.hugg.feature.theme.ACCOUNT_ALL
 import com.hugg.feature.theme.ACCOUNT_ALL_EXPENSE
 import com.hugg.feature.theme.ACCOUNT_MONTH
@@ -65,13 +65,16 @@ import com.hugg.feature.theme.ACCOUNT_PERSONAL
 import com.hugg.feature.theme.ACCOUNT_ROUND
 import com.hugg.feature.theme.ACCOUNT_SUBSIDY
 import com.hugg.feature.theme.ACCOUNT_SUBSIDY_ALL
+import com.hugg.feature.theme.ACCOUNT_SUGGEST_ADD_SUBSIDY
 import com.hugg.feature.theme.Background
 import com.hugg.feature.theme.CalendarEtc
 import com.hugg.feature.theme.CalendarHospital
 import com.hugg.feature.theme.CalendarInjection
 import com.hugg.feature.theme.CalendarPill
+import com.hugg.feature.theme.EmptySubsidyBoxColor
 import com.hugg.feature.theme.Gs20
 import com.hugg.feature.theme.Gs30
+import com.hugg.feature.theme.Gs50
 import com.hugg.feature.theme.Gs60
 import com.hugg.feature.theme.Gs70
 import com.hugg.feature.theme.Gs80
@@ -81,7 +84,10 @@ import com.hugg.feature.theme.MainNormal
 import com.hugg.feature.theme.WORD_ACCOUNT
 import com.hugg.feature.theme.White
 import com.hugg.feature.uiItem.AccountCardItem
+import com.hugg.feature.uiItem.SubsidyTotalBoxItem
 import com.hugg.feature.util.TimeFormatter
+import com.hugg.feature.util.UnitFormatter
+import com.hugg.feature.util.UserInfo
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -103,7 +109,11 @@ fun AccountContainer(
         isFilterAtTop = isFilterAtTop,
         onClickPrevMonthBtn = { viewModel.onClickPrevMonth() },
         onClickNextMonthBtn = { viewModel.onClickNextMonth() },
+        onClickPrevRoundBtn = { viewModel.onClickPrevRound() },
+        onClickNextRoundBtn = { viewModel.onClickNextRound() },
         onClickDateFilter = { viewModel.onClickBottomSheetOnOff() },
+        onClickCreateSubsidyBtn = {},
+        onClickSubsidyDetail = {},
         interactionSource = interactionSource
     )
 
@@ -115,7 +125,7 @@ fun AccountContainer(
             }
     }
 
-    if(uiState.isShowBottomSheet){
+    if (uiState.isShowBottomSheet) {
         DatePickBottomSheet(
             onClickClose = { viewModel.onClickBottomSheetOnOff() },
             onClickConfirm = { selectedType, startDay, endDay ->
@@ -132,13 +142,18 @@ fun AccountContainer(
 fun AccountScreen(
     onClickPrevMonthBtn: () -> Unit = {},
     onClickNextMonthBtn: () -> Unit = {},
+    onClickPrevRoundBtn: () -> Unit = {},
+    onClickNextRoundBtn: () -> Unit = {},
+    onClickCreateRoundBtn: () -> Unit = {},
+    onClickCreateSubsidyBtn : () -> Unit = {},
     onClickTab: (AccountTabType) -> Unit = {},
     uiState: AccountPageState = AccountPageState(),
     onClickFilterBox: (String) -> Unit = {},
+    onClickSubsidyDetail : (Long) -> Unit = {},
     scrollState: LazyListState = rememberLazyListState(),
-    isFilterAtTop : Boolean = false,
-    onClickDateFilter : () -> Unit = {},
-    interactionSource : MutableInteractionSource = remember { MutableInteractionSource() }
+    isFilterAtTop: Boolean = false,
+    onClickDateFilter: () -> Unit = {},
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
 
     Column(
@@ -171,27 +186,35 @@ fun AccountScreen(
                     interactionSource = interactionSource
                 )
 
-                if(uiState.tabType == AccountTabType.MONTH){
-                    Spacer(modifier = Modifier.size(6.dp))
+                Spacer(modifier = Modifier.size(6.dp))
 
+                if (uiState.tabType == AccountTabType.MONTH) {
                     RemoteYearMonth(
                         onClickPrevMonthBtn = onClickPrevMonthBtn,
                         onClickNextMonthBtn = onClickNextMonthBtn,
                         date = uiState.selectedYearMonth,
                         interactionSource = interactionSource
                     )
+                }
+                if (uiState.tabType == AccountTabType.ROUND) {
 
-                    Spacer(modifier = Modifier.size(6.dp))
+                        RemoteRound(
+                            onClickPrevRoundBtn = onClickPrevRoundBtn,
+                            onClickNextRoundBtn = onClickNextRoundBtn,
+                            onClickCreateRoundBtn = onClickCreateRoundBtn,
+                            interactionSource = interactionSource,
+                            uiState = uiState
+                        )
                 }
-                else{
-                    Spacer(modifier = Modifier.size(12.dp))
-                }
+                Spacer(modifier = Modifier.size(6.dp))
             }
 
             item {
                 AccountTotalBox(
                     uiState = uiState,
                     onClickDateFilter = onClickDateFilter,
+                    onClickCreateSubsidyBtn = onClickCreateSubsidyBtn,
+                    onClickSubsidyDetail = onClickSubsidyDetail,
                     interactionSource = interactionSource
                 )
 
@@ -273,21 +296,116 @@ fun AccountScreen(
 }
 
 @Composable
+fun RemoteRound(
+    onClickPrevRoundBtn: () -> Unit = {},
+    onClickNextRoundBtn: () -> Unit = {},
+    onClickCreateRoundBtn: () -> Unit = {},
+    interactionSource: MutableInteractionSource,
+    uiState: AccountPageState = AccountPageState()
+) {
+    Box(
+        modifier = Modifier.fillMaxWidth()
+    ){
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(modifier = Modifier.size(48.dp)) {
+                if (uiState.nowRound != 0) Image(
+                    modifier = Modifier
+                        .width(48.dp)
+                        .height(48.dp)
+                        .padding(12.dp)
+                        .clickable(
+                            onClick = onClickPrevRoundBtn,
+                            interactionSource = interactionSource,
+                            indication = null
+                        ),
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_back_arrow_gs_60),
+                    contentDescription = null
+                )
+            }
+
+            Spacer(modifier = Modifier.size(35.dp))
+
+            Text(
+                modifier = Modifier.align(Alignment.CenterVertically),
+                text = UnitFormatter.getRoundFormat(uiState.nowRound),
+                color = Gs90,
+                style = HuggTypography.h2
+            )
+
+            Spacer(modifier = Modifier.size(35.dp))
+
+            Box(modifier = Modifier.size(48.dp)) {
+                if (uiState.nowRound != UserInfo.info.round) Image(
+                    modifier = Modifier
+                        .width(48.dp)
+                        .height(48.dp)
+                        .padding(12.dp)
+                        .graphicsLayer(scaleX = -1f)
+                        .clickable(
+                            onClick = onClickNextRoundBtn,
+                            interactionSource = interactionSource,
+                            indication = null
+                        ),
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_back_arrow_gs_60),
+                    contentDescription = null
+                )
+            }
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Spacer(modifier = Modifier.weight(1f))
+            if (uiState.nowRound == UserInfo.info.round) {
+                Box(
+                    modifier = Modifier
+                        .padding(end = 16.dp, top = 8.dp)
+                        .border(width = 0.5.dp, color = Gs20, shape = RoundedCornerShape(4.dp))
+                        .background(color = White, shape = RoundedCornerShape(4.dp)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .padding(horizontal = 8.dp, vertical = 6.dp)
+                            .clickable(
+                                onClick = onClickCreateRoundBtn,
+                                interactionSource = interactionSource,
+                                indication = null
+                            ),
+                        text = ACCOUNT_ADD_ROUND,
+                        style = HuggTypography.p2,
+                        color = Gs50
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
 fun AccountTotalBox(
     uiState: AccountPageState = AccountPageState(),
-    onClickDateFilter : () -> Unit = {},
-    interactionSource : MutableInteractionSource
+    onClickDateFilter: () -> Unit = {},
+    onClickCreateSubsidyBtn: () -> Unit = {},
+    onClickSubsidyDetail : (Long) -> Unit = {},
+    interactionSource: MutableInteractionSource
 ) {
     Column(
         modifier = Modifier
             .padding(horizontal = 16.dp)
             .fillMaxWidth()
             .background(color = White, shape = RoundedCornerShape(8.dp))
-            .padding(start = 12.dp, bottom = 16.dp)
+            .padding(bottom = 16.dp)
     ) {
-        if(uiState.tabType == AccountTabType.ALL) {
+        if (uiState.tabType == AccountTabType.ALL) {
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .padding(start = 12.dp)
+                    .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
@@ -314,19 +432,38 @@ fun AccountTotalBox(
             }
         }
 
-        if(uiState.tabType != AccountTabType.ALL) Spacer(modifier = Modifier.size(22.dp))
+        if (uiState.tabType != AccountTabType.ALL) Spacer(modifier = Modifier.size(22.dp))
 
         TotalBoxItem(AccountColorType.PERSONAL, uiState)
 
-        Spacer(modifier = Modifier.size(18.dp))
+        Spacer(modifier = Modifier.size(
+            if (uiState.tabType == AccountTabType.ROUND && uiState.subsidyList.isEmpty()) 12.dp else 18.dp
+        ))
 
-        if(uiState.tabType != AccountTabType.ROUND) TotalBoxItem(AccountColorType.ALL, uiState)
+        if (uiState.tabType != AccountTabType.ROUND) {
+            TotalBoxItem(AccountColorType.ALL, uiState)
+        }
+        else{
+            if(uiState.subsidyList.isEmpty()) EmptySubsidyBox(
+                onClickCreateSubsidyBtn = onClickCreateSubsidyBtn,
+                interactionSource = interactionSource
+            )
+            else{
+                uiState.subsidyList.forEach {
+                    SubsidyTotalBoxItem(
+                        item = it,
+                        interactionSource = interactionSource,
+                        onClickSubsidyDetail = onClickSubsidyDetail
+                    )
+                }
+            }
+        }
 
         Spacer(modifier = Modifier.size(9.dp))
 
         Canvas(
             modifier = Modifier
-                .padding(end = 11.dp)
+                .padding(start = 12.dp, end = 11.dp)
                 .fillMaxWidth()
                 .height((0.3).dp)
         ) {
@@ -342,7 +479,9 @@ fun AccountTotalBox(
         Spacer(modifier = Modifier.size(8.dp))
 
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .padding(start = 12.dp)
+                .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
@@ -369,8 +508,8 @@ fun AccountTotalBox(
 fun TotalBoxItem(
     colorType: AccountColorType = AccountColorType.PERSONAL,
     uiState: AccountPageState = AccountPageState()
-){
-    val color = when(colorType){
+) {
+    val color = when (colorType) {
         AccountColorType.PERSONAL -> CalendarPill
         AccountColorType.ALL -> Gs20
         AccountColorType.BLUE -> CalendarInjection
@@ -378,14 +517,16 @@ fun TotalBoxItem(
         AccountColorType.YELLOW -> CalendarEtc
     }
 
-    val text = when(colorType){
+    val text = when (colorType) {
         AccountColorType.PERSONAL -> ACCOUNT_PERSONAL
         AccountColorType.ALL -> ACCOUNT_SUBSIDY_ALL
         else -> ""
     }
 
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .padding(start = 12.dp)
+            .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
 
@@ -406,7 +547,7 @@ fun TotalBoxItem(
         Spacer(modifier = Modifier.weight(1f))
 
         Text(
-            text = if(colorType == AccountColorType.PERSONAL) uiState.personalExpense else "1,000원", // 아직 서버 미반영
+            text = if (colorType == AccountColorType.PERSONAL) uiState.personalExpense else "1,000원", // 아직 서버 미반영
             style = HuggTypography.p1,
             color = Gs80
         )
@@ -416,10 +557,49 @@ fun TotalBoxItem(
 }
 
 @Composable
+fun EmptySubsidyBox(
+    onClickCreateSubsidyBtn : () -> Unit = {},
+    interactionSource: MutableInteractionSource,
+){
+    Row(
+        modifier = Modifier
+            .padding(start = 12.dp, end = 6.dp)
+            .fillMaxWidth()
+            .background(color = EmptySubsidyBoxColor, shape = RoundedCornerShape(4.dp))
+            .padding(vertical = 6.dp)
+            .clickable(
+                onClick = onClickCreateSubsidyBtn,
+                interactionSource = interactionSource,
+                indication = null
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        Spacer(modifier = Modifier.size(7.dp))
+
+        Text(
+            text = ACCOUNT_SUGGEST_ADD_SUBSIDY,
+            style = HuggTypography.h3,
+            color = Gs80
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Image(
+            imageVector = ImageVector.vectorResource(R.drawable.ic_right_arrow_gs_80),
+            contentDescription = null
+        )
+
+        Spacer(modifier = Modifier.size(4.dp))
+
+    }
+}
+
+@Composable
 fun AccountItemFilter(
     uiState: AccountPageState = AccountPageState(),
     onClickFilterBox: (String) -> Unit = {},
-    interactionSource : MutableInteractionSource
+    interactionSource: MutableInteractionSource
 ) {
     Row(
         modifier = Modifier
@@ -440,7 +620,7 @@ fun AccountItemFilter(
             interactionSource = interactionSource
         )
 
-        if (uiState.tabType == AccountTabType.ALL || uiState.tabType == AccountTabType.MONTH){
+        if (uiState.tabType == AccountTabType.ALL || uiState.tabType == AccountTabType.MONTH) {
             FilterItem(
                 text = ACCOUNT_SUBSIDY,
                 uiState = uiState,
@@ -453,11 +633,11 @@ fun AccountItemFilter(
 
 @Composable
 fun FilterItem(
-    text : String = "",
+    text: String = "",
     uiState: AccountPageState = AccountPageState(),
     onClickFilterBox: (String) -> Unit = {},
-    interactionSource : MutableInteractionSource
-){
+    interactionSource: MutableInteractionSource
+) {
     Box(
         modifier = Modifier
             .padding(end = 4.dp)
@@ -485,5 +665,5 @@ fun FilterItem(
 @Preview
 @Composable
 internal fun PreviewMainContainer() {
-    AccountContainer()
+    //EmptySubsidyBox()
 }

@@ -68,18 +68,18 @@ interface AccountApi {
         @Body request : SubsidyCreateEditRequestVo,
     ) : Response<ApiResponse<Unit>>
 
-    @PUT(Endpoints.SUBSIDY.SUBSIDY)
+    @PUT(Endpoints.SUBSIDY.DELETE_MODIFY_SUBSIDY)
     suspend fun modifySubsidy(
         @Path(PATH_ID) id : Long,
         @Body request : SubsidyCreateEditRequestVo,
     ) : Response<ApiResponse<Unit>>
 
-    @DELETE(Endpoints.SUBSIDY.SUBSIDY)
+    @DELETE(Endpoints.SUBSIDY.DELETE_MODIFY_SUBSIDY)
     suspend fun deleteSubsidy(
         @Path(PATH_ID) id : Long,
     ) : Response<ApiResponse<Unit>>
 
-    @GET(Endpoints.SUBSIDY.SUBSIDY)
+    @GET(Endpoints.SUBSIDY.GET_SUBSIDY_BY_COUNT)
     suspend fun getSubsidy(
         @Path(PATH_COUNT) count: Int,
     ) : Response<ApiResponse<SubsidyResponse>>

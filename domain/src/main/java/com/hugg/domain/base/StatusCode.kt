@@ -1,4 +1,4 @@
-package com.hugg.data.base
+package com.hugg.domain.base
 
 object StatusCode {
     const val ERROR = "ERROR400"
