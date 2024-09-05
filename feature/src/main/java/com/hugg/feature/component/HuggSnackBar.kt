@@ -77,7 +77,7 @@ fun HuggToast(
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(72.dp))
+            Spacer(modifier = Modifier.height(59.dp))
         }
     }
 }

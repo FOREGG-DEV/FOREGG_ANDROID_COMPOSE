@@ -320,7 +320,7 @@ fun AccountTotalBox(
 
         Spacer(modifier = Modifier.size(18.dp))
 
-        TotalBoxItem(AccountColorType.ALL, uiState)
+        if(uiState.tabType != AccountTabType.ROUND) TotalBoxItem(AccountColorType.ALL, uiState)
 
         Spacer(modifier = Modifier.size(9.dp))
 

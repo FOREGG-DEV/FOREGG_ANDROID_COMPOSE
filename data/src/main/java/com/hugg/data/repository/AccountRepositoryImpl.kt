@@ -5,12 +5,16 @@ import com.hugg.data.base.BaseRepository
 import com.hugg.data.mapper.UnitResponseMapper
 import com.hugg.data.mapper.account.AccountDetailResponseMapper
 import com.hugg.data.mapper.account.AccountItemResponseMapper
+import com.hugg.data.mapper.account.SubsidyResponseMapper
 import com.hugg.domain.base.ApiState
 import com.hugg.domain.model.request.account.AccountCreateRequestVo
 import com.hugg.domain.model.request.account.AccountEditRequestVo
 import com.hugg.domain.model.request.account.AccountGetConditionRequestVo
+import com.hugg.domain.model.request.account.SubsidyCreateEditRequestVo
+import com.hugg.domain.model.request.account.SubsidyRequestVo
 import com.hugg.domain.model.response.account.AccountDetailResponseVo
 import com.hugg.domain.model.response.account.AccountResponseVo
+import com.hugg.domain.model.response.account.SubsidyListResponseVo
 import com.hugg.domain.repository.AccountRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -45,5 +49,21 @@ class AccountRepositoryImpl @Inject constructor(
 
     override suspend fun editAccount(request: AccountEditRequestVo): Flow<ApiState<Unit>> {
         return apiLaunch(apiCall = { accountApi.modifyAccount(request.id, request.request) }, UnitResponseMapper )
+    }
+
+    override suspend fun createSubsidy(request: SubsidyCreateEditRequestVo): Flow<ApiState<Unit>> {
+        return apiLaunch(apiCall = { accountApi.createSubsidy(request) }, UnitResponseMapper )
+    }
+
+    override suspend fun modifySubsidy(request: SubsidyRequestVo): Flow<ApiState<Unit>> {
+        return apiLaunch(apiCall = { accountApi.modifySubsidy(request.id, request.request) }, UnitResponseMapper )
+    }
+
+    override suspend fun deleteSubsidy(request: Long): Flow<ApiState<Unit>> {
+        return apiLaunch(apiCall = { accountApi.deleteSubsidy(request) }, UnitResponseMapper )
+    }
+
+    override suspend fun getSubsidies(request: Int): Flow<ApiState<List<SubsidyListResponseVo>>> {
+        return apiLaunch(apiCall = { accountApi.getSubsidy(request) }, SubsidyResponseMapper )
     }
 }
