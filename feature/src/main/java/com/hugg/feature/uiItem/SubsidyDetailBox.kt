@@ -39,7 +39,7 @@ import com.hugg.feature.util.UnitFormatter
 
 @Composable
 fun SubsidyDetailBox(
-    onClickDetailSubsidyBtn : (Long, CreateOrEditType) -> Unit = {_, _ -> },
+    onClickDetailSubsidyBtn : (Long, CreateOrEditType, Int) -> Unit = {_, _, _-> },
     interactionSource: MutableInteractionSource,
     item : SubsidyListResponseVo = SubsidyListResponseVo()
 ){
@@ -63,7 +63,7 @@ fun SubsidyDetailBox(
             .fillMaxWidth()
             .background(color = White, shape = RoundedCornerShape(8.dp))
             .clickable(
-                onClick = { onClickDetailSubsidyBtn(item.id, CreateOrEditType.EDIT) },
+                onClick = { onClickDetailSubsidyBtn(item.id, CreateOrEditType.EDIT, -1) },
                 interactionSource = interactionSource,
                 indication = null
             )

@@ -34,4 +34,7 @@ sealed class Routes(val route : String){
     data object AccountSubsidyList : Routes("accountSubsidyList/{round}"){
         fun getRouteAccountSubsidyList(round: Int) = "accountSubsidyList/$round"
     }
+    data object AccountSubsidyCreateOrEdit : Routes("accountSubsidyCreateOrEdit/{id}/{type}/{round}"){
+        fun getRouteAccountSubsidyCreateOrEdit(id: Long, type : String, round : Int) = "accountSubsidyCreateOrEdit/$id/$type/$round"
+    }
 }

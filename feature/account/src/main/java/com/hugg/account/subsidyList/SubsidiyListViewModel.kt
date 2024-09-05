@@ -1,7 +1,6 @@
 package com.hugg.account.subsidyList
 
 import androidx.lifecycle.viewModelScope
-import com.hugg.domain.model.enums.AccountTabType
 import com.hugg.domain.model.response.account.SubsidyListResponseVo
 import com.hugg.domain.repository.AccountRepository
 import com.hugg.feature.base.BaseViewModel
@@ -17,11 +16,14 @@ class SubsidiyListViewModel @Inject constructor(
     SubsidyListPageState()
 ) {
 
+    private var isRoundInitialized = false
     private var round = UserInfo.info.round
 
     fun initRound(round: Int){
+        if(isRoundInitialized) return
         this.round = round
         updateNowRound()
+        isRoundInitialized = true
     }
 
     private fun updateNowRound(){

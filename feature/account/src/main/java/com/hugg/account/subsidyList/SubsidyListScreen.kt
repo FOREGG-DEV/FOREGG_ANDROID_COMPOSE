@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,13 +49,13 @@ import com.hugg.feature.util.UserInfo
 @Composable
 fun SubsidyListContainer(
     goToBack : () -> Unit = {},
-    navigateToCreateSubsidy : () -> Unit = {},
+    onClickCreateEditSubsidyBtn : (Long, CreateOrEditType, Int) -> Unit = { _, _, _-> },
     nowRound : Int = UserInfo.info.round,
     viewModel: SubsidiyListViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(Unit){
+    LaunchedEffect(Unit) {
         viewModel.initRound(nowRound)
     }
 
@@ -62,7 +63,8 @@ fun SubsidyListContainer(
         uiState = uiState,
         onClickTopBarLeftBtn = goToBack,
         onClickPrevRoundBtn = { viewModel.onClickPrevRound() },
-        onClickNextRoundBtn = { viewModel.onClickNextRound() }
+        onClickNextRoundBtn = { viewModel.onClickNextRound() },
+        onClickCreateEditSubsidyBtn = { id, type, _ -> onClickCreateEditSubsidyBtn(id, type, uiState.nowRound) }
     )
 }
 
@@ -73,7 +75,7 @@ fun SubsidyListScreen(
     onClickPrevRoundBtn: () -> Unit = {},
     onClickNextRoundBtn: () -> Unit = {},
     onClickCreateRoundBtn: () -> Unit = {},
-    onClickCreateEditSubsidyBtn : (Long, CreateOrEditType) -> Unit = { _, _ -> },
+    onClickCreateEditSubsidyBtn : (Long, CreateOrEditType, Int) -> Unit = { _, _, _ -> },
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
     Column(
@@ -137,7 +139,7 @@ fun SubsidyListScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp),
-                        onClickBtn = { onClickCreateEditSubsidyBtn(-1, CreateOrEditType.CREATE) },
+                        onClickBtn = { onClickCreateEditSubsidyBtn(-1, CreateOrEditType.CREATE, -1) },
                         text = ACCOUNT_ADD_SUBSIDY
                     )
                 }
@@ -153,7 +155,7 @@ fun SubsidyListScreen(
 
 @Composable
 fun EmptySubsidyBox(
-    onClickAddSubsidyBtn : (Long, CreateOrEditType) -> Unit = {_, _ -> },
+    onClickAddSubsidyBtn : (Long, CreateOrEditType, Int) -> Unit = {_, _, _-> },
     interactionSource: MutableInteractionSource
 ){
     Box(
@@ -162,7 +164,7 @@ fun EmptySubsidyBox(
             .fillMaxWidth()
             .aspectRatio(343f / 174f)
             .clickable(
-                onClick = { onClickAddSubsidyBtn(-1, CreateOrEditType.CREATE) },
+                onClick = { onClickAddSubsidyBtn(-1, CreateOrEditType.CREATE, -1) },
                 interactionSource = interactionSource,
                 indication = null
             )

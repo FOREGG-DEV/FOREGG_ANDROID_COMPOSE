@@ -20,6 +20,8 @@ const val WORD_HOSPITAL = "병원"
 const val WORD_INJECTION = "주사"
 const val WORD_MEDICINE = "약"
 const val WORD_ETC = "기타"
+const val WORD_REGISTRATION = "등록"
+const val WORD_MODIFY = "수정"
 
 // --------- 기타 --------- //
 const val COPY_COMPLETE_TEXT = "클립보드에 배우자 코드가 복사되었어요!"
@@ -77,11 +79,24 @@ const val ACCOUNT_DIVIDE_DATE = "-"
 const val ACCOUNT_ADD_ROUND = "회차 추가"
 const val ACCOUNT_SUGGEST_ADD_SUBSIDY = "지원금을 추가해보세요"
 const val ACCOUNT_AVAILABLE_MONEY = "사용 가능 금액"
+const val ACCOUNT_MONEY_UNIT = "원"
 
 // --------- 지원급 --------- //
 const val ACCOUNT_SUBSIDY_MONEY = "지원금"
 const val ACCOUNT_ADD_SUBSIDY = "지원금 추가"
+const val ACCOUNT_MODIFY_SUBSIDY = "지원금 수정"
 const val ACCOUNT_EXPENDITURE = "지출"
+const val ACCOUNT_SUBSIDY_NICKNAME = "지원금 별명*"
+const val ACCOUNT_MAX_TWO_WORD = "최대 2글자"
+const val ACCOUNT_NICKNAME_TEXT_FIELD_HINT = "지원금 별명 입력"
+const val ACCOUNT_NICKNAME_DETAIL_EXPLAIN = "지원(별명)으로 표시될 두글자를 적어주세요."
+const val ACCOUNT_SUBSIDY_CONTENT = "지원금 내용"
+const val ACCOUNT_CONTENT_TEXT_FIELD_HINT = "지원금 내용 입력"
+const val ACCOUNT_SUBSIDY_MONEY_TITLE = "지원금 총액*"
+
+const val ACCOUNT_TOAST_SUCCESS_CREATE_SUBSIDY = "지원금이 등록되었어요"
+const val ACCOUNT_TOAST_SUCCESS_EDIT_SUBSIDY = "지원금이 수정되었어요"
+const val ACCOUNT_TOAST_SUCCESS_DELETE_SUBSIDY = "지원금이 삭제되었어요"
 
 // --------- 에러 Toast --------- //
 const val TOAST_ERROR_NOR_CORRECT_SPOUSE_CODE = "유효하지 않은 배우자코드입니다."

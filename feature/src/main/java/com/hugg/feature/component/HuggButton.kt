@@ -31,6 +31,7 @@ import com.hugg.feature.R
 import com.hugg.feature.theme.Gs70
 import com.hugg.feature.theme.HuggTheme
 import com.hugg.feature.theme.HuggTypography
+import com.hugg.feature.theme.InActiveMainNormal
 import com.hugg.feature.theme.MainNormal
 import com.hugg.feature.theme.White
 
@@ -101,15 +102,20 @@ fun FilledBtn(
     text : String = "테스트",
     textStyle: TextStyle = HuggTypography.btn,
     textColor : Color = White,
+    isActive : Boolean = true,
     contentPadding : PaddingValues = PaddingValues(horizontal = 0.dp, vertical = 16.dp)
 ) {
     Button(
         modifier = modifier,
         onClick = onClickBtn,
-        colors = ButtonDefaults
-            .buttonColors(containerColor = MainNormal),
         shape = RoundedCornerShape(radius),
-        contentPadding = contentPadding
+        contentPadding = contentPadding,
+        enabled = isActive,
+        colors = ButtonDefaults
+            .buttonColors(
+                containerColor = MainNormal,
+                disabledContainerColor = InActiveMainNormal
+            ),
     ) {
         Text(
             text = text,
@@ -182,6 +188,6 @@ fun CancelBtn(
 
 @Preview
 @Composable
-fun testt(){
-    BlankBtnWithIcon()
+internal fun testt(){
+    FilledBtn()
 }

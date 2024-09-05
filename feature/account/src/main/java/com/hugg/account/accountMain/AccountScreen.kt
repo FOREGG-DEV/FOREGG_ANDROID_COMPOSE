@@ -47,6 +47,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hugg.account.accountMain.bottomSheet.DatePickBottomSheet
 import com.hugg.domain.model.enums.AccountColorType
 import com.hugg.domain.model.enums.AccountTabType
+import com.hugg.domain.model.enums.HuggTabClickedType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.feature.R
 import com.hugg.feature.component.HuggTabBar
@@ -148,6 +149,12 @@ fun AccountScreen(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
 
+    val initialTabType = when(uiState.tabType){
+        AccountTabType.ALL -> HuggTabClickedType.LEFT
+        AccountTabType.ROUND -> HuggTabClickedType.MIDDLE
+        AccountTabType.MONTH -> HuggTabClickedType.RIGHT
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -169,6 +176,7 @@ fun AccountScreen(
         ) {
             item {
                 HuggTabBar(
+                    initialTabType = initialTabType,
                     leftText = ACCOUNT_ALL,
                     middleText = ACCOUNT_ROUND,
                     rightText = ACCOUNT_MONTH,
