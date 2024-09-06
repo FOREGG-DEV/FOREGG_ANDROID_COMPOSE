@@ -38,9 +38,11 @@ import com.hugg.domain.model.enums.TopBarLeftType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.domain.model.enums.TopBarRightType
 import com.hugg.feature.component.FilledBtn
+import com.hugg.feature.component.HuggDialog
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.ACCOUNT_ADD_SUBSIDY
 import com.hugg.feature.theme.ACCOUNT_CONTENT_TEXT_FIELD_HINT
+import com.hugg.feature.theme.ACCOUNT_DIALOG_SUBSIDY_DELETE
 import com.hugg.feature.theme.ACCOUNT_MAX_TWO_WORD
 import com.hugg.feature.theme.ACCOUNT_MODIFY_SUBSIDY
 import com.hugg.feature.theme.ACCOUNT_MONEY_UNIT
@@ -57,6 +59,7 @@ import com.hugg.feature.theme.Gs80
 import com.hugg.feature.theme.Gs90
 import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.Sunday
+import com.hugg.feature.theme.WORD_DELETE
 import com.hugg.feature.theme.WORD_MODIFY
 import com.hugg.feature.theme.WORD_REGISTRATION
 import com.hugg.feature.util.HuggToast
@@ -72,6 +75,7 @@ fun SubsidyCreateOrEditContainer(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val interactionSource = remember { MutableInteractionSource() }
 
     LaunchedEffect(Unit){
         viewModel.initTypeAndId(type, id, round)
@@ -95,11 +99,20 @@ fun SubsidyCreateOrEditContainer(
     SubsidyCreateOrEditScreen(
         uiState = uiState,
         onClickTopBarLeftBtn = goToBack,
-        onClickDeleteBtn = { viewModel.deleteSubsidy() },
+        onClickDeleteBtn = { viewModel.showDeleteDialog() },
         onChangedNickname = { nickname -> viewModel.onChangedNickname(nickname) },
         onChangedContent = { content -> viewModel.onChangedContent(content) },
         onChangedMoney = { money -> viewModel.onChangedMoney(money) },
         onClickCreateOrChangeBtn = { viewModel.createOrEdit() }
+    )
+
+    if(uiState.isShowDialog) ShowDeleteDialog(
+        interactionSource = interactionSource,
+        onClickCancel = { viewModel.cancelDeleteDialog() },
+        onClickDeleteBtn = {
+            viewModel.cancelDeleteDialog()
+            viewModel.deleteSubsidy()
+        }
     )
 }
 
@@ -341,6 +354,23 @@ fun InputMoney(
             )
         }
     }
+}
+
+@Composable
+fun ShowDeleteDialog(
+    interactionSource: MutableInteractionSource,
+    onClickCancel : () -> Unit = {},
+    onClickDeleteBtn: () -> Unit = {}
+){
+    HuggDialog(
+        title = ACCOUNT_DIALOG_SUBSIDY_DELETE,
+        positiveColor = Sunday,
+        positiveText = WORD_DELETE,
+        onClickCancel = onClickCancel,
+        onClickNegative = onClickCancel,
+        onClickPositive = onClickDeleteBtn,
+        interactionSource = interactionSource
+    )
 }
 
 @Preview

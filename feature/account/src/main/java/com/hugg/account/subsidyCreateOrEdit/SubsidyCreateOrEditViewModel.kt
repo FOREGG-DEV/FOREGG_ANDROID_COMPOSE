@@ -31,6 +31,18 @@ class SubsidyCreateOrEditViewModel @Inject constructor(
         )
     }
 
+    fun showDeleteDialog(){
+        updateState(
+            uiState.value.copy(isShowDialog = true)
+        )
+    }
+
+    fun cancelDeleteDialog(){
+        updateState(
+            uiState.value.copy(isShowDialog = false)
+        )
+    }
+
     fun deleteSubsidy(){
         viewModelScope.launch {
             accountRepository.deleteSubsidy(uiState.value.id).collect {

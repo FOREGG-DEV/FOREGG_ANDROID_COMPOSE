@@ -355,12 +355,14 @@ fun AccountTotalBox(
                 interactionSource = interactionSource
             )
             else{
-                uiState.subsidyList.forEach {
+                uiState.subsidyList.forEachIndexed { index, subsidyListResponseVo ->
                     SubsidyTotalBoxItem(
-                        item = it,
+                        item = subsidyListResponseVo,
                         interactionSource = interactionSource,
                         onClickGoToSubsidyList = onClickGoToSubsidyList
                     )
+
+                    if(index != uiState.subsidyList.size -1) Spacer(modifier = Modifier.size(16.dp))
                 }
             }
         }

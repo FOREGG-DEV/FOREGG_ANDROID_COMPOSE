@@ -13,7 +13,7 @@ const val WORD_ROUND = "회차"
 const val WORD_NO = "아니요"
 const val WORD_YES = "네"
 const val WORD_CONFIRM = "확인"
-const val WORD_REMOVE = "삭제"
+const val WORD_DELETE = "삭제"
 const val WORD_CALENDAR = "캘린더"
 const val WORD_ACCOUNT = "가계부"
 const val WORD_HOSPITAL = "병원"
@@ -93,6 +93,8 @@ const val ACCOUNT_NICKNAME_DETAIL_EXPLAIN = "지원(별명)으로 표시될 두�
 const val ACCOUNT_SUBSIDY_CONTENT = "지원금 내용"
 const val ACCOUNT_CONTENT_TEXT_FIELD_HINT = "지원금 내용 입력"
 const val ACCOUNT_SUBSIDY_MONEY_TITLE = "지원금 총액*"
+
+const val ACCOUNT_DIALOG_SUBSIDY_DELETE = "지원금을 삭제할까요?"
 
 const val ACCOUNT_TOAST_SUCCESS_CREATE_SUBSIDY = "지원금이 등록되었어요"
 const val ACCOUNT_TOAST_SUCCESS_EDIT_SUBSIDY = "지원금이 수정되었어요"

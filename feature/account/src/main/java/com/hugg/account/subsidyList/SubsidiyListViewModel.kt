@@ -20,7 +20,10 @@ class SubsidiyListViewModel @Inject constructor(
     private var round = UserInfo.info.round
 
     fun initRound(round: Int){
-        if(isRoundInitialized) return
+        if(isRoundInitialized) {
+            setView()
+            return
+        }
         this.round = round
         updateNowRound()
         isRoundInitialized = true

@@ -11,7 +11,8 @@ data class SubsidyCreateOrEditPageState(
     val money : String = "",
     val pageType : CreateOrEditType = CreateOrEditType.CREATE,
     val id : Long = -1,
-    val nowRound : Int = UserInfo.info.round
+    val nowRound : Int = UserInfo.info.round,
+    val isShowDialog : Boolean = false,
 ) : PageState {
     val isActiveBtn = nickname.isNotEmpty() && money.isNotEmpty()
 }
