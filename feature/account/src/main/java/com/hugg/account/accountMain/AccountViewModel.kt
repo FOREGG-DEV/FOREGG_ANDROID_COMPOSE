@@ -7,10 +7,10 @@ import com.hugg.domain.model.enums.AccountTabType
 import com.hugg.domain.model.request.account.AccountGetConditionRequestVo
 import com.hugg.domain.model.response.account.AccountItemResponseVo
 import com.hugg.domain.model.response.account.AccountResponseVo
-import com.hugg.domain.model.response.account.SubsidyListResponseVo
 import com.hugg.domain.model.vo.account.AccountCardVo
 import com.hugg.domain.repository.AccountRepository
 import com.hugg.feature.base.BaseViewModel
+import com.hugg.feature.theme.ACCOUNT_ALL
 import com.hugg.feature.theme.ACCOUNT_PERSONAL
 import com.hugg.feature.theme.ACCOUNT_SUBSIDY
 import com.hugg.feature.util.TimeFormatter
@@ -51,23 +51,33 @@ class AccountViewModel @Inject constructor(
     private fun setView(){
         when(uiState.value.tabType){
             AccountTabType.ALL -> getAccountByCondition()
-            AccountTabType.ROUND -> {
-                getSubsidies()
-            }
+            AccountTabType.ROUND -> getAccountByRound()
             AccountTabType.MONTH -> getAccountByMonth()
         }
     }
 
     fun onClickTabType(type : AccountTabType){
         updateState(
-            uiState.value.copy(tabType = type)
+            uiState.value.copy(
+                tabType = type,
+                selectedFilterList = listOf(ACCOUNT_ALL)
+            )
         )
         setView()
     }
 
     fun onClickFilterBox(filterText : String){
+        val newList = uiState.value.selectedFilterList.toMutableList()
+
+        if (newList.contains(filterText)) newList.remove(filterText)
+        else {
+            if(filterText == ACCOUNT_ALL) newList.clear()
+            if(filterText != ACCOUNT_ALL && newList.contains(ACCOUNT_ALL)) newList.remove(ACCOUNT_ALL)
+            newList.add(filterText)
+        }
+
         updateState(
-            uiState.value.copy(filterText = filterText)
+            uiState.value.copy(selectedFilterList = newList)
         )
         setView()
     }
@@ -90,10 +100,10 @@ class AccountViewModel @Inject constructor(
         }
     }
 
-    private fun getSubsidies(){
+    private fun getAccountByRound(){
         viewModelScope.launch {
-            accountRepository.getSubsidies(uiState.value.nowRound).collect {
-                resultResponse(it, ::handleGetSuccessSubsidies)
+            accountRepository.getByCount(uiState.value.nowRound).collect {
+                resultResponse(it, ::handleGetSuccessAccount)
             }
         }
     }
@@ -138,27 +148,23 @@ class AccountViewModel @Inject constructor(
     }
 
     private fun handleGetSuccessAccount(result : AccountResponseVo){
-        val filterList = result.ledgerDetailResponseDTOS.filter {
-            when(uiState.value.filterText) {
-                ACCOUNT_PERSONAL -> it.color == AccountColorType.RED
-                ACCOUNT_SUBSIDY -> it.color != AccountColorType.RED
-                else -> true
-            }
+        val filterList = when {
+            uiState.value.selectedFilterList.contains(ACCOUNT_ALL) -> result.ledgerDetailResponseDTOS
+            uiState.value.tabType == AccountTabType.ROUND -> result.ledgerDetailResponseDTOS.filter { it.name in uiState.value.selectedFilterList }
+            uiState.value.selectedFilterList.contains(ACCOUNT_PERSONAL) -> result.ledgerDetailResponseDTOS.filter { it.color == AccountColorType.RED }
+            else -> result.ledgerDetailResponseDTOS.filter { it.color != AccountColorType.RED }
         }
+
         updateState(
             uiState.value.copy(
                 personalExpense = getMoneyFormat(result.personalSum),
                 subsidyExpense = getMoneyFormat(result.subsidySum),
                 totalExpense = getMoneyFormat(result.total.toInt()),
-                accountList = getAccountCardList(filterList)
+                subsidyList = result.subsidyAvailable,
+                accountList = getAccountCardList(filterList),
             )
         )
-    }
-
-    private fun handleGetSuccessSubsidies(result : List<SubsidyListResponseVo>){
-        updateState(
-            uiState.value.copy(subsidyList = result)
-        )
+        updateFilterBoxList(result.ledgerDetailResponseDTOS)
     }
 
     private fun updateStartDay(start: String){
@@ -212,5 +218,18 @@ class AccountViewModel @Inject constructor(
                 money = it.amount,
             )
         }
+    }
+
+    private fun updateFilterBoxList(list : List<AccountItemResponseVo>){
+        val filterBoxList = mutableListOf<String>()
+
+        if(list.isNotEmpty()) filterBoxList.add(ACCOUNT_ALL)
+        if(list.any { it.color == AccountColorType.RED }) filterBoxList.add(ACCOUNT_PERSONAL)
+        if((uiState.value.tabType == AccountTabType.ALL || uiState.value.tabType == AccountTabType.MONTH) && list.any { it.color != AccountColorType.RED }) filterBoxList.add(ACCOUNT_SUBSIDY)
+        if(uiState.value.tabType == AccountTabType.ROUND) filterBoxList.addAll(list.filter { it.name != ACCOUNT_PERSONAL }.map { it.name }.distinct())
+
+        updateState(
+            uiState.value.copy(filterList = filterBoxList)
+        )
     }
 }

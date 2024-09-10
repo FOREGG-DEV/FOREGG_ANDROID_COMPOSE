@@ -20,6 +20,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -59,7 +61,6 @@ import com.hugg.feature.theme.ACCOUNT_ALL_EXPENSE
 import com.hugg.feature.theme.ACCOUNT_MONTH
 import com.hugg.feature.theme.ACCOUNT_PERSONAL
 import com.hugg.feature.theme.ACCOUNT_ROUND
-import com.hugg.feature.theme.ACCOUNT_SUBSIDY
 import com.hugg.feature.theme.ACCOUNT_SUBSIDY_ALL
 import com.hugg.feature.theme.ACCOUNT_SUGGEST_ADD_SUBSIDY
 import com.hugg.feature.theme.Background
@@ -82,6 +83,7 @@ import com.hugg.feature.uiItem.AccountCardItem
 import com.hugg.feature.uiItem.RemoteRound
 import com.hugg.feature.uiItem.SubsidyTotalBoxItem
 import com.hugg.feature.util.TimeFormatter
+import com.hugg.feature.util.UnitFormatter
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -509,28 +511,14 @@ fun AccountItemFilter(
     onClickFilterBox: (String) -> Unit = {},
     interactionSource: MutableInteractionSource
 ) {
-    Row(
+    LazyRow(
         modifier = Modifier
-            .padding(start = 16.dp)
+            .padding(start = 16.dp, end = 16.dp)
             .background(Background)
     ) {
-        FilterItem(
-            text = ACCOUNT_ALL,
-            uiState = uiState,
-            onClickFilterBox = onClickFilterBox,
-            interactionSource = interactionSource
-        )
-
-        FilterItem(
-            text = ACCOUNT_PERSONAL,
-            uiState = uiState,
-            onClickFilterBox = onClickFilterBox,
-            interactionSource = interactionSource
-        )
-
-        if (uiState.tabType == AccountTabType.ALL || uiState.tabType == AccountTabType.MONTH) {
+        items(uiState.filterList){
             FilterItem(
-                text = ACCOUNT_SUBSIDY,
+                text = it,
                 uiState = uiState,
                 onClickFilterBox = onClickFilterBox,
                 interactionSource = interactionSource
@@ -549,23 +537,23 @@ fun FilterItem(
     Box(
         modifier = Modifier
             .padding(end = 4.dp)
-            .size(width = 78.dp, height = 28.dp)
             .background(
-                color = if (uiState.filterText == text) Gs70 else White,
+                color = if (uiState.selectedFilterList.contains(text)) Gs70 else White,
                 shape = RoundedCornerShape(999.dp)
             )
             .clickable(
                 onClick = { onClickFilterBox(text) },
                 interactionSource = interactionSource,
                 indication = null
-            ),
+            )
+            .padding(horizontal = 25.dp, vertical = 3.dp),
         contentAlignment = Alignment.Center
     ) {
         Text(
             textAlign = TextAlign.Center,
-            text = text,
-            style = if (uiState.filterText == text) HuggTypography.h3 else HuggTypography.p2,
-            color = if (uiState.filterText == text) White else Gs60
+            text = if(uiState.tabType == AccountTabType.ROUND && text != ACCOUNT_ALL && text != ACCOUNT_PERSONAL) UnitFormatter.getSubsidyTitleWithoutMoneyFormat(text) else text,
+            style = HuggTypography.p2,
+            color = if(uiState.selectedFilterList.contains(text)) White else Gs60
         )
     }
 }

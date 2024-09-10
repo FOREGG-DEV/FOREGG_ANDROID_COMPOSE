@@ -85,12 +85,11 @@ fun AccountCardItem(
         ) {
             Box(
                 modifier = Modifier
-                    .width(40.dp)
                     .background(
                         color = boxColor,
                         shape = RoundedCornerShape(4.dp)
                     )
-                    .padding(vertical = 2.dp),
+                    .padding(vertical = 4.dp, horizontal = 9.dp),
                 contentAlignment = Alignment.Center
             ){
                 Text(

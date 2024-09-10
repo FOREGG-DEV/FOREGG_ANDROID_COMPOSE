@@ -19,8 +19,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import com.hugg.domain.model.enums.AccountColorType
 import com.hugg.domain.model.enums.CreateOrEditType
-import com.hugg.domain.model.enums.SubsidyColorType
 import com.hugg.domain.model.response.account.SubsidyListResponseVo
 import com.hugg.feature.theme.ACCOUNT_AVAILABLE_MONEY
 import com.hugg.feature.theme.ACCOUNT_EXPENDITURE
@@ -44,15 +44,17 @@ fun SubsidyDetailBox(
     item : SubsidyListResponseVo = SubsidyListResponseVo()
 ){
     val subColor = when(item.color){
-        SubsidyColorType.BLUE -> CalendarInjection
-        SubsidyColorType.GREEN -> CalendarHospital
-        SubsidyColorType.YELLOW -> CalendarEtc
+        AccountColorType.BLUE -> CalendarInjection
+        AccountColorType.GREEN -> CalendarHospital
+        AccountColorType.YELLOW -> CalendarEtc
+        else -> CalendarEtc
     }
 
     val percentColor = when(item.color){
-        SubsidyColorType.BLUE -> SubsidyColorBlue
-        SubsidyColorType.GREEN -> SubsidyColorGreen
-        SubsidyColorType.YELLOW -> SubsidyColorYellow
+        AccountColorType.BLUE -> SubsidyColorBlue
+        AccountColorType.GREEN -> SubsidyColorGreen
+        AccountColorType.YELLOW -> SubsidyColorYellow
+        else -> SubsidyColorYellow
     }
     
     val percent = item.percent / 100f

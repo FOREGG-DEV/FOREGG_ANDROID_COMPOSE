@@ -18,7 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import com.hugg.domain.model.enums.SubsidyColorType
+import com.hugg.domain.model.enums.AccountColorType
+import com.hugg.domain.model.response.account.AccountSubsidyAvailableItemVo
 import com.hugg.domain.model.response.account.SubsidyListResponseVo
 import com.hugg.feature.R
 import com.hugg.feature.theme.ACCOUNT_AVAILABLE_MONEY
@@ -32,14 +33,15 @@ import com.hugg.feature.util.UnitFormatter
 
 @Composable
 fun SubsidyTotalBoxItem(
-    item: SubsidyListResponseVo = SubsidyListResponseVo(),
+    item: AccountSubsidyAvailableItemVo = AccountSubsidyAvailableItemVo(),
     onClickGoToSubsidyList : () -> Unit = {},
     interactionSource: MutableInteractionSource
 ) {
     val color = when (item.color) {
-        SubsidyColorType.BLUE -> CalendarInjection
-        SubsidyColorType.GREEN -> CalendarHospital
-        SubsidyColorType.YELLOW -> CalendarEtc
+        AccountColorType.BLUE -> CalendarInjection
+        AccountColorType.GREEN -> CalendarHospital
+        AccountColorType.YELLOW -> CalendarEtc
+        else -> CalendarEtc
     }
 
     Row(
@@ -86,7 +88,7 @@ fun SubsidyTotalBoxItem(
         Spacer(modifier = Modifier.size(8.dp))
 
         Text(
-            text = UnitFormatter.getMoneyFormat(item.available),
+            text = UnitFormatter.getMoneyFormat(item.amount),
             style = HuggTypography.p1,
             color = Gs80
         )
