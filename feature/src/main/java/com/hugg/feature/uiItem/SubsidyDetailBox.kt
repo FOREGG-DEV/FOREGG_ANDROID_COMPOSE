@@ -92,7 +92,7 @@ fun SubsidyDetailBox(
                 Spacer(modifier = Modifier.weight(1f))
 
                 Text(
-                    text = UnitFormatter.getMoneyFormat(item.amount),
+                    text = UnitFormatter.getMoneyFormatWithUnit(item.amount),
                     style = HuggTypography.h2,
                     color = Gs90
                 )
@@ -114,7 +114,7 @@ fun SubsidyDetailBox(
                 Spacer(modifier = Modifier.weight(1f))
 
                 Text(
-                    text = UnitFormatter.getMoneyFormat(item.expenditure),
+                    text = UnitFormatter.getMoneyFormatWithUnit(item.expenditure),
                     style = HuggTypography.p1,
                     color = Gs90
                 )
@@ -136,7 +136,7 @@ fun SubsidyDetailBox(
                 Spacer(modifier = Modifier.weight(1f))
 
                 Text(
-                    text = UnitFormatter.getMoneyFormat(item.available),
+                    text = UnitFormatter.getMoneyFormatWithUnit(item.available),
                     style = HuggTypography.p1,
                     color = Gs90
                 )

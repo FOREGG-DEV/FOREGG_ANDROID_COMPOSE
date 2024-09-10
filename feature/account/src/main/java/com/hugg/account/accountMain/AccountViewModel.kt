@@ -16,7 +16,7 @@ import com.hugg.feature.theme.ACCOUNT_ALL
 import com.hugg.feature.theme.ACCOUNT_PERSONAL
 import com.hugg.feature.theme.ACCOUNT_SUBSIDY
 import com.hugg.feature.util.TimeFormatter
-import com.hugg.feature.util.UnitFormatter.getMoneyFormat
+import com.hugg.feature.util.UnitFormatter.getMoneyFormatWithUnit
 import com.hugg.feature.util.UserInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -181,9 +181,9 @@ class AccountViewModel @Inject constructor(
 
         updateState(
             uiState.value.copy(
-                personalExpense = getMoneyFormat(result.personalSum),
-                subsidyExpense = getMoneyFormat(result.subsidySum),
-                totalExpense = getMoneyFormat(result.total.toInt()),
+                personalExpense = getMoneyFormatWithUnit(result.personalSum),
+                subsidyExpense = getMoneyFormatWithUnit(result.subsidySum),
+                totalExpense = getMoneyFormatWithUnit(result.total.toInt()),
                 subsidyList = result.subsidyAvailable,
                 accountList = getAccountCardList(filterList),
             )

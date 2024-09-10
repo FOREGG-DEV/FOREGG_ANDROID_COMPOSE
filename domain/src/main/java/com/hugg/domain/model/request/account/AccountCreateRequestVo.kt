@@ -1,6 +1,7 @@
 package com.hugg.domain.model.request.account
 
 import com.google.gson.annotations.SerializedName
+import com.hugg.domain.model.enums.AccountColorType
 
 data class AccountCreateRequestVo(
     @SerializedName("date")
@@ -16,8 +17,10 @@ data class AccountCreateRequestVo(
 )
 
 data class ExpenditureRequestItem(
-    @SerializedName("nickname")
-    val nickname : String = "",
+    @SerializedName("name")
+    val name : String = "",
+    @SerializedName("color")
+    val color : AccountColorType = AccountColorType.RED,
     @SerializedName("amount")
     val amount : Int = 0,
 )

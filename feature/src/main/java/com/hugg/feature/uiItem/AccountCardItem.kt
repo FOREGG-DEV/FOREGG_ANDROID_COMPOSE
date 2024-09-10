@@ -8,18 +8,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hugg.domain.model.enums.AccountColorType
 import com.hugg.domain.model.vo.account.AccountCardVo
-import com.hugg.feature.theme.ACCOUNT_PERSONAL
 import com.hugg.feature.theme.ACCOUNT_ROUND_UNIT
 import com.hugg.feature.theme.Black
 import com.hugg.feature.theme.CalendarEtc
@@ -32,7 +29,7 @@ import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.White
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UnitFormatter
-import com.hugg.feature.util.UnitFormatter.getMoneyFormat
+import com.hugg.feature.util.UnitFormatter.getMoneyFormatWithUnit
 
 @Composable
 fun AccountCardItem(
@@ -110,7 +107,7 @@ fun AccountCardItem(
             Spacer(modifier = Modifier.weight(1f))
 
             Text(
-                text = getMoneyFormat(item.money),
+                text = getMoneyFormatWithUnit(item.money),
                 style = HuggTypography.p1,
                 color = Black
             )

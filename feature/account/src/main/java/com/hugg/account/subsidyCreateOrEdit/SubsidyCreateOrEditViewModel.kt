@@ -1,19 +1,15 @@
 package com.hugg.account.subsidyCreateOrEdit
 
 import androidx.lifecycle.viewModelScope
-import com.hugg.account.subsidyList.SubsidyListPageState
 import com.hugg.domain.model.enums.CreateOrEditType
 import com.hugg.domain.model.request.account.SubsidyCreateEditRequestVo
 import com.hugg.domain.model.request.account.SubsidyRequestVo
 import com.hugg.domain.model.response.account.SubsidyDetailResponseVo
-import com.hugg.domain.model.response.account.SubsidyListResponseVo
 import com.hugg.domain.repository.AccountRepository
 import com.hugg.feature.base.BaseViewModel
-import com.hugg.feature.util.ForeggLog
-import com.hugg.feature.util.UserInfo
+import com.hugg.feature.util.UnitFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.text.DecimalFormat
 import javax.inject.Inject
 
 @HiltViewModel
@@ -70,12 +66,7 @@ class SubsidyCreateOrEditViewModel @Inject constructor(
     }
 
     fun onChangedMoney(money : String){
-        val newMoney = try {
-            val parsedValue = money.replace(",", "").toLong()
-            DecimalFormat("#,###").format(parsedValue)
-        } catch (e: NumberFormatException) {
-            money
-        }
+        val newMoney = UnitFormatter.getMoneyFormat(money)
         updateState(
             uiState.value.copy(money =  newMoney)
         )

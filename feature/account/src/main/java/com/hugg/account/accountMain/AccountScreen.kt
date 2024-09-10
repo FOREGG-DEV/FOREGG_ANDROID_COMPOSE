@@ -49,6 +49,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hugg.account.accountMain.bottomSheet.DatePickBottomSheet
 import com.hugg.domain.model.enums.AccountColorType
 import com.hugg.domain.model.enums.AccountTabType
+import com.hugg.domain.model.enums.CreateOrEditType
 import com.hugg.domain.model.enums.HuggTabClickedType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.feature.R
@@ -96,6 +97,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 @Composable
 fun AccountContainer(
     navigateToSubsidyList : (Int) -> Unit = {},
+    navigateToCreateOrEditAccount : (Long, CreateOrEditType) -> Unit = {_, _ -> },
     viewModel: AccountViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -117,6 +119,7 @@ fun AccountContainer(
         onClickNextRoundBtn = { viewModel.onClickNextRound() },
         onClickDateFilter = { viewModel.onClickBottomSheetOnOff() },
         onClickGoToSubsidyList = { navigateToSubsidyList(uiState.nowRound) },
+        onClickCreateAccountBtn = { navigateToCreateOrEditAccount(-1, CreateOrEditType.CREATE) },
         interactionSource = interactionSource
     )
 
@@ -158,6 +161,7 @@ fun AccountScreen(
     onClickCreateRoundBtn: () -> Unit = {},
     onClickGoToSubsidyList : () -> Unit = {},
     onClickTab: (AccountTabType) -> Unit = {},
+    onClickCreateAccountBtn : () -> Unit = {},
     uiState: AccountPageState = AccountPageState(),
     onClickFilterBox: (String) -> Unit = {},
     scrollState: LazyListState = rememberLazyListState(),
@@ -301,7 +305,7 @@ fun AccountScreen(
                 .size(56.dp)
                 .background(color = MainNormal)
                 .clickable(
-                    onClick = { },
+                    onClick = onClickCreateAccountBtn,
                     interactionSource = interactionSource,
                     indication = null
                 )

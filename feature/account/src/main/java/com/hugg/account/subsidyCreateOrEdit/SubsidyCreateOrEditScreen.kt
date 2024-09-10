@@ -357,7 +357,7 @@ fun InputMoney(
             BasicTextField(
                 value = TextFieldValue(
                     text = money,
-                    selection = TextRange(money.length) // 커서를 텍스트 끝으로 이동
+                    selection = TextRange(money.length)
                 ),
                 onValueChange = { value ->
                     onChangedMoney(value.text)
