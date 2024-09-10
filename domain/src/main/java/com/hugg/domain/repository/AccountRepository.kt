@@ -26,5 +26,6 @@ interface AccountRepository {
     suspend fun modifySubsidy(request : SubsidyRequestVo) : Flow<ApiState<Unit>>
     suspend fun deleteSubsidy(request : Long) : Flow<ApiState<Unit>>
     suspend fun getSubsidies(request : Int) : Flow<ApiState<List<SubsidyListResponseVo>>>
+    suspend fun createRound() : Flow<ApiState<Unit>>
 
 }

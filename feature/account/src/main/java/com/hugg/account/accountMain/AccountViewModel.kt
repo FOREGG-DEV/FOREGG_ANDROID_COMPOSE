@@ -7,8 +7,10 @@ import com.hugg.domain.model.enums.AccountTabType
 import com.hugg.domain.model.request.account.AccountGetConditionRequestVo
 import com.hugg.domain.model.response.account.AccountItemResponseVo
 import com.hugg.domain.model.response.account.AccountResponseVo
+import com.hugg.domain.model.response.profile.ProfileDetailResponseVo
 import com.hugg.domain.model.vo.account.AccountCardVo
 import com.hugg.domain.repository.AccountRepository
+import com.hugg.domain.repository.ProfileRepository
 import com.hugg.feature.base.BaseViewModel
 import com.hugg.feature.theme.ACCOUNT_ALL
 import com.hugg.feature.theme.ACCOUNT_PERSONAL
@@ -22,7 +24,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AccountViewModel @Inject constructor(
-    private val accountRepository: AccountRepository
+    private val accountRepository: AccountRepository,
+    private val profileRepository: ProfileRepository
 ) : BaseViewModel<AccountPageState>(
     AccountPageState()
 ) {
@@ -147,6 +150,27 @@ class AccountViewModel @Inject constructor(
         )
     }
 
+    fun onClickCreateRoundBtn(){
+        cancelDialog()
+        viewModelScope.launch {
+            accountRepository.createRound().collect {
+                resultResponse(it, ::handleSuccessCreateRound)
+            }
+        }
+    }
+
+    fun showCreateRoundDialog(){
+        updateState(
+            uiState.value.copy(isShowDialog = true)
+        )
+    }
+
+    fun cancelDialog(){
+        updateState(
+            uiState.value.copy(isShowDialog = false)
+        )
+    }
+
     private fun handleGetSuccessAccount(result : AccountResponseVo){
         val filterList = when {
             uiState.value.selectedFilterList.contains(ACCOUNT_ALL) -> result.ledgerDetailResponseDTOS
@@ -165,6 +189,20 @@ class AccountViewModel @Inject constructor(
             )
         )
         updateFilterBoxList(result.ledgerDetailResponseDTOS)
+    }
+
+    private fun handleSuccessCreateRound(result : Unit){
+        viewModelScope.launch {
+            profileRepository.getMyInfo().collect{
+                resultResponse(it, ::handleSuccessGetMyInfo)
+            }
+        }
+    }
+
+    private fun handleSuccessGetMyInfo(result : ProfileDetailResponseVo){
+        UserInfo.updateInfo(result)
+        round++
+        updateSelectedRound()
     }
 
     private fun updateStartDay(start: String){

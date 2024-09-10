@@ -59,6 +59,7 @@ object Endpoints {
         const val MODIFY = "$LEDGER/{id}/modify"
         const val CREATE = "$LEDGER/add"
         const val GET_DETAIL = "$LEDGER/{id}/detail"
+        const val CREATE_COUNT = "$LEDGER/createCount"
     }
 
     object SUBSIDY{

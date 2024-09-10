@@ -52,12 +52,16 @@ import com.hugg.domain.model.enums.AccountTabType
 import com.hugg.domain.model.enums.HuggTabClickedType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.feature.R
+import com.hugg.feature.component.HuggDialog
 import com.hugg.feature.component.HuggTabBar
 import com.hugg.feature.component.PlusBtn
 import com.hugg.feature.uiItem.RemoteYearMonth
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.ACCOUNT_ALL
 import com.hugg.feature.theme.ACCOUNT_ALL_EXPENSE
+import com.hugg.feature.theme.ACCOUNT_DIALOG_CREATE_ROUND
+import com.hugg.feature.theme.ACCOUNT_DIALOG_SUBSIDY_DELETE
+import com.hugg.feature.theme.ACCOUNT_DIALOG_WARNING_CREATE_ROUND
 import com.hugg.feature.theme.ACCOUNT_MONTH
 import com.hugg.feature.theme.ACCOUNT_PERSONAL
 import com.hugg.feature.theme.ACCOUNT_ROUND
@@ -77,7 +81,9 @@ import com.hugg.feature.theme.Gs80
 import com.hugg.feature.theme.Gs90
 import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.MainNormal
+import com.hugg.feature.theme.Sunday
 import com.hugg.feature.theme.WORD_ACCOUNT
+import com.hugg.feature.theme.WORD_DELETE
 import com.hugg.feature.theme.White
 import com.hugg.feature.uiItem.AccountCardItem
 import com.hugg.feature.uiItem.RemoteRound
@@ -104,6 +110,7 @@ fun AccountContainer(
         uiState = uiState,
         scrollState = scrollState,
         isFilterAtTop = isFilterAtTop,
+        onClickCreateRoundBtn = { viewModel.showCreateRoundDialog() },
         onClickPrevMonthBtn = { viewModel.onClickPrevMonth() },
         onClickNextMonthBtn = { viewModel.onClickNextMonth() },
         onClickPrevRoundBtn = { viewModel.onClickPrevRound() },
@@ -130,6 +137,14 @@ fun AccountContainer(
             },
             uiState = uiState,
             context = context
+        )
+    }
+
+    if(uiState.isShowDialog){
+        ShowCreateRoundDialog(
+            interactionSource = interactionSource,
+            onClickCreateRoundBtn = { viewModel.onClickCreateRoundBtn() },
+            onClickCancel = { viewModel.cancelDialog() }
         )
     }
 }
@@ -552,10 +567,27 @@ fun FilterItem(
         Text(
             textAlign = TextAlign.Center,
             text = if(uiState.tabType == AccountTabType.ROUND && text != ACCOUNT_ALL && text != ACCOUNT_PERSONAL) UnitFormatter.getSubsidyTitleWithoutMoneyFormat(text) else text,
-            style = HuggTypography.p2,
+            style = if(uiState.selectedFilterList.contains(text)) HuggTypography.h4 else HuggTypography.p2 ,
             color = if(uiState.selectedFilterList.contains(text)) White else Gs60
         )
     }
+}
+
+@Composable
+fun ShowCreateRoundDialog(
+    interactionSource: MutableInteractionSource,
+    onClickCancel : () -> Unit = {},
+    onClickCreateRoundBtn: () -> Unit = {}
+){
+    HuggDialog(
+        title = ACCOUNT_DIALOG_CREATE_ROUND,
+        warningMessage = ACCOUNT_DIALOG_WARNING_CREATE_ROUND,
+        hasWarningText = true,
+        onClickCancel = onClickCancel,
+        onClickNegative = onClickCancel,
+        onClickPositive = onClickCreateRoundBtn,
+        interactionSource = interactionSource
+    )
 }
 
 @Preview

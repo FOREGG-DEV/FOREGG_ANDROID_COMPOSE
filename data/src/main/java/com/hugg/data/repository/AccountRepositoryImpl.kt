@@ -72,4 +72,8 @@ class AccountRepositoryImpl @Inject constructor(
     override suspend fun getSubsidies(request: Int): Flow<ApiState<List<SubsidyListResponseVo>>> {
         return apiLaunch(apiCall = { accountApi.getSubsidy(request) }, SubsidyResponseMapper )
     }
+
+    override suspend fun createRound(): Flow<ApiState<Unit>> {
+        return apiLaunch(apiCall = { accountApi.createRound() }, UnitResponseMapper )
+    }
 }

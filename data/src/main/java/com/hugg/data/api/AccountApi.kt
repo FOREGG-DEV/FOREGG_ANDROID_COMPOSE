@@ -90,4 +90,7 @@ interface AccountApi {
     suspend fun getSubsidy(
         @Path(PATH_COUNT) count: Int,
     ) : Response<ApiResponse<SubsidyResponse>>
+
+    @POST(Endpoints.ACCOUNT.CREATE_COUNT)
+    suspend fun createRound() : Response<ApiResponse<Unit>>
 }
