@@ -1,6 +1,8 @@
 package com.hugg.feature.uiItem
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,7 +15,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hugg.domain.model.enums.AccountColorType
 import com.hugg.domain.model.vo.account.AccountCardVo
@@ -33,7 +34,9 @@ import com.hugg.feature.util.UnitFormatter.getMoneyFormatWithUnit
 
 @Composable
 fun AccountCardItem(
-    item : AccountCardVo = AccountCardVo()
+    item : AccountCardVo = AccountCardVo(),
+    onClickCard : (Long) -> Unit = {},
+    interactionSource: MutableInteractionSource,
 ){
     val boxColor = when(item.color){
         AccountColorType.ALL,
@@ -57,6 +60,11 @@ fun AccountCardItem(
             .fillMaxWidth()
             .background(color = White, shape = RoundedCornerShape(8.dp))
             .padding(top = 8.dp, bottom = 11.dp, start = 12.dp, end = 12.dp)
+            .clickable(
+                onClick = { onClickCard(item.id) },
+                interactionSource = interactionSource,
+                indication = null
+            )
     ) {
 
         Row {
@@ -114,10 +122,4 @@ fun AccountCardItem(
         }
 
     }
-}
-
-@Preview
-@Composable
-fun test(){
-    AccountCardItem()
 }

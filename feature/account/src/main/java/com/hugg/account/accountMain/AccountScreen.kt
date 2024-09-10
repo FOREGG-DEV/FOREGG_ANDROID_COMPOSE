@@ -120,6 +120,7 @@ fun AccountContainer(
         onClickDateFilter = { viewModel.onClickBottomSheetOnOff() },
         onClickGoToSubsidyList = { navigateToSubsidyList(uiState.nowRound) },
         onClickCreateAccountBtn = { navigateToCreateOrEditAccount(-1, CreateOrEditType.CREATE) },
+        onClickAccountCard = { id -> navigateToCreateOrEditAccount(id, CreateOrEditType.EDIT) },
         interactionSource = interactionSource
     )
 
@@ -167,7 +168,8 @@ fun AccountScreen(
     scrollState: LazyListState = rememberLazyListState(),
     isFilterAtTop: Boolean = false,
     onClickDateFilter: () -> Unit = {},
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    onClickAccountCard : (Long) -> Unit = {}
 ) {
 
     val initialTabType = when(uiState.tabType){
@@ -258,6 +260,8 @@ fun AccountScreen(
             ) { _, accountVo ->
                 AccountCardItem(
                     item = accountVo,
+                    interactionSource = interactionSource,
+                    onClickCard = onClickAccountCard
                 )
             }
         }

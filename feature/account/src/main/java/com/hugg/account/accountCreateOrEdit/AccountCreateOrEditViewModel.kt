@@ -4,7 +4,9 @@ import androidx.lifecycle.viewModelScope
 import com.hugg.domain.model.enums.AccountColorType
 import com.hugg.domain.model.enums.CreateOrEditType
 import com.hugg.domain.model.request.account.AccountCreateRequestVo
+import com.hugg.domain.model.request.account.AccountEditRequestVo
 import com.hugg.domain.model.request.account.ExpenditureRequestItem
+import com.hugg.domain.model.response.account.AccountDetailResponseVo
 import com.hugg.domain.model.response.account.SubsidyListResponseVo
 import com.hugg.domain.model.vo.account.AccountExpenditureItemVo
 import com.hugg.domain.repository.AccountRepository
@@ -30,8 +32,8 @@ class AccountCreateOrEditViewModel @Inject constructor(
 
     fun initView(id : Long, type : CreateOrEditType) {
         when(type){
-            CreateOrEditType.CREATE -> getSubsidyByCount()
-            CreateOrEditType.EDIT -> {}
+            CreateOrEditType.CREATE -> getSubsidyByCount(uiState.value.nowRound)
+            CreateOrEditType.EDIT -> getAccountDetail(id)
         }
     }
 
@@ -43,18 +45,20 @@ class AccountCreateOrEditViewModel @Inject constructor(
 
     fun onClickPlusBtn(){
         if(uiState.value.nowRound == UserInfo.info.round) return
+        val newRound = uiState.value.nowRound + 1
         updateState(uiState.value.copy(
-            nowRound = uiState.value.nowRound + 1
+            nowRound = newRound
         ))
-        getSubsidyByCount()
+        getSubsidyByCount(newRound)
     }
 
     fun onClickMinusBtn(){
         if(uiState.value.nowRound == 0) return
+        val newRound = uiState.value.nowRound - 1
         updateState(uiState.value.copy(
-            nowRound = uiState.value.nowRound - 1
+            nowRound = newRound
         ))
-        getSubsidyByCount()
+        getSubsidyByCount(newRound)
     }
 
     fun onChangedContent(content : String){
@@ -86,13 +90,13 @@ class AccountCreateOrEditViewModel @Inject constructor(
     fun onClickCreateOrEdit(){
         when(uiState.value.pageType){
             CreateOrEditType.CREATE -> createAccount()
-            CreateOrEditType.EDIT -> {}
+            CreateOrEditType.EDIT -> modifyAccount()
         }
     }
 
-    private fun getSubsidyByCount(){
+    private fun getSubsidyByCount(count : Int){
         viewModelScope.launch {
-            accountRepository.getSubsidies(uiState.value.nowRound).collect {
+            accountRepository.getSubsidies(count).collect {
                 resultResponse(it, ::handleSuccessGetSubsidies)
             }
         }
@@ -115,6 +119,7 @@ class AccountCreateOrEditViewModel @Inject constructor(
             uiState.value.copy(expenditureList = expenditureList)
         )
 
+        if(uiState.value.pageType == CreateOrEditType.EDIT) setOriginExpenditure()
     }
 
     private fun createAccount(){
@@ -126,19 +131,72 @@ class AccountCreateOrEditViewModel @Inject constructor(
         }
     }
 
+    private fun modifyAccount(){
+        val request = AccountEditRequestVo(
+            id = uiState.value.id,
+            request = getAccountCreateRequest()
+        )
+        viewModelScope.launch {
+            accountRepository.editAccount(request).collect {
+                resultResponse(it, { emitEventFlow(AccountCreateOrEditEvent.SuccessModifyAccountEvent) } )
+            }
+        }
+    }
+
     private fun getAccountCreateRequest() : AccountCreateRequestVo {
         return AccountCreateRequestVo(
             date = uiState.value.date,
             count = uiState.value.nowRound,
             content = uiState.value.content,
             memo = uiState.value.memo,
-            expenditureRequestDTOList = uiState.value.expenditureList.map {
-                ExpenditureRequestItem(
-                    name = it.nickname,
-                    color = it.color,
-                    amount = it.money.replace(",", "").toInt()
-                )
-            }
+            expenditureRequestDTOList = uiState.value.expenditureList
+                .filter { it.money.isNotEmpty() }
+                .map {
+                    ExpenditureRequestItem(
+                        name = it.nickname,
+                        color = it.color,
+                        amount = it.money.replace(",", "").toInt()
+                    )
+                }
         )
+    }
+
+    private fun getAccountDetail(id : Long){
+        updateState(uiState.value.copy(id = id))
+
+        viewModelScope.launch {
+            accountRepository.getAccountDetail(id).collect {
+                resultResponse(it, ::handleSuccessGetAccountDetail )
+            }
+        }
+    }
+
+    private fun handleSuccessGetAccountDetail(result : AccountDetailResponseVo){
+        getSubsidyByCount(result.count)
+
+        updateState(
+            uiState.value.copy(
+                date = result.date,
+                nowRound = result.count,
+                content = result.content,
+                memo = result.memo,
+                originExpenditureList = result.subsidyAvailable.map {
+                    AccountExpenditureItemVo(
+                        color = it.color,
+                        nickname = it.nickname,
+                        money = UnitFormatter.getMoneyFormat(it.amount.toString())
+                    )
+                }
+            )
+        )
+    }
+
+    private fun setOriginExpenditure() {
+        val newList = uiState.value.expenditureList.map { item ->
+            val matchingItem =  uiState.value.originExpenditureList.find { it.nickname == item.nickname }
+            matchingItem ?: item
+        }
+
+        updateState(uiState.value.copy(expenditureList = newList))
     }
 }
