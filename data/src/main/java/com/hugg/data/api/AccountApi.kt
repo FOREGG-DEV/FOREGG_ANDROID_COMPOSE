@@ -3,6 +3,7 @@ package com.hugg.data.api
 import com.hugg.data.base.ApiResponse
 import com.hugg.data.dto.account.AccountResponse
 import com.hugg.data.dto.account.AccountResponseListItem
+import com.hugg.data.dto.account.SubsidyDetailResponse
 import com.hugg.data.dto.account.SubsidyResponse
 import com.hugg.domain.model.request.account.AccountCreateRequestVo
 import com.hugg.domain.model.request.account.SubsidyCreateEditRequestVo
@@ -62,6 +63,11 @@ interface AccountApi {
         @Path(PATH_ID) id : Long,
         @Body request : AccountCreateRequestVo,
     ) : Response<ApiResponse<Unit>>
+
+    @GET(Endpoints.SUBSIDY.DELETE_MODIFY_SUBSIDY)
+    suspend fun getSubsidyDetail(
+        @Path(PATH_ID) id: Long,
+    ) : Response<ApiResponse<SubsidyDetailResponse>>
 
     @POST(Endpoints.SUBSIDY.SUBSIDY)
     suspend fun createSubsidy(

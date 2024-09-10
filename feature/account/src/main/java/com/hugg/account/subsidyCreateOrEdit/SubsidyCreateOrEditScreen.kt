@@ -53,6 +53,7 @@ import com.hugg.feature.theme.ACCOUNT_SUBSIDY_MONEY_TITLE
 import com.hugg.feature.theme.ACCOUNT_SUBSIDY_NICKNAME
 import com.hugg.feature.theme.ACCOUNT_TOAST_SUCCESS_CREATE_SUBSIDY
 import com.hugg.feature.theme.ACCOUNT_TOAST_SUCCESS_DELETE_SUBSIDY
+import com.hugg.feature.theme.ACCOUNT_TOAST_SUCCESS_EDIT_SUBSIDY
 import com.hugg.feature.theme.Background
 import com.hugg.feature.theme.Gs50
 import com.hugg.feature.theme.Gs80
@@ -90,6 +91,10 @@ fun SubsidyCreateOrEditContainer(
                 }
                 SubsidyCreateOrEditEvent.SuccessCreateSubsidyEvent -> {
                     HuggToast.createToast(context, ACCOUNT_TOAST_SUCCESS_CREATE_SUBSIDY).show()
+                    goToBack()
+                }
+                SubsidyCreateOrEditEvent.SuccessModifySubsidyEvent -> {
+                    HuggToast.createToast(context, ACCOUNT_TOAST_SUCCESS_EDIT_SUBSIDY).show()
                     goToBack()
                 }
             }

@@ -4,6 +4,8 @@ import androidx.lifecycle.viewModelScope
 import com.hugg.account.subsidyList.SubsidyListPageState
 import com.hugg.domain.model.enums.CreateOrEditType
 import com.hugg.domain.model.request.account.SubsidyCreateEditRequestVo
+import com.hugg.domain.model.request.account.SubsidyRequestVo
+import com.hugg.domain.model.response.account.SubsidyDetailResponseVo
 import com.hugg.domain.model.response.account.SubsidyListResponseVo
 import com.hugg.domain.repository.AccountRepository
 import com.hugg.feature.base.BaseViewModel
@@ -29,6 +31,8 @@ class SubsidyCreateOrEditViewModel @Inject constructor(
                 nowRound = round
             )
         )
+
+        if(type == CreateOrEditType.EDIT) getSubsidyDetail()
     }
 
     fun showDeleteDialog(){
@@ -80,7 +84,7 @@ class SubsidyCreateOrEditViewModel @Inject constructor(
     fun createOrEdit(){
         when(uiState.value.pageType){
             CreateOrEditType.CREATE -> createSubsidy()
-            CreateOrEditType.EDIT -> {}
+            CreateOrEditType.EDIT -> modifySubsidy()
         }
     }
 
@@ -93,6 +97,22 @@ class SubsidyCreateOrEditViewModel @Inject constructor(
         }
     }
 
+    private fun modifySubsidy(){
+        val request = getSubsidyRequest()
+        viewModelScope.launch {
+            accountRepository.modifySubsidy(request).collect {
+                resultResponse(it, { emitEventFlow(SubsidyCreateOrEditEvent.SuccessModifySubsidyEvent) })
+            }
+        }
+    }
+
+    private fun getSubsidyRequest() : SubsidyRequestVo {
+        return SubsidyRequestVo(
+            id = uiState.value.id,
+            request = getCreateEditRequest()
+        )
+    }
+
     private fun getCreateEditRequest() : SubsidyCreateEditRequestVo {
         return SubsidyCreateEditRequestVo(
             nickname = uiState.value.nickname,
@@ -100,5 +120,23 @@ class SubsidyCreateOrEditViewModel @Inject constructor(
             amount = uiState.value.money.replace(",", "").toInt(),
             count = uiState.value.nowRound
         )
+    }
+
+    private fun getSubsidyDetail() {
+        viewModelScope.launch {
+            accountRepository.getSubsidyDetail(uiState.value.id).collect {
+                resultResponse(it, ::handleSuccessGetSubsidyDetail)
+            }
+        }
+    }
+
+    private fun handleSuccessGetSubsidyDetail(result : SubsidyDetailResponseVo){
+        updateState(
+            uiState.value.copy(
+                nickname = result.nickname,
+                content = result.content,
+            )
+        )
+        onChangedMoney(result.amount.toString())
     }
 }

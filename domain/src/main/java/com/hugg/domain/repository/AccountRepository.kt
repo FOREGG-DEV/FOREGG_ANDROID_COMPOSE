@@ -8,6 +8,7 @@ import com.hugg.domain.model.request.account.SubsidyCreateEditRequestVo
 import com.hugg.domain.model.request.account.SubsidyRequestVo
 import com.hugg.domain.model.response.account.AccountResponseVo
 import com.hugg.domain.model.response.account.AccountDetailResponseVo
+import com.hugg.domain.model.response.account.SubsidyDetailResponseVo
 import com.hugg.domain.model.response.account.SubsidyListResponseVo
 import kotlinx.coroutines.flow.Flow
 
@@ -19,7 +20,7 @@ interface AccountRepository {
     suspend fun getAccountDetail(request : Long) : Flow<ApiState<AccountDetailResponseVo>>
     suspend fun createAccount(request : AccountCreateRequestVo) : Flow<ApiState<Unit>>
     suspend fun editAccount(request : AccountEditRequestVo) : Flow<ApiState<Unit>>
-
+    suspend fun getSubsidyDetail(request : Long) : Flow<ApiState<SubsidyDetailResponseVo>>
     suspend fun createSubsidy(request : SubsidyCreateEditRequestVo) : Flow<ApiState<Unit>>
     suspend fun modifySubsidy(request : SubsidyRequestVo) : Flow<ApiState<Unit>>
     suspend fun deleteSubsidy(request : Long) : Flow<ApiState<Unit>>
