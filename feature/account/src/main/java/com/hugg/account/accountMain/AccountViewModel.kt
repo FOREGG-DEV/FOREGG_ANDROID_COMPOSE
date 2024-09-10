@@ -151,7 +151,7 @@ class AccountViewModel @Inject constructor(
     }
 
     fun onClickCreateRoundBtn(){
-        cancelDialog()
+        cancelCreateRoundDialog()
         viewModelScope.launch {
             accountRepository.createRound().collect {
                 resultResponse(it, ::handleSuccessCreateRound)
@@ -161,14 +161,69 @@ class AccountViewModel @Inject constructor(
 
     fun showCreateRoundDialog(){
         updateState(
-            uiState.value.copy(isShowDialog = true)
+            uiState.value.copy(isShowCreateRoundDialog = true)
         )
     }
 
-    fun cancelDialog(){
+    fun cancelCreateRoundDialog(){
         updateState(
-            uiState.value.copy(isShowDialog = false)
+            uiState.value.copy(isShowCreateRoundDialog = false)
         )
+    }
+
+    fun showDeleteDialog(){
+        updateState(
+            uiState.value.copy(isShowDeleteDialog = true)
+        )
+    }
+
+    fun cancelDeleteDialog(){
+        updateState(
+            uiState.value.copy(isShowDeleteDialog = false)
+        )
+    }
+
+    fun onLongClickItem(id : Long){
+        if(uiState.value.isDeleteMode) return
+        else {
+            val newList = uiState.value.accountList.map {
+                it.copy(
+                    isSelected = if (it.id == id) !it.isSelected else it.isSelected
+                )
+            }
+            updateState(
+                uiState.value.copy(
+                    isDeleteMode = true,
+                    accountList = newList
+                )
+            )
+        }
+    }
+
+    fun onClickCard(id : Long){
+        val newList = uiState.value.accountList.map {
+            it.copy(
+                isSelected = if (it.id == id) !it.isSelected else it.isSelected
+            )
+        }
+        updateState(
+            uiState.value.copy(
+                isDeleteMode = newList.any { it.isSelected },
+                accountList = newList
+            )
+        )
+    }
+
+    fun deleteAccount(){
+        cancelDeleteDialog()
+        val deleteList = uiState.value.accountList.filter { it.isSelected }
+        deleteList.forEachIndexed { index, accountCardVo ->
+            viewModelScope.launch {
+                accountRepository.delete(accountCardVo.id).collect {
+                    resultResponse(it, { handleSuccessDeleteAccount(deleteList.size - 1 == index) })
+                }
+            }
+        }
     }
 
     private fun handleGetSuccessAccount(result : AccountResponseVo){
@@ -205,9 +260,16 @@ class AccountViewModel @Inject constructor(
         updateSelectedRound()
     }
 
+    private fun handleSuccessDeleteAccount(isComplete : Boolean){
+        if(isComplete) {
+            emitEventFlow(AccountEvent.SuccessDeleteAccountEvent)
+
+        }
+    }
+
     private fun updateStartDay(start: String){
         updateState(
-            uiState.value.copy(startDay = start,)
+            uiState.value.copy(startDay = start)
         )
     }
 

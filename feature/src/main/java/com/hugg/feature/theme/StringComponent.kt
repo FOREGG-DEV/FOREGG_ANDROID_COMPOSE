@@ -105,6 +105,7 @@ const val ACCOUNT_SUBSIDY_MONEY_TITLE = "지원금 총액*"
 
 const val ACCOUNT_DIALOG_SUBSIDY_DELETE = "지원금을 삭제할까요?"
 const val ACCOUNT_DIALOG_DELETE = "지출 항목을 삭제할까요?"
+const val ACCOUNT_LIST_DIALOG_DELETE = "지출 내역을 삭제할까요?"
 const val ACCOUNT_DIALOG_CREATE_ROUND = "새 회차 추가"
 const val ACCOUNT_DIALOG_WARNING_CREATE_ROUND = "실제 회차가 추가되었을 때 추가 버튼을 눌러주세요"
 
@@ -115,6 +116,7 @@ const val ACCOUNT_TOAST_SUCCESS_DELETE_SUBSIDY = "지원금이 삭제되었어�
 const val ACCOUNT_TOAST_SUCCESS_CREATE = "지출 항목이 등록되었어요"
 const val ACCOUNT_TOAST_SUCCESS_EDIT = "지출 항목이 수정되었어요"
 const val ACCOUNT_TOAST_SUCCESS_DELETE = "지출 항목이 삭제되었어요"
+const val ACCOUNT_LIST_TOAST_SUCCESS_DELETE = "지출 내역이 삭제되었어요"
 
 // --------- 에러 Toast --------- //
 const val TOAST_ERROR_NOR_CORRECT_SPOUSE_CODE = "유효하지 않은 배우자코드입니다."

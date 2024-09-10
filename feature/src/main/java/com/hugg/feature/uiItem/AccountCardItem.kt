@@ -1,7 +1,9 @@
 package com.hugg.feature.uiItem
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,15 +29,18 @@ import com.hugg.feature.theme.CalendarPill
 import com.hugg.feature.theme.Gs70
 import com.hugg.feature.theme.Gs80
 import com.hugg.feature.theme.HuggTypography
+import com.hugg.feature.theme.SelectedCardColor
 import com.hugg.feature.theme.White
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UnitFormatter
 import com.hugg.feature.util.UnitFormatter.getMoneyFormatWithUnit
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AccountCardItem(
     item : AccountCardVo = AccountCardVo(),
     onClickCard : (Long) -> Unit = {},
+    onLongClickCard : (Long) -> Unit = {},
     interactionSource: MutableInteractionSource,
 ){
     val boxColor = when(item.color){
@@ -58,9 +63,10 @@ fun AccountCardItem(
         modifier = Modifier
             .padding(bottom = 4.dp, start = 16.dp, end = 16.dp)
             .fillMaxWidth()
-            .background(color = White, shape = RoundedCornerShape(8.dp))
+            .background(color = if(item.isSelected) SelectedCardColor else White, shape = RoundedCornerShape(8.dp))
             .padding(top = 8.dp, bottom = 11.dp, start = 12.dp, end = 12.dp)
-            .clickable(
+            .combinedClickable(
+                onLongClick = { onLongClickCard(item.id) },
                 onClick = { onClickCard(item.id) },
                 interactionSource = interactionSource,
                 indication = null

@@ -52,6 +52,7 @@ import com.hugg.domain.model.enums.AccountTabType
 import com.hugg.domain.model.enums.CreateOrEditType
 import com.hugg.domain.model.enums.HuggTabClickedType
 import com.hugg.domain.model.enums.TopBarMiddleType
+import com.hugg.domain.model.enums.TopBarRightType
 import com.hugg.feature.R
 import com.hugg.feature.component.HuggDialog
 import com.hugg.feature.component.HuggTabBar
@@ -61,13 +62,15 @@ import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.ACCOUNT_ALL
 import com.hugg.feature.theme.ACCOUNT_ALL_EXPENSE
 import com.hugg.feature.theme.ACCOUNT_DIALOG_CREATE_ROUND
-import com.hugg.feature.theme.ACCOUNT_DIALOG_SUBSIDY_DELETE
+import com.hugg.feature.theme.ACCOUNT_DIALOG_DELETE
 import com.hugg.feature.theme.ACCOUNT_DIALOG_WARNING_CREATE_ROUND
+import com.hugg.feature.theme.ACCOUNT_LIST_DIALOG_DELETE
 import com.hugg.feature.theme.ACCOUNT_MONTH
 import com.hugg.feature.theme.ACCOUNT_PERSONAL
 import com.hugg.feature.theme.ACCOUNT_ROUND
 import com.hugg.feature.theme.ACCOUNT_SUBSIDY_ALL
 import com.hugg.feature.theme.ACCOUNT_SUGGEST_ADD_SUBSIDY
+import com.hugg.feature.theme.ACCOUNT_TOAST_SUCCESS_DELETE
 import com.hugg.feature.theme.Background
 import com.hugg.feature.theme.CalendarEtc
 import com.hugg.feature.theme.CalendarHospital
@@ -89,6 +92,7 @@ import com.hugg.feature.theme.White
 import com.hugg.feature.uiItem.AccountCardItem
 import com.hugg.feature.uiItem.RemoteRound
 import com.hugg.feature.uiItem.SubsidyTotalBoxItem
+import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UnitFormatter
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -120,7 +124,9 @@ fun AccountContainer(
         onClickDateFilter = { viewModel.onClickBottomSheetOnOff() },
         onClickGoToSubsidyList = { navigateToSubsidyList(uiState.nowRound) },
         onClickCreateAccountBtn = { navigateToCreateOrEditAccount(-1, CreateOrEditType.CREATE) },
-        onClickAccountCard = { id -> navigateToCreateOrEditAccount(id, CreateOrEditType.EDIT) },
+        onClickAccountCard = { id -> if(uiState.isDeleteMode) viewModel.onClickCard(id) else navigateToCreateOrEditAccount(id, CreateOrEditType.EDIT) },
+        onLongClickAccountCard = { id -> viewModel.onLongClickItem(id) },
+        onDeleteAccountList = { viewModel.showDeleteDialog() },
         interactionSource = interactionSource
     )
 
@@ -130,6 +136,16 @@ fun AccountContainer(
             .collect { index ->
                 isFilterAtTop = index >= 2
             }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.eventFlow.collect { event ->
+            when(event) {
+                AccountEvent.SuccessDeleteAccountEvent -> {
+                    HuggToast.createToast(context, ACCOUNT_TOAST_SUCCESS_DELETE).show()
+                }
+            }
+        }
     }
 
     if (uiState.isShowBottomSheet) {
@@ -144,11 +160,27 @@ fun AccountContainer(
         )
     }
 
-    if(uiState.isShowDialog){
-        ShowCreateRoundDialog(
-            interactionSource = interactionSource,
-            onClickCreateRoundBtn = { viewModel.onClickCreateRoundBtn() },
-            onClickCancel = { viewModel.cancelDialog() }
+    if(uiState.isShowDeleteDialog){
+        HuggDialog(
+            title = ACCOUNT_LIST_DIALOG_DELETE,
+            positiveColor = Sunday,
+            positiveText = WORD_DELETE,
+            onClickCancel = { viewModel.cancelDeleteDialog() },
+            onClickNegative = { viewModel.cancelDeleteDialog() },
+            onClickPositive = { viewModel.deleteAccount() },
+            interactionSource = interactionSource
+        )
+    }
+
+    if(uiState.isShowCreateRoundDialog){
+        HuggDialog(
+            title = ACCOUNT_DIALOG_CREATE_ROUND,
+            warningMessage = ACCOUNT_DIALOG_WARNING_CREATE_ROUND,
+            hasWarningText = true,
+            onClickCancel = { viewModel.cancelCreateRoundDialog() },
+            onClickNegative = { viewModel.cancelCreateRoundDialog() },
+            onClickPositive = { viewModel.onClickCreateRoundBtn() },
+            interactionSource = interactionSource
         )
     }
 }
@@ -169,7 +201,9 @@ fun AccountScreen(
     isFilterAtTop: Boolean = false,
     onClickDateFilter: () -> Unit = {},
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    onClickAccountCard : (Long) -> Unit = {}
+    onClickAccountCard : (Long) -> Unit = {},
+    onLongClickAccountCard : (Long) -> Unit = {},
+    onDeleteAccountList : () -> Unit = {}
 ) {
 
     val initialTabType = when(uiState.tabType){
@@ -187,6 +221,8 @@ fun AccountScreen(
         TopBar(
             middleItemType = TopBarMiddleType.TEXT,
             middleText = WORD_ACCOUNT,
+            rightItemType = if(uiState.isDeleteMode) TopBarRightType.DELETE else TopBarRightType.NONE,
+            rightBtnClicked = onDeleteAccountList,
             interactionSource = interactionSource
         )
 
@@ -261,7 +297,8 @@ fun AccountScreen(
                 AccountCardItem(
                     item = accountVo,
                     interactionSource = interactionSource,
-                    onClickCard = onClickAccountCard
+                    onClickCard = onClickAccountCard,
+                    onLongClickCard = onLongClickAccountCard
                 )
             }
         }
@@ -579,23 +616,6 @@ fun FilterItem(
             color = if(uiState.selectedFilterList.contains(text)) White else Gs60
         )
     }
-}
-
-@Composable
-fun ShowCreateRoundDialog(
-    interactionSource: MutableInteractionSource,
-    onClickCancel : () -> Unit = {},
-    onClickCreateRoundBtn: () -> Unit = {}
-){
-    HuggDialog(
-        title = ACCOUNT_DIALOG_CREATE_ROUND,
-        warningMessage = ACCOUNT_DIALOG_WARNING_CREATE_ROUND,
-        hasWarningText = true,
-        onClickCancel = onClickCancel,
-        onClickNegative = onClickCancel,
-        onClickPositive = onClickCreateRoundBtn,
-        interactionSource = interactionSource
-    )
 }
 
 @Preview

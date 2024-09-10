@@ -22,6 +22,8 @@ data class AccountPageState(
     val selectedFilterList : List<String> = listOf(ACCOUNT_ALL),
     val accountList : List<AccountCardVo> = emptyList(),
     val isShowBottomSheet : Boolean = false,
-    val isShowDialog : Boolean = false,
+    val isShowCreateRoundDialog : Boolean = false,
+    val isShowDeleteDialog : Boolean = false,
     val selectedBottomSheetType: AccountBottomSheetType = AccountBottomSheetType.ONE_MONTH,
+    val isDeleteMode : Boolean = false
 ) : PageState
