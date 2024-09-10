@@ -1,6 +1,7 @@
 package com.hugg.account.subsidyCreateOrEdit
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,6 +24,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextRange
@@ -108,7 +111,8 @@ fun SubsidyCreateOrEditContainer(
         onChangedNickname = { nickname -> viewModel.onChangedNickname(nickname) },
         onChangedContent = { content -> viewModel.onChangedContent(content) },
         onChangedMoney = { money -> viewModel.onChangedMoney(money) },
-        onClickCreateOrChangeBtn = { viewModel.createOrEdit() }
+        onClickCreateOrChangeBtn = { viewModel.createOrEdit() },
+        interactionSource = interactionSource
     )
 
     if(uiState.isShowDialog) ShowDeleteDialog(
@@ -130,6 +134,8 @@ fun SubsidyCreateOrEditScreen(
     onChangedContent : (String) -> Unit = {},
     onChangedMoney : (String) -> Unit = {},
     onClickCreateOrChangeBtn : () -> Unit = {},
+    focusRequester : FocusRequester = remember { FocusRequester() },
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
     Column(
         modifier = Modifier
@@ -163,7 +169,9 @@ fun SubsidyCreateOrEditScreen(
                 Spacer(modifier = Modifier.size(32.dp))
                 InputContent(
                     content = uiState.content,
-                    onChangedContent = onChangedContent
+                    onChangedContent = onChangedContent,
+                    focusRequester = focusRequester,
+                    interactionSource = interactionSource
                 )
             }
 
@@ -255,7 +263,9 @@ fun InputNickName(
 @Composable
 fun InputContent(
     content : String = "",
-    onChangedContent : (String) -> Unit = {}
+    onChangedContent : (String) -> Unit = {},
+    focusRequester: FocusRequester,
+    interactionSource: MutableInteractionSource
 ){
     Column {
         Text(
@@ -272,6 +282,11 @@ fun InputContent(
                 .defaultMinSize(minHeight = 291.dp)
                 .background(color = Color.White, shape = RoundedCornerShape(8.dp))
                 .padding(horizontal = 12.dp, vertical = 13.dp)
+                .clickable(
+                    onClick = { focusRequester.requestFocus() },
+                    interactionSource = interactionSource,
+                    indication = null
+                )
         ) {
             if (content.isEmpty()) {
                 Text(
@@ -282,14 +297,16 @@ fun InputContent(
             }
 
             BasicTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(focusRequester),
                 value = content,
                 onValueChange = { value ->
                     onChangedContent(value)
                 },
                 textStyle = HuggTypography.h3.copy(
                     color = Gs90,
-                ),
-                modifier = Modifier.fillMaxWidth()
+                )
             )
         }
     }
