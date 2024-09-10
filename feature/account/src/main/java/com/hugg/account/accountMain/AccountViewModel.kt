@@ -2,11 +2,13 @@ package com.hugg.account.accountMain
 
 import androidx.lifecycle.viewModelScope
 import com.hugg.domain.model.enums.AccountBottomSheetType
+import com.hugg.domain.model.enums.AccountColorType
 import com.hugg.domain.model.enums.AccountTabType
-import com.hugg.domain.model.enums.AccountType
 import com.hugg.domain.model.request.account.AccountGetConditionRequestVo
+import com.hugg.domain.model.response.account.AccountItemResponseVo
 import com.hugg.domain.model.response.account.AccountResponseVo
 import com.hugg.domain.model.response.account.SubsidyListResponseVo
+import com.hugg.domain.model.vo.account.AccountCardVo
 import com.hugg.domain.repository.AccountRepository
 import com.hugg.feature.base.BaseViewModel
 import com.hugg.feature.theme.ACCOUNT_PERSONAL
@@ -136,18 +138,19 @@ class AccountViewModel @Inject constructor(
     }
 
     private fun handleGetSuccessAccount(result : AccountResponseVo){
-        val filterList = result.accountList.filter {
+        val filterList = result.ledgerDetailResponseDTOS.filter {
             when(uiState.value.filterText) {
-                ACCOUNT_PERSONAL -> it.type == AccountType.PERSONAL_EXPENSE
-                ACCOUNT_SUBSIDY -> it.type == AccountType.SUBSIDY
+                ACCOUNT_PERSONAL -> it.color == AccountColorType.RED
+                ACCOUNT_SUBSIDY -> it.color != AccountColorType.RED
                 else -> true
             }
         }
         updateState(
             uiState.value.copy(
-                personalExpense = getMoneyFormat(result.personalMoney),
-                totalExpense = getMoneyFormat(result.allExpendMoney),
-                accountList = filterList
+                personalExpense = getMoneyFormat(result.personalSum),
+                subsidyExpense = getMoneyFormat(result.subsidySum),
+                totalExpense = getMoneyFormat(result.total.toInt()),
+                accountList = getAccountCardList(filterList)
             )
         )
     }
@@ -196,5 +199,18 @@ class AccountViewModel @Inject constructor(
     private fun getByMonthRequest() : String{
         val requestMonth = String.format("%02d", month)
         return "$year-$requestMonth"
+    }
+
+    private fun getAccountCardList(list : List<AccountItemResponseVo>) : List<AccountCardVo>{
+        return list.map {
+            AccountCardVo(
+                id = it.id,
+                date = it.date,
+                round = it.round,
+                color = it.color,
+                title = it.name,
+                money = it.amount,
+            )
+        }
     }
 }

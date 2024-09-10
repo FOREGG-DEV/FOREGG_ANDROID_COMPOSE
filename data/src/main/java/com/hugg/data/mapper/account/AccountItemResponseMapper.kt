@@ -2,24 +2,33 @@ package com.hugg.data.mapper.account
 
 import com.hugg.data.base.Mapper
 import com.hugg.data.dto.account.AccountResponse
+import com.hugg.domain.model.response.account.AccountItemResponseVo
 import com.hugg.domain.model.response.account.AccountResponseVo
-import com.hugg.domain.model.vo.account.AccountCardVo
+import com.hugg.domain.model.response.account.AccountSubsidyAvailableItemVo
 
 object AccountItemResponseMapper: Mapper.ResponseMapper<AccountResponse, AccountResponseVo> {
     override fun mapDtoToModel(type: AccountResponse?): AccountResponseVo {
         return type?.run {
             AccountResponseVo(
-                allExpendMoney = ledgerSummaryDTO.totalExpense,
-                subsidyMoney = ledgerSummaryDTO.subsidy,
-                personalMoney = ledgerSummaryDTO.personal,
-                accountList = ledgerResponseDTOS.map {
-                    AccountCardVo(
+                personalSum = personalSum,
+                subsidySum = subsidySum ?: 0,
+                subsidyAvailable = subsidyAvailable?.map {
+                    AccountSubsidyAvailableItemVo(
+                        color = it.color,
+                        nickname = it.nickname,
+                        amount = it.amount
+                    )
+                } ?: emptyList(),
+                total = total,
+                ledgerDetailResponseDTOS = ledgerDetailResponseDTOS.map {
+                    AccountItemResponseVo(
                         id = it.id,
                         date = it.date,
                         round = it.count,
-                        type = it.ledgerType,
-                        title = it.content,
-                        money = it.amount,
+                        color = it.color,
+                        name = it.name,
+                        content = it.content,
+                        amount = it.amount
                     )
                 }
             )

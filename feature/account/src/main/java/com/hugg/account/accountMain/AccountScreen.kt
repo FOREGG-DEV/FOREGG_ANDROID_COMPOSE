@@ -340,7 +340,7 @@ fun AccountTotalBox(
 
         if (uiState.tabType != AccountTabType.ALL) Spacer(modifier = Modifier.size(22.dp))
 
-        TotalBoxItem(AccountColorType.PERSONAL, uiState)
+        TotalBoxItem(AccountColorType.RED, uiState)
 
         Spacer(modifier = Modifier.size(
             if (uiState.tabType == AccountTabType.ROUND && uiState.subsidyList.isEmpty()) 12.dp else 18.dp
@@ -414,11 +414,11 @@ fun AccountTotalBox(
 
 @Composable
 fun TotalBoxItem(
-    colorType: AccountColorType = AccountColorType.PERSONAL,
+    colorType: AccountColorType = AccountColorType.RED,
     uiState: AccountPageState = AccountPageState()
 ) {
     val color = when (colorType) {
-        AccountColorType.PERSONAL -> CalendarPill
+        AccountColorType.RED -> CalendarPill
         AccountColorType.ALL -> Gs20
         AccountColorType.BLUE -> CalendarInjection
         AccountColorType.GREEN -> CalendarHospital
@@ -426,7 +426,7 @@ fun TotalBoxItem(
     }
 
     val text = when (colorType) {
-        AccountColorType.PERSONAL -> ACCOUNT_PERSONAL
+        AccountColorType.RED -> ACCOUNT_PERSONAL
         AccountColorType.ALL -> ACCOUNT_SUBSIDY_ALL
         else -> ""
     }
@@ -455,7 +455,7 @@ fun TotalBoxItem(
         Spacer(modifier = Modifier.weight(1f))
 
         Text(
-            text = if (colorType == AccountColorType.PERSONAL) uiState.personalExpense else "1,000원", // 아직 서버 미반영
+            text = if (colorType == AccountColorType.RED) uiState.personalExpense else uiState.subsidyExpense, // 아직 서버 미반영
             style = HuggTypography.p1,
             color = Gs80
         )

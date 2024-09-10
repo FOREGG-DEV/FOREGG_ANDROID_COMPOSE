@@ -17,25 +17,43 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.hugg.domain.model.enums.AccountType
+import com.hugg.domain.model.enums.AccountColorType
 import com.hugg.domain.model.vo.account.AccountCardVo
 import com.hugg.feature.theme.ACCOUNT_PERSONAL
 import com.hugg.feature.theme.ACCOUNT_ROUND_UNIT
 import com.hugg.feature.theme.Black
+import com.hugg.feature.theme.CalendarEtc
+import com.hugg.feature.theme.CalendarHospital
+import com.hugg.feature.theme.CalendarInjection
 import com.hugg.feature.theme.CalendarPill
 import com.hugg.feature.theme.Gs70
 import com.hugg.feature.theme.Gs80
 import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.White
 import com.hugg.feature.util.TimeFormatter
+import com.hugg.feature.util.UnitFormatter
 import com.hugg.feature.util.UnitFormatter.getMoneyFormat
-import java.text.NumberFormat
-import java.util.Locale
 
 @Composable
 fun AccountCardItem(
     item : AccountCardVo = AccountCardVo()
 ){
+    val boxColor = when(item.color){
+        AccountColorType.ALL,
+        AccountColorType.RED -> CalendarPill
+        AccountColorType.BLUE -> CalendarInjection
+        AccountColorType.GREEN -> CalendarHospital
+        AccountColorType.YELLOW -> CalendarEtc
+    }
+
+    val boxText = when(item.color){
+        AccountColorType.ALL,
+        AccountColorType.RED -> item.title
+        AccountColorType.BLUE,
+        AccountColorType.GREEN,
+        AccountColorType.YELLOW -> UnitFormatter.getSubsidyTitleWithoutMoneyFormat(item.title)
+    }
+
     Column(
         modifier = Modifier
             .padding(bottom = 4.dp, start = 16.dp, end = 16.dp)
@@ -69,14 +87,14 @@ fun AccountCardItem(
                 modifier = Modifier
                     .width(40.dp)
                     .background(
-                        color = if (item.type == AccountType.PERSONAL_EXPENSE) CalendarPill else Color.Black,
+                        color = boxColor,
                         shape = RoundedCornerShape(4.dp)
                     )
                     .padding(vertical = 2.dp),
                 contentAlignment = Alignment.Center
             ){
                 Text(
-                    text = if(item.type == AccountType.PERSONAL_EXPENSE) ACCOUNT_PERSONAL else "",
+                    text = boxText,
                     style = HuggTypography.p3_l,
                     color = Gs80
                 )

@@ -15,5 +15,6 @@ object UnitFormatter {
 
     fun getRoundFormat(round : Int) : String ="$round$ACCOUNT_ROUND_UNIT"
     fun getSubsidyTitleFormat(title : String) : String = "지원금($title)"
+    fun getSubsidyTitleWithoutMoneyFormat(title : String) : String = "지원($title)"
     fun getPercentFormat(percent : Int) : String = "$percent%"
 }

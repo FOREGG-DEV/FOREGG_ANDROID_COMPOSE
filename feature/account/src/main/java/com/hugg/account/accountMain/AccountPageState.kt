@@ -16,6 +16,7 @@ data class AccountPageState(
     val selectedYearMonth : String = "",
     val nowRound : Int = UserInfo.info.round,
     val personalExpense : String = "",
+    val subsidyExpense : String = "",
     val totalExpense : String = "",
     val subsidyList : List<SubsidyListResponseVo> = emptyList(),
     val accountList : List<AccountCardVo> = emptyList(),

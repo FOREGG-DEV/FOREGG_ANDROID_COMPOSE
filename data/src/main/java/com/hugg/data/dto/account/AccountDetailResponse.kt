@@ -1,8 +1,8 @@
-package com.hugg.domain.model.request.account
+package com.hugg.data.dto.account
 
 import com.google.gson.annotations.SerializedName
 
-data class AccountCreateRequestVo(
+data class AccountDetailResponse(
     @SerializedName("date")
     val date : String = "",
     @SerializedName("count")
@@ -12,12 +12,5 @@ data class AccountCreateRequestVo(
     @SerializedName("memo")
     val memo : String = "",
     @SerializedName("expenditureRequestDTOList")
-    val expenditureRequestDTOList : List<ExpenditureRequestItem> = emptyList()
-)
-
-data class ExpenditureRequestItem(
-    @SerializedName("nickname")
-    val nickname : String = "",
-    @SerializedName("amount")
-    val amount : Int = 0,
+    val expenditureRequestDTOList : List<SubsidyAvailableItem> = emptyList()
 )
