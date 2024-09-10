@@ -15,6 +15,7 @@ data class AccountCreateOrEditPageState(
     val expenditureList : List<AccountExpenditureItemVo> = emptyList(),
     val originExpenditureList : List<AccountExpenditureItemVo> = emptyList(),
     val memo : String = "",
+    val isShowDialog : Boolean = false,
 ) : PageState {
     val isActiveBtn : Boolean = content.isNotEmpty() && expenditureList.any { it.money.isNotEmpty() }
 }

@@ -38,11 +38,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.hugg.account.subsidyCreateOrEdit.ShowDeleteDialog
 import com.hugg.account.subsidyCreateOrEdit.SubsidyCreateOrEditEvent
 import com.hugg.domain.model.enums.AccountColorType
 import com.hugg.domain.model.enums.CreateOrEditType
 import com.hugg.domain.model.enums.TopBarLeftType
 import com.hugg.domain.model.enums.TopBarMiddleType
+import com.hugg.domain.model.enums.TopBarRightType
 import com.hugg.domain.model.response.account.AccountSubsidyAvailableItemVo
 import com.hugg.domain.model.vo.account.AccountExpenditureItemVo
 import com.hugg.feature.component.BlankBtn
@@ -51,6 +53,7 @@ import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
 import com.hugg.feature.R
 import com.hugg.feature.component.FilledBtn
+import com.hugg.feature.component.HuggDialog
 import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UnitFormatter
@@ -68,6 +71,7 @@ fun AccountCreateOrEditContainer(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val calendar = Calendar.getInstance()
+    val interactionSource = remember { MutableInteractionSource() }
 
     val datePickerDialog = remember {
         DatePickerDialog(
@@ -97,6 +101,10 @@ fun AccountCreateOrEditContainer(
                     HuggToast.createToast(context, ACCOUNT_TOAST_SUCCESS_EDIT).show()
                     goToBack()
                 }
+                AccountCreateOrEditEvent.SuccessDeleteAccountEvent -> {
+                    HuggToast.createToast(context, ACCOUNT_TOAST_SUCCESS_DELETE).show()
+                    goToBack()
+                }
             }
         }
     }
@@ -104,6 +112,7 @@ fun AccountCreateOrEditContainer(
     AccountCreateOrEditScreen(
         uiState = uiState,
         onClickTopBarLeftBtn = goToBack,
+        onClickDeleteBtn = { viewModel.showDeleteDialog() },
         onClickDatePickerBtn = { datePickerDialog.show() },
         onClickMinusBtn = { viewModel.onClickMinusBtn() },
         onClickPlusBtn = { viewModel.onClickPlusBtn() },
@@ -111,14 +120,28 @@ fun AccountCreateOrEditContainer(
         onChangedContent = { content -> viewModel.onChangedContent(content) },
         onChangedMoney = { money, name -> viewModel.onChangedMoney(money, name) },
         onChangedMemo = { memo -> viewModel.onChangedMemo(memo) },
-        onClickCreateOrChangeBtn = { viewModel.onClickCreateOrEdit() }
+        onClickCreateOrChangeBtn = { viewModel.onClickCreateOrEdit() },
+        interactionSource = interactionSource
     )
+
+    if(uiState.isShowDialog) {
+        HuggDialog(
+            title = ACCOUNT_DIALOG_DELETE,
+            positiveColor = Sunday,
+            positiveText = WORD_DELETE,
+            onClickCancel = { viewModel.cancelDeleteDialog() },
+            onClickNegative = { viewModel.cancelDeleteDialog() },
+            onClickPositive = { viewModel.deleteAccount() },
+            interactionSource = interactionSource
+        )
+    }
 }
 
 @Composable
 fun AccountCreateOrEditScreen(
     uiState : AccountCreateOrEditPageState = AccountCreateOrEditPageState(),
     onClickTopBarLeftBtn : () -> Unit = {},
+    onClickDeleteBtn : () -> Unit = {},
     onClickDatePickerBtn: () -> Unit = {},
     onClickMinusBtn: () -> Unit = {},
     onClickPlusBtn: () -> Unit = {},
@@ -140,6 +163,8 @@ fun AccountCreateOrEditScreen(
             leftBtnClicked = onClickTopBarLeftBtn,
             middleItemType = TopBarMiddleType.TEXT,
             middleText = ACCOUNT_CREATE,
+            rightItemType = if(uiState.pageType == CreateOrEditType.CREATE) TopBarRightType.NONE else TopBarRightType.DELETE_GS30,
+            rightBtnClicked = onClickDeleteBtn,
             interactionSource = interactionSource
         )
 

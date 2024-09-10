@@ -94,6 +94,26 @@ class AccountCreateOrEditViewModel @Inject constructor(
         }
     }
 
+    fun showDeleteDialog(){
+        updateState(
+            uiState.value.copy(isShowDialog = true)
+        )
+    }
+
+    fun cancelDeleteDialog(){
+        updateState(
+            uiState.value.copy(isShowDialog = false)
+        )
+    }
+
+    fun deleteAccount(){
+        viewModelScope.launch {
+            accountRepository.delete(uiState.value.id).collect {
+                resultResponse(it, { emitEventFlow(AccountCreateOrEditEvent.SuccessDeleteAccountEvent) } )
+            }
+        }
+    }
+
     private fun getSubsidyByCount(count : Int){
         viewModelScope.launch {
             accountRepository.getSubsidies(count).collect {
