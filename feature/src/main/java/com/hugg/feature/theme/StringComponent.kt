@@ -23,6 +23,7 @@ const val WORD_ETC = "기타"
 const val WORD_REGISTRATION = "등록"
 const val WORD_MODIFY = "수정"
 const val WORD_MEMO = "메모"
+const val WORD_ADD = "추가"
 
 // --------- 기타 --------- //
 const val COPY_COMPLETE_TEXT = "클립보드에 배우자 코드가 복사되었어요!"
@@ -65,6 +66,63 @@ const val CALENDAR_EMPTY_SCHEDULE = "이날은 일정이 없어요"
 const val CALENDAR_MAX_SCHEDULE = "일정을 더 추가할 수 없어요 (하루 최대 7개)"
 const val CALENDAR_MEDICINE_UNIT = "정"
 const val CALENDAR_INJECTION_UNIT = "IU"
+
+// --------- 캘린더_일정 --------- //
+const val CALENDAR_SCHEDULE_ABOUT_HOSPITAL = "병원 일정"
+const val CALENDAR_SCHEDULE_ABOUT_INJECTION = "주사 일정"
+const val CALENDAR_SCHEDULE_ABOUT_MEDICINE = "약 일정"
+const val CALENDAR_SCHEDULE_ABOUT_ETC = "기타 일정"
+const val CALENDAR_SCHEDULE_MEDICINE_KIND = "약 종류*"
+val CALENDAR_SCHEDULE_MEDICINE_KIND_LIST = listOf(
+    "가니레버",
+    "고날에프",
+    "고나도핀",
+    "데카펩틸",
+    "루베리스",
+    "로렐린",
+    "레코벨",
+    "메노푸어",
+    "메리오날",
+    "벰폴라",
+    "세트로타이드",
+    "오가루트란",
+    "오비드렐",
+    "유트로핀",
+    "크녹산",
+    "퍼고베리스",
+    "프롤루텍스",
+    "플리트롭",
+    "퓨레곤",
+    "IVF-C",
+    "IVF-M HP",
+    "기타"
+)
+const val CALENDAR_SCHEDULE_INJECTION_KIND = "주사 종류*"
+val CALENDAR_SCHEDULE_INJECTION_KIND_LIST = listOf(
+    "가니레버",
+    "고날에프",
+    "고나도핀",
+    "데카펩틸",
+    "루베리스",
+    "로렐린",
+    "레코벨",
+    "메노푸어",
+    "메리오날",
+    "벰폴라",
+    "세트로타이드",
+    "오가루트란",
+    "오비드렐",
+    "유트로핀",
+    "크녹산",
+    "퍼고베리스",
+    "프롤루텍스",
+    "플리트롭",
+    "퓨레곤",
+    "IVF-C",
+    "IVF-M HP",
+    "기타"
+)
+
 
 // --------- 가계부 --------- //
 const val ACCOUNT_ALL = "전체"

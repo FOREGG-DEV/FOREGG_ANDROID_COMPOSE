@@ -1,4 +1,4 @@
-package com.hugg.calendar
+package com.hugg.calendar.calendarMain
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -30,6 +30,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -48,6 +49,7 @@ import com.cheonjaeung.compose.grid.VerticalGrid
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
+import com.hugg.domain.model.enums.CreateOrEditType
 import com.hugg.domain.model.enums.DayType
 import com.hugg.domain.model.enums.RecordType
 import com.hugg.domain.model.enums.TopBarMiddleType
@@ -62,7 +64,7 @@ import com.hugg.feature.uiItem.ScheduleDetailItem
 
 @Composable
 fun CalendarContainer(
-    navigateCreateSchedule : () -> Unit = {},
+    navigateCreateSchedule : (CreateOrEditType, RecordType, Long) -> Unit = {_, _, _ -> },
     viewModel: CalendarViewModel = hiltViewModel()
 ) {
 
@@ -79,6 +81,14 @@ fun CalendarContainer(
         uiState = uiState,
         interactionSource = interactionSource
     )
+
+    LaunchedEffect(Unit){
+        viewModel.eventFlow.collect { event ->
+            when(event){
+                is CalendarEvent.GoToCreateSchedule -> { navigateCreateSchedule(CreateOrEditType.CREATE, event.type, -1) }
+            }
+        }
+    }
 }
 
 @OptIn(ExperimentalPagerApi::class)
@@ -330,12 +340,12 @@ fun ScheduleDetailDialog(
 
             Spacer(
                 modifier = Modifier
-                .size(16.dp)
-                .clickable(
-                    onClick = onClickCancel,
-                    interactionSource = interactionSource,
-                    indication = null
-                )
+                    .size(16.dp)
+                    .clickable(
+                        onClick = onClickCancel,
+                        interactionSource = interactionSource,
+                        indication = null
+                    )
             )
 
             HorizontalPager(

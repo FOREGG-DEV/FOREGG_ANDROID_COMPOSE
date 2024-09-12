@@ -1,5 +1,8 @@
 package com.hugg.main
 
+import com.hugg.domain.model.enums.CreateOrEditType
+import com.hugg.domain.model.enums.RecordType
+
 sealed class Routes(val route : String){
 
     //----------------SIGN_GRAPH----------------//
@@ -27,6 +30,9 @@ sealed class Routes(val route : String){
     //----------------CALENDAR_GRAPH----------------//
     data object CalendarGraph : Routes("calendar_graph")
     data object CalendarScreen : Routes("calendar")
+    data object CalendarScheduleCreateOrEdit : Routes("calendarScheduleCreateOrEdit/{pageType}/{recordType}/{id}"){
+        fun getRouteCalendarScheduleCreateOrEdit(pageType: String, recordType : String, id : Long) = "calendarScheduleCreateOrEdit/$pageType/$recordType/$id"
+    }
 
     //----------------ACCOUNT_GRAPH----------------//
     data object AccountGraph : Routes("account_graph")

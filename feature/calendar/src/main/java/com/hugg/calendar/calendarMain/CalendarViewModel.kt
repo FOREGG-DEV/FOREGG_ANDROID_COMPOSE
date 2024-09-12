@@ -1,4 +1,4 @@
-package com.hugg.calendar
+package com.hugg.calendar.calendarMain
 
 import androidx.lifecycle.viewModelScope
 import com.hugg.domain.model.enums.DayType
@@ -7,7 +7,6 @@ import com.hugg.domain.model.vo.calendar.CalendarDayVo
 import com.hugg.domain.model.vo.calendar.ScheduleDetailVo
 import com.hugg.domain.repository.ScheduleRepository
 import com.hugg.feature.base.BaseViewModel
-import com.hugg.feature.util.ForeggLog
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.TimeFormatter.getWeekListKor
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -225,7 +224,7 @@ class CalendarViewModel @Inject constructor(
             }
         }
         else{
-
+            emitEventFlow(CalendarEvent.GoToCreateSchedule(type))
         }
     }
 }
