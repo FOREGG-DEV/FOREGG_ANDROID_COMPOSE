@@ -39,6 +39,7 @@ class AccountViewModel @Inject constructor(
     private var year = TimeFormatter.getYear(today)
     private var month = TimeFormatter.getMonth(today)
     private var round = UserInfo.info.round
+    private var initialInit = false
 
     init {
         initDay(TimeFormatter.getPreviousMonthDate(), today)
@@ -48,10 +49,12 @@ class AccountViewModel @Inject constructor(
     fun initDay(start : String, end : String){
         if(uiState.value.startDay != start) updateStartDay(start)
         if(uiState.value.endDay != end) updateEndDay(end)
+        initialInit = true
         setView()
     }
 
-    private fun setView(){
+    fun setView(){
+        if(!initialInit) return
         when(uiState.value.tabType){
             AccountTabType.ALL -> getAccountByCondition()
             AccountTabType.ROUND -> getAccountByRound()
@@ -314,7 +317,8 @@ class AccountViewModel @Inject constructor(
                 date = it.date,
                 round = it.round,
                 color = it.color,
-                title = it.name,
+                cardName = it.name,
+                title = it.content,
                 money = it.amount,
             )
         }

@@ -110,6 +110,10 @@ fun AccountContainer(
     var isFilterAtTop by remember { mutableStateOf(false) }
     val interactionSource = remember { MutableInteractionSource() }
 
+    LaunchedEffect(Unit){
+        viewModel.setView()
+    }
+
     AccountScreen(
         onClickTab = { type -> viewModel.onClickTabType(type) },
         onClickFilterBox = { filter -> viewModel.onClickFilterBox(filter) },

@@ -12,6 +12,7 @@ import com.hugg.domain.model.vo.account.AccountExpenditureItemVo
 import com.hugg.domain.repository.AccountRepository
 import com.hugg.feature.base.BaseViewModel
 import com.hugg.feature.theme.ACCOUNT_PERSONAL
+import com.hugg.feature.util.ForeggLog
 import com.hugg.feature.util.UnitFormatter
 import com.hugg.feature.util.UserInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,6 +32,12 @@ class AccountCreateOrEditViewModel @Inject constructor(
     }
 
     fun initView(id : Long, type : CreateOrEditType) {
+        updateState(
+            uiState.value.copy(
+                id = id,
+                pageType = type
+            )
+        )
         when(type){
             CreateOrEditType.CREATE -> getSubsidyByCount(uiState.value.nowRound)
             CreateOrEditType.EDIT -> getAccountDetail(id)
@@ -192,8 +199,6 @@ class AccountCreateOrEditViewModel @Inject constructor(
     }
 
     private fun handleSuccessGetAccountDetail(result : AccountDetailResponseVo){
-        getSubsidyByCount(result.count)
-
         updateState(
             uiState.value.copy(
                 date = result.date,
@@ -209,6 +214,7 @@ class AccountCreateOrEditViewModel @Inject constructor(
                 }
             )
         )
+        getSubsidyByCount(result.count)
     }
 
     private fun setOriginExpenditure() {

@@ -53,10 +53,10 @@ fun AccountCardItem(
 
     val boxText = when(item.color){
         AccountColorType.ALL,
-        AccountColorType.RED -> item.title
+        AccountColorType.RED -> item.cardName
         AccountColorType.BLUE,
         AccountColorType.GREEN,
-        AccountColorType.YELLOW -> UnitFormatter.getSubsidyTitleWithoutMoneyFormat(item.title)
+        AccountColorType.YELLOW -> UnitFormatter.getSubsidyTitleWithoutMoneyFormat(item.cardName)
     }
 
     Column(

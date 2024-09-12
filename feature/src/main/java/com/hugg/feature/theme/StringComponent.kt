@@ -22,7 +22,7 @@ const val WORD_MEDICINE = "약"
 const val WORD_ETC = "기타"
 const val WORD_REGISTRATION = "등록"
 const val WORD_MODIFY = "수정"
-const val WORD_MEMO = "메"
+const val WORD_MEMO = "메모"
 
 // --------- 기타 --------- //
 const val COPY_COMPLETE_TEXT = "클립보드에 배우자 코드가 복사되었어요!"

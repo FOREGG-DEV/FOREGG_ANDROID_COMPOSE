@@ -17,7 +17,7 @@ object AccountDetailResponseMapper: Mapper.ResponseMapper<AccountDetailResponse,
                 subsidyAvailable = expenditureRequestDTOList.map {
                     AccountSubsidyAvailableItemVo(
                         color = it.color,
-                        nickname = it.nickname,
+                        nickname = it.name,
                         amount = it.amount
                     )
                 }
