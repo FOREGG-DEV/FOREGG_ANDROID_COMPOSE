@@ -162,7 +162,7 @@ fun DetailMoneyView(
         Spacer(modifier = Modifier.weight(1f))
 
         Text(
-            text = UnitFormatter.getMoneyFormat(money),
+            text = UnitFormatter.getMoneyFormatWithUnit(money),
             style = HuggTypography.p1,
             color = Gs90
         )
