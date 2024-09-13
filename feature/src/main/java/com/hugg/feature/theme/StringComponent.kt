@@ -24,6 +24,7 @@ const val WORD_REGISTRATION = "등록"
 const val WORD_MODIFY = "수정"
 const val WORD_MEMO = "메모"
 const val WORD_ADD = "추가"
+const val WORD_ALARM = "알람"
 
 // --------- 기타 --------- //
 const val COPY_COMPLETE_TEXT = "클립보드에 배우자 코드가 복사되었어요!"
@@ -82,6 +83,7 @@ val CALENDAR_SCHEDULE_MEDICINE_KIND_LIST = listOf(
     "IVF-M HP", "기타"
 )
 const val CALENDAR_SCHEDULE_MEDICINE_DOSE = "약 용량*"
+const val CALENDAR_SCHEDULE_DAILY_INTAKE_COUNT = "하루 복용 횟수*"
 const val CALENDAR_SCHEDULE_INJECTION_KIND = "주사 종류*"
 const val CALENDAR_SCHEDULE_INJECTION_KIND_HINT = "주사 종류 선택"
 val CALENDAR_SCHEDULE_INJECTION_KIND_LIST = listOf(
@@ -100,6 +102,9 @@ const val CALENDAR_SCHEDULE_DOSE_HINT = "용량 입력"
 val CALENDAR_SCHEDULE_INJECTION_BASIC_DOSE_LIST = listOf(
     "75", "150", "300", "400", "900"
 )
+const val CALENDAR_SCHEDULE_DAILY_ADMINISTER_COUNT = "하루 투여 횟수*"
+const val CALENDAR_SCHEDULE_ALARM_HINT = "활성화시 진동이 계속 울려요"
+const val CALENDAR_SCHEDULE_DEFAULT_TIME = "오전 9:00"
 
 // --------- 가계부 --------- //
 const val ACCOUNT_ALL = "전체"

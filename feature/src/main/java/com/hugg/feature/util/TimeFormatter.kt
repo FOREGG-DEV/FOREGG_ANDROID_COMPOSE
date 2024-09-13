@@ -151,4 +151,10 @@ object TimeFormatter {
         val newFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         return date.format(newFormat)
     }
+
+    fun getTimeFormatByKor(hour : Int, minute : Int) : String {
+        val amPm = if (hour < 12) "오전" else "오후"
+        val hourTime = if (hour % 12 == 0 && amPm == "오후") 12 else hour % 12
+        return String.format("%s %d:%02d", amPm, hourTime, minute)
+    }
 }

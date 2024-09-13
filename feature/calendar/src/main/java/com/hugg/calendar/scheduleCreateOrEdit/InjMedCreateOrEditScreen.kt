@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,6 +24,8 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,12 +46,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hugg.domain.model.enums.RecordType
+import com.hugg.domain.model.vo.calendar.RepeatTimeVo
 import com.hugg.feature.R
 import com.hugg.feature.theme.ACCOUNT_CREATE_CONTENT_HINT
+import com.hugg.feature.theme.ACCOUNT_ROUND_UNIT_WITHOUT_CAR
 import com.hugg.feature.theme.Background
+import com.hugg.feature.theme.Black
 import com.hugg.feature.theme.CALENDAR_INJECTION_UNIT
 import com.hugg.feature.theme.CALENDAR_MEDICINE_UNIT
 import com.hugg.feature.theme.CALENDAR_SCHEDULE_ABOUT_MEDICINE
+import com.hugg.feature.theme.CALENDAR_SCHEDULE_ALARM_HINT
+import com.hugg.feature.theme.CALENDAR_SCHEDULE_DAILY_ADMINISTER_COUNT
+import com.hugg.feature.theme.CALENDAR_SCHEDULE_DAILY_INTAKE_COUNT
 import com.hugg.feature.theme.CALENDAR_SCHEDULE_DOSE_HINT
 import com.hugg.feature.theme.CALENDAR_SCHEDULE_INJECTION_BASIC_DOSE_LIST
 import com.hugg.feature.theme.CALENDAR_SCHEDULE_INJECTION_DOSE
@@ -59,13 +68,19 @@ import com.hugg.feature.theme.CALENDAR_SCHEDULE_MEDICINE_DOSE
 import com.hugg.feature.theme.CALENDAR_SCHEDULE_MEDICINE_KIND
 import com.hugg.feature.theme.CALENDAR_SCHEDULE_MEDICINE_KIND_HINT
 import com.hugg.feature.theme.CALENDAR_SCHEDULE_MEDICINE_KIND_LIST
+import com.hugg.feature.theme.Disabled
 import com.hugg.feature.theme.Gs10
+import com.hugg.feature.theme.Gs20
 import com.hugg.feature.theme.Gs50
+import com.hugg.feature.theme.Gs60
 import com.hugg.feature.theme.Gs70
 import com.hugg.feature.theme.Gs80
 import com.hugg.feature.theme.Gs90
 import com.hugg.feature.theme.HuggTypography
+import com.hugg.feature.theme.MainNormal
+import com.hugg.feature.theme.WORD_ALARM
 import com.hugg.feature.theme.White
+import com.hugg.feature.util.UserInfo
 
 @Composable
 fun InjMedCreateOrEditScreen(
@@ -75,26 +90,50 @@ fun InjMedCreateOrEditScreen(
     onClickKind : (String) -> Unit = {},
     onChangedName : (String) -> Unit = {},
     onChangedDose : (String) -> Unit = {},
+    onClickMinusBtn : () -> Unit = {},
+    onClickPlusBtn : () -> Unit = {},
+    onClickTimePickerBtn : (Int) -> Unit = {},
+    onCheckedChange : (Boolean) -> Unit = {},
 ) {
+    LazyColumn{
+        item {
+            InputKindView(
+                type = uiState.recordType,
+                kind = uiState.name,
+                onClickDropDown = onClickDropDown,
+                interactionSource = interactionSource,
+                isExpandMenu = uiState.isExpandDropDown,
+                onClickKind = onClickKind,
+                onChangedKind = onChangedName
+            )
 
-    InputKindView(
-        type = uiState.recordType,
-        kind = uiState.name,
-        onClickDropDown = onClickDropDown,
-        interactionSource = interactionSource,
-        isExpandMenu = uiState.isExpandDropDown,
-        onClickKind = onClickKind,
-        onChangedKind = onChangedName
-    )
+            Spacer(modifier = Modifier.size(32.dp))
+        }
 
-    Spacer(modifier = Modifier.size(32.dp))
+        item {
+            InputDoseView(
+                type = uiState.recordType,
+                dose = uiState.dose,
+                onChangedDose = onChangedDose,
+                interactionSource = interactionSource
+            )
 
-    InputDoseView(
-        type = uiState.recordType,
-        dose = uiState.dose,
-        onChangedDose = onChangedDose,
-        interactionSource = interactionSource
-    )
+            Spacer(modifier = Modifier.size(32.dp))
+        }
+
+        item {
+            SelectDailyTakeCount(
+                repeatCount = uiState.repeatCount,
+                repeatTimeList = uiState.repeatTimeList,
+                isChecked = uiState.isAlarmCheck,
+                onClickMinusBtn = onClickMinusBtn,
+                onClickPlusBtn = onClickPlusBtn,
+                onClickTimePickerBtn = onClickTimePickerBtn,
+                onCheckedChange = onCheckedChange,
+                interactionSource = interactionSource
+            )
+        }
+    }
 }
 
 @Composable
@@ -297,11 +336,14 @@ internal fun InjectionDoseChipView(
     Box(
         modifier = Modifier
             .size(width = 60.dp, height = 32.dp)
-            .background(color = if(dose == basicDose) Gs70 else Gs10, shape = RoundedCornerShape(999.dp))
+            .background(
+                color = if (dose == basicDose) Gs70 else Gs10,
+                shape = RoundedCornerShape(999.dp)
+            )
             .clickable(
                 onClick = {
-                    if(dose == basicDose) onClickDoseChip("") else onClickDoseChip(basicDose)
-                          },
+                    if (dose == basicDose) onClickDoseChip("") else onClickDoseChip(basicDose)
+                },
                 interactionSource = interactionSource,
                 indication = null
             ),
@@ -311,6 +353,231 @@ internal fun InjectionDoseChipView(
             text = basicDose,
             style = HuggTypography.h4,
             color = if(dose == basicDose) White else Gs80
+        )
+    }
+}
+
+@Composable
+internal fun SelectDailyTakeCount(
+    type: RecordType = RecordType.INJECTION,
+    repeatCount : Int = 1,
+    repeatTimeList : List<RepeatTimeVo> = emptyList(),
+    onClickMinusBtn : () -> Unit = {},
+    onClickPlusBtn : () -> Unit = {},
+    onClickTimePickerBtn : (Int) -> Unit = {},
+    isChecked : Boolean = true,
+    onCheckedChange : (Boolean) -> Unit = {},
+    interactionSource: MutableInteractionSource,
+){
+    val title = if(type == RecordType.INJECTION) CALENDAR_SCHEDULE_DAILY_ADMINISTER_COUNT else CALENDAR_SCHEDULE_DAILY_INTAKE_COUNT
+
+    Text(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        color = Gs80,
+        style = HuggTypography.h3,
+        text = title
+    )
+
+    Spacer(modifier = Modifier.size(4.dp))
+
+    Row(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.Bottom
+    ) {
+        Row(
+            modifier = Modifier
+                .width(168.dp)
+                .height(48.dp)
+                .background(color = White, shape = RoundedCornerShape(8.dp)),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Row(
+                modifier = Modifier
+                    .weight(1f),
+                horizontalArrangement = Arrangement.Start
+            ){
+                Box(
+                    modifier = Modifier
+                        .width(51.dp)
+                        .height(48.dp)
+                        .background(
+                            color = if (repeatCount == 1) Disabled else Gs10,
+                            shape = RoundedCornerShape(topStart = 8.dp, bottomStart = 8.dp)
+                        )
+                        .clickable(
+                            onClick = onClickMinusBtn,
+                            interactionSource = interactionSource,
+                            indication = null
+                        ),
+                    contentAlignment = Alignment.Center
+                ){
+                    Image(
+                        painter = painterResource(id = if(repeatCount == 1) R.drawable.ic_minus_white else R.drawable.ic_minus_gs_70),
+                        contentDescription = null
+                    )
+                }
+            }
+
+            Text(
+                color = Black,
+                style = HuggTypography.h3,
+                text = repeatCount.toString()
+            )
+
+            Row(
+                modifier = Modifier
+                    .weight(1f),
+                horizontalArrangement = Arrangement.End
+            ) {
+                Box(
+                    modifier = Modifier
+                        .width(51.dp)
+                        .height(48.dp)
+                        .background(
+                            color = Gs10,
+                            shape = RoundedCornerShape(topEnd = 8.dp, bottomEnd = 8.dp)
+                        )
+                        .clickable(
+                            onClick = onClickPlusBtn,
+                            interactionSource = interactionSource,
+                            indication = null
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        modifier = Modifier.size(14.dp),
+                        painter = painterResource(id = R.drawable.ic_plus_gs_70),
+                        contentDescription = null
+                    )
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.width(8.dp))
+
+        Text(
+            style = HuggTypography.h3,
+            color = Gs70,
+            text = ACCOUNT_ROUND_UNIT_WITHOUT_CAR
+        )
+    }
+
+    Spacer(modifier = Modifier.size(8.dp))
+
+    repeat(repeatCount){ index ->
+        TimePickerView(
+            onClickTimePickerBtn = onClickTimePickerBtn,
+            time = repeatTimeList[index].time,
+            index = index,
+            interactionSource = interactionSource
+        )
+
+        Spacer(modifier = Modifier.size(8.dp))
+    }
+
+    Spacer(modifier = Modifier.size(8.dp))
+
+    SelectAlarmOnAndOffView(
+        isChecked = isChecked,
+        onCheckedChange = onCheckedChange
+    )
+}
+
+@Composable
+internal fun TimePickerView(
+    onClickTimePickerBtn : (Int) -> Unit = {},
+    time : String = "",
+    index : Int = 0,
+    interactionSource: MutableInteractionSource,
+){
+    Row(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth()
+            .height(48.dp)
+            .background(color = White, shape = RoundedCornerShape(8.dp))
+            .clickable(
+                onClick = { onClickTimePickerBtn(index) },
+                interactionSource = interactionSource,
+                indication = null
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.Start
+        ){
+            Box(
+                modifier = Modifier
+                    .width(48.dp)
+                    .height(48.dp)
+                    .background(
+                        color = MainNormal,
+                        shape = RoundedCornerShape(topStart = 8.dp, bottomStart = 8.dp)
+                    ),
+                contentAlignment = Alignment.Center
+            ){
+                Image(
+                    painter = painterResource(id = R.drawable.ic_clock_white),
+                    contentDescription = null
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.width(16.dp))
+
+        Text(
+            color = Gs50,
+            style = HuggTypography.h3,
+            text = time
+        )
+    }
+}
+
+@Composable
+internal fun SelectAlarmOnAndOffView(
+    isChecked : Boolean = true,
+    onCheckedChange : (Boolean) -> Unit = {},
+){
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth()
+            .background(color = White, RoundedCornerShape(8.dp))
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                color = Gs80,
+                style = HuggTypography.h2,
+                text = WORD_ALARM
+            )
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Switch(
+                modifier = Modifier
+                    .size(width = 49.dp, height = 28.dp),
+                checked = isChecked,
+                onCheckedChange = onCheckedChange,
+                colors = SwitchDefaults.colors(
+                    checkedThumbColor = White,
+                    checkedTrackColor = MainNormal,
+                    checkedBorderColor = MainNormal,
+                    uncheckedThumbColor = White,
+                    uncheckedTrackColor = Gs20,
+                    uncheckedBorderColor = Gs20,
+                )
+            )
+        }
+
+        Spacer(modifier = Modifier.size(4.dp))
+
+        Text(
+            color = Gs60,
+            style = HuggTypography.p3_l,
+            text = CALENDAR_SCHEDULE_ALARM_HINT
         )
     }
 }

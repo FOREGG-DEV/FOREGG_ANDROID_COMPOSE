@@ -1,5 +1,6 @@
 package com.hugg.calendar.scheduleCreateOrEdit
 
+import android.app.TimePickerDialog
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
@@ -16,12 +17,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.hugg.feature.R
 import com.hugg.domain.model.enums.CreateOrEditType
 import com.hugg.domain.model.enums.RecordType
 import com.hugg.domain.model.enums.TopBarLeftType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
+import com.hugg.feature.util.TimeFormatter
+import java.util.Calendar
 
 @Composable
 fun ScheduleCreateOrEditContainer(
@@ -35,6 +39,18 @@ fun ScheduleCreateOrEditContainer(
     val context = LocalContext.current
     val interactionSource = remember { MutableInteractionSource() }
 
+    val calendar = Calendar.getInstance()
+    val timePickerListener = TimePickerDialog.OnTimeSetListener { _, hour, minute ->
+        viewModel.setRepeatTimeList(TimeFormatter.getTimeFormatByKor(hour, minute))
+    }
+    val timePickerDialog = TimePickerDialog(context,
+        R.style.DatePickerStyle,
+        timePickerListener,
+        calendar.get(Calendar.HOUR_OF_DAY),
+        calendar.get(Calendar.MINUTE),
+        false
+    )
+
     LaunchedEffect(Unit){
         viewModel.initView(pageType, recordType, id)
     }
@@ -47,7 +63,14 @@ fun ScheduleCreateOrEditContainer(
         onClickDropDown = { viewModel.showOrCancelDropDown() },
         onClickKind = { kind -> viewModel.onChangedName(kind)},
         onChangedName = { name -> viewModel.onChangedName(name)},
-        onChangedDose = { dose -> viewModel.onChangedDose(dose) }
+        onChangedDose = { dose -> viewModel.onChangedDose(dose) },
+        onClickMinusBtn = { viewModel.onClickMinusBtn() },
+        onClickPlusBtn = { viewModel.onClickPlusBtn() },
+        onClickTimePickerBtn = { index ->
+            viewModel.setTouchedTimePicker(index)
+            timePickerDialog.show()
+        },
+        onCheckedChange = { checked -> viewModel.onCheckedChange(checked) }
     )
 }
 
@@ -60,6 +83,10 @@ fun ScheduleCreateOrEditScreen(
     onClickKind : (String) -> Unit = {},
     onChangedName : (String) -> Unit = {},
     onChangedDose : (String) -> Unit = {},
+    onClickMinusBtn : () -> Unit = {},
+    onClickPlusBtn : () -> Unit = {},
+    onClickTimePickerBtn : (Int) -> Unit = {},
+    onCheckedChange : (Boolean) -> Unit = {},
 ) {
     val topBarText = when(uiState.recordType) {
         RecordType.MEDICINE -> CALENDAR_SCHEDULE_ABOUT_MEDICINE
@@ -89,7 +116,11 @@ fun ScheduleCreateOrEditScreen(
             onClickDropDown = onClickDropDown,
             onClickKind = onClickKind,
             onChangedName = onChangedName,
-            onChangedDose = onChangedDose
+            onChangedDose = onChangedDose,
+            onClickMinusBtn = onClickMinusBtn,
+            onClickPlusBtn = onClickPlusBtn,
+            onClickTimePickerBtn = onClickTimePickerBtn,
+            onCheckedChange = onCheckedChange
         )
     }
 }
