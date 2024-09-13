@@ -358,7 +358,7 @@ fun SelectRoundView(
                 ) {
                     Image(
                         modifier = Modifier.size(14.dp),
-                        painter = painterResource(id = if(round == 0) R.drawable.ic_plus_white else R.drawable.ic_plus_gs_70),
+                        painter = painterResource(id = if(round == UserInfo.info.round) R.drawable.ic_plus_white else R.drawable.ic_plus_gs_70),
                         contentDescription = null
                     )
                 }
