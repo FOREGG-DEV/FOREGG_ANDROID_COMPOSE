@@ -137,14 +137,12 @@ class AccountViewModel @Inject constructor(
     }
 
     fun onClickNextRound(){
-        round++
-        updateSelectedRound()
+        updateSelectedRound(uiState.value.nowRound + 1)
     }
 
     fun onClickPrevRound(){
-        if(round == 0) return
-        round--
-        updateSelectedRound()
+        if(uiState.value.nowRound == 0) return
+        updateSelectedRound(uiState.value.nowRound - 1)
     }
 
     fun updateSelectedBottomSheetType(type : AccountBottomSheetType){
@@ -259,8 +257,7 @@ class AccountViewModel @Inject constructor(
 
     private fun handleSuccessGetMyInfo(result : ProfileDetailResponseVo){
         UserInfo.updateInfo(result)
-        round++
-        updateSelectedRound()
+        updateSelectedRound(uiState.value.nowRound + 1)
     }
 
     private fun handleSuccessDeleteAccount(isComplete : Boolean){
@@ -292,7 +289,7 @@ class AccountViewModel @Inject constructor(
         if(isChange) setView()
     }
 
-    private fun updateSelectedRound(){
+    private fun updateSelectedRound(round : Int){
         updateState(
             uiState.value.copy(nowRound = round)
         )
