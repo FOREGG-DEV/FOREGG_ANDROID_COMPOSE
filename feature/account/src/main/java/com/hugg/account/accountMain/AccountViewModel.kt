@@ -296,7 +296,7 @@ class AccountViewModel @Inject constructor(
         updateState(
             uiState.value.copy(nowRound = round)
         )
-        getSubsidies()
+        getAccountByRound()
     }
 
     private fun getAccountByMonth(){
