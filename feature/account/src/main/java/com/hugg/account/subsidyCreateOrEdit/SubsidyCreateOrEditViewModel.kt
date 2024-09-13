@@ -76,6 +76,8 @@ class SubsidyCreateOrEditViewModel @Inject constructor(
         } catch (e: NumberFormatException) {
             money
         }
+
+        if(money == uiState.value.money) return
         updateState(
             uiState.value.copy(money =  newMoney)
         )

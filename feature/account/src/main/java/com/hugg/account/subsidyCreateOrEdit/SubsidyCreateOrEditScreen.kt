@@ -78,7 +78,7 @@ fun SubsidyCreateOrEditContainer(
     val context = LocalContext.current
     val interactionSource = remember { MutableInteractionSource() }
 
-    LaunchedEffect(Unit){
+    LaunchedEffect(key1 = type, key2 = id, key3 = round){
         viewModel.initTypeAndId(type, id, round)
     }
 
