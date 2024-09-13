@@ -1,4 +1,4 @@
-package com.hugg.account
+package com.hugg.account.accountMain
 
 import com.hugg.domain.model.enums.AccountBottomSheetType
 import com.hugg.domain.model.enums.AccountTabType

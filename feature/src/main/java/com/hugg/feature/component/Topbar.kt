@@ -128,6 +128,7 @@ fun DrawRightItem(
         TopBarRightType.CREATE -> DrawCreateBtn(rightBtnClicked, interactionSource)
         TopBarRightType.CHECK -> DrawCheckBtn(rightBtnClicked, interactionSource)
         TopBarRightType.DELETE -> DrawDeleteBtn(rightBtnClicked, interactionSource)
+        TopBarRightType.DELETE_GS30 -> DrawDeleteGs30Btn(rightBtnClicked, interactionSource)
         TopBarRightType.NONE -> {}
     }
 }
@@ -306,6 +307,27 @@ fun DrawDeleteBtn(
                 indication = null
             ),
         imageVector = ImageVector.vectorResource(R.drawable.ic_delete),
+        contentDescription = null
+    )
+    Spacer(modifier = Modifier.width(16.dp))
+}
+
+@Composable
+fun DrawDeleteGs30Btn(
+    rightBtnClicked : () -> Unit = {},
+    interactionSource : MutableInteractionSource
+){
+    Image(
+        modifier = Modifier
+            .width(48.dp)
+            .height(48.dp)
+            .padding(8.dp)
+            .clickable(
+                onClick = rightBtnClicked,
+                interactionSource = interactionSource,
+                indication = null
+            ),
+        imageVector = ImageVector.vectorResource(R.drawable.ic_delete_gs_30),
         contentDescription = null
     )
     Spacer(modifier = Modifier.width(16.dp))

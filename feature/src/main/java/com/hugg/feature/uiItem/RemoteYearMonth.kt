@@ -1,4 +1,4 @@
-package com.hugg.feature.component
+package com.hugg.feature.uiItem
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable

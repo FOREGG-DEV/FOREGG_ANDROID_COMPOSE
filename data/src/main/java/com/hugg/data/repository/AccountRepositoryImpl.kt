@@ -5,6 +5,7 @@ import com.hugg.data.base.BaseRepository
 import com.hugg.data.mapper.UnitResponseMapper
 import com.hugg.data.mapper.account.AccountDetailResponseMapper
 import com.hugg.data.mapper.account.AccountItemResponseMapper
+import com.hugg.data.mapper.account.SubsidyDetailResponseMapper
 import com.hugg.data.mapper.account.SubsidyResponseMapper
 import com.hugg.domain.base.ApiState
 import com.hugg.domain.model.request.account.AccountCreateRequestVo
@@ -14,6 +15,7 @@ import com.hugg.domain.model.request.account.SubsidyCreateEditRequestVo
 import com.hugg.domain.model.request.account.SubsidyRequestVo
 import com.hugg.domain.model.response.account.AccountDetailResponseVo
 import com.hugg.domain.model.response.account.AccountResponseVo
+import com.hugg.domain.model.response.account.SubsidyDetailResponseVo
 import com.hugg.domain.model.response.account.SubsidyListResponseVo
 import com.hugg.domain.repository.AccountRepository
 import kotlinx.coroutines.flow.Flow
@@ -49,6 +51,10 @@ class AccountRepositoryImpl @Inject constructor(
 
     override suspend fun editAccount(request: AccountEditRequestVo): Flow<ApiState<Unit>> {
         return apiLaunch(apiCall = { accountApi.modifyAccount(request.id, request.request) }, UnitResponseMapper )
+    }
+
+    override suspend fun getSubsidyDetail(request: Long): Flow<ApiState<SubsidyDetailResponseVo>> {
+        return apiLaunch(apiCall = { accountApi.getSubsidyDetail(request) }, SubsidyDetailResponseMapper )
     }
 
     override suspend fun createSubsidy(request: SubsidyCreateEditRequestVo): Flow<ApiState<Unit>> {

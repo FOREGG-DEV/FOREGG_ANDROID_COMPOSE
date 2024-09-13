@@ -6,11 +6,15 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
-import com.hugg.account.AccountContainer
+import com.hugg.account.accountMain.AccountContainer
+import com.hugg.account.subsidyCreateOrEdit.SubsidyCreateOrEditContainer
+import com.hugg.account.subsidyList.SubsidyListContainer
 import com.hugg.calendar.CalendarContainer
+import com.hugg.domain.model.enums.CreateOrEditType
 import com.hugg.domain.model.enums.SurgeryType
 import com.hugg.domain.model.request.sign.SignUpMaleRequestVo
 import com.hugg.domain.model.request.sign.SignUpRequestVo
+import com.hugg.feature.util.UserInfo
 import com.hugg.sign.femaleSignUp.chooseSurgery.ChooseSurgeryContainer
 import com.hugg.sign.femaleSignUp.spouseCodeFemale.SpouseCodeFemaleContainer
 import com.hugg.sign.femaleSignUp.startSurgery.SurgeryStartContainer
@@ -150,6 +154,42 @@ fun NavGraphBuilder.calendarGraph(navController: NavHostController) {
 
 fun NavGraphBuilder.accountGraph(navController: NavHostController) {
     navigation(startDestination = Routes.AccountScreen.route, route = Routes.AccountGraph.route) {
-        composable(Routes.AccountScreen.route) { AccountContainer() }
+
+        composable(Routes.AccountScreen.route) { AccountContainer(
+            navigateToSubsidyList = { round -> navController.navigate(Routes.AccountSubsidyList.getRouteAccountSubsidyList(round)) }
+        ) }
+
+        composable(
+            route = Routes.AccountSubsidyList.route,
+            arguments = listOf(
+                navArgument("round") { type = NavType.IntType },
+            )
+        ) {
+            val round = it.arguments?.getInt("round") ?: UserInfo.info.round
+            SubsidyListContainer(
+                onClickCreateEditSubsidyBtn = {id, type, round -> navController.navigate(Routes.AccountSubsidyCreateOrEdit.getRouteAccountSubsidyCreateOrEdit(id, type.name, round)) },
+                nowRound = round,
+                goToBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = Routes.AccountSubsidyCreateOrEdit.route,
+            arguments = listOf(
+                navArgument("id") { type = NavType.LongType },
+                navArgument("round") { type = NavType.IntType },
+                navArgument("type") { type = NavType.StringType}
+            )
+        ) {
+            val id = it.arguments?.getLong("id") ?: -1
+            val round = it.arguments?.getInt("round") ?: UserInfo.info.round
+            val type = CreateOrEditType.getEnumType(it.arguments?.getString("type") ?: "")
+            SubsidyCreateOrEditContainer(
+                id = id,
+                type = type,
+                round = round,
+                goToBack = { navController.popBackStack() }
+            )
+        }
     }
 }
