@@ -100,47 +100,11 @@ fun SubsidyDetailBox(
 
             Spacer(modifier = Modifier.size(8.dp))
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Spacer(modifier = Modifier.size(16.dp))
-
-                Text(
-                    text = ACCOUNT_EXPENDITURE,
-                    style = HuggTypography.h2,
-                    color = Gs70
-                )
-
-                Spacer(modifier = Modifier.weight(1f))
-
-                Text(
-                    text = UnitFormatter.getMoneyFormatWithUnit(item.expenditure),
-                    style = HuggTypography.p1,
-                    color = Gs90
-                )
-            }
+            DetailMoneyView(ACCOUNT_EXPENDITURE)
 
             Spacer(modifier = Modifier.size(8.dp))
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Spacer(modifier = Modifier.size(16.dp))
-
-                Text(
-                    text = ACCOUNT_AVAILABLE_MONEY,
-                    style = HuggTypography.h2,
-                    color = Gs70
-                )
-
-                Spacer(modifier = Modifier.weight(1f))
-
-                Text(
-                    text = UnitFormatter.getMoneyFormatWithUnit(item.available),
-                    style = HuggTypography.p1,
-                    color = Gs90
-                )
-            }
+            DetailMoneyView(ACCOUNT_AVAILABLE_MONEY)
 
             Spacer(modifier = Modifier.size(16.dp))
 
@@ -175,5 +139,32 @@ fun SubsidyDetailBox(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun DetailMoneyView(
+    text : String = "",
+    item: SubsidyListResponseVo = SubsidyListResponseVo()
+){
+    val money = if(text == ACCOUNT_AVAILABLE_MONEY) item.available else item.expenditure
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Spacer(modifier = Modifier.size(16.dp))
+
+        Text(
+            text = text,
+            style = HuggTypography.h2,
+            color = Gs70
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Text(
+            text = UnitFormatter.getMoneyFormatWithUnit(money),
+            style = HuggTypography.p1,
+            color = Gs90
+        )
     }
 }

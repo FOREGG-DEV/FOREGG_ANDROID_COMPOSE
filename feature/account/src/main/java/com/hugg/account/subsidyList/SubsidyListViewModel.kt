@@ -10,26 +10,25 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SubsidiyListViewModel @Inject constructor(
+class SubsidyListViewModel @Inject constructor(
     private val accountRepository: AccountRepository
 ) : BaseViewModel<SubsidyListPageState>(
     SubsidyListPageState()
 ) {
 
     private var isRoundInitialized = false
-    private var round = UserInfo.info.round
 
     fun initRound(round: Int){
         if(isRoundInitialized) {
             setView()
-            return
         }
-        this.round = round
-        updateNowRound()
-        isRoundInitialized = true
+        else{
+            updateNowRound(round)
+            isRoundInitialized = true
+        }
     }
 
-    private fun updateNowRound(){
+    private fun updateNowRound(round : Int){
         updateState(
             uiState.value.copy(nowRound = round)
         )
@@ -37,14 +36,12 @@ class SubsidiyListViewModel @Inject constructor(
     }
 
     fun onClickNextRound(){
-        round++
-        updateNowRound()
+        updateNowRound(uiState.value.nowRound + 1)
     }
 
     fun onClickPrevRound(){
-        if(round == 0) return
-        round--
-        updateNowRound()
+        if(uiState.value.nowRound == 0) return
+        updateNowRound(uiState.value.nowRound - 1)
     }
 
     private fun setView(){

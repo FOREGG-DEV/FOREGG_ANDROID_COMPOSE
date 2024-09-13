@@ -19,7 +19,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,7 +32,6 @@ import com.hugg.domain.model.enums.CreateOrEditType
 import com.hugg.feature.R
 import com.hugg.domain.model.enums.TopBarLeftType
 import com.hugg.domain.model.enums.TopBarMiddleType
-import com.hugg.feature.component.BlankBtn
 import com.hugg.feature.component.BlankBtnWithIcon
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.ACCOUNT_ADD_SUBSIDY
@@ -41,7 +39,6 @@ import com.hugg.feature.theme.ACCOUNT_SUBSIDY_MONEY
 import com.hugg.feature.theme.Background
 import com.hugg.feature.theme.Gs70
 import com.hugg.feature.theme.HuggTypography
-import com.hugg.feature.theme.WORD_NEXT
 import com.hugg.feature.uiItem.RemoteRound
 import com.hugg.feature.uiItem.SubsidyDetailBox
 import com.hugg.feature.util.UserInfo
@@ -51,7 +48,7 @@ fun SubsidyListContainer(
     goToBack : () -> Unit = {},
     onClickCreateEditSubsidyBtn : (Long, CreateOrEditType, Int) -> Unit = { _, _, _-> },
     nowRound : Int = UserInfo.info.round,
-    viewModel: SubsidiyListViewModel = hiltViewModel()
+    viewModel: SubsidyListViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 

@@ -57,6 +57,7 @@ import com.hugg.feature.component.HuggDialog
 import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UnitFormatter
+import com.hugg.feature.util.UserInfo
 import java.util.Calendar
 
 
@@ -185,7 +186,7 @@ fun AccountCreateOrEditScreen(
             Spacer(modifier = Modifier.size(32.dp))
 
             SelectRoundView(
-                round = uiState.nowRound.toString(),
+                round = uiState.nowRound,
                 onClickMinusBtn = onClickMinusBtn,
                 onClickPlusBtn = onClickPlusBtn,
                 interactionSource = interactionSource
@@ -281,7 +282,7 @@ fun SelectDateView(
 
 @Composable
 fun SelectRoundView(
-    round : String = "",
+    round : Int = 0,
     onClickMinusBtn: () -> Unit = {},
     onClickPlusBtn: () -> Unit = {},
     interactionSource : MutableInteractionSource
@@ -312,7 +313,7 @@ fun SelectRoundView(
                         .width(51.dp)
                         .height(48.dp)
                         .background(
-                            color = Gs10,
+                            color = if(round == 0) Disabled else Gs10,
                             shape = RoundedCornerShape(topStart = 8.dp, bottomStart = 8.dp)
                         )
                         .clickable(
@@ -323,7 +324,7 @@ fun SelectRoundView(
                     contentAlignment = Alignment.Center
                 ){
                     Image(
-                        painter = painterResource(id = R.drawable.ic_minus_gs_70),
+                        painter = painterResource(id = if(round == 0) R.drawable.ic_minus_white else R.drawable.ic_minus_gs_70),
                         contentDescription = null
                     )
                 }
@@ -332,7 +333,7 @@ fun SelectRoundView(
             Text(
                 color = Black,
                 style = HuggTypography.h3,
-                text = round
+                text = round.toString()
             )
 
             Row(
@@ -345,7 +346,7 @@ fun SelectRoundView(
                         .width(51.dp)
                         .height(48.dp)
                         .background(
-                            color = Gs10,
+                            color = if(round == UserInfo.info.round) Disabled else Gs10,
                             shape = RoundedCornerShape(topEnd = 8.dp, bottomEnd = 8.dp)
                         )
                         .clickable(
@@ -357,7 +358,7 @@ fun SelectRoundView(
                 ) {
                     Image(
                         modifier = Modifier.size(14.dp),
-                        painter = painterResource(id = R.drawable.ic_plus_gs_70),
+                        painter = painterResource(id = if(round == UserInfo.info.round) R.drawable.ic_plus_white else R.drawable.ic_plus_gs_70),
                         contentDescription = null
                     )
                 }
