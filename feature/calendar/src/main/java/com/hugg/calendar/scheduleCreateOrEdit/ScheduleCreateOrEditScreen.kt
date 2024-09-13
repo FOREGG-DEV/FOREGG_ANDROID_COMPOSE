@@ -46,7 +46,8 @@ fun ScheduleCreateOrEditContainer(
         interactionSource = interactionSource,
         onClickDropDown = { viewModel.showOrCancelDropDown() },
         onClickKind = { kind -> viewModel.onChangedName(kind)},
-        onChangedName = { name -> viewModel.onChangedName(name)}
+        onChangedName = { name -> viewModel.onChangedName(name)},
+        onChangedDose = { dose -> viewModel.onChangedDose(dose) }
     )
 }
 
@@ -58,6 +59,7 @@ fun ScheduleCreateOrEditScreen(
     onClickDropDown : () -> Unit = {},
     onClickKind : (String) -> Unit = {},
     onChangedName : (String) -> Unit = {},
+    onChangedDose : (String) -> Unit = {},
 ) {
     val topBarText = when(uiState.recordType) {
         RecordType.MEDICINE -> CALENDAR_SCHEDULE_ABOUT_MEDICINE
@@ -86,7 +88,8 @@ fun ScheduleCreateOrEditScreen(
             interactionSource = interactionSource,
             onClickDropDown = onClickDropDown,
             onClickKind = onClickKind,
-            onChangedName = onChangedName
+            onChangedName = onChangedName,
+            onChangedDose = onChangedDose
         )
     }
 }

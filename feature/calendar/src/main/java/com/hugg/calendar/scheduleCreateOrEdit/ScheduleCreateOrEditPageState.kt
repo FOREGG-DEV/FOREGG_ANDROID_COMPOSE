@@ -10,4 +10,5 @@ data class ScheduleCreateOrEditPageState(
     val id : Long = -1,
     val name : String = "",
     val isExpandDropDown : Boolean = false,
+    val dose : String = ""
 ) : PageState

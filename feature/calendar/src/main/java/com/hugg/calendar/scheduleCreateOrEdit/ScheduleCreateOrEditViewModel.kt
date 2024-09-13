@@ -36,6 +36,12 @@ class ScheduleCreateOrEditViewModel @Inject constructor(
         )
     }
 
+    fun onChangedDose(dose : String){
+        updateState(
+            uiState.value.copy(dose = dose)
+        )
+    }
+
     private fun updateRecordType(type : RecordType){
         updateState(
             uiState.value.copy(recordType = type)

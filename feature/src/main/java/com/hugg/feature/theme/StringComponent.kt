@@ -73,56 +73,33 @@ const val CALENDAR_SCHEDULE_ABOUT_INJECTION = "주사 일정"
 const val CALENDAR_SCHEDULE_ABOUT_MEDICINE = "약 일정"
 const val CALENDAR_SCHEDULE_ABOUT_ETC = "기타 일정"
 const val CALENDAR_SCHEDULE_MEDICINE_KIND = "약 종류*"
+const val CALENDAR_SCHEDULE_MEDICINE_KIND_HINT = "약 종류 선택"
 val CALENDAR_SCHEDULE_MEDICINE_KIND_LIST = listOf(
-    "가니레버",
-    "고날에프",
-    "고나도핀",
-    "데카펩틸",
-    "루베리스",
-    "로렐린",
-    "레코벨",
-    "메노푸어",
-    "메리오날",
-    "벰폴라",
-    "세트로타이드",
-    "오가루트란",
-    "오비드렐",
-    "유트로핀",
-    "크녹산",
-    "퍼고베리스",
-    "프롤루텍스",
-    "플리트롭",
-    "퓨레곤",
-    "IVF-C",
-    "IVF-M HP",
-    "기타"
+    "가니레버", "고날에프", "고나도핀", "데카펩틸", "루베리스",
+    "로렐린", "레코벨", "메노푸어", "메리오날", "벰폴라",
+    "세트로타이드", "오가루트란", "오비드렐", "유트로핀", "크녹산",
+    "퍼고베리스", "프롤루텍스", "플리트롭", "퓨레곤", "IVF-C",
+    "IVF-M HP", "기타"
 )
+const val CALENDAR_SCHEDULE_MEDICINE_DOSE = "약 용량*"
 const val CALENDAR_SCHEDULE_INJECTION_KIND = "주사 종류*"
+const val CALENDAR_SCHEDULE_INJECTION_KIND_HINT = "주사 종류 선택"
 val CALENDAR_SCHEDULE_INJECTION_KIND_LIST = listOf(
-    "가니레버",
-    "고날에프",
-    "고나도핀",
-    "데카펩틸",
-    "루베리스",
-    "로렐린",
-    "레코벨",
-    "메노푸어",
-    "메리오날",
-    "벰폴라",
-    "세트로타이드",
-    "오가루트란",
-    "오비드렐",
-    "유트로핀",
-    "크녹산",
-    "퍼고베리스",
-    "프롤루텍스",
-    "플리트롭",
-    "퓨레곤",
-    "IVF-C",
-    "IVF-M HP",
+    "크리논겔", "듀파스톤", "유트로게스탄", "유트로게스탄질정", "예나트론",
+    "싸이클로제스트", "프로베라 5mg", "프로베라 10mg", "프레다 1mg", "프레다 2mg",
+    "프로기노바 1mg", "프로기노바 2mg", "프레미나 0.3mg", "프레미나 0.625mg", "안젤릭",
+    "페모스톤콘티", "야즈", "야스민", "페모스톤 2/10 노란색", "페모스톤 2/10 분홍색",
+    "크리멘 흰색", "크리멘 분홍색", "카버락틴", "팔로멜", "페마라",
+    "클로미펜", "아스피린 100mg (베이비)", "다이아벡스 250mg", "다이아벡스 500mg", "다이아벡스 1000mg",
+    "다이아벡스 엑스알 서방정 500mg", "다이아벡스 엑스알 서방정 1000mg", "액토스 15mg", "액토스 30mg", "덱사메타손",
+    "소론도", "비아그라", "맥시그라", "바이오아지니나", "포텐시에이터",
     "기타"
 )
-
+const val CALENDAR_SCHEDULE_INJECTION_DOSE = "주사 용량*"
+const val CALENDAR_SCHEDULE_DOSE_HINT = "용량 입력"
+val CALENDAR_SCHEDULE_INJECTION_BASIC_DOSE_LIST = listOf(
+    "75", "150", "300", "400", "900"
+)
 
 // --------- 가계부 --------- //
 const val ACCOUNT_ALL = "전체"
