@@ -14,6 +14,7 @@ data class AccountPageState(
     val startDay : String = "",
     val endDay : String = "",
     val selectedYearMonth : String = "",
+    val isCurrentMonth : Boolean = false,
     val nowRound : Int = UserInfo.info.round,
     val personalExpense : String = "",
     val totalExpense : String = "",

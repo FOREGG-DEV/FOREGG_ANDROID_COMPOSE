@@ -189,10 +189,11 @@ fun AccountScreen(
                 Spacer(modifier = Modifier.size(6.dp))
 
                 if (uiState.tabType == AccountTabType.MONTH) {
-                    RemoteYearMonth(
+                    RemoteMonth(
                         onClickPrevMonthBtn = onClickPrevMonthBtn,
                         onClickNextMonthBtn = onClickNextMonthBtn,
                         date = uiState.selectedYearMonth,
+                        isCurrent = uiState.isCurrentMonth,
                         interactionSource = interactionSource
                     )
                 }
@@ -383,6 +384,65 @@ fun RemoteRound(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun RemoteMonth(
+    onClickPrevMonthBtn : () -> Unit = {},
+    onClickNextMonthBtn : () -> Unit = {},
+    date : String = "",
+    isCurrent : Boolean = false,
+    interactionSource : MutableInteractionSource
+){
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Image(
+            modifier = Modifier
+                .width(48.dp)
+                .height(48.dp)
+                .padding(12.dp)
+                .clickable(
+                    onClick = onClickPrevMonthBtn,
+                    interactionSource = interactionSource,
+                    indication = null
+                ),
+            imageVector = ImageVector.vectorResource(R.drawable.ic_back_arrow_gs_60),
+            contentDescription = null
+        )
+
+        Spacer(modifier = Modifier.size(9.dp))
+
+        Text(
+            modifier = Modifier.align(Alignment.CenterVertically),
+            text = date,
+            color = Gs90,
+            style = HuggTypography.h2
+        )
+
+        Spacer(modifier = Modifier.size(9.dp))
+
+        Box(modifier = Modifier.size(48.dp)) {
+            if (!isCurrent) Image(
+                modifier = Modifier
+                    .width(48.dp)
+                    .height(48.dp)
+                    .padding(12.dp)
+                    .graphicsLayer(scaleX = -1f)
+                    .clickable(
+                        onClick = onClickNextMonthBtn,
+                        interactionSource = interactionSource,
+                        indication = null
+                    ),
+                imageVector = ImageVector.vectorResource(R.drawable.ic_back_arrow_gs_60),
+                contentDescription = null
+            )
+        }
+
+        Spacer(modifier = Modifier.size(9.dp))
+
     }
 }
 
