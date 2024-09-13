@@ -7,8 +7,10 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,6 +20,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
@@ -38,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
@@ -59,6 +63,7 @@ import com.hugg.feature.component.HuggTabBar
 import com.hugg.feature.component.PlusBtn
 import com.hugg.feature.uiItem.RemoteYearMonth
 import com.hugg.feature.component.TopBar
+import com.hugg.feature.theme.ACCOUNT_ADD_ROUND
 import com.hugg.feature.theme.ACCOUNT_ALL
 import com.hugg.feature.theme.ACCOUNT_ALL_EXPENSE
 import com.hugg.feature.theme.ACCOUNT_DIALOG_CREATE_ROUND
@@ -79,6 +84,7 @@ import com.hugg.feature.theme.CalendarPill
 import com.hugg.feature.theme.EmptySubsidyBoxColor
 import com.hugg.feature.theme.Gs20
 import com.hugg.feature.theme.Gs30
+import com.hugg.feature.theme.Gs50
 import com.hugg.feature.theme.Gs60
 import com.hugg.feature.theme.Gs70
 import com.hugg.feature.theme.Gs80
@@ -95,6 +101,7 @@ import com.hugg.feature.uiItem.SubsidyTotalBoxItem
 import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UnitFormatter
+import com.hugg.feature.util.UserInfo
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -252,10 +259,11 @@ fun AccountScreen(
                 Spacer(modifier = Modifier.size(6.dp))
 
                 if (uiState.tabType == AccountTabType.MONTH) {
-                    RemoteYearMonth(
+                    RemoteMonth(
                         onClickPrevMonthBtn = onClickPrevMonthBtn,
                         onClickNextMonthBtn = onClickNextMonthBtn,
                         date = uiState.selectedYearMonth,
+                        isCurrent = uiState.isCurrentMonth,
                         interactionSource = interactionSource
                     )
                 }
@@ -356,6 +364,65 @@ fun AccountScreen(
                 )
         )
         Spacer(modifier = Modifier.size(24.dp))
+    }
+}
+
+@Composable
+fun RemoteMonth(
+    onClickPrevMonthBtn : () -> Unit = {},
+    onClickNextMonthBtn : () -> Unit = {},
+    date : String = "",
+    isCurrent : Boolean = false,
+    interactionSource : MutableInteractionSource
+){
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Image(
+            modifier = Modifier
+                .width(48.dp)
+                .height(48.dp)
+                .padding(12.dp)
+                .clickable(
+                    onClick = onClickPrevMonthBtn,
+                    interactionSource = interactionSource,
+                    indication = null
+                ),
+            imageVector = ImageVector.vectorResource(R.drawable.ic_back_arrow_gs_60),
+            contentDescription = null
+        )
+
+        Spacer(modifier = Modifier.size(9.dp))
+
+        Text(
+            modifier = Modifier.align(Alignment.CenterVertically),
+            text = date,
+            color = Gs90,
+            style = HuggTypography.h2
+        )
+
+        Spacer(modifier = Modifier.size(9.dp))
+
+        Box(modifier = Modifier.size(48.dp)) {
+            if (!isCurrent) Image(
+                modifier = Modifier
+                    .width(48.dp)
+                    .height(48.dp)
+                    .padding(12.dp)
+                    .graphicsLayer(scaleX = -1f)
+                    .clickable(
+                        onClick = onClickNextMonthBtn,
+                        interactionSource = interactionSource,
+                        indication = null
+                    ),
+                imageVector = ImageVector.vectorResource(R.drawable.ic_back_arrow_gs_60),
+                contentDescription = null
+            )
+        }
+
+        Spacer(modifier = Modifier.size(9.dp))
+
     }
 }
 

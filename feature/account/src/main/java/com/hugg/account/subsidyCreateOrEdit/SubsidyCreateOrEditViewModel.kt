@@ -67,6 +67,7 @@ class SubsidyCreateOrEditViewModel @Inject constructor(
 
     fun onChangedMoney(money : String){
         val newMoney = UnitFormatter.getMoneyFormat(money)
+        if(newMoney == uiState.value.money) return
         updateState(
             uiState.value.copy(money =  newMoney)
         )

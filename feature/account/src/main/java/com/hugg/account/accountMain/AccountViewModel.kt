@@ -284,7 +284,10 @@ class AccountViewModel @Inject constructor(
 
     private fun updateSelectedYearMonth(isChange : Boolean = false){
         updateState(
-            uiState.value.copy(selectedYearMonth = TimeFormatter.getTodayYearAndMonthKor(year, month))
+            uiState.value.copy(
+                selectedYearMonth = TimeFormatter.getTodayYearAndMonthKor(year, month),
+                isCurrentMonth = year == TimeFormatter.getYear(today) && month == TimeFormatter.getMonth(today)
+            )
         )
         if(isChange) setView()
     }
@@ -293,7 +296,7 @@ class AccountViewModel @Inject constructor(
         updateState(
             uiState.value.copy(nowRound = round)
         )
-        setView()
+        getSubsidies()
     }
 
     private fun getAccountByMonth(){
