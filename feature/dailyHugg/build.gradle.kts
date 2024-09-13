@@ -1,6 +1,8 @@
 plugins {
     id("com.android.library")
-    id("org.jetbrains.kotlin.android")
+    kotlin("android")
+    kotlin("kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -23,6 +25,12 @@ android {
             )
         }
     }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.14"
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -33,11 +41,41 @@ android {
 }
 
 dependencies {
+    implementation(project(":feature"))
+    implementation(project(":domain"))
 
-    implementation("androidx.core:core-ktx:1.13.1")
-    implementation("androidx.appcompat:appcompat:1.7.0")
-    implementation("com.google.android.material:material:1.12.0")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.2.1")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+    implementation(AndroidX.CORE)
+    implementation(AndroidX.APPCOMPAT)
+    implementation(Google.MATERIAL)
+    implementation(AndroidX.NAVIGATION_COMPOSE)
+    implementation(AndroidX.LIFECYCLE_VIEW_MODEL_KTX)
+    implementation(AndroidX.LIFECYCLE_RUNTIME_KTX)
+    implementation(AndroidX.LIFECYCLE_RUNTIME_COMPOSE)
+    implementation(AndroidX.SPLASH)
+    implementation(AndroidX.THREE_TEN)
+    implementation(AndroidX.SWIPE_REFRESH)
+    implementation(AndroidX.DATA_STORE_PREFERENCES)
+    implementation(AndroidX.FRAGMENT_KTX)
+
+    //코루틴
+    implementation(Kotlin.COROUTINES_CORE)
+    implementation(Kotlin.COROUTINES)
+
+    //힐트
+    implementation(Google.HILT_ANDROID)
+    implementation(Google.HILT_CORE)
+    implementation(Google.HILT_COMPOSE)
+    implementation(Google.FCM)
+    implementation(Google.FCM_KTX)
+    implementation(Google.FIREBASE_ANALYTICS)
+    implementation(platform(Google.FIREBASE_BOM))
+
+    implementation(AndroidX.COMPOSE_BOM)
+    implementation(AndroidX.COMPOSE_MATERIAL)
+    implementation(AndroidX.COMPOSE_UI)
+    implementation(AndroidX.COMPOSE_GRAPHICS)
+    implementation(AndroidX.COMPOSE_PREVIEW)
+    implementation(AndroidX.ACTIVITY_COMPOSE)
+
+    kapt(Google.HILT_COMPILER)
 }
