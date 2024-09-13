@@ -189,10 +189,11 @@ fun AccountScreen(
                 Spacer(modifier = Modifier.size(6.dp))
 
                 if (uiState.tabType == AccountTabType.MONTH) {
-                    RemoteYearMonth(
+                    RemoteMonth(
                         onClickPrevMonthBtn = onClickPrevMonthBtn,
                         onClickNextMonthBtn = onClickNextMonthBtn,
                         date = uiState.selectedYearMonth,
+                        isCurrent = uiState.isCurrentMonth,
                         interactionSource = interactionSource
                     )
                 }
@@ -290,6 +291,156 @@ fun AccountScreen(
                 )
         )
         Spacer(modifier = Modifier.size(24.dp))
+    }
+}
+
+@Composable
+fun RemoteRound(
+    onClickPrevRoundBtn: () -> Unit = {},
+    onClickNextRoundBtn: () -> Unit = {},
+    onClickCreateRoundBtn: () -> Unit = {},
+    interactionSource: MutableInteractionSource,
+    uiState: AccountPageState = AccountPageState()
+) {
+    Box(
+        modifier = Modifier.fillMaxWidth()
+    ){
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(modifier = Modifier.size(48.dp)) {
+                if (uiState.nowRound != 0) Image(
+                    modifier = Modifier
+                        .width(48.dp)
+                        .height(48.dp)
+                        .padding(12.dp)
+                        .clickable(
+                            onClick = onClickPrevRoundBtn,
+                            interactionSource = interactionSource,
+                            indication = null
+                        ),
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_back_arrow_gs_60),
+                    contentDescription = null
+                )
+            }
+
+            Spacer(modifier = Modifier.size(35.dp))
+
+            Text(
+                modifier = Modifier.align(Alignment.CenterVertically),
+                text = UnitFormatter.getRoundFormat(uiState.nowRound),
+                color = Gs90,
+                style = HuggTypography.h2
+            )
+
+            Spacer(modifier = Modifier.size(35.dp))
+
+            Box(modifier = Modifier.size(48.dp)) {
+                if (uiState.nowRound != UserInfo.info.round) Image(
+                    modifier = Modifier
+                        .width(48.dp)
+                        .height(48.dp)
+                        .padding(12.dp)
+                        .graphicsLayer(scaleX = -1f)
+                        .clickable(
+                            onClick = onClickNextRoundBtn,
+                            interactionSource = interactionSource,
+                            indication = null
+                        ),
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_back_arrow_gs_60),
+                    contentDescription = null
+                )
+            }
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Spacer(modifier = Modifier.weight(1f))
+            if (uiState.nowRound == UserInfo.info.round) {
+                Box(
+                    modifier = Modifier
+                        .padding(end = 16.dp, top = 8.dp)
+                        .border(width = 0.5.dp, color = Gs20, shape = RoundedCornerShape(4.dp))
+                        .background(color = White, shape = RoundedCornerShape(4.dp)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .padding(horizontal = 8.dp, vertical = 6.dp)
+                            .clickable(
+                                onClick = onClickCreateRoundBtn,
+                                interactionSource = interactionSource,
+                                indication = null
+                            ),
+                        text = ACCOUNT_ADD_ROUND,
+                        style = HuggTypography.p2,
+                        color = Gs50
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun RemoteMonth(
+    onClickPrevMonthBtn : () -> Unit = {},
+    onClickNextMonthBtn : () -> Unit = {},
+    date : String = "",
+    isCurrent : Boolean = false,
+    interactionSource : MutableInteractionSource
+){
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Image(
+            modifier = Modifier
+                .width(48.dp)
+                .height(48.dp)
+                .padding(12.dp)
+                .clickable(
+                    onClick = onClickPrevMonthBtn,
+                    interactionSource = interactionSource,
+                    indication = null
+                ),
+            imageVector = ImageVector.vectorResource(R.drawable.ic_back_arrow_gs_60),
+            contentDescription = null
+        )
+
+        Spacer(modifier = Modifier.size(9.dp))
+
+        Text(
+            modifier = Modifier.align(Alignment.CenterVertically),
+            text = date,
+            color = Gs90,
+            style = HuggTypography.h2
+        )
+
+        Spacer(modifier = Modifier.size(9.dp))
+
+        Box(modifier = Modifier.size(48.dp)) {
+            if (!isCurrent) Image(
+                modifier = Modifier
+                    .width(48.dp)
+                    .height(48.dp)
+                    .padding(12.dp)
+                    .graphicsLayer(scaleX = -1f)
+                    .clickable(
+                        onClick = onClickNextMonthBtn,
+                        interactionSource = interactionSource,
+                        indication = null
+                    ),
+                imageVector = ImageVector.vectorResource(R.drawable.ic_back_arrow_gs_60),
+                contentDescription = null
+            )
+        }
+
+        Spacer(modifier = Modifier.size(9.dp))
+
     }
 }
 
