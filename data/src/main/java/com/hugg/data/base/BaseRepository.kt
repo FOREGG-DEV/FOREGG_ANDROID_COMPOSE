@@ -3,6 +3,7 @@ package com.hugg.data.base
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.hugg.domain.base.ApiState
+import com.hugg.domain.base.StatusCode
 import kotlinx.coroutines.flow.*
 import retrofit2.Response
 import java.io.Reader

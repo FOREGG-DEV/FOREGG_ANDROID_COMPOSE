@@ -61,6 +61,12 @@ object Endpoints {
         const val GET_DETAIL = "$LEDGER/{id}/detail"
     }
 
+    object SUBSIDY{
+        const val SUBSIDY = "/subsidy"
+        const val DELETE_MODIFY_SUBSIDY = " $SUBSIDY/{id}"
+        const val GET_SUBSIDY_BY_COUNT = "$SUBSIDY/byCount/{count}"
+    }
+
     object PROFILE{
         const val MY_INFO = "/myPage"
         const val MODIFY = "$MY_INFO/modifySurgery"

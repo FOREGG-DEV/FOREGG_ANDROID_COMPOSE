@@ -28,11 +28,10 @@ import com.hugg.domain.model.enums.TopBarLeftType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.domain.model.request.sign.SignUpMaleRequestVo
 import com.hugg.feature.component.FilledBtn
-import com.hugg.feature.component.HuggSnackBar
-import com.hugg.feature.component.HuggToast
 import com.hugg.feature.component.SignUpIndicator
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
+import com.hugg.feature.util.HuggToast
 
 
 @Composable
@@ -44,11 +43,13 @@ fun MaleSignUpContainer(
     viewModel: MaleSignUpViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         viewModel.eventFlow.collect { event ->
             when(event) {
                 MaleSignUpEvent.GoToMainEvent -> navigateGoToHome
+                MaleSignUpEvent.ShowErrorSpouseCodeEvent -> HuggToast.createToast(context, TOAST_ERROR_NOR_CORRECT_SPOUSE_CODE).show()
             }
         }
     }
@@ -147,11 +148,6 @@ fun MaleSignUpScreen(
             Spacer(modifier = Modifier.height(80.dp))
         }
     }
-
-    HuggToast(
-        visible = uiState.isShowErrorSpouseCode,
-        text = TOAST_ERROR_NOR_CORRECT_SPOUSE_CODE
-    )
 }
 
 @Preview

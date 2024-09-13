@@ -4,7 +4,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -37,11 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -53,19 +48,16 @@ import com.cheonjaeung.compose.grid.VerticalGrid
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
-import com.hugg.domain.model.enums.CalendarType
 import com.hugg.domain.model.enums.DayType
 import com.hugg.domain.model.enums.RecordType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.domain.model.vo.calendar.CalendarDayVo
-import com.hugg.domain.model.vo.calendar.ScheduleDetailVo
-import com.hugg.feature.R
 import com.hugg.feature.component.CancelBtn
 import com.hugg.feature.component.PlusBtn
+import com.hugg.feature.uiItem.RemoteYearMonth
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
 import com.hugg.feature.uiItem.ScheduleDetailItem
-import com.hugg.feature.util.TimeFormatter
 
 
 @Composable
@@ -119,10 +111,10 @@ fun CalendarScreen(
         ) {
             Spacer(modifier = Modifier.size(12.dp))
 
-            RemoteCalendar(
+            RemoteYearMonth(
                 onClickPrevMonthBtn = onClickPrevMonthBtn,
                 onClickNextMonthBtn = onClickNextMonthBtn,
-                uiState = uiState,
+                date = uiState.selectedYearMonth,
                 interactionSource = interactionSource
             )
 
@@ -186,62 +178,6 @@ fun CalendarScreen(
         onClickCreateScheduleBtn = onClickCreateScheduleBtn,
         interactionSource = interactionSource
     )
-}
-
-@Composable
-fun RemoteCalendar(
-    onClickPrevMonthBtn : () -> Unit = {},
-    onClickNextMonthBtn : () -> Unit = {},
-    uiState : CalendarPageState = CalendarPageState(),
-    interactionSource : MutableInteractionSource
-){
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center
-    ) {
-        Image(
-            modifier = Modifier
-                .width(48.dp)
-                .height(48.dp)
-                .padding(12.dp)
-                .clickable(
-                    onClick = onClickPrevMonthBtn,
-                    interactionSource = interactionSource,
-                    indication = null
-                ),
-            imageVector = ImageVector.vectorResource(R.drawable.ic_back_arrow_gs_70),
-            contentDescription = null
-        )
-
-        Spacer(modifier = Modifier.size(9.dp))
-
-        Text(
-            modifier = Modifier.align(Alignment.CenterVertically),
-            text = uiState.selectedYearMonth,
-            color = Gs90,
-            style = HuggTypography.h2
-        )
-
-        Spacer(modifier = Modifier.size(9.dp))
-
-        Image(
-            modifier = Modifier
-                .width(48.dp)
-                .height(48.dp)
-                .padding(12.dp)
-                .graphicsLayer(scaleX = -1f)
-                .clickable(
-                    onClick = onClickNextMonthBtn,
-                    interactionSource = interactionSource,
-                    indication = null
-                ),
-            imageVector = ImageVector.vectorResource(R.drawable.ic_back_arrow_gs_70),
-            contentDescription = null
-        )
-
-        Spacer(modifier = Modifier.size(9.dp))
-
-    }
 }
 
 @Composable

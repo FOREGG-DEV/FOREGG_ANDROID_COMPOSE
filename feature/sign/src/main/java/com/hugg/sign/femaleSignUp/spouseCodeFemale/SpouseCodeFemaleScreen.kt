@@ -1,5 +1,8 @@
 package com.hugg.sign.femaleSignUp.spouseCodeFemale
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -25,6 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -50,11 +54,13 @@ fun SpouseCodeFemaleContainer(
     viewModel: SpouseCodeFemaleViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val clipboardManager : ClipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 
     LaunchedEffect(Unit) {
         viewModel.eventFlow.collect { event ->
             when(event) {
-                SpouseCodeFemaleEvent.GoToMainEvent -> navigateGoToHome
+                SpouseCodeFemaleEvent.GoToMainEvent -> navigateGoToHome()
             }
         }
     }
@@ -63,7 +69,11 @@ fun SpouseCodeFemaleContainer(
         uiState = uiState,
         onClickTopBarLeftBtn = goToBack,
         onClickSignUpBtn = { viewModel.onClickSignUp(accessToken, signUpRequestVo) },
-        onClickCopyBtn = { viewModel.onClickCopyBtn() }
+        onClickCopyBtn = {
+            val clip = ClipData.newPlainText("label", uiState.spouseCode)
+            clipboardManager.setPrimaryClip(clip)
+            viewModel.onClickCopyBtn()
+        }
     )
 }
 

@@ -40,10 +40,13 @@ android {
     packagingOptions {
         exclude("META-INF/gradle/incremental.annotation.processors")
     }
+
+    viewBinding {
+        enable = true
+    }
 }
 
 dependencies {
-    implementation(project(":data"))
     implementation(project(":domain"))
 
     implementation(AndroidX.NAVIGATION_COMPOSE)
@@ -55,6 +58,8 @@ dependencies {
     implementation(AndroidX.COMPOSE_GRAPHICS)
     implementation(AndroidX.COMPOSE_PREVIEW)
     implementation(AndroidX.COMPOSE_MATERIAL)
+    implementation(AndroidX.CONSTRAINT_LAYOUT)
+
 
     implementation(AndroidX.THREE_TEN)
     debugImplementation("androidx.compose.ui:ui-tooling:1.6.8")

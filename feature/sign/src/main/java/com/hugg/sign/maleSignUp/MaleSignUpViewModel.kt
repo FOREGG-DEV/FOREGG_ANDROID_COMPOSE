@@ -2,13 +2,12 @@ package com.hugg.sign.maleSignUp
 
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.messaging.FirebaseMessaging
-import com.hugg.data.base.StatusCode
+import com.hugg.domain.base.StatusCode
 import com.hugg.domain.model.request.sign.SaveForeggJwtRequestVo
 import com.hugg.domain.model.request.sign.SignUpMaleRequestVo
 import com.hugg.domain.model.request.sign.SignUpWithTokenMaleRequestVo
 import com.hugg.domain.model.response.profile.ProfileDetailResponseVo
 import com.hugg.domain.model.response.sign.SignResponseVo
-import com.hugg.domain.model.vo.user.UserVo
 import com.hugg.domain.repository.AuthRepository
 import com.hugg.domain.repository.ForeggJwtRepository
 import com.hugg.domain.repository.ProfileRepository
@@ -50,19 +49,7 @@ class MaleSignUpViewModel @Inject constructor(
 
     private fun handleJoinError(error : String){
         when(error){
-            StatusCode.AUTH.NOT_CORRECT_SHARE_CODE -> showErrorSpouseCodeError()
-        }
-    }
-
-    private fun showErrorSpouseCodeError(){
-        viewModelScope.launch {
-            updateState(uiState.value.copy(
-                isShowErrorSpouseCode = true
-            ))
-            delay(1000)
-            updateState(uiState.value.copy(
-                isShowErrorSpouseCode = false
-            ))
+            StatusCode.AUTH.NOT_CORRECT_SHARE_CODE -> emitEventFlow(MaleSignUpEvent.ShowErrorSpouseCodeEvent)
         }
     }
 
@@ -75,8 +62,7 @@ class MaleSignUpViewModel @Inject constructor(
     }
 
     private fun handleSuccessGetMyInfo(result : ProfileDetailResponseVo){
-        val vo = UserVo(name = result.nickName, ssn = result.ssn, genderType = result.genderType, spouse = result.spouse)
-        UserInfo.updateInfo(vo)
+        UserInfo.updateInfo(result)
         goToMain()
     }
 

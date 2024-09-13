@@ -1,4 +1,4 @@
-package com.hugg.account.bottomSheet
+package com.hugg.account.accountMain.bottomSheet
 
 import android.app.DatePickerDialog
 import android.content.Context
@@ -33,7 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import com.hugg.account.AccountPageState
+import com.hugg.account.accountMain.AccountPageState
 import com.hugg.domain.model.enums.AccountBottomSheetType
 import com.hugg.feature.R
 import com.hugg.feature.theme.ACCOUNT_CHOOSE_DATE
