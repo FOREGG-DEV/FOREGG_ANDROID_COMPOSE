@@ -4,7 +4,7 @@ import com.hugg.domain.model.enums.AccountColorType
 
 
 data class AccountItemResponseVo(
-    val id : Long = -1,
+    val ledgerId : Long = -1,
     val date : String = "",
     val round : Int = 0,
     val color : AccountColorType = AccountColorType.RED,
