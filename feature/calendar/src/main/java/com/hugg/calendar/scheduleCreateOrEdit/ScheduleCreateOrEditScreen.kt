@@ -1,5 +1,6 @@
 package com.hugg.calendar.scheduleCreateOrEdit
 
+import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -20,10 +21,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hugg.feature.R
 import com.hugg.domain.model.enums.CreateOrEditType
 import com.hugg.domain.model.enums.RecordType
+import com.hugg.domain.model.enums.RepeatDayType
 import com.hugg.domain.model.enums.TopBarLeftType
 import com.hugg.domain.model.enums.TopBarMiddleType
+import com.hugg.domain.model.enums.TopBarRightType
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
+import com.hugg.feature.util.ForeggLog
+import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.TimeFormatter
 import java.util.Calendar
 
@@ -33,6 +38,7 @@ fun ScheduleCreateOrEditContainer(
     pageType : CreateOrEditType = CreateOrEditType.CREATE,
     recordType: RecordType = RecordType.ETC,
     id : Long = -1,
+    selectDate : String = "",
     viewModel: ScheduleCreateOrEditViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -51,14 +57,47 @@ fun ScheduleCreateOrEditContainer(
         false
     )
 
+    val datePickerDialog = remember {
+        DatePickerDialog(
+            context,
+            R.style.DatePickerStyle,
+            { _, year, month, day ->
+                viewModel.setDate(TimeFormatter.getDatePickerDashDate(year, month, day))
+            },
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        )
+    }
+
     LaunchedEffect(Unit){
-        viewModel.initView(pageType, recordType, id)
+        viewModel.initView(pageType, recordType, id, selectDate)
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.eventFlow.collect { event ->
+            when(event) {
+                ScheduleCreateOrEditEvent.SuccessCreateScheduleEvent -> {
+                    HuggToast.createToast(context, CALENDAR_TOAST_SUCCESS_CREATE).show()
+                    goToBack()
+                }
+                ScheduleCreateOrEditEvent.SuccessModifyScheduleEvent -> {
+                    HuggToast.createToast(context, CALENDAR_TOAST_SUCCESS_EDIT).show()
+                    goToBack()
+                }
+                ScheduleCreateOrEditEvent.SuccessDeleteScheduleEvent -> {
+                    HuggToast.createToast(context, CALENDAR_TOAST_SUCCESS_DELETE).show()
+                    goToBack()
+                }
+            }
+        }
     }
 
 
     ScheduleCreateOrEditScreen(
         uiState = uiState,
         onClickTopBarLeftBtn = goToBack,
+        onClickTopBarRightBtn = { viewModel.onDeleteSchedule() },
         interactionSource = interactionSource,
         onClickDropDown = { viewModel.showOrCancelDropDown() },
         onClickKind = { kind -> viewModel.onChangedName(kind)},
@@ -70,7 +109,14 @@ fun ScheduleCreateOrEditContainer(
             viewModel.setTouchedTimePicker(index)
             timePickerDialog.show()
         },
-        onCheckedChange = { checked -> viewModel.onCheckedChange(checked) }
+        onCheckedChange = { checked -> viewModel.onCheckedChange(checked) },
+        onClickDatePickerBtn = { repeatType ->
+            viewModel.setTouchedDatePicker(repeatType)
+            datePickerDialog.show()
+                               },
+        onRepeatBtnChanged = { checked -> viewModel.onRepeatChange(checked) },
+        onChangedMemo = { memo -> viewModel.onChangedMemo(memo) },
+        onClickCreateOrChangeBtn = { viewModel.onClickCreateOrEdit() }
     )
 }
 
@@ -78,6 +124,7 @@ fun ScheduleCreateOrEditContainer(
 fun ScheduleCreateOrEditScreen(
     uiState : ScheduleCreateOrEditPageState = ScheduleCreateOrEditPageState(),
     onClickTopBarLeftBtn : () -> Unit = {},
+    onClickTopBarRightBtn : () -> Unit = {},
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     onClickDropDown : () -> Unit = {},
     onClickKind : (String) -> Unit = {},
@@ -87,6 +134,10 @@ fun ScheduleCreateOrEditScreen(
     onClickPlusBtn : () -> Unit = {},
     onClickTimePickerBtn : (Int) -> Unit = {},
     onCheckedChange : (Boolean) -> Unit = {},
+    onClickDatePickerBtn : (RepeatDayType) -> Unit = {},
+    onRepeatBtnChanged : (Boolean) -> Unit = {},
+    onChangedMemo : (String) -> Unit = {},
+    onClickCreateOrChangeBtn : () -> Unit = {},
 ) {
     val topBarText = when(uiState.recordType) {
         RecordType.MEDICINE -> CALENDAR_SCHEDULE_ABOUT_MEDICINE
@@ -105,7 +156,9 @@ fun ScheduleCreateOrEditScreen(
             leftItemType = TopBarLeftType.BACK,
             leftBtnClicked = onClickTopBarLeftBtn,
             middleItemType = TopBarMiddleType.TEXT,
-            middleText = topBarText
+            middleText = topBarText,
+            rightItemType = if(uiState.pageType == CreateOrEditType.CREATE) TopBarRightType.NONE else TopBarRightType.DELETE_GS30,
+            rightBtnClicked = onClickTopBarRightBtn
         )
 
         Spacer(modifier = Modifier.size(24.dp))
@@ -120,7 +173,12 @@ fun ScheduleCreateOrEditScreen(
             onClickMinusBtn = onClickMinusBtn,
             onClickPlusBtn = onClickPlusBtn,
             onClickTimePickerBtn = onClickTimePickerBtn,
-            onCheckedChange = onCheckedChange
+            onCheckedChange = onCheckedChange,
+            onClickDatePickerBtn = onClickDatePickerBtn,
+            onRepeatBtnChanged = onRepeatBtnChanged,
+            onChangedMemo = onChangedMemo,
+            onClickCreateOrChangeBtn = onClickCreateOrChangeBtn,
+            isActiveBtn = uiState.isActiveBtn
         )
     }
 }

@@ -45,10 +45,14 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.hugg.domain.model.enums.CreateOrEditType
 import com.hugg.domain.model.enums.RecordType
+import com.hugg.domain.model.enums.RepeatDayType
 import com.hugg.domain.model.vo.calendar.RepeatTimeVo
 import com.hugg.feature.R
+import com.hugg.feature.component.FilledBtn
 import com.hugg.feature.theme.ACCOUNT_CREATE_CONTENT_HINT
+import com.hugg.feature.theme.ACCOUNT_CREATE_DATE_TITLE
 import com.hugg.feature.theme.ACCOUNT_ROUND_UNIT_WITHOUT_CAR
 import com.hugg.feature.theme.Background
 import com.hugg.feature.theme.Black
@@ -58,6 +62,7 @@ import com.hugg.feature.theme.CALENDAR_SCHEDULE_ABOUT_MEDICINE
 import com.hugg.feature.theme.CALENDAR_SCHEDULE_ALARM_HINT
 import com.hugg.feature.theme.CALENDAR_SCHEDULE_DAILY_ADMINISTER_COUNT
 import com.hugg.feature.theme.CALENDAR_SCHEDULE_DAILY_INTAKE_COUNT
+import com.hugg.feature.theme.CALENDAR_SCHEDULE_DATE_PICK_AND_REPEAT
 import com.hugg.feature.theme.CALENDAR_SCHEDULE_DOSE_HINT
 import com.hugg.feature.theme.CALENDAR_SCHEDULE_INJECTION_BASIC_DOSE_LIST
 import com.hugg.feature.theme.CALENDAR_SCHEDULE_INJECTION_DOSE
@@ -68,6 +73,11 @@ import com.hugg.feature.theme.CALENDAR_SCHEDULE_MEDICINE_DOSE
 import com.hugg.feature.theme.CALENDAR_SCHEDULE_MEDICINE_KIND
 import com.hugg.feature.theme.CALENDAR_SCHEDULE_MEDICINE_KIND_HINT
 import com.hugg.feature.theme.CALENDAR_SCHEDULE_MEDICINE_KIND_LIST
+import com.hugg.feature.theme.CALENDAR_SCHEDULE_MEMO_HINT
+import com.hugg.feature.theme.CALENDAR_SCHEDULE_REPEAT_END_DAY_HINT
+import com.hugg.feature.theme.CALENDAR_SCHEDULE_REPEAT_EVERYDAY
+import com.hugg.feature.theme.CALENDAR_SCHEDULE_REPEAT_EVERYDAY_HINT
+import com.hugg.feature.theme.CALENDAR_SCHEDULE_REPEAT_START_DAY_HINT
 import com.hugg.feature.theme.Disabled
 import com.hugg.feature.theme.Gs10
 import com.hugg.feature.theme.Gs20
@@ -79,7 +89,13 @@ import com.hugg.feature.theme.Gs90
 import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.MainNormal
 import com.hugg.feature.theme.WORD_ALARM
+import com.hugg.feature.theme.WORD_END
+import com.hugg.feature.theme.WORD_MEMO
+import com.hugg.feature.theme.WORD_MODIFY
+import com.hugg.feature.theme.WORD_REGISTRATION
+import com.hugg.feature.theme.WORD_START
 import com.hugg.feature.theme.White
+import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UserInfo
 
 @Composable
@@ -94,6 +110,11 @@ fun InjMedCreateOrEditScreen(
     onClickPlusBtn : () -> Unit = {},
     onClickTimePickerBtn : (Int) -> Unit = {},
     onCheckedChange : (Boolean) -> Unit = {},
+    onClickDatePickerBtn : (RepeatDayType) -> Unit = {},
+    onRepeatBtnChanged : (Boolean) -> Unit = {},
+    onChangedMemo : (String) -> Unit = {},
+    onClickCreateOrChangeBtn : () -> Unit = {},
+    isActiveBtn : Boolean = true,
 ) {
     LazyColumn{
         item {
@@ -132,6 +153,44 @@ fun InjMedCreateOrEditScreen(
                 onCheckedChange = onCheckedChange,
                 interactionSource = interactionSource
             )
+
+            Spacer(modifier = Modifier.size(32.dp))
+        }
+
+        item {
+            SelectRepeatDateView(
+                date = uiState.date,
+                startDate = uiState.startDate,
+                endDate = uiState.endDate,
+                isRepeat = uiState.isRepeatDay,
+                onClickDatePickerBtn = onClickDatePickerBtn,
+                onRepeatBtnChanged = onRepeatBtnChanged,
+                interactionSource = interactionSource
+            )
+
+            Spacer(modifier = Modifier.size(32.dp))
+        }
+
+        item {
+            InputMemoView(
+                memo = uiState.memo,
+                onChangedMemo = onChangedMemo
+            )
+
+            Spacer(modifier = Modifier.size(24.dp))
+        }
+
+        item {
+            FilledBtn(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+                onClickBtn = onClickCreateOrChangeBtn,
+                isActive = isActiveBtn,
+                text = if(uiState.pageType == CreateOrEditType.CREATE) WORD_REGISTRATION else WORD_MODIFY
+            )
+
+            Spacer(modifier = Modifier.size(36.dp))
         }
     }
 }
@@ -475,8 +534,6 @@ internal fun SelectDailyTakeCount(
         Spacer(modifier = Modifier.size(8.dp))
     }
 
-    Spacer(modifier = Modifier.size(8.dp))
-
     SelectAlarmOnAndOffView(
         isChecked = isChecked,
         onCheckedChange = onCheckedChange
@@ -579,6 +636,222 @@ internal fun SelectAlarmOnAndOffView(
             style = HuggTypography.p3_l,
             text = CALENDAR_SCHEDULE_ALARM_HINT
         )
+    }
+}
+
+@Composable
+internal fun SelectRepeatDateView(
+    onClickDatePickerBtn : (RepeatDayType) -> Unit = {},
+    date : String = "",
+    startDate : String = "",
+    endDate : String = "",
+    isRepeat : Boolean = false,
+    onRepeatBtnChanged : (Boolean) -> Unit = {},
+    interactionSource: MutableInteractionSource,
+){
+    Text(
+        modifier = Modifier.padding(start = 16.dp),
+        text = CALENDAR_SCHEDULE_DATE_PICK_AND_REPEAT,
+        style = HuggTypography.h3,
+        color = Gs80
+    )
+
+    Spacer(modifier = Modifier.size(4.dp))
+
+    DatePickerView(
+        date = if(isRepeat) startDate else date,
+        interactionSource = interactionSource,
+        onClickDatePickerBtn = onClickDatePickerBtn,
+        repeatDayType = if(isRepeat) RepeatDayType.START else RepeatDayType.NORMAL
+    )
+
+    if(isRepeat) {
+        Spacer(modifier = Modifier.size(8.dp))
+        DatePickerView(
+            date = endDate,
+            interactionSource = interactionSource,
+            onClickDatePickerBtn = onClickDatePickerBtn,
+            repeatDayType = RepeatDayType.END
+        )
+    }
+
+    Spacer(modifier = Modifier.size(8.dp))
+
+    SelectRepeatEveryDayView(
+        isChecked = isRepeat,
+        onCheckedChange = onRepeatBtnChanged
+    )
+}
+
+@Composable
+internal fun DatePickerView(
+    date : String = "",
+    interactionSource: MutableInteractionSource,
+    onClickDatePickerBtn : (RepeatDayType) -> Unit = {},
+    repeatDayType : RepeatDayType = RepeatDayType.NORMAL
+){
+    Row(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth()
+            .height(48.dp)
+            .background(color = White, shape = RoundedCornerShape(8.dp))
+            .clickable(
+                onClick = { onClickDatePickerBtn(repeatDayType) },
+                interactionSource = interactionSource,
+                indication = null
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.Start
+        ){
+            Box(
+                modifier = Modifier
+                    .width(48.dp)
+                    .height(48.dp)
+                    .background(
+                        color = MainNormal,
+                        shape = RoundedCornerShape(topStart = 8.dp, bottomStart = 8.dp)
+                    ),
+                contentAlignment = Alignment.Center
+            ){
+                Image(
+                    painter = painterResource(id = R.drawable.ic_calendar_white),
+                    contentDescription = null
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.width(16.dp))
+
+        val hintText = when(repeatDayType){
+            RepeatDayType.NORMAL -> ""
+            RepeatDayType.START -> CALENDAR_SCHEDULE_REPEAT_START_DAY_HINT
+            RepeatDayType.END -> CALENDAR_SCHEDULE_REPEAT_END_DAY_HINT
+        }
+
+        Text(
+            color = Gs50,
+            style = HuggTypography.h3,
+            text = if(date.isEmpty()) hintText else date + " ${TimeFormatter.getKoreanFullDayOfWeek(date)}"
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        val endText = when(repeatDayType){
+            RepeatDayType.NORMAL -> ""
+            RepeatDayType.START -> WORD_START
+            RepeatDayType.END -> WORD_END
+        }
+
+        Text(
+            color = Gs50,
+            style = HuggTypography.h3,
+            text = endText
+        )
+
+        Spacer(modifier = Modifier.width(16.dp))
+    }
+}
+
+@Composable
+internal fun SelectRepeatEveryDayView(
+    isChecked : Boolean = true,
+    onCheckedChange : (Boolean) -> Unit = {},
+){
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth()
+            .background(color = White, RoundedCornerShape(8.dp))
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                color = Gs80,
+                style = HuggTypography.h2,
+                text = CALENDAR_SCHEDULE_REPEAT_EVERYDAY
+            )
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Switch(
+                modifier = Modifier
+                    .size(width = 49.dp, height = 28.dp),
+                checked = isChecked,
+                onCheckedChange = onCheckedChange,
+                colors = SwitchDefaults.colors(
+                    checkedThumbColor = White,
+                    checkedTrackColor = MainNormal,
+                    checkedBorderColor = MainNormal,
+                    uncheckedThumbColor = White,
+                    uncheckedTrackColor = Gs20,
+                    uncheckedBorderColor = Gs20,
+                )
+            )
+        }
+
+        Spacer(modifier = Modifier.size(4.dp))
+
+        Text(
+            color = Gs60,
+            style = HuggTypography.p3_l,
+            text = CALENDAR_SCHEDULE_REPEAT_EVERYDAY_HINT
+        )
+    }
+}
+
+@Composable
+fun InputMemoView(
+    memo : String = "",
+    onChangedMemo : (String) -> Unit = {},
+){
+    Text(
+        modifier = Modifier.padding(start = 16.dp),
+        text = WORD_MEMO,
+        style = HuggTypography.h3,
+        color = Gs50,
+    )
+
+    Spacer(modifier = Modifier.size(4.dp))
+
+    Row(
+        modifier = Modifier.padding(start = 16.dp),
+        verticalAlignment = Alignment.Bottom
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(color = Color.White, shape = RoundedCornerShape(8.dp))
+                .padding(horizontal = 12.dp, vertical = 13.dp)
+        ) {
+            if (memo.isEmpty()) {
+                Text(
+                    text = CALENDAR_SCHEDULE_MEMO_HINT,
+                    style = HuggTypography.h3,
+                    color = Gs50,
+                )
+            }
+
+            BasicTextField(
+                value = memo,
+                onValueChange = { value ->
+                    onChangedMemo(value)
+                },
+                textStyle = HuggTypography.h3.copy(
+                    color = Gs90,
+                    textAlign = TextAlign.Start
+                ),
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Number
+                ),
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
     }
 }
 

@@ -64,7 +64,7 @@ import com.hugg.feature.uiItem.ScheduleDetailItem
 
 @Composable
 fun CalendarContainer(
-    navigateCreateSchedule : (CreateOrEditType, RecordType, Long) -> Unit = {_, _, _ -> },
+    navigateCreateSchedule : (CreateOrEditType, RecordType, Long, String) -> Unit = {_, _, _, _ -> },
     viewModel: CalendarViewModel = hiltViewModel()
 ) {
 
@@ -77,15 +77,19 @@ fun CalendarContainer(
         onClickDay = { position -> viewModel.onClickDay(position) },
         onClickCancel = { viewModel.onClickDialogCancel() },
         onClickCreateCancelScheduleBtn = { viewModel.onClickCreateCancelScheduleBtn() },
-        onClickCreateScheduleBtn = { type, size -> viewModel.onClickCreateScheduleBtn(type, size)},
+        onClickCreateScheduleBtn = { type, size, day -> viewModel.onClickCreateScheduleBtn(type, size, day)},
         uiState = uiState,
         interactionSource = interactionSource
     )
 
     LaunchedEffect(Unit){
+        viewModel.setCalendar()
+    }
+
+    LaunchedEffect(Unit){
         viewModel.eventFlow.collect { event ->
             when(event){
-                is CalendarEvent.GoToCreateSchedule -> { navigateCreateSchedule(CreateOrEditType.CREATE, event.type, -1) }
+                is CalendarEvent.GoToCreateSchedule -> { navigateCreateSchedule(CreateOrEditType.CREATE, event.type, -1, event.day) }
             }
         }
     }
@@ -100,7 +104,7 @@ fun CalendarScreen(
     onClickDay : ( Int ) -> Unit = {},
     onClickCancel: () -> Unit = {},
     onClickCreateCancelScheduleBtn: () -> Unit = {},
-    onClickCreateScheduleBtn: (RecordType, Int) -> Unit = {_,_ -> },
+    onClickCreateScheduleBtn: (RecordType, Int, String) -> Unit = {_,_,_ -> },
     uiState : CalendarPageState = CalendarPageState(),
     interactionSource : MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
@@ -306,7 +310,7 @@ fun ScheduleDetailDialog(
     pagerState : PagerState = rememberPagerState(),
     onClickCancel: () -> Unit = {},
     onClickCreateCancelScheduleBtn: () -> Unit = {},
-    onClickCreateScheduleBtn: (RecordType, Int) -> Unit = {_,_ -> },
+    onClickCreateScheduleBtn: (RecordType, Int, String) -> Unit = {_,_,_ -> },
     interactionSource : MutableInteractionSource
 ) {
     Dialog(
@@ -387,7 +391,7 @@ fun ScheduleDialogPagerItem(
     calendarDayVo: CalendarDayVo = CalendarDayVo(),
     uiState: CalendarPageState = CalendarPageState(),
     onClickCreateCancelScheduleBtn : () -> Unit = {},
-    onClickCreateScheduleBtn: (RecordType, Int) -> Unit = {_,_ -> },
+    onClickCreateScheduleBtn: (RecordType, Int, String) -> Unit = {_,_,_ -> },
     interactionSource : MutableInteractionSource
 ) {
     Column(
@@ -436,7 +440,7 @@ fun ScheduleDialogPagerItem(
     DialogCreateMode(
         uiState = uiState,
         onClickCreateCancelScheduleBtn = onClickCreateCancelScheduleBtn,
-        onClickCreateScheduleBtn = { recordType, _ -> onClickCreateScheduleBtn(recordType, calendarDayVo.scheduleList.size)},
+        onClickCreateScheduleBtn = { recordType, _ -> onClickCreateScheduleBtn(recordType, calendarDayVo.scheduleList.size, calendarDayVo.day)},
         interactionSource = interactionSource
     )
 }

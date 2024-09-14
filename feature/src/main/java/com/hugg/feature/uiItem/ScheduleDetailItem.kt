@@ -32,6 +32,8 @@ import com.hugg.feature.theme.Gs90
 import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.White
 import com.hugg.feature.util.TimeFormatter
+import org.threeten.bp.LocalTime
+import org.threeten.bp.format.DateTimeFormatter
 
 @Composable
 fun ScheduleDetailItem(
@@ -85,7 +87,11 @@ fun ScheduleDetailItem(
                 )
 
                 Row {
-                    scheduleDetailVo.repeatTimes.forEach {
+                    val sortedTimeList = scheduleDetailVo.repeatTimes.sortedBy {
+                        LocalTime.parse(it.time, DateTimeFormatter.ofPattern("HH:mm"))
+                    }
+
+                    sortedTimeList.forEach {
                         Text(
                             text = TimeFormatter.formatTimeToKor(it.time),
                             color = Gs70,

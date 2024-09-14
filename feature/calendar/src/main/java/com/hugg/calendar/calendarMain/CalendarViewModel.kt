@@ -29,25 +29,22 @@ class CalendarViewModel @Inject constructor(
         const val DECEMBER = 12
     }
 
-    private var year by Delegates.notNull<Int>()
-    private var month by Delegates.notNull<Int>()
+    private var today = TimeFormatter.getToday()
+    private var year = TimeFormatter.getYear(today)
+    private var month = TimeFormatter.getMonth(today)
 
     init {
-        initData()
+        updateState(
+            uiState.value.copy(
+                calendarHeadList = getHeadDayList(),
+            )
+        )
     }
 
-    private fun initData(){
-        val today = TimeFormatter.getToday()
-        year = TimeFormatter.getYear(today)
-        month = TimeFormatter.getMonth(today)
-        setCalendar()
-    }
-
-    private fun setCalendar(){
+    fun setCalendar(){
         updateState(
             uiState.value.copy(
                 selectedYearMonth = TimeFormatter.getTodayYearAndMonthKor(year, month),
-                calendarHeadList = getHeadDayList(),
             )
         )
         getScheduleList()
@@ -211,7 +208,7 @@ class CalendarViewModel @Inject constructor(
         )
     }
 
-    fun onClickCreateScheduleBtn(type : RecordType, size : Int){
+    fun onClickCreateScheduleBtn(type : RecordType, size : Int, day : String){
         if(size == 7) {
             viewModelScope.launch {
                 updateState(uiState.value.copy(
@@ -224,7 +221,8 @@ class CalendarViewModel @Inject constructor(
             }
         }
         else{
-            emitEventFlow(CalendarEvent.GoToCreateSchedule(type))
+            val fullDate = "${year}-${String.format("%02d", month)}-$day"
+            emitEventFlow(CalendarEvent.GoToCreateSchedule(type, fullDate))
         }
     }
 }

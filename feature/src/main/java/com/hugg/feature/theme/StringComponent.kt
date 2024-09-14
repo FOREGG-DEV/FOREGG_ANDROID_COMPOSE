@@ -25,6 +25,9 @@ const val WORD_MODIFY = "수정"
 const val WORD_MEMO = "메모"
 const val WORD_ADD = "추가"
 const val WORD_ALARM = "알람"
+const val WORD_START = "시작"
+const val WORD_END = "종료"
+const val WORD_EVERYDAY ="매일"
 
 // --------- 기타 --------- //
 const val COPY_COMPLETE_TEXT = "클립보드에 배우자 코드가 복사되었어요!"
@@ -104,7 +107,17 @@ val CALENDAR_SCHEDULE_INJECTION_BASIC_DOSE_LIST = listOf(
 )
 const val CALENDAR_SCHEDULE_DAILY_ADMINISTER_COUNT = "하루 투여 횟수*"
 const val CALENDAR_SCHEDULE_ALARM_HINT = "활성화시 진동이 계속 울려요"
+const val CALENDAR_SCHEDULE_DATE_PICK_AND_REPEAT = "날짜 및 반복*"
+const val CALENDAR_SCHEDULE_REPEAT_EVERYDAY = "매일 반복"
+const val CALENDAR_SCHEDULE_REPEAT_EVERYDAY_HINT = "매일 반복 설정시 종료일까지 알람이 울려요"
+const val CALENDAR_SCHEDULE_REPEAT_START_DAY_HINT = "시작 일자 선택"
+const val CALENDAR_SCHEDULE_REPEAT_END_DAY_HINT = "종료 일자 선택"
+const val CALENDAR_SCHEDULE_MEMO_HINT = "메모 입력"
 const val CALENDAR_SCHEDULE_DEFAULT_TIME = "오전 9:00"
+
+const val CALENDAR_TOAST_SUCCESS_CREATE = "일정이 등록되었어요"
+const val CALENDAR_TOAST_SUCCESS_EDIT = "일정이 수정되었어요"
+const val CALENDAR_TOAST_SUCCESS_DELETE = "일정이 삭제되었어요"
 
 // --------- 가계부 --------- //
 const val ACCOUNT_ALL = "전체"
@@ -157,6 +170,8 @@ const val ACCOUNT_TOAST_SUCCESS_CREATE = "지출 항목이 등록되었어요"
 const val ACCOUNT_TOAST_SUCCESS_EDIT = "지출 항목이 수정되었어요"
 const val ACCOUNT_TOAST_SUCCESS_DELETE = "지출 항목이 삭제되었어요"
 const val ACCOUNT_LIST_TOAST_SUCCESS_DELETE = "지출 내역이 삭제되었어요"
+
+
 
 // --------- 에러 Toast --------- //
 const val TOAST_ERROR_NOR_CORRECT_SPOUSE_CODE = "유효하지 않은 배우자코드입니다."

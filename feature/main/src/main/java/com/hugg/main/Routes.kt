@@ -30,8 +30,8 @@ sealed class Routes(val route : String){
     //----------------CALENDAR_GRAPH----------------//
     data object CalendarGraph : Routes("calendar_graph")
     data object CalendarScreen : Routes("calendar")
-    data object CalendarScheduleCreateOrEdit : Routes("calendarScheduleCreateOrEdit/{pageType}/{recordType}/{id}"){
-        fun getRouteCalendarScheduleCreateOrEdit(pageType: String, recordType : String, id : Long) = "calendarScheduleCreateOrEdit/$pageType/$recordType/$id"
+    data object CalendarScheduleCreateOrEdit : Routes("calendarScheduleCreateOrEdit/{pageType}/{recordType}/{id}/{selectDate}"){
+        fun getRouteCalendarScheduleCreateOrEdit(pageType: String, recordType : String, id : Long, selectDate : String) = "calendarScheduleCreateOrEdit/$pageType/$recordType/$id/$selectDate"
     }
 
     //----------------ACCOUNT_GRAPH----------------//

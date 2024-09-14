@@ -153,7 +153,7 @@ fun NavGraphBuilder.calendarGraph(navController: NavHostController) {
     navigation(startDestination = Routes.CalendarScreen.route, route = Routes.CalendarGraph.route) {
 
         composable(Routes.CalendarScreen.route) { CalendarContainer(
-            navigateCreateSchedule = { pageType, recordType, id -> navController.navigate(Routes.CalendarScheduleCreateOrEdit.getRouteCalendarScheduleCreateOrEdit(pageType.name, recordType.type, id))}
+            navigateCreateSchedule = { pageType, recordType, id, day -> navController.navigate(Routes.CalendarScheduleCreateOrEdit.getRouteCalendarScheduleCreateOrEdit(pageType.name, recordType.type, id, day))}
         ) }
 
         composable(
@@ -162,16 +162,19 @@ fun NavGraphBuilder.calendarGraph(navController: NavHostController) {
                 navArgument("pageType") { type = NavType.StringType },
                 navArgument("recordType") { type = NavType.StringType },
                 navArgument("id") { type = NavType.LongType },
+                navArgument("selectDate") { type = NavType.StringType },
             )
         ) {
             val pageType = CreateOrEditType.getEnumType(it.arguments?.getString("pageType") ?: "")
             val recordType = RecordType.getEnumType(it.arguments?.getString("recordType") ?: "")
+            val selectDate = it.arguments?.getString("selectDate") ?: ""
             val id = it.arguments?.getLong("id") ?: -1
 
             ScheduleCreateOrEditContainer(
                 goToBack = { navController.popBackStack() },
                 pageType = pageType,
                 recordType = recordType,
+                selectDate = selectDate,
                 id = id
             )
         }
