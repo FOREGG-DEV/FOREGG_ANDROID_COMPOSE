@@ -151,4 +151,12 @@ object TimeFormatter {
         val newFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         return date.format(newFormat)
     }
+
+    fun isAfter(date1 : String, date2 : String) : Boolean {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val originDate = LocalDate.parse(date1, formatter)
+        val compareDate = LocalDate.parse(date2, formatter)
+
+        return originDate.isAfter(compareDate)
+    }
 }

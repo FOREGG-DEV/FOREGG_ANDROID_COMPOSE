@@ -13,6 +13,7 @@ import com.hugg.domain.repository.AccountRepository
 import com.hugg.feature.base.BaseViewModel
 import com.hugg.feature.theme.ACCOUNT_PERSONAL
 import com.hugg.feature.util.ForeggLog
+import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UnitFormatter
 import com.hugg.feature.util.UserInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -46,7 +47,7 @@ class AccountCreateOrEditViewModel @Inject constructor(
 
     fun selectStartDate(date : String){
         updateState(uiState.value.copy(
-            date = date
+            date = if(TimeFormatter.isAfter(date, TimeFormatter.getToday())) TimeFormatter.getToday() else date
         ))
     }
 
