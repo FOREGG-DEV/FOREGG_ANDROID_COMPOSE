@@ -263,7 +263,7 @@ class AccountViewModel @Inject constructor(
     private fun handleSuccessDeleteAccount(isComplete : Boolean){
         if(isComplete) {
             emitEventFlow(AccountEvent.SuccessDeleteAccountEvent)
-
+            setView()
         }
     }
 
