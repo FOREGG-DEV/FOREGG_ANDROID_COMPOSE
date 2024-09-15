@@ -157,6 +157,7 @@ class ScheduleCreateOrEditViewModel @Inject constructor(
             endDate = if(uiState.value.isRepeatDay) uiState.value.endDate else null,
             repeatDate = if(uiState.value.isRepeatDay) WORD_EVERYDAY else null,
             repeatTimes = getTimeList(),
+            vibration = uiState.value.isAlarmCheck,
             dose = uiState.value.dose.ifEmpty { null },
             memo = uiState.value.memo
         )
@@ -215,6 +216,7 @@ class ScheduleCreateOrEditViewModel @Inject constructor(
         result.dose?.let { onChangedDose(it) }
         updateRepeatCount(result.repeatTimes.size)
         updateRepeatTimeList(result.repeatTimes)
+        onCheckedChange(result.vibration)
         result.date?.let { updateNormalDate(it) }
         result.startDate?.let { updateStartDate(it) }
         result.endDate?.let { updateEndDate(it) }

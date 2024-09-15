@@ -23,4 +23,6 @@ data class ScheduleDetailRequestVo(
     val dose : String? = null,
     @SerializedName("memo")
     val memo : String = "",
+    @SerializedName("vibration")
+    val vibration : Boolean = false,
 )

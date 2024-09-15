@@ -24,6 +24,9 @@ data class ScheduleDetailVo(
     val dose : String? = null,
     @SerializedName("memo")
     val memo : String = "",
+    @SerializedName("vibration")
+    val vibration : Boolean = false,
+
     val isStartContinueSchedule : Boolean = false,
     val isContinueSchedule : Boolean = false,
     val blankCount : Int = 0
