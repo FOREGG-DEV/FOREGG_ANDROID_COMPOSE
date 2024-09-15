@@ -114,6 +114,13 @@ const val CALENDAR_SCHEDULE_REPEAT_START_DAY_HINT = "시작 일자 선택"
 const val CALENDAR_SCHEDULE_REPEAT_END_DAY_HINT = "종료 일자 선택"
 const val CALENDAR_SCHEDULE_MEMO_HINT = "메모 입력"
 const val CALENDAR_SCHEDULE_DEFAULT_TIME = "오전 9:00"
+const val CALENDAR_SCHEDULE_HOSPITAL_TREATMENT_CONTENT = "진료 내용*"
+const val CALENDAR_SCHEDULE_HOSPITAL_TREATMENT_CONTENT_HINT = "진료 내용 선택"
+val CALENDAR_SCHEDULE_HOSPITAL_TREATMENT_CONTENT_LIST = listOf(
+    "진료 및 검사", "난자 채취", "배아 이식", "기타"
+)
+const val CALENDAR_SCHEDULE_DATE_AND_TIME_PICKER = "날짜 및 시간*"
+const val CALENDAR_SCHEDULE_HOSPITAL_MEMO_HINT = "병원 방문 시 물어볼 사항을 정리해보세요"
 
 const val CALENDAR_TOAST_SUCCESS_CREATE = "일정이 등록되었어요"
 const val CALENDAR_TOAST_SUCCESS_EDIT = "일정이 수정되었어요"

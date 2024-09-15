@@ -26,7 +26,7 @@ data class ScheduleCreateOrEditPageState(
     val isActiveBtn : Boolean = when(recordType){
         RecordType.MEDICINE,
         RecordType.INJECTION -> name.isNotEmpty() && dose.isNotEmpty() && repeatTimeList.isNotEmpty() && dateIsNotEmpty()
-        RecordType.HOSPITAL -> true
+        RecordType.HOSPITAL -> name.isNotEmpty()
         RecordType.ETC -> true
     }
 

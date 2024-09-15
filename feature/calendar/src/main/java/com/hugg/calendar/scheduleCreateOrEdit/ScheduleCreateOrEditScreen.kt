@@ -163,23 +163,54 @@ fun ScheduleCreateOrEditScreen(
 
         Spacer(modifier = Modifier.size(24.dp))
 
-        InjMedCreateOrEditScreen(
-            uiState = uiState,
-            interactionSource = interactionSource,
-            onClickDropDown = onClickDropDown,
-            onClickKind = onClickKind,
-            onChangedName = onChangedName,
-            onChangedDose = onChangedDose,
-            onClickMinusBtn = onClickMinusBtn,
-            onClickPlusBtn = onClickPlusBtn,
-            onClickTimePickerBtn = onClickTimePickerBtn,
-            onCheckedChange = onCheckedChange,
-            onClickDatePickerBtn = onClickDatePickerBtn,
-            onRepeatBtnChanged = onRepeatBtnChanged,
-            onChangedMemo = onChangedMemo,
-            onClickCreateOrChangeBtn = onClickCreateOrChangeBtn,
-            isActiveBtn = uiState.isActiveBtn
-        )
+        when(uiState.recordType) {
+            RecordType.MEDICINE,
+            RecordType.INJECTION ->{
+                InjMedCreateOrEditScreen(
+                    uiState = uiState,
+                    interactionSource = interactionSource,
+                    onClickDropDown = onClickDropDown,
+                    onClickKind = onClickKind,
+                    onChangedName = onChangedName,
+                    onChangedDose = onChangedDose,
+                    onClickMinusBtn = onClickMinusBtn,
+                    onClickPlusBtn = onClickPlusBtn,
+                    onClickTimePickerBtn = onClickTimePickerBtn,
+                    onCheckedChange = onCheckedChange,
+                    onClickDatePickerBtn = onClickDatePickerBtn,
+                    onRepeatBtnChanged = onRepeatBtnChanged,
+                    onChangedMemo = onChangedMemo,
+                    onClickCreateOrChangeBtn = onClickCreateOrChangeBtn,
+                    isActiveBtn = uiState.isActiveBtn
+                )
+            }
+            RecordType.HOSPITAL ->{
+                HospitalCreateOrEditScreen(
+                    uiState = uiState,
+                    interactionSource = interactionSource,
+                    onClickDropDown = onClickDropDown,
+                    onClickKind = onClickKind,
+                    onChangedName = onChangedName,
+                    onClickTimePickerBtn = onClickTimePickerBtn,
+                    onClickDatePickerBtn = onClickDatePickerBtn,
+                    onChangedMemo = onChangedMemo,
+                    onClickCreateOrChangeBtn = onClickCreateOrChangeBtn,
+                    isActiveBtn = uiState.isActiveBtn
+                )
+            }
+            RecordType.ETC -> HospitalCreateOrEditScreen(
+                uiState = uiState,
+                interactionSource = interactionSource,
+                onClickDropDown = onClickDropDown,
+                onClickKind = onClickKind,
+                onChangedName = onChangedName,
+                onClickTimePickerBtn = onClickTimePickerBtn,
+                onClickDatePickerBtn = onClickDatePickerBtn,
+                onChangedMemo = onChangedMemo,
+                onClickCreateOrChangeBtn = onClickCreateOrChangeBtn,
+                isActiveBtn = uiState.isActiveBtn
+            )
+        }
     }
 }
 
