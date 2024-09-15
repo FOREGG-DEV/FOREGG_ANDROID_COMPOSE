@@ -302,9 +302,6 @@ fun AccountScreen(
 
             itemsIndexed(
                 items = uiState.accountList,
-                key = { _, accountVo ->
-                    accountVo.id
-                }
             ) { _, accountVo ->
                 AccountCardItem(
                     item = accountVo,

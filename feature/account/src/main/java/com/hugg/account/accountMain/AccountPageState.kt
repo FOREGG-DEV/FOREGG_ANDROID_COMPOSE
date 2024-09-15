@@ -9,7 +9,7 @@ import com.hugg.feature.theme.ACCOUNT_ALL
 import com.hugg.feature.util.UserInfo
 
 data class AccountPageState(
-    val tabType : AccountTabType = AccountTabType.ALL,
+    val tabType : AccountTabType = AccountTabType.ROUND,
     val startDay : String = "",
     val endDay : String = "",
     val selectedYearMonth : String = "",

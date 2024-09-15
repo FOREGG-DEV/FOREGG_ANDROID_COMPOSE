@@ -180,6 +180,14 @@ object TimeFormatter {
         return date.format(newFormat)
     }
 
+    fun isAfter(date1 : String, date2 : String) : Boolean {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val originDate = LocalDate.parse(date1, formatter)
+        val compareDate = LocalDate.parse(date2, formatter)
+
+        return originDate.isAfter(compareDate)
+    }
+
     fun getTimeFormatByKor(hour : Int, minute : Int) : String {
         val amPm = if (hour < 12) "오전" else "오후"
         val hourTime = if (hour % 12 == 0 && amPm == "오후") 12 else hour % 12

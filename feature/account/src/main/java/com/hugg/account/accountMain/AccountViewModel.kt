@@ -15,6 +15,7 @@ import com.hugg.feature.base.BaseViewModel
 import com.hugg.feature.theme.ACCOUNT_ALL
 import com.hugg.feature.theme.ACCOUNT_PERSONAL
 import com.hugg.feature.theme.ACCOUNT_SUBSIDY
+import com.hugg.feature.util.ForeggLog
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UnitFormatter.getMoneyFormatWithUnit
 import com.hugg.feature.util.UserInfo
@@ -38,7 +39,6 @@ class AccountViewModel @Inject constructor(
     private val today = TimeFormatter.getToday()
     private var year = TimeFormatter.getYear(today)
     private var month = TimeFormatter.getMonth(today)
-    private var round = UserInfo.info.round
     private var initialInit = false
 
     init {
@@ -263,7 +263,7 @@ class AccountViewModel @Inject constructor(
     private fun handleSuccessDeleteAccount(isComplete : Boolean){
         if(isComplete) {
             emitEventFlow(AccountEvent.SuccessDeleteAccountEvent)
-
+            setView()
         }
     }
 
@@ -313,7 +313,7 @@ class AccountViewModel @Inject constructor(
     private fun getAccountCardList(list : List<AccountItemResponseVo>) : List<AccountCardVo>{
         return list.map {
             AccountCardVo(
-                id = it.id,
+                id = it.ledgerId,
                 date = it.date,
                 round = it.round,
                 color = it.color,
