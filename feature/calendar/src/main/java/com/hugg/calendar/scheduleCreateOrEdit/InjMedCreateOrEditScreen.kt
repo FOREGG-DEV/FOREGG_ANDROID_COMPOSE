@@ -813,7 +813,7 @@ fun InputMemoView(
         modifier = Modifier.padding(start = 16.dp),
         text = WORD_MEMO,
         style = HuggTypography.h3,
-        color = Gs50,
+        color = Gs80,
     )
 
     Spacer(modifier = Modifier.size(4.dp))

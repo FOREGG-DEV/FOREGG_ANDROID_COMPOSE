@@ -27,10 +27,10 @@ data class ScheduleCreateOrEditPageState(
         RecordType.MEDICINE,
         RecordType.INJECTION -> name.isNotEmpty() && dose.isNotEmpty() && repeatTimeList.isNotEmpty() && dateIsNotEmpty()
         RecordType.HOSPITAL -> name.isNotEmpty()
-        RecordType.ETC -> true
+        RecordType.ETC -> name.isNotEmpty() && dateIsNotEmpty()
     }
 
-    fun dateIsNotEmpty() : Boolean {
+    private fun dateIsNotEmpty() : Boolean {
         return if(isRepeatDay) startDate.isNotEmpty() && endDate.isNotEmpty()
             else date.isNotEmpty()
     }

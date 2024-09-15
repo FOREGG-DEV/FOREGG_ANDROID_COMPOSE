@@ -198,18 +198,19 @@ fun ScheduleCreateOrEditScreen(
                     isActiveBtn = uiState.isActiveBtn
                 )
             }
-            RecordType.ETC -> HospitalCreateOrEditScreen(
-                uiState = uiState,
-                interactionSource = interactionSource,
-                onClickDropDown = onClickDropDown,
-                onClickKind = onClickKind,
-                onChangedName = onChangedName,
-                onClickTimePickerBtn = onClickTimePickerBtn,
-                onClickDatePickerBtn = onClickDatePickerBtn,
-                onChangedMemo = onChangedMemo,
-                onClickCreateOrChangeBtn = onClickCreateOrChangeBtn,
-                isActiveBtn = uiState.isActiveBtn
-            )
+            RecordType.ETC -> {
+                EtcCreateOrEditScreen(
+                    uiState = uiState,
+                    interactionSource = interactionSource,
+                    onChangedName = onChangedName,
+                    onClickTimePickerBtn = onClickTimePickerBtn,
+                    onClickDatePickerBtn = onClickDatePickerBtn,
+                    onRepeatBtnChanged = onRepeatBtnChanged,
+                    onChangedMemo = onChangedMemo,
+                    onClickCreateOrChangeBtn = onClickCreateOrChangeBtn,
+                    isActiveBtn = uiState.isActiveBtn
+                )
+            }
         }
     }
 }
