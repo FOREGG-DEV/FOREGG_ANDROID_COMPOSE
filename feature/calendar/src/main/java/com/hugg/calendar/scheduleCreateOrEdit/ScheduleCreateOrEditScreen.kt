@@ -25,6 +25,7 @@ import com.hugg.domain.model.enums.RepeatDayType
 import com.hugg.domain.model.enums.TopBarLeftType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.domain.model.enums.TopBarRightType
+import com.hugg.feature.component.HuggDialog
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
 import com.hugg.feature.util.ForeggLog
@@ -118,6 +119,18 @@ fun ScheduleCreateOrEditContainer(
         onChangedMemo = { memo -> viewModel.onChangedMemo(memo) },
         onClickCreateOrChangeBtn = { viewModel.onClickCreateOrEdit() }
     )
+
+    if(uiState.showDeleteDialog) {
+        HuggDialog(
+            title = CALENDAR_SCHEDULE_DIALOG_DELETE,
+            positiveColor = Sunday,
+            positiveText = WORD_DELETE,
+            onClickCancel = { viewModel.cancelDeleteDialog() },
+            onClickNegative = { viewModel.cancelDeleteDialog() },
+            onClickPositive = { viewModel.onDeleteSchedule() },
+            interactionSource = interactionSource
+        )
+    }
 }
 
 @Composable

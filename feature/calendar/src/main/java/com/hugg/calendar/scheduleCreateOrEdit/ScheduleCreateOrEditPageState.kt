@@ -22,6 +22,7 @@ data class ScheduleCreateOrEditPageState(
     val endDate : String = "",
     val isRepeatDay : Boolean = false,
     val memo : String = "",
+    val showDeleteDialog : Boolean = false,
 ) : PageState {
     val isActiveBtn : Boolean = when(recordType){
         RecordType.MEDICINE,

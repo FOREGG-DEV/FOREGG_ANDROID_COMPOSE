@@ -119,7 +119,10 @@ fun HuggDialog(
                         .height(48.dp)
                         .background(color = positiveColor, shape = RoundedCornerShape(4.dp))
                         .clickable(
-                            onClick = onClickPositive,
+                            onClick = {
+                                onClickCancel()
+                                onClickPositive()
+                            },
                             interactionSource = interactionSource,
                             indication = null
                         ),
