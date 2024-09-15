@@ -30,11 +30,13 @@ class ScheduleCreateOrEditViewModel @Inject constructor(
         updateState(
             uiState.value.copy(
                 pageType = pageType,
-                date = selectDate
             )
         )
         when(pageType){
-            CreateOrEditType.CREATE -> updateRecordType(recordType)
+            CreateOrEditType.CREATE -> {
+                updateNormalDate(selectDate)
+                updateRecordType(recordType)
+            }
             CreateOrEditType.EDIT -> {
                 updateScheduleId(id)
                 getCalendarDetail(id)

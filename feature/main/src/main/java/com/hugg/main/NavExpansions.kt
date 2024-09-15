@@ -17,6 +17,7 @@ import com.hugg.domain.model.enums.RecordType
 import com.hugg.domain.model.enums.SurgeryType
 import com.hugg.domain.model.request.sign.SignUpMaleRequestVo
 import com.hugg.domain.model.request.sign.SignUpRequestVo
+import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UserInfo
 import com.hugg.sign.femaleSignUp.chooseSurgery.ChooseSurgeryContainer
 import com.hugg.sign.femaleSignUp.spouseCodeFemale.SpouseCodeFemaleContainer
@@ -153,7 +154,7 @@ fun NavGraphBuilder.calendarGraph(navController: NavHostController) {
     navigation(startDestination = Routes.CalendarScreen.route, route = Routes.CalendarGraph.route) {
 
         composable(Routes.CalendarScreen.route) { CalendarContainer(
-            navigateCreateSchedule = { pageType, recordType, id, day -> navController.navigate(Routes.CalendarScheduleCreateOrEdit.getRouteCalendarScheduleCreateOrEdit(pageType.name, recordType.type, id, day))}
+            navigateCreateSchedule = { pageType, recordType, id, day -> navController.navigate(Routes.CalendarScheduleCreateOrEdit.getRouteCalendarScheduleCreateOrEdit(pageType.type, recordType.type, id, day))}
         ) }
 
         composable(
@@ -167,7 +168,7 @@ fun NavGraphBuilder.calendarGraph(navController: NavHostController) {
         ) {
             val pageType = CreateOrEditType.getEnumType(it.arguments?.getString("pageType") ?: "")
             val recordType = RecordType.getEnumType(it.arguments?.getString("recordType") ?: "")
-            val selectDate = it.arguments?.getString("selectDate") ?: ""
+            val selectDate = it.arguments?.getString("selectDate") ?: TimeFormatter.getToday()
             val id = it.arguments?.getLong("id") ?: -1
 
             ScheduleCreateOrEditContainer(
