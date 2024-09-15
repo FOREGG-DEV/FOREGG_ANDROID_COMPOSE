@@ -37,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -60,6 +61,7 @@ import com.hugg.feature.uiItem.RemoteYearMonth
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
 import com.hugg.feature.uiItem.ScheduleDetailItem
+import com.hugg.feature.util.HuggToast
 
 
 @Composable
@@ -69,6 +71,7 @@ fun CalendarContainer(
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
     val interactionSource = remember { MutableInteractionSource() }
 
     CalendarScreen(
@@ -90,6 +93,7 @@ fun CalendarContainer(
         viewModel.eventFlow.collect { event ->
             when(event){
                 is CalendarEvent.GoToCreateSchedule -> { navigateCreateSchedule(CreateOrEditType.CREATE, event.type, -1, event.day) }
+                CalendarEvent.ShowErrorMaxScheduleEvent -> HuggToast.createToast(context, CALENDAR_TOAST_SUCCESS_CREATE, true).show()
             }
         }
     }
@@ -317,69 +321,22 @@ fun ScheduleDetailDialog(
         onDismissRequest = onClickCancel,
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
-        Column {
-
-            Box(
+        HorizontalPager(
+            count = uiState.calendarDayList.size,
+            state = pagerState,
+        ) { page ->
+            ScheduleDialogPagerItem(
                 modifier = Modifier
+                    .fillMaxWidth()
                     .padding(horizontal = 16.dp)
-                    .fillMaxWidth()
-                    .height(40.dp)
-                    .clickable(
-                        onClick = onClickCancel,
-                        interactionSource = interactionSource,
-                        indication = null
-                    )
-                    .background(
-                        if (uiState.showErrorMaxScheduleSnackBar) ErrorSnackBar else Color.Transparent,
-                        shape = RoundedCornerShape(8.dp)
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = CALENDAR_MAX_SCHEDULE,
-                    style = HuggTypography.p2,
-                    color = if (uiState.showErrorMaxScheduleSnackBar) White else Color.Transparent
-                )
-            }
-
-            Spacer(
-                modifier = Modifier
-                    .size(16.dp)
-                    .clickable(
-                        onClick = onClickCancel,
-                        interactionSource = interactionSource,
-                        indication = null
-                    )
-            )
-
-            HorizontalPager(
-                count = uiState.calendarDayList.size,
-                state = pagerState,
-            ) { page ->
-                ScheduleDialogPagerItem(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(color = White, shape = RoundedCornerShape(20.dp))
-                        .height(454.dp),
-                    calendarDayVo = uiState.calendarDayList[page],
-                    onClickCreateCancelScheduleBtn = onClickCreateCancelScheduleBtn,
-                    uiState = uiState,
-                    onClickCreateScheduleBtn = onClickCreateScheduleBtn,
-                    interactionSource = interactionSource
-                )
-            }
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-                    .clickable(
-                        onClick = onClickCancel,
-                        interactionSource = interactionSource,
-                        indication = null
-                    )
-                    .background(Color.Transparent)
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(color = White, shape = RoundedCornerShape(20.dp))
+                    .height(454.dp),
+                calendarDayVo = uiState.calendarDayList[page],
+                onClickCreateCancelScheduleBtn = onClickCreateCancelScheduleBtn,
+                uiState = uiState,
+                onClickCreateScheduleBtn = onClickCreateScheduleBtn,
+                interactionSource = interactionSource
             )
         }
     }

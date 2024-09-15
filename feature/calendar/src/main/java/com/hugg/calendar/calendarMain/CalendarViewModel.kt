@@ -195,7 +195,6 @@ class CalendarViewModel @Inject constructor(
             uiState.value.copy(
                 isShowDetailDialog = false,
                 isCreateMode = false,
-                showErrorMaxScheduleSnackBar = false
             )
         )
     }
@@ -209,17 +208,7 @@ class CalendarViewModel @Inject constructor(
     }
 
     fun onClickCreateScheduleBtn(type : RecordType, size : Int, day : String){
-        if(size == 7) {
-            viewModelScope.launch {
-                updateState(uiState.value.copy(
-                    showErrorMaxScheduleSnackBar = true
-                ))
-                delay(2000)
-                updateState(uiState.value.copy(
-                    showErrorMaxScheduleSnackBar = false
-                ))
-            }
-        }
+        if(size == 7) { emitEventFlow(CalendarEvent.ShowErrorMaxScheduleEvent) }
         else{
             val fullDate = "${year}-${String.format("%02d", month)}-$day"
             emitEventFlow(CalendarEvent.GoToCreateSchedule(type, fullDate))
