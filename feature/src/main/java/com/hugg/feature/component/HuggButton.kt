@@ -43,7 +43,8 @@ fun BlankBtn(
     text : String = "테스트",
     textStyle: TextStyle = HuggTypography.btn,
     textColor : Color = Gs70,
-    contentPadding : PaddingValues = PaddingValues(horizontal = 0.dp, vertical = 16.dp)
+    contentPadding : PaddingValues = PaddingValues(horizontal = 0.dp, vertical = 16.dp),
+    strokeColor: Color = MainNormal
 ) {
     Button(
         modifier = modifier,
@@ -51,7 +52,7 @@ fun BlankBtn(
         colors = ButtonDefaults
             .buttonColors(containerColor = White),
         shape = RoundedCornerShape(radius),
-        border = BorderStroke(1.dp, MainNormal),
+        border = BorderStroke(1.dp, strokeColor),
         contentPadding = contentPadding
     ) {
         Text(
