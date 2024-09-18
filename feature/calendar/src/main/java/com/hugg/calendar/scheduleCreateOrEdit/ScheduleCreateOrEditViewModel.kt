@@ -217,7 +217,7 @@ class ScheduleCreateOrEditViewModel @Inject constructor(
         onChangedName(result.name)
         result.dose?.let { onChangedDose(it) }
         updateRepeatCount(result.repeatTimes.size)
-        updateRepeatTimeList(result.repeatTimes)
+        updateRepeatTimeList(convertKorTime(result.repeatTimes))
         onCheckedChange(result.vibration)
         result.date?.let { updateNormalDate(it) }
         result.startDate?.let { updateStartDate(it) }
@@ -230,5 +230,12 @@ class ScheduleCreateOrEditViewModel @Inject constructor(
         updateState(
             uiState.value.copy(showDeleteDialog = isShow)
         )
+    }
+
+    private fun convertKorTime(list : List<RepeatTimeVo>) : List<RepeatTimeVo> {
+        val newList = list.map {
+            RepeatTimeVo(time = TimeFormatter.formatTimeToKor(it.time))
+        }
+        return newList
     }
 }
