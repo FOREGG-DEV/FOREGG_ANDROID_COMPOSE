@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -130,7 +131,7 @@ fun ScheduleDetailItem(
                 Spacer(modifier = Modifier.size(14.dp))
 
                 Image(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_push_alarm),
+                    painter = painterResource(if(scheduleDetailVo.vibration) R.drawable.ic_vibration_alarm else R.drawable.ic_push_alarm),
                     contentDescription = null
                 )
             }

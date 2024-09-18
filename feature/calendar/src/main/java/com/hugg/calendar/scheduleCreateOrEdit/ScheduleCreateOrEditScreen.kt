@@ -98,7 +98,7 @@ fun ScheduleCreateOrEditContainer(
     ScheduleCreateOrEditScreen(
         uiState = uiState,
         onClickTopBarLeftBtn = goToBack,
-        onClickTopBarRightBtn = { viewModel.onDeleteSchedule() },
+        onClickTopBarRightBtn = { viewModel.showDeleteDialog(true) },
         interactionSource = interactionSource,
         onClickDropDown = { viewModel.showOrCancelDropDown() },
         onClickKind = { kind -> viewModel.onChangedName(kind)},
@@ -125,8 +125,8 @@ fun ScheduleCreateOrEditContainer(
             title = CALENDAR_SCHEDULE_DIALOG_DELETE,
             positiveColor = Sunday,
             positiveText = WORD_DELETE,
-            onClickCancel = { viewModel.cancelDeleteDialog() },
-            onClickNegative = { viewModel.cancelDeleteDialog() },
+            onClickCancel = { viewModel.showDeleteDialog(false) },
+            onClickNegative = { viewModel.showDeleteDialog(false) },
             onClickPositive = { viewModel.onDeleteSchedule() },
             interactionSource = interactionSource
         )

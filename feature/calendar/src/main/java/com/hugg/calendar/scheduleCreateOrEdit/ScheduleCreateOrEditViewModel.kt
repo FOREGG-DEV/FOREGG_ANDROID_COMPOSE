@@ -226,15 +226,9 @@ class ScheduleCreateOrEditViewModel @Inject constructor(
         result.repeatDate?.let { onRepeatChange(it.isNotEmpty()) }
     }
 
-    fun showDeleteDialog(){
+    fun showDeleteDialog(isShow : Boolean){
         updateState(
-            uiState.value.copy(showDeleteDialog = true)
-        )
-    }
-
-    fun cancelDeleteDialog(){
-        updateState(
-            uiState.value.copy(showDeleteDialog = false)
+            uiState.value.copy(showDeleteDialog = isShow)
         )
     }
 }
