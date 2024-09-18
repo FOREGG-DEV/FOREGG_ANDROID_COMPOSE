@@ -23,6 +23,7 @@ fun MainScreen() {
                 signNavGraph(navController)
                 calendarGraph(navController)
                 accountGraph(navController)
+                dailyHuggGraph(navController)
             }
         }
     }

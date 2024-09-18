@@ -6,6 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
+import com.example.dailyhugg.main.DailyHuggScreen
 import com.hugg.account.accountMain.AccountContainer
 import com.hugg.account.subsidyCreateOrEdit.SubsidyCreateOrEditContainer
 import com.hugg.account.subsidyList.SubsidyListContainer
@@ -28,7 +29,7 @@ fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
 
         composable(Routes.OnboardingScreen.route) { OnboardingContainer(
             navigateInputSsn = { accessToken : String -> navController.navigate(route = Routes.InputSsnScreen.getRouteInputSsn(accessToken)) },
-            navigateHome = { navController.navigate(route = Routes.AccountGraph.route) } // 임시!
+            navigateHome = { navController.navigate(route = Routes.DailyHuggGraph.route) } // 임시!
         ) }
 
         composable(
@@ -191,5 +192,11 @@ fun NavGraphBuilder.accountGraph(navController: NavHostController) {
                 goToBack = { navController.popBackStack() }
             )
         }
+    }
+}
+
+fun NavGraphBuilder.dailyHuggGraph(navController: NavHostController) {
+    navigation(startDestination = Routes.DailyHuggScreen.route, route = Routes.DailyHuggGraph.route) {
+        composable(Routes.DailyHuggScreen.route) { DailyHuggScreen() }
     }
 }
