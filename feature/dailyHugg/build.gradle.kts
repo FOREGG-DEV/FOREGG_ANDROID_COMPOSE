@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.dailyhugg"
+    namespace = "com.hugg.dailyhugg"
     compileSdk = 34
 
     defaultConfig {
