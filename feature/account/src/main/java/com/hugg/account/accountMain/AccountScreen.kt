@@ -93,6 +93,7 @@ import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.MainNormal
 import com.hugg.feature.theme.Sunday
 import com.hugg.feature.theme.WORD_ACCOUNT
+import com.hugg.feature.theme.WORD_ADD
 import com.hugg.feature.theme.WORD_DELETE
 import com.hugg.feature.theme.White
 import com.hugg.feature.uiItem.AccountCardItem
@@ -127,7 +128,7 @@ fun AccountContainer(
         uiState = uiState,
         scrollState = scrollState,
         isFilterAtTop = isFilterAtTop,
-        onClickCreateRoundBtn = { viewModel.showCreateRoundDialog() },
+        onClickCreateRoundBtn = { viewModel.showCreateRoundDialog(true) },
         onClickPrevMonthBtn = { viewModel.onClickPrevMonth() },
         onClickNextMonthBtn = { viewModel.onClickNextMonth() },
         onClickPrevRoundBtn = { viewModel.onClickPrevRound() },
@@ -137,7 +138,7 @@ fun AccountContainer(
         onClickCreateAccountBtn = { navigateToCreateOrEditAccount(-1, CreateOrEditType.CREATE) },
         onClickAccountCard = { id -> if(uiState.isDeleteMode) viewModel.onClickCard(id) else navigateToCreateOrEditAccount(id, CreateOrEditType.EDIT) },
         onLongClickAccountCard = { id -> viewModel.onLongClickItem(id) },
-        onDeleteAccountList = { viewModel.showDeleteDialog() },
+        onDeleteAccountList = { viewModel.showDeleteDialog(true) },
         interactionSource = interactionSource
     )
 
@@ -176,8 +177,8 @@ fun AccountContainer(
             title = ACCOUNT_LIST_DIALOG_DELETE,
             positiveColor = Sunday,
             positiveText = WORD_DELETE,
-            onClickCancel = { viewModel.cancelDeleteDialog() },
-            onClickNegative = { viewModel.cancelDeleteDialog() },
+            onClickCancel = { viewModel.showDeleteDialog(false) },
+            onClickNegative = { viewModel.showDeleteDialog(false) },
             onClickPositive = { viewModel.deleteAccount() },
             interactionSource = interactionSource
         )
@@ -187,9 +188,10 @@ fun AccountContainer(
         HuggDialog(
             title = ACCOUNT_DIALOG_CREATE_ROUND,
             warningMessage = ACCOUNT_DIALOG_WARNING_CREATE_ROUND,
+            positiveText = WORD_ADD,
             hasWarningText = true,
-            onClickCancel = { viewModel.cancelCreateRoundDialog() },
-            onClickNegative = { viewModel.cancelCreateRoundDialog() },
+            onClickCancel = { viewModel.showCreateRoundDialog(false) },
+            onClickNegative = { viewModel.showCreateRoundDialog(false) },
             onClickPositive = { viewModel.onClickCreateRoundBtn() },
             interactionSource = interactionSource
         )
