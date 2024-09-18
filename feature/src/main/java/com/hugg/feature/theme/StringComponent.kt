@@ -172,7 +172,7 @@ const val ACCOUNT_DIALOG_SUBSIDY_DELETE = "지원금을 삭제할까요?"
 const val ACCOUNT_DIALOG_DELETE = "지출 항목을 삭제할까요?"
 const val ACCOUNT_LIST_DIALOG_DELETE = "지출 내역을 삭제할까요?"
 const val ACCOUNT_DIALOG_CREATE_ROUND = "새 회차 추가"
-const val ACCOUNT_DIALOG_WARNING_CREATE_ROUND = "실제 회차가 추가되었을 때 추가 버튼을 눌러주세요"
+const val ACCOUNT_DIALOG_WARNING_CREATE_ROUND = "실제 회차가 추가되었을 때 버튼을 눌러주세요"
 
 const val ACCOUNT_TOAST_SUCCESS_CREATE_SUBSIDY = "지원금이 등록되었어요"
 const val ACCOUNT_TOAST_SUCCESS_EDIT_SUBSIDY = "지원금이 수정되었어요"

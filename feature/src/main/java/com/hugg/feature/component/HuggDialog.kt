@@ -76,6 +76,7 @@ fun HuggDialog(
 
                 Text(
                     modifier = Modifier
+                        .padding(horizontal = 16.dp)
                         .fillMaxWidth(),
                     maxLines = 1,
                     text = warningMessage,

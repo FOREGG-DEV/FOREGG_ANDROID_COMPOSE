@@ -159,27 +159,15 @@ class AccountViewModel @Inject constructor(
         }
     }
 
-    fun showCreateRoundDialog(){
+    fun showCreateRoundDialog(isShow : Boolean){
         updateState(
-            uiState.value.copy(isShowCreateRoundDialog = true)
+            uiState.value.copy(isShowCreateRoundDialog = isShow)
         )
     }
 
-    fun cancelCreateRoundDialog(){
-        updateState(
-            uiState.value.copy(isShowCreateRoundDialog = false)
-        )
-    }
-
-    fun showDeleteDialog(){
+    fun showDeleteDialog(isShow : Boolean){
         updateState(
             uiState.value.copy(isShowDeleteDialog = true)
-        )
-    }
-
-    fun cancelDeleteDialog(){
-        updateState(
-            uiState.value.copy(isShowDeleteDialog = false)
         )
     }
 
