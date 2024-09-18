@@ -37,4 +37,8 @@ sealed class Routes(val route : String){
     data object AccountSubsidyCreateOrEdit : Routes("accountSubsidyCreateOrEdit/{id}/{type}/{round}"){
         fun getRouteAccountSubsidyCreateOrEdit(id: Long, type : String, round : Int) = "accountSubsidyCreateOrEdit/$id/$type/$round"
     }
+
+    data object AccountCreateOrEdit : Routes("accountCreateOrEdit/{id}/{type}"){
+        fun getRouteAccountCreateOrEdit(id: Long, type : String) = "accountCreateOrEdit/$id/$type"
+    }
 }
