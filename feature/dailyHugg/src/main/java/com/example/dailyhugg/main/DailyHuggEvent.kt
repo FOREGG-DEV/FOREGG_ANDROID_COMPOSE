@@ -1,4 +1,7 @@
 package com.example.dailyhugg.main
 
-class DailyHuggEvent {
+import com.hugg.feature.base.Event
+
+sealed class DailyHuggEvent: Event {
+
 }
