@@ -152,7 +152,6 @@ class AccountViewModel @Inject constructor(
     }
 
     fun onClickCreateRoundBtn(){
-        cancelCreateRoundDialog()
         viewModelScope.launch {
             accountRepository.createRound().collect {
                 resultResponse(it, ::handleSuccessCreateRound)
@@ -160,27 +159,15 @@ class AccountViewModel @Inject constructor(
         }
     }
 
-    fun showCreateRoundDialog(){
+    fun showCreateRoundDialog(isShow : Boolean){
         updateState(
-            uiState.value.copy(isShowCreateRoundDialog = true)
+            uiState.value.copy(isShowCreateRoundDialog = isShow)
         )
     }
 
-    fun cancelCreateRoundDialog(){
-        updateState(
-            uiState.value.copy(isShowCreateRoundDialog = false)
-        )
-    }
-
-    fun showDeleteDialog(){
+    fun showDeleteDialog(isShow : Boolean){
         updateState(
             uiState.value.copy(isShowDeleteDialog = true)
-        )
-    }
-
-    fun cancelDeleteDialog(){
-        updateState(
-            uiState.value.copy(isShowDeleteDialog = false)
         )
     }
 
@@ -216,7 +203,6 @@ class AccountViewModel @Inject constructor(
     }
 
     fun deleteAccount(){
-        cancelDeleteDialog()
         val deleteList = uiState.value.accountList.filter { it.isSelected }
         deleteList.forEachIndexed { index, accountCardVo ->
             viewModelScope.launch {
