@@ -77,5 +77,8 @@ dependencies {
     implementation(AndroidX.COMPOSE_PREVIEW)
     implementation(AndroidX.ACTIVITY_COMPOSE)
 
+    implementation(Libraries.COIL)
+    implementation(Libraries.COIL_COMPOSE)
+
     kapt(Google.HILT_COMPILER)
 }

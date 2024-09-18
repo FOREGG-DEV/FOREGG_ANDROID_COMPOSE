@@ -49,6 +49,7 @@ dependencies {
     implementation(project(":feature:sign"))
     implementation(project(":feature:calendar"))
     implementation(project(":feature:account"))
+    implementation(project(":feature:dailyHugg"))
 
     implementation(AndroidX.CORE)
     implementation(AndroidX.APPCOMPAT)
