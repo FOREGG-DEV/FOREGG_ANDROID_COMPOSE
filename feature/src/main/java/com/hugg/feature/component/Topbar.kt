@@ -29,7 +29,9 @@ import com.hugg.domain.model.enums.TopBarRightType
 import com.hugg.feature.R
 import com.hugg.feature.theme.Background
 import com.hugg.feature.theme.Black
+import com.hugg.feature.theme.DAILY_HUGG_BTN_TEXT
 import com.hugg.feature.theme.Gs20
+import com.hugg.feature.theme.Gs50
 import com.hugg.feature.theme.Gs60
 import com.hugg.feature.theme.HuggTheme
 import com.hugg.feature.theme.HuggTypography
@@ -236,14 +238,16 @@ fun DrawRightSkipBtn(
 fun DrawDailyRecordBtn(
     rightBtnClicked : () -> Unit = {},
 ){
-    FilledBtn(
+    BlankBtn(
         modifier = Modifier
-            .width(80.dp)
-            .height(32.dp),
+            .width(90.dp)
+            .height(28.dp),
         onClickBtn = rightBtnClicked,
         radius = 6.dp,
-        text = WORD_DAILY_RECORD,
-        textStyle = HuggTypography.h4,
+        text = DAILY_HUGG_BTN_TEXT,
+        textStyle = HuggTypography.p2,
+        textColor = Gs50,
+        strokeColor = Gs20,
         contentPadding = PaddingValues(vertical = 6.dp)
     )
     Spacer(modifier = Modifier.width(16.dp))
@@ -339,6 +343,6 @@ fun DrawDeleteGs30Btn(
 @Composable
 internal fun Preview() {
     HuggTheme {
-        TopBar()
+        DrawDailyRecordBtn()
     }
 }
