@@ -2,17 +2,22 @@ package com.hugg.account.accountMain
 
 import androidx.lifecycle.viewModelScope
 import com.hugg.domain.model.enums.AccountBottomSheetType
+import com.hugg.domain.model.enums.AccountColorType
 import com.hugg.domain.model.enums.AccountTabType
-import com.hugg.domain.model.enums.AccountType
 import com.hugg.domain.model.request.account.AccountGetConditionRequestVo
+import com.hugg.domain.model.response.account.AccountItemResponseVo
 import com.hugg.domain.model.response.account.AccountResponseVo
-import com.hugg.domain.model.response.account.SubsidyListResponseVo
+import com.hugg.domain.model.response.profile.ProfileDetailResponseVo
+import com.hugg.domain.model.vo.account.AccountCardVo
 import com.hugg.domain.repository.AccountRepository
+import com.hugg.domain.repository.ProfileRepository
 import com.hugg.feature.base.BaseViewModel
+import com.hugg.feature.theme.ACCOUNT_ALL
 import com.hugg.feature.theme.ACCOUNT_PERSONAL
 import com.hugg.feature.theme.ACCOUNT_SUBSIDY
+import com.hugg.feature.util.ForeggLog
 import com.hugg.feature.util.TimeFormatter
-import com.hugg.feature.util.UnitFormatter.getMoneyFormat
+import com.hugg.feature.util.UnitFormatter.getMoneyFormatWithUnit
 import com.hugg.feature.util.UserInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -20,7 +25,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AccountViewModel @Inject constructor(
-    private val accountRepository: AccountRepository
+    private val accountRepository: AccountRepository,
+    private val profileRepository: ProfileRepository
 ) : BaseViewModel<AccountPageState>(
     AccountPageState()
 ) {
@@ -33,7 +39,7 @@ class AccountViewModel @Inject constructor(
     private val today = TimeFormatter.getToday()
     private var year = TimeFormatter.getYear(today)
     private var month = TimeFormatter.getMonth(today)
-    private var round = UserInfo.info.round
+    private var initialInit = false
 
     init {
         initDay(TimeFormatter.getPreviousMonthDate(), today)
@@ -43,29 +49,41 @@ class AccountViewModel @Inject constructor(
     fun initDay(start : String, end : String){
         if(uiState.value.startDay != start) updateStartDay(start)
         if(uiState.value.endDay != end) updateEndDay(end)
+        initialInit = true
         setView()
     }
 
-    private fun setView(){
+    fun setView(){
+        if(!initialInit) return
         when(uiState.value.tabType){
             AccountTabType.ALL -> getAccountByCondition()
-            AccountTabType.ROUND -> {
-                getSubsidies()
-            }
+            AccountTabType.ROUND -> getAccountByRound()
             AccountTabType.MONTH -> getAccountByMonth()
         }
     }
 
     fun onClickTabType(type : AccountTabType){
         updateState(
-            uiState.value.copy(tabType = type)
+            uiState.value.copy(
+                tabType = type,
+                selectedFilterList = listOf(ACCOUNT_ALL)
+            )
         )
         setView()
     }
 
     fun onClickFilterBox(filterText : String){
+        val newList = uiState.value.selectedFilterList.toMutableList()
+
+        if (newList.contains(filterText)) newList.remove(filterText)
+        else {
+            if(filterText == ACCOUNT_ALL) newList.clear()
+            if(filterText != ACCOUNT_ALL && newList.contains(ACCOUNT_ALL)) newList.remove(ACCOUNT_ALL)
+            newList.add(filterText)
+        }
+
         updateState(
-            uiState.value.copy(filterText = filterText)
+            uiState.value.copy(selectedFilterList = newList)
         )
         setView()
     }
@@ -88,10 +106,10 @@ class AccountViewModel @Inject constructor(
         }
     }
 
-    private fun getSubsidies(){
+    private fun getAccountByRound(){
         viewModelScope.launch {
-            accountRepository.getSubsidies(uiState.value.nowRound).collect {
-                resultResponse(it, ::handleGetSuccessSubsidies)
+            accountRepository.getByCount(uiState.value.nowRound).collect {
+                resultResponse(it, ::handleGetSuccessAccount)
             }
         }
     }
@@ -119,14 +137,12 @@ class AccountViewModel @Inject constructor(
     }
 
     fun onClickNextRound(){
-        round++
-        updateSelectedRound()
+        updateSelectedRound(uiState.value.nowRound + 1)
     }
 
     fun onClickPrevRound(){
-        if(round == 0) return
-        round--
-        updateSelectedRound()
+        if(uiState.value.nowRound == 0) return
+        updateSelectedRound(uiState.value.nowRound - 1)
     }
 
     fun updateSelectedBottomSheetType(type : AccountBottomSheetType){
@@ -135,32 +151,111 @@ class AccountViewModel @Inject constructor(
         )
     }
 
-    private fun handleGetSuccessAccount(result : AccountResponseVo){
-        val filterList = result.accountList.filter {
-            when(uiState.value.filterText) {
-                ACCOUNT_PERSONAL -> it.type == AccountType.PERSONAL_EXPENSE
-                ACCOUNT_SUBSIDY -> it.type == AccountType.SUBSIDY
-                else -> true
+    fun onClickCreateRoundBtn(){
+        viewModelScope.launch {
+            accountRepository.createRound().collect {
+                resultResponse(it, ::handleSuccessCreateRound)
             }
+        }
+    }
+
+    fun showCreateRoundDialog(isShow : Boolean){
+        updateState(
+            uiState.value.copy(isShowCreateRoundDialog = isShow)
+        )
+    }
+
+    fun showDeleteDialog(isShow : Boolean){
+        updateState(
+            uiState.value.copy(isShowDeleteDialog = true)
+        )
+    }
+
+    fun onLongClickItem(id : Long){
+        if(uiState.value.isDeleteMode) return
+        else {
+            val newList = uiState.value.accountList.map {
+                it.copy(
+                    isSelected = if (it.id == id) !it.isSelected else it.isSelected
+                )
+            }
+            updateState(
+                uiState.value.copy(
+                    isDeleteMode = true,
+                    accountList = newList
+                )
+            )
+        }
+    }
+
+    fun onClickCard(id : Long){
+        val newList = uiState.value.accountList.map {
+            it.copy(
+                isSelected = if (it.id == id) !it.isSelected else it.isSelected
+            )
         }
         updateState(
             uiState.value.copy(
-                personalExpense = getMoneyFormat(result.personalMoney),
-                totalExpense = getMoneyFormat(result.allExpendMoney),
-                accountList = filterList
+                isDeleteMode = newList.any { it.isSelected },
+                accountList = newList
             )
         )
     }
 
-    private fun handleGetSuccessSubsidies(result : List<SubsidyListResponseVo>){
+    fun deleteAccount(){
+        val deleteList = uiState.value.accountList.filter { it.isSelected }
+        deleteList.forEachIndexed { index, accountCardVo ->
+            viewModelScope.launch {
+                accountRepository.delete(accountCardVo.id).collect {
+                    resultResponse(it, { handleSuccessDeleteAccount(deleteList.size - 1 == index) })
+                }
+            }
+        }
+    }
+
+    private fun handleGetSuccessAccount(result : AccountResponseVo){
+        val filterList = when {
+            uiState.value.selectedFilterList.contains(ACCOUNT_ALL) -> result.ledgerDetailResponseDTOS
+            uiState.value.tabType == AccountTabType.ROUND -> result.ledgerDetailResponseDTOS.filter { it.name in uiState.value.selectedFilterList }
+            uiState.value.selectedFilterList.contains(ACCOUNT_PERSONAL) -> result.ledgerDetailResponseDTOS.filter { it.color == AccountColorType.RED }
+            else -> result.ledgerDetailResponseDTOS.filter { it.color != AccountColorType.RED }
+        }
+
         updateState(
-            uiState.value.copy(subsidyList = result)
+            uiState.value.copy(
+                personalExpense = getMoneyFormatWithUnit(result.personalSum),
+                subsidyExpense = getMoneyFormatWithUnit(result.subsidySum),
+                totalExpense = getMoneyFormatWithUnit(result.total.toInt()),
+                subsidyList = result.subsidyAvailable,
+                accountList = getAccountCardList(filterList),
+            )
         )
+        updateFilterBoxList(result.ledgerDetailResponseDTOS)
+    }
+
+    private fun handleSuccessCreateRound(result : Unit){
+        viewModelScope.launch {
+            profileRepository.getMyInfo().collect{
+                resultResponse(it, ::handleSuccessGetMyInfo)
+            }
+        }
+    }
+
+    private fun handleSuccessGetMyInfo(result : ProfileDetailResponseVo){
+        UserInfo.updateInfo(result)
+        updateSelectedRound(uiState.value.nowRound + 1)
+    }
+
+    private fun handleSuccessDeleteAccount(isComplete : Boolean){
+        if(isComplete) {
+            emitEventFlow(AccountEvent.SuccessDeleteAccountEvent)
+            setView()
+        }
     }
 
     private fun updateStartDay(start: String){
         updateState(
-            uiState.value.copy(startDay = start,)
+            uiState.value.copy(startDay = start)
         )
     }
 
@@ -180,11 +275,11 @@ class AccountViewModel @Inject constructor(
         if(isChange) setView()
     }
 
-    private fun updateSelectedRound(){
+    private fun updateSelectedRound(round : Int){
         updateState(
             uiState.value.copy(nowRound = round)
         )
-        getSubsidies()
+        getAccountByRound()
     }
 
     private fun getAccountByMonth(){
@@ -199,5 +294,32 @@ class AccountViewModel @Inject constructor(
     private fun getByMonthRequest() : String{
         val requestMonth = String.format("%02d", month)
         return "$year-$requestMonth"
+    }
+
+    private fun getAccountCardList(list : List<AccountItemResponseVo>) : List<AccountCardVo>{
+        return list.map {
+            AccountCardVo(
+                id = it.ledgerId,
+                date = it.date,
+                round = it.round,
+                color = it.color,
+                cardName = it.name,
+                title = it.content,
+                money = it.amount,
+            )
+        }
+    }
+
+    private fun updateFilterBoxList(list : List<AccountItemResponseVo>){
+        val filterBoxList = mutableListOf<String>()
+
+        if(list.isNotEmpty()) filterBoxList.add(ACCOUNT_ALL)
+        if(list.any { it.color == AccountColorType.RED }) filterBoxList.add(ACCOUNT_PERSONAL)
+        if((uiState.value.tabType == AccountTabType.ALL || uiState.value.tabType == AccountTabType.MONTH) && list.any { it.color != AccountColorType.RED }) filterBoxList.add(ACCOUNT_SUBSIDY)
+        if(uiState.value.tabType == AccountTabType.ROUND) filterBoxList.addAll(list.filter { it.name != ACCOUNT_PERSONAL }.map { it.name }.distinct())
+
+        updateState(
+            uiState.value.copy(filterList = filterBoxList)
+        )
     }
 }

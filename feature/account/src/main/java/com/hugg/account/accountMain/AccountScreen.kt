@@ -23,6 +23,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -51,9 +53,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hugg.account.accountMain.bottomSheet.DatePickBottomSheet
 import com.hugg.domain.model.enums.AccountColorType
 import com.hugg.domain.model.enums.AccountTabType
+import com.hugg.domain.model.enums.CreateOrEditType
 import com.hugg.domain.model.enums.HuggTabClickedType
 import com.hugg.domain.model.enums.TopBarMiddleType
+import com.hugg.domain.model.enums.TopBarRightType
 import com.hugg.feature.R
+import com.hugg.feature.component.HuggDialog
 import com.hugg.feature.component.HuggTabBar
 import com.hugg.feature.component.PlusBtn
 import com.hugg.feature.uiItem.RemoteYearMonth
@@ -61,12 +66,16 @@ import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.ACCOUNT_ADD_ROUND
 import com.hugg.feature.theme.ACCOUNT_ALL
 import com.hugg.feature.theme.ACCOUNT_ALL_EXPENSE
+import com.hugg.feature.theme.ACCOUNT_DIALOG_CREATE_ROUND
+import com.hugg.feature.theme.ACCOUNT_DIALOG_DELETE
+import com.hugg.feature.theme.ACCOUNT_DIALOG_WARNING_CREATE_ROUND
+import com.hugg.feature.theme.ACCOUNT_LIST_DIALOG_DELETE
 import com.hugg.feature.theme.ACCOUNT_MONTH
 import com.hugg.feature.theme.ACCOUNT_PERSONAL
 import com.hugg.feature.theme.ACCOUNT_ROUND
-import com.hugg.feature.theme.ACCOUNT_SUBSIDY
 import com.hugg.feature.theme.ACCOUNT_SUBSIDY_ALL
 import com.hugg.feature.theme.ACCOUNT_SUGGEST_ADD_SUBSIDY
+import com.hugg.feature.theme.ACCOUNT_TOAST_SUCCESS_DELETE
 import com.hugg.feature.theme.Background
 import com.hugg.feature.theme.CalendarEtc
 import com.hugg.feature.theme.CalendarHospital
@@ -82,11 +91,15 @@ import com.hugg.feature.theme.Gs80
 import com.hugg.feature.theme.Gs90
 import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.MainNormal
+import com.hugg.feature.theme.Sunday
 import com.hugg.feature.theme.WORD_ACCOUNT
+import com.hugg.feature.theme.WORD_ADD
+import com.hugg.feature.theme.WORD_DELETE
 import com.hugg.feature.theme.White
 import com.hugg.feature.uiItem.AccountCardItem
 import com.hugg.feature.uiItem.RemoteRound
 import com.hugg.feature.uiItem.SubsidyTotalBoxItem
+import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UnitFormatter
 import com.hugg.feature.util.UserInfo
@@ -96,6 +109,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 @Composable
 fun AccountContainer(
     navigateToSubsidyList : (Int) -> Unit = {},
+    navigateToCreateOrEditAccount : (Long, CreateOrEditType) -> Unit = {_, _ -> },
     viewModel: AccountViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -104,18 +118,27 @@ fun AccountContainer(
     var isFilterAtTop by remember { mutableStateOf(false) }
     val interactionSource = remember { MutableInteractionSource() }
 
+    LaunchedEffect(Unit){
+        viewModel.setView()
+    }
+
     AccountScreen(
         onClickTab = { type -> viewModel.onClickTabType(type) },
         onClickFilterBox = { filter -> viewModel.onClickFilterBox(filter) },
         uiState = uiState,
         scrollState = scrollState,
         isFilterAtTop = isFilterAtTop,
+        onClickCreateRoundBtn = { viewModel.showCreateRoundDialog(true) },
         onClickPrevMonthBtn = { viewModel.onClickPrevMonth() },
         onClickNextMonthBtn = { viewModel.onClickNextMonth() },
         onClickPrevRoundBtn = { viewModel.onClickPrevRound() },
         onClickNextRoundBtn = { viewModel.onClickNextRound() },
         onClickDateFilter = { viewModel.onClickBottomSheetOnOff() },
         onClickGoToSubsidyList = { navigateToSubsidyList(uiState.nowRound) },
+        onClickCreateAccountBtn = { navigateToCreateOrEditAccount(-1, CreateOrEditType.CREATE) },
+        onClickAccountCard = { id -> if(uiState.isDeleteMode) viewModel.onClickCard(id) else navigateToCreateOrEditAccount(id, CreateOrEditType.EDIT) },
+        onLongClickAccountCard = { id -> viewModel.onLongClickItem(id) },
+        onDeleteAccountList = { viewModel.showDeleteDialog(true) },
         interactionSource = interactionSource
     )
 
@@ -125,6 +148,16 @@ fun AccountContainer(
             .collect { index ->
                 isFilterAtTop = index >= 2
             }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.eventFlow.collect { event ->
+            when(event) {
+                AccountEvent.SuccessDeleteAccountEvent -> {
+                    HuggToast.createToast(context, ACCOUNT_TOAST_SUCCESS_DELETE).show()
+                }
+            }
+        }
     }
 
     if (uiState.isShowBottomSheet) {
@@ -138,6 +171,31 @@ fun AccountContainer(
             context = context
         )
     }
+
+    if(uiState.isShowDeleteDialog){
+        HuggDialog(
+            title = ACCOUNT_LIST_DIALOG_DELETE,
+            positiveColor = Sunday,
+            positiveText = WORD_DELETE,
+            onClickCancel = { viewModel.showDeleteDialog(false) },
+            onClickNegative = { viewModel.showDeleteDialog(false) },
+            onClickPositive = { viewModel.deleteAccount() },
+            interactionSource = interactionSource
+        )
+    }
+
+    if(uiState.isShowCreateRoundDialog){
+        HuggDialog(
+            title = ACCOUNT_DIALOG_CREATE_ROUND,
+            warningMessage = ACCOUNT_DIALOG_WARNING_CREATE_ROUND,
+            positiveText = WORD_ADD,
+            hasWarningText = true,
+            onClickCancel = { viewModel.showCreateRoundDialog(false) },
+            onClickNegative = { viewModel.showCreateRoundDialog(false) },
+            onClickPositive = { viewModel.onClickCreateRoundBtn() },
+            interactionSource = interactionSource
+        )
+    }
 }
 
 @Composable
@@ -149,12 +207,16 @@ fun AccountScreen(
     onClickCreateRoundBtn: () -> Unit = {},
     onClickGoToSubsidyList : () -> Unit = {},
     onClickTab: (AccountTabType) -> Unit = {},
+    onClickCreateAccountBtn : () -> Unit = {},
     uiState: AccountPageState = AccountPageState(),
     onClickFilterBox: (String) -> Unit = {},
     scrollState: LazyListState = rememberLazyListState(),
     isFilterAtTop: Boolean = false,
     onClickDateFilter: () -> Unit = {},
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    onClickAccountCard : (Long) -> Unit = {},
+    onLongClickAccountCard : (Long) -> Unit = {},
+    onDeleteAccountList : () -> Unit = {}
 ) {
 
     val initialTabType = when(uiState.tabType){
@@ -172,6 +234,8 @@ fun AccountScreen(
         TopBar(
             middleItemType = TopBarMiddleType.TEXT,
             middleText = WORD_ACCOUNT,
+            rightItemType = if(uiState.isDeleteMode) TopBarRightType.DELETE else TopBarRightType.NONE,
+            rightBtnClicked = onDeleteAccountList,
             interactionSource = interactionSource
         )
 
@@ -240,12 +304,12 @@ fun AccountScreen(
 
             itemsIndexed(
                 items = uiState.accountList,
-                key = { _, accountVo ->
-                    accountVo.id
-                }
             ) { _, accountVo ->
                 AccountCardItem(
                     item = accountVo,
+                    interactionSource = interactionSource,
+                    onClickCard = onClickAccountCard,
+                    onLongClickCard = onLongClickAccountCard
                 )
             }
         }
@@ -293,7 +357,7 @@ fun AccountScreen(
                 .size(56.dp)
                 .background(color = MainNormal)
                 .clickable(
-                    onClick = { },
+                    onClick = onClickCreateAccountBtn,
                     interactionSource = interactionSource,
                     indication = null
                 )
@@ -408,7 +472,7 @@ fun AccountTotalBox(
 
         if (uiState.tabType != AccountTabType.ALL) Spacer(modifier = Modifier.size(22.dp))
 
-        TotalBoxItem(AccountColorType.PERSONAL, uiState)
+        TotalBoxItem(AccountColorType.RED, uiState)
 
         Spacer(modifier = Modifier.size(
             if (uiState.tabType == AccountTabType.ROUND && uiState.subsidyList.isEmpty()) 12.dp else 18.dp
@@ -482,11 +546,11 @@ fun AccountTotalBox(
 
 @Composable
 fun TotalBoxItem(
-    colorType: AccountColorType = AccountColorType.PERSONAL,
+    colorType: AccountColorType = AccountColorType.RED,
     uiState: AccountPageState = AccountPageState()
 ) {
     val color = when (colorType) {
-        AccountColorType.PERSONAL -> CalendarPill
+        AccountColorType.RED -> CalendarPill
         AccountColorType.ALL -> Gs20
         AccountColorType.BLUE -> CalendarInjection
         AccountColorType.GREEN -> CalendarHospital
@@ -494,7 +558,7 @@ fun TotalBoxItem(
     }
 
     val text = when (colorType) {
-        AccountColorType.PERSONAL -> ACCOUNT_PERSONAL
+        AccountColorType.RED -> ACCOUNT_PERSONAL
         AccountColorType.ALL -> ACCOUNT_SUBSIDY_ALL
         else -> ""
     }
@@ -523,7 +587,7 @@ fun TotalBoxItem(
         Spacer(modifier = Modifier.weight(1f))
 
         Text(
-            text = if (colorType == AccountColorType.PERSONAL) uiState.personalExpense else "1,000원", // 아직 서버 미반영
+            text = if (colorType == AccountColorType.RED) uiState.personalExpense else uiState.subsidyExpense, // 아직 서버 미반영
             style = HuggTypography.p1,
             color = Gs80
         )
@@ -577,28 +641,14 @@ fun AccountItemFilter(
     onClickFilterBox: (String) -> Unit = {},
     interactionSource: MutableInteractionSource
 ) {
-    Row(
+    LazyRow(
         modifier = Modifier
-            .padding(start = 16.dp)
+            .padding(start = 16.dp, end = 16.dp)
             .background(Background)
     ) {
-        FilterItem(
-            text = ACCOUNT_ALL,
-            uiState = uiState,
-            onClickFilterBox = onClickFilterBox,
-            interactionSource = interactionSource
-        )
-
-        FilterItem(
-            text = ACCOUNT_PERSONAL,
-            uiState = uiState,
-            onClickFilterBox = onClickFilterBox,
-            interactionSource = interactionSource
-        )
-
-        if (uiState.tabType == AccountTabType.ALL || uiState.tabType == AccountTabType.MONTH) {
+        items(uiState.filterList){
             FilterItem(
-                text = ACCOUNT_SUBSIDY,
+                text = it,
                 uiState = uiState,
                 onClickFilterBox = onClickFilterBox,
                 interactionSource = interactionSource
@@ -617,23 +667,23 @@ fun FilterItem(
     Box(
         modifier = Modifier
             .padding(end = 4.dp)
-            .size(width = 78.dp, height = 28.dp)
             .background(
-                color = if (uiState.filterText == text) Gs70 else White,
+                color = if (uiState.selectedFilterList.contains(text)) Gs70 else White,
                 shape = RoundedCornerShape(999.dp)
             )
             .clickable(
                 onClick = { onClickFilterBox(text) },
                 interactionSource = interactionSource,
                 indication = null
-            ),
+            )
+            .padding(horizontal = 25.dp, vertical = 3.dp),
         contentAlignment = Alignment.Center
     ) {
         Text(
             textAlign = TextAlign.Center,
-            text = text,
-            style = if (uiState.filterText == text) HuggTypography.h3 else HuggTypography.p2,
-            color = if (uiState.filterText == text) White else Gs60
+            text = if(uiState.tabType == AccountTabType.ROUND && text != ACCOUNT_ALL && text != ACCOUNT_PERSONAL) UnitFormatter.getSubsidyTitleWithoutMoneyFormat(text) else text,
+            style = if(uiState.selectedFilterList.contains(text)) HuggTypography.h4 else HuggTypography.p2 ,
+            color = if(uiState.selectedFilterList.contains(text)) White else Gs60
         )
     }
 }

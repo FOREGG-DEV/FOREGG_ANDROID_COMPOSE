@@ -1,7 +1,7 @@
 package com.hugg.data.dto.account
 
 import com.google.gson.annotations.SerializedName
-import com.hugg.domain.model.enums.SubsidyColorType
+import com.hugg.domain.model.enums.AccountColorType
 
 data class SubsidyResponse(
     @SerializedName("subsidyDetailResponseDTOS")
@@ -14,7 +14,7 @@ data class SubsidyResponseListItem(
     @SerializedName("nickname")
     val nickname : String = "",
     @SerializedName("color")
-    val color : SubsidyColorType = SubsidyColorType.BLUE,
+    val color : AccountColorType = AccountColorType.BLUE,
     @SerializedName("content")
     val content : String = "",
     @SerializedName("amount")

@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.example.dailyhugg.main.DailyHuggScreen
+import com.hugg.account.accountCreateOrEdit.AccountCreateOrEditContainer
 import com.hugg.account.accountMain.AccountContainer
 import com.hugg.account.subsidyCreateOrEdit.SubsidyCreateOrEditContainer
 import com.hugg.account.subsidyList.SubsidyListContainer
@@ -157,7 +158,8 @@ fun NavGraphBuilder.accountGraph(navController: NavHostController) {
     navigation(startDestination = Routes.AccountScreen.route, route = Routes.AccountGraph.route) {
 
         composable(Routes.AccountScreen.route) { AccountContainer(
-            navigateToSubsidyList = { round -> navController.navigate(Routes.AccountSubsidyList.getRouteAccountSubsidyList(round)) }
+            navigateToSubsidyList = { round -> navController.navigate(Routes.AccountSubsidyList.getRouteAccountSubsidyList(round)) },
+            navigateToCreateOrEditAccount = { id, type -> navController.navigate(Routes.AccountCreateOrEdit.getRouteAccountCreateOrEdit(id, type.name))}
         ) }
 
         composable(
@@ -189,6 +191,23 @@ fun NavGraphBuilder.accountGraph(navController: NavHostController) {
                 id = id,
                 type = type,
                 round = round,
+                goToBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = Routes.AccountCreateOrEdit.route,
+            arguments = listOf(
+                navArgument("id") { type = NavType.LongType },
+                navArgument("type") { type = NavType.StringType}
+            )
+        ) {
+            val id = it.arguments?.getLong("id") ?: -1
+            val type = CreateOrEditType.getEnumType(it.arguments?.getString("type") ?: "")
+            AccountCreateOrEditContainer(
+                navigateCreateSubsidy = { round -> navController.navigate(Routes.AccountSubsidyCreateOrEdit.getRouteAccountSubsidyCreateOrEdit(id, type.name, round))},
+                id = id,
+                type = type,
                 goToBack = { navController.popBackStack() }
             )
         }
