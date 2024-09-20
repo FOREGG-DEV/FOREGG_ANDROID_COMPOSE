@@ -1,5 +1,6 @@
 package com.hugg.main
 
+import android.net.Uri
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -8,6 +9,7 @@ import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.example.dailyhugg.create.CreateDailyHuggScreen
 import com.example.dailyhugg.main.DailyHuggScreen
+import com.example.dailyhugg.preview.ImagePreviewScreen
 import com.hugg.account.accountCreateOrEdit.AccountCreateOrEditContainer
 import com.hugg.account.accountMain.AccountContainer
 import com.hugg.account.subsidyCreateOrEdit.SubsidyCreateOrEditContainer
@@ -223,6 +225,25 @@ fun NavGraphBuilder.dailyHuggGraph(navController: NavHostController) {
             )
         }
 
-        composable(Routes.CreateDailyHuggScreen.route) { CreateDailyHuggScreen() }
+        composable(Routes.CreateDailyHuggScreen.route) {
+            CreateDailyHuggScreen(
+                goToImgPreview = { uri: Uri? ->
+                    uri?.let {
+                        navController.navigate(Routes.ImagePreviewScreen.createRoute(uri))
+                    }
+                }
+            )
+        }
+
+        composable(
+            route = Routes.ImagePreviewScreen.route,
+            arguments = listOf(
+                navArgument("uri") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val uriString = backStackEntry.arguments?.getString("uri")
+            val uri = uriString?.let { Uri.parse(Uri.decode(it)) }
+            ImagePreviewScreen(selectedUri = uri)
+        }
     }
 }

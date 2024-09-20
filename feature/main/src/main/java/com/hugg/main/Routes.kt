@@ -1,5 +1,7 @@
 package com.hugg.main
 
+import android.net.Uri
+
 sealed class Routes(val route : String){
 
     //----------------SIGN_GRAPH----------------//
@@ -46,4 +48,7 @@ sealed class Routes(val route : String){
     data object DailyHuggGraph : Routes("daily_hugg_graph")
     data object DailyHuggScreen : Routes("daily_hugg")
     data object CreateDailyHuggScreen : Routes("create_daily_hugg")
+    data object ImagePreviewScreen: Routes("image_preview/{uri}") {
+        fun createRoute(uri: Uri) = "image_preview/${Uri.encode(uri.toString())}"
+    }
 }
