@@ -27,6 +27,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,8 +39,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -51,6 +55,7 @@ import com.hugg.dailyhugg.R
 import com.hugg.domain.model.enums.DailyConditionType
 import com.hugg.domain.model.enums.TopBarLeftType
 import com.hugg.domain.model.enums.TopBarMiddleType
+import com.hugg.feature.component.FilledBtn
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.Background
 import com.hugg.feature.theme.CREATE_TITLE
@@ -60,6 +65,7 @@ import com.hugg.feature.theme.Gs10
 import com.hugg.feature.theme.GsWhite
 import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.IMAGE_PERMISSION_TEXT
+import com.hugg.feature.theme.MainStrong
 import com.hugg.feature.theme.WORD_REGISTRATION
 import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.TimeFormatter
@@ -67,18 +73,18 @@ import com.hugg.feature.util.UserInfo
 
 @Composable
 fun CreateDailyHuggScreen(
-    goToImgPreview: (Uri?) -> Unit = {}
+    goToImgPreview: (Uri?) -> Unit = {},
+    getSavedUri: () -> Uri?
 ) {
     val viewModel: CreateDailyHuggViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     val interactionSource = remember { MutableInteractionSource() }
     val galleryLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         uri?.let {
-            selectedImageUri = it
+            viewModel.setSelectedImageUri(it)
             goToImgPreview(it)
         }
     }
@@ -93,29 +99,34 @@ fun CreateDailyHuggScreen(
     }
     val year = TimeFormatter.getYear(TimeFormatter.getToday())
     val formattedMDW = TimeFormatter.getDateFormattedMDWKor(TimeFormatter.getToday())
+    val onClickBtnClose = { viewModel.setSelectedImageUri(null) }
+
+    LaunchedEffect(Unit) {
+        viewModel.setSelectedImageUri(getSavedUri())
+    }
 
     CreateDailyHuggContent(
-        selectedImageUri = selectedImageUri,
         permissionLauncher = permissionLauncher,
         uiState = uiState,
         onDailyHuggContentChanged = { viewModel.onDailyHuggContentChange(it) },
         year = year,
         formattedMDW = formattedMDW,
         onSelectedDailyConditionType = { viewModel.onSelectedDailyCondition(it) },
-        interactionSource = interactionSource
+        interactionSource = interactionSource,
+        onClickBtnClose = onClickBtnClose
     )
 }
 
 @Composable
 fun CreateDailyHuggContent(
-    selectedImageUri: Uri? = null,
     permissionLauncher: ManagedActivityResultLauncher<String, Boolean>? = null,
     uiState: CreateDailyHuggPageState = CreateDailyHuggPageState(),
     onDailyHuggContentChanged: (String) -> Unit = {},
     year: Int = 2024,
     formattedMDW: String = "",
     interactionSource: MutableInteractionSource = remember {  MutableInteractionSource() },
-    onSelectedDailyConditionType: (DailyConditionType) -> Unit = {}
+    onSelectedDailyConditionType: (DailyConditionType) -> Unit = {},
+    onClickBtnClose: () -> Unit = {}
 ) {
     Box(
         modifier = Modifier
@@ -139,12 +150,13 @@ fun CreateDailyHuggContent(
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Text(
-                    text = String.format(
-                        CREATE_TITLE,
-                        UserInfo.info.name,
-                        year,
-                        formattedMDW
-                    ),
+                    text = buildAnnotatedString {
+                        append(String.format("%s님\n", UserInfo.info.name))
+                        withStyle(style = SpanStyle(color = MainStrong)) {
+                            append(String.format("%s년 %s", year, formattedMDW))
+                        }
+                        append("\n오늘 하루 어떠셨나요?")
+                    },
                     style = HuggTypography.h1,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth()
@@ -167,35 +179,22 @@ fun CreateDailyHuggContent(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 BtnImageSelector(
-                    selectedImageUri = selectedImageUri,
-                    permissionLauncher = permissionLauncher
+                    selectedImageUri = uiState.selectedImageUri,
+                    permissionLauncher = permissionLauncher,
+                    onClickBtnClose = onClickBtnClose
                 )
             }
         }
 
-        Box(
+        FilledBtn(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
                 .padding(bottom = 80.dp)
-                .height(56.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .background(uiState.btnRegistrationColor)
-                .align(Alignment.BottomCenter)
-                .clickable(
-                    enabled = uiState.clickable,
-                    interactionSource = interactionSource,
-                    indication = null,
-                    onClick = {}
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = WORD_REGISTRATION,
-                style = HuggTypography.btn,
-                color = GsWhite
-            )
-        }
+                .align(Alignment.BottomCenter),
+            isActive = uiState.clickable,
+            text = WORD_REGISTRATION
+        )
     }
 }
 
@@ -301,7 +300,9 @@ fun DailyHuggInputField(
 @Composable
 fun BtnImageSelector(
     selectedImageUri: Uri? = null,
+    onClickBtnClose: () -> Unit = {},
     permissionLauncher: ManagedActivityResultLauncher<String, Boolean>? = null,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
     Box(
         modifier = Modifier
@@ -324,6 +325,23 @@ fun BtnImageSelector(
                 modifier = Modifier.size(80.dp),
                 contentScale = ContentScale.Crop
             )
+
+            Box(
+                modifier = Modifier
+                    .size(16.dp)
+                    .padding(2.dp)
+                    .align(Alignment.TopEnd)
+                    .clickable(
+                        interactionSource = interactionSource,
+                        indication = null,
+                        onClick = { onClickBtnClose() }
+                    )
+            ) {
+                Image(
+                    painter = painterResource(id = com.hugg.feature.R.drawable.ic_circle_close),
+                    contentDescription = ""
+                )
+            }
         } else {
             Image(
                 painter = painterResource(id = com.hugg.feature.R.drawable.ic_camera),
