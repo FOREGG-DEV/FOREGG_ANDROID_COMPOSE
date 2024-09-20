@@ -425,7 +425,7 @@ fun ReplyItem(
 @Composable
 fun UrlToImage(
     url: String,
-    ratio: Float = 319f / 244f,
+    ratio: Float = 319f / 200f,
     radius: Dp = 4.dp
 ) {
     Image(
