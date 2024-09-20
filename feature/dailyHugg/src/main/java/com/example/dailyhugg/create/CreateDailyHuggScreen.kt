@@ -67,7 +67,7 @@ import com.hugg.feature.util.UserInfo
 
 @Composable
 fun CreateDailyHuggScreen(
-
+    goToImgPreview: (Uri?) -> Unit = {}
 ) {
     val viewModel: CreateDailyHuggViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -79,6 +79,7 @@ fun CreateDailyHuggScreen(
     ) { uri: Uri? ->
         uri?.let {
             selectedImageUri = it
+            goToImgPreview(it)
         }
     }
     val permissionLauncher = rememberLauncherForActivityResult(
