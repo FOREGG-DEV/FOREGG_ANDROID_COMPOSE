@@ -218,6 +218,11 @@ fun NavGraphBuilder.accountGraph(navController: NavHostController) {
 }
 
 fun NavGraphBuilder.dailyHuggGraph(navController: NavHostController) {
+    val popScreen = { croppedUri: Uri? ->
+        navController.previousBackStackEntry?.savedStateHandle?.set("croppedUri", croppedUri)
+        navController.popBackStack()
+    }
+
     navigation(startDestination = Routes.DailyHuggScreen.route, route = Routes.DailyHuggGraph.route) {
         composable(Routes.DailyHuggScreen.route) {
             DailyHuggScreen(
@@ -231,7 +236,8 @@ fun NavGraphBuilder.dailyHuggGraph(navController: NavHostController) {
                     uri?.let {
                         navController.navigate(Routes.ImagePreviewScreen.createRoute(uri))
                     }
-                }
+                },
+                getSavedUri = { navController.currentBackStackEntry?.savedStateHandle?.get<Uri>("croppedUri") }
             )
         }
 
@@ -243,7 +249,12 @@ fun NavGraphBuilder.dailyHuggGraph(navController: NavHostController) {
         ) { backStackEntry ->
             val uriString = backStackEntry.arguments?.getString("uri")
             val uri = uriString?.let { Uri.parse(Uri.decode(it)) }
-            ImagePreviewScreen(selectedUri = uri)
+            ImagePreviewScreen(
+                selectedUri = uri,
+                popScreen =  { croppedUri: Uri? ->
+                    popScreen(croppedUri)
+                }
+            )
         }
     }
 }
