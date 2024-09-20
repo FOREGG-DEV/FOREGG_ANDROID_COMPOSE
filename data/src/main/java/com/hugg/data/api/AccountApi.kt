@@ -1,6 +1,7 @@
 package com.hugg.data.api
 
 import com.hugg.data.base.ApiResponse
+import com.hugg.data.dto.account.AccountDetailResponse
 import com.hugg.data.dto.account.AccountResponse
 import com.hugg.data.dto.account.AccountResponseListItem
 import com.hugg.data.dto.account.SubsidyDetailResponse
@@ -51,7 +52,7 @@ interface AccountApi {
     @GET(Endpoints.ACCOUNT.GET_DETAIL)
     suspend fun getAccountDetail(
         @Path(PATH_ID) id : Long,
-    ) : Response<ApiResponse<AccountResponseListItem>>
+    ) : Response<ApiResponse<AccountDetailResponse>>
 
     @POST(Endpoints.ACCOUNT.CREATE)
     suspend fun createAccount(
@@ -89,4 +90,7 @@ interface AccountApi {
     suspend fun getSubsidy(
         @Path(PATH_COUNT) count: Int,
     ) : Response<ApiResponse<SubsidyResponse>>
+
+    @POST(Endpoints.ACCOUNT.CREATE_COUNT)
+    suspend fun createRound() : Response<ApiResponse<Unit>>
 }

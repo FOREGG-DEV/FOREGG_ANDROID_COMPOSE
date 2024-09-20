@@ -1,14 +1,11 @@
 package com.hugg.domain.model.response.account
 
-import com.hugg.domain.model.enums.AccountType
-
+import com.google.gson.annotations.SerializedName
 
 data class AccountDetailResponseVo(
-    val id : Long = -1,
-    val type : AccountType = AccountType.PERSONAL_EXPENSE,
     val date : String = "",
+    val count : Int = 0,
     val content : String = "",
-    val money : String = "",
-    val round : Int = 0,
-    val memo : String = ""
+    val memo : String = "",
+    val subsidyAvailable : List<AccountSubsidyAvailableItemVo> = emptyList(),
 )
