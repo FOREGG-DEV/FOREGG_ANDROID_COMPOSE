@@ -132,5 +132,9 @@ const val CREATE_TITLE = "%s님\n%s년 %s\n오늘 하루 어떠셨나요?"
 const val DAILY_HUGG_CONTENT_HINT = "오늘 하루의 기분, 컨디션, 건강 상태 등 남편과 공유하고 싶은 모든 기록을 자유롭게 작성해보세요."
 const val IMAGE_PERMISSION_TEXT = "접근 권한을 허용해주세요."
 
+// DailyHuggCreationSuccess
+const val CREATION_SUCCESS_TITLE = "데일리 허그가 전달되었어요!"
+const val CONFIRM_DAILY_HUGG = "작성한 글 확인"
+
 // --------- 에러 Toast --------- //
 const val TOAST_ERROR_NOR_CORRECT_SPOUSE_CODE = "유효하지 않은 배우자코드입니다."
