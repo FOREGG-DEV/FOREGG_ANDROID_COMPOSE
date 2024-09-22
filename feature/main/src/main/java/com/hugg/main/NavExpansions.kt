@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.example.dailyhugg.create.CreateDailyHuggScreen
+import com.example.dailyhugg.create.complete.DailyHuggCreationSuccessScreen
 import com.example.dailyhugg.main.DailyHuggScreen
 import com.example.dailyhugg.preview.ImagePreviewScreen
 import com.hugg.account.accountCreateOrEdit.AccountCreateOrEditContainer
@@ -237,7 +238,8 @@ fun NavGraphBuilder.dailyHuggGraph(navController: NavHostController) {
                         navController.navigate(Routes.ImagePreviewScreen.createRoute(uri))
                     }
                 },
-                getSavedUri = { navController.currentBackStackEntry?.savedStateHandle?.get<Uri>("croppedUri") }
+                getSavedUri = { navController.currentBackStackEntry?.savedStateHandle?.get<Uri>("croppedUri") },
+                goToDailyHuggCreationSuccessScreen = { navController.navigate(Routes.DailyHuggCreationSuccessScreen.route) }
             )
         }
 
@@ -253,6 +255,16 @@ fun NavGraphBuilder.dailyHuggGraph(navController: NavHostController) {
                 selectedUri = uri,
                 popScreen =  { croppedUri: Uri? ->
                     popScreen(croppedUri)
+                }
+            )
+        }
+
+        composable(Routes.DailyHuggCreationSuccessScreen.route) {
+            DailyHuggCreationSuccessScreen(
+                goToDailyHuggMain = {
+                    navController.navigate(Routes.DailyHuggScreen.route) {
+                        popUpTo(Routes.DailyHuggGraph.route) { inclusive = true }
+                    }
                 }
             )
         }
