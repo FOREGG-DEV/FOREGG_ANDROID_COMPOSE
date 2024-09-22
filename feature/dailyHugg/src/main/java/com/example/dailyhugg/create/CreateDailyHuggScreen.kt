@@ -73,6 +73,7 @@ import com.hugg.feature.util.UserInfo
 
 @Composable
 fun CreateDailyHuggScreen(
+    goToDailyHuggCreationSuccessScreen: () -> Unit = {},
     goToImgPreview: (Uri?) -> Unit = {},
     getSavedUri: () -> Uri?
 ) {
@@ -113,7 +114,8 @@ fun CreateDailyHuggScreen(
         formattedMDW = formattedMDW,
         onSelectedDailyConditionType = { viewModel.onSelectedDailyCondition(it) },
         interactionSource = interactionSource,
-        onClickBtnClose = onClickBtnClose
+        onClickBtnClose = onClickBtnClose,
+        goToDailyHuggCreationSuccessScreen = { goToDailyHuggCreationSuccessScreen() }
     )
 }
 
@@ -126,7 +128,8 @@ fun CreateDailyHuggContent(
     formattedMDW: String = "",
     interactionSource: MutableInteractionSource = remember {  MutableInteractionSource() },
     onSelectedDailyConditionType: (DailyConditionType) -> Unit = {},
-    onClickBtnClose: () -> Unit = {}
+    onClickBtnClose: () -> Unit = {},
+    goToDailyHuggCreationSuccessScreen: () -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -193,7 +196,8 @@ fun CreateDailyHuggContent(
                 .padding(bottom = 80.dp)
                 .align(Alignment.BottomCenter),
             isActive = uiState.clickable,
-            text = WORD_REGISTRATION
+            text = WORD_REGISTRATION,
+            onClickBtn = { goToDailyHuggCreationSuccessScreen() }
         )
     }
 }
