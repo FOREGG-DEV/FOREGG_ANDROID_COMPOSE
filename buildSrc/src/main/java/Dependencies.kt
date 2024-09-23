@@ -39,8 +39,8 @@ object AndroidX{
     const val COMPOSE_BOM = "androidx.compose:compose-bom:${Versions.COMPOSE_BOM}"
     const val COMPOSE_UI = "androidx.compose.ui:ui"
     const val COMPOSE_GRAPHICS = "androidx.compose.ui:ui-graphics"
-    const val COMPOSE_PREVIEW = "androidx.compose.ui:ui-tooling-preview"
-    const val COMPOSE_MATERIAL = "androidx.compose.material3:material3"
+    const val COMPOSE_PREVIEW = "androidx.compose.ui:ui-tooling-preview:${Versions.COMPOSE_PREVIEW}"
+    const val COMPOSE_MATERIAL = "androidx.compose.material3:material3:${Versions.COMPOSE_MATERIAL3}"
 }
 
 object Libraries {

@@ -5,6 +5,9 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 
 // --------- 단어 --------- //
+const val WORD_HOME = "홈"
+const val WORD_DAILY_HUGG = "데일리 허그"
+const val WORD_MY = "마정"
 const val WORD_SKIP = "skip"
 const val WORD_NEXT = "다음"
 const val WORD_DAILY_RECORD = "하루기록"

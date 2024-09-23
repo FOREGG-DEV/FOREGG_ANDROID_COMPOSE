@@ -1,8 +1,5 @@
 package com.hugg.main
 
-import com.hugg.domain.model.enums.CreateOrEditType
-import com.hugg.domain.model.enums.RecordType
-
 sealed class Routes(val route : String){
 
     //----------------SIGN_GRAPH----------------//
