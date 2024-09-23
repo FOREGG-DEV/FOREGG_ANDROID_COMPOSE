@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.rememberTransformableState
+import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
@@ -15,11 +17,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,6 +37,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
 import com.hugg.feature.component.FilledBtn
 import com.hugg.feature.theme.Black
+import com.hugg.feature.theme.GsBlack
 import com.hugg.feature.theme.WORD_CONFIRM
 import java.io.File
 import java.io.FileOutputStream
@@ -43,15 +51,15 @@ fun ImagePreviewScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(selectedUri) {
         viewModel.setUri(selectedUri)
     }
 
     ImagePreviewContent(
         selectedUri = uiState.selectedUri,
-        onClickBtnConfirm = {
+        onClickBtnConfirm = { scale, offsetX, offsetY ->
             selectedUri?.let { uri ->
-                val croppedUri = cropImage(context, uri)
+                val croppedUri = cropImage(context, uri, scale, offsetX, offsetY)
                 popScreen(croppedUri)
             }
         }
@@ -61,8 +69,17 @@ fun ImagePreviewScreen(
 @Composable
 fun ImagePreviewContent(
     selectedUri: Uri? = null,
-    onClickBtnConfirm: () -> Unit = {}
+    onClickBtnConfirm: (Float, Float, Float) -> Unit = { _, _, _ -> }
 ) {
+    var scale by remember { mutableFloatStateOf(1f) }
+    var offsetX by remember { mutableFloatStateOf(0f) }
+    var offsetY by remember { mutableFloatStateOf(0f) }
+    val state = rememberTransformableState { zoomChange, offsetChange, _ ->
+        scale *= zoomChange
+        offsetX += offsetChange.x
+        offsetY += offsetChange.y
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize(),
@@ -72,7 +89,14 @@ fun ImagePreviewContent(
             painter = rememberAsyncImagePainter(model = selectedUri),
             contentDescription = null,
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .graphicsLayer(
+                    scaleX = maxOf(1f, scale),
+                    scaleY = maxOf(1f, scale),
+                    translationX = offsetX,
+                    translationY = offsetY
+                )
+                .transformable(state = state),
             contentScale = ContentScale.Crop
         )
 
@@ -85,14 +109,14 @@ fun ImagePreviewContent(
                 .padding(bottom = 80.dp)
                 .align(Alignment.BottomCenter),
             text = WORD_CONFIRM,
-            onClickBtn = { onClickBtnConfirm() }
+            onClickBtn = { onClickBtnConfirm(scale, offsetX, offsetY) }
         )
     }
 }
 
 @Composable
 fun CropOverlay(
-    backgroundColor: Color = Black.copy(alpha = 0.7f)
+    backgroundColor: Color = GsBlack.copy(alpha = 0.7f)
 ) {
     Column(
         modifier = Modifier
@@ -122,20 +146,24 @@ fun CropOverlay(
     }
 }
 
-fun cropImage(context: Context, uri: Uri): Uri? {
+fun cropImage(context: Context, uri: Uri, scale: Float, offsetX: Float, offsetY: Float): Uri? {
     val inputStream = context.contentResolver.openInputStream(uri)
     val originalBitmap = BitmapFactory.decodeStream(inputStream)
     inputStream?.close()
-
+    val originalWidth = originalBitmap.width
+    val originalHeight = originalBitmap.height
     val aspectRatio = 375f / 235f
-    val width = originalBitmap.width
-    val height = originalBitmap.height
-    val cropHeight = (width / aspectRatio).toInt()
-    val cropTop = (height - cropHeight) / 2
-    val croppedBitmap = Bitmap.createBitmap(originalBitmap, 0, cropTop, width, cropHeight)
+    val visibleWidth = originalWidth / scale
+    val visibleHeight = visibleWidth / aspectRatio
+    val cropX = ((originalWidth - visibleWidth) / 2 + offsetX / scale).toInt().coerceIn(0, originalWidth)
+    val cropY = ((originalHeight - visibleHeight) / 2 + offsetY / scale).toInt().coerceIn(0, originalHeight)
+    val cropWidth = minOf(visibleWidth.toInt(), originalWidth - cropX)
+    val cropHeight = (cropWidth / aspectRatio).toInt()
+    val croppedBitmap = Bitmap.createBitmap(originalBitmap, cropX, cropY, cropWidth, cropHeight)
 
     return saveBitmapToUri(context, croppedBitmap)
 }
+
 
 fun saveBitmapToUri(context: Context, bitmap: Bitmap): Uri? {
     val file = File(context.cacheDir, "cropped_image_${System.currentTimeMillis()}.jpg")
