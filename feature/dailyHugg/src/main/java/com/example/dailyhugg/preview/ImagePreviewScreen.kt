@@ -3,6 +3,8 @@ package com.example.dailyhugg.preview
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
+import android.media.ExifInterface
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -52,7 +54,6 @@ fun ImagePreviewScreen(
     val viewModel: ImagePreviewViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    val interactionSource = remember { MutableInteractionSource() }
 
     LaunchedEffect(selectedUri) {
         viewModel.setUri(selectedUri)
@@ -65,8 +66,7 @@ fun ImagePreviewScreen(
                 val croppedUri = cropImage(context, uri, scale, offsetX, offsetY)
                 popScreen(croppedUri)
             }
-        },
-        interactionSource = interactionSource
+        }
     )
 }
 
@@ -74,7 +74,6 @@ fun ImagePreviewScreen(
 fun ImagePreviewContent(
     selectedUri: Uri? = null,
     onClickBtnConfirm: (Float, Float, Float) -> Unit = { _, _, _ -> },
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
     var scale by remember { mutableFloatStateOf(1f) }
     var offsetX by remember { mutableFloatStateOf(0f) }
@@ -155,25 +154,27 @@ fun cropImage(context: Context, uri: Uri, scale: Float, offsetX: Float, offsetY:
     val inputStream = context.contentResolver.openInputStream(uri)
     val originalBitmap = BitmapFactory.decodeStream(inputStream)
     inputStream?.close()
-    val originalWidth = originalBitmap.width
-    val originalHeight = originalBitmap.height
+
+    val rotationDegrees = getImageRotation(context, uri)
+    val rotatedBitmap = rotateBitmapIfNeeded(originalBitmap, rotationDegrees)
+    val originalWidth = rotatedBitmap.width
+    val originalHeight = rotatedBitmap.height
     val aspectRatio = 375f / 235f
     val visibleWidth = originalWidth / scale
     val visibleHeight = visibleWidth / aspectRatio
     val cropX = ((originalWidth - visibleWidth) / 2 + offsetX / scale).toInt().coerceIn(0, originalWidth)
     val cropY = ((originalHeight - visibleHeight) / 2 + offsetY / scale).toInt().coerceIn(0, originalHeight)
     val cropWidth = minOf(visibleWidth.toInt(), originalWidth - cropX)
-    val cropHeight = (cropWidth / aspectRatio).toInt()
-    val croppedBitmap = Bitmap.createBitmap(originalBitmap, cropX, cropY, cropWidth, cropHeight)
+    val cropHeight = minOf((cropWidth / aspectRatio).toInt(), originalHeight - cropY)
+    val croppedBitmap = Bitmap.createBitmap(rotatedBitmap, cropX, cropY, cropWidth, cropHeight)
 
     return saveBitmapToUri(context, croppedBitmap)
 }
 
-
 fun saveBitmapToUri(context: Context, bitmap: Bitmap): Uri? {
     val file = File(context.cacheDir, "cropped_image_${System.currentTimeMillis()}.jpg")
     val outputStream = FileOutputStream(file)
-    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+    bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
     outputStream.flush()
     outputStream.close()
 
@@ -182,6 +183,26 @@ fun saveBitmapToUri(context: Context, bitmap: Bitmap): Uri? {
         "${context.packageName}.fileprovider",
         file
     )
+}
+
+fun getImageRotation(context: Context, uri: Uri): Int {
+    val inputStream = context.contentResolver.openInputStream(uri)
+    val exif = inputStream?.let { ExifInterface(it) }
+    inputStream?.close()
+
+    return when (exif?.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)) {
+        ExifInterface.ORIENTATION_ROTATE_90 -> 90
+        ExifInterface.ORIENTATION_ROTATE_180 -> 180
+        ExifInterface.ORIENTATION_ROTATE_270 -> 270
+        else -> 0
+    }
+}
+
+fun rotateBitmapIfNeeded(bitmap: Bitmap, rotationDegrees: Int): Bitmap {
+    if (rotationDegrees == 0) return bitmap
+
+    val matrix = Matrix().apply { postRotate(rotationDegrees.toFloat()) }
+    return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
 }
 
 @Preview(showBackground = true, showSystemUi = true)
