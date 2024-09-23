@@ -104,7 +104,7 @@ fun FilledBtn(
     textStyle: TextStyle = HuggTypography.btn,
     textColor : Color = White,
     isActive : Boolean = true,
-    contentPadding : PaddingValues = PaddingValues(horizontal = 0.dp, vertical = 12.dp)
+    contentPadding : PaddingValues = PaddingValues(horizontal = 0.dp, vertical = 16.dp)
 ) {
     Button(
         modifier = modifier,
