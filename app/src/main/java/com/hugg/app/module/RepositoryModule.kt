@@ -42,7 +42,7 @@ abstract class RepositoryModule {
 
     @Singleton
     @Binds
-    abstract fun providesDailyRecordRepository(repositoryImpl: DailyRecordRepositoryImpl): DailyRecordRepository
+    abstract fun providesDailyHuggRepository(repositoryImpl: DailyHuggRepositoryImpl): DailyHuggRepository
 
     @Singleton
     @Binds
