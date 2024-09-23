@@ -6,6 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
+import com.example.dailyhugg.main.DailyHuggScreen
 import com.hugg.account.accountCreateOrEdit.AccountCreateOrEditContainer
 import com.hugg.account.accountMain.AccountContainer
 import com.hugg.account.subsidyCreateOrEdit.SubsidyCreateOrEditContainer
@@ -239,5 +240,11 @@ fun NavGraphBuilder.accountGraph(navController: NavHostController) {
                 goToBack = { navController.popBackStack() }
             )
         }
+    }
+}
+
+fun NavGraphBuilder.dailyHuggGraph(navController: NavHostController) {
+    navigation(startDestination = Routes.DailyHuggScreen.route, route = Routes.DailyHuggGraph.route) {
+        composable(Routes.DailyHuggScreen.route) { DailyHuggScreen() }
     }
 }

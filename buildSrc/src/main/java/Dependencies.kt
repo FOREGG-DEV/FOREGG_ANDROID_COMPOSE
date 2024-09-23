@@ -52,6 +52,7 @@ object Libraries {
     const val PAGER = "com.google.accompanist:accompanist-pager:${Versions.PAGER}"
     const val LOTTIE = "com.airbnb.android:lottie:${Versions.LOTTIE}"
     const val COIL = "io.coil-kt:coil:${Versions.COIL}"
+    const val COIL_COMPOSE = "io.coil-kt:coil-compose:${Versions.COIL}"
     const val COIL_SVG = "io.coil-kt:coil-svg:${Versions.COIL}"
     const val GRID_LAYOUT = "com.cheonjaeung.compose.grid:grid:${Versions.GRID}"
 }

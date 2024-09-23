@@ -186,7 +186,13 @@ const val ACCOUNT_TOAST_SUCCESS_EDIT = "지출 항목이 수정되었어요"
 const val ACCOUNT_TOAST_SUCCESS_DELETE = "지출 항목이 삭제되었어요"
 const val ACCOUNT_LIST_TOAST_SUCCESS_DELETE = "지출 내역이 삭제되었어요"
 
-
+// DailyHugg
+const val ROUND_TEXT = "%s회차"
+const val DAILY_HUGG = "데일리 허그"
+const val DAILY_HUGG_BTN_TEXT = "기록 모아보기"
+const val EMPTY_HUGG_FEMALE = "오늘의 일상을\n 남편과 공유해봐요"
+const val EMPTY_HUGG_MALE = "남편이 답장을\n할 수 있어요"
+const val REPLY_COUNT = "%s/50"
 
 // --------- 에러 Toast --------- //
 const val TOAST_ERROR_NOR_CORRECT_SPOUSE_CODE = "유효하지 않은 배우자코드입니다."

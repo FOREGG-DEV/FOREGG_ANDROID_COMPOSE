@@ -6,13 +6,14 @@ plugins {
 }
 
 android {
-    namespace = "com.hugg.main"
+    namespace = "com.hugg.dailyhugg"
     compileSdk = 34
 
     defaultConfig {
         minSdk = 24
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -24,6 +25,12 @@ android {
             )
         }
     }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.14"
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -31,25 +38,11 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.14"
-    }
-    packagingOptions {
-        exclude("META-INF/gradle/incremental.annotation.processors")
-    }
 }
 
 dependencies {
-    implementation(project(":domain"))
-
     implementation(project(":feature"))
-    implementation(project(":feature:sign"))
-    implementation(project(":feature:calendar"))
-    implementation(project(":feature:account"))
-    implementation(project(":feature:dailyHugg"))
+    implementation(project(":domain"))
 
     implementation(AndroidX.CORE)
     implementation(AndroidX.APPCOMPAT)
@@ -84,17 +77,8 @@ dependencies {
     implementation(AndroidX.COMPOSE_PREVIEW)
     implementation(AndroidX.ACTIVITY_COMPOSE)
 
-
+    implementation(Libraries.COIL)
+    implementation(Libraries.COIL_COMPOSE)
 
     kapt(Google.HILT_COMPILER)
-
-    implementation(KAKAO.AUTH)
-    implementation(KAKAO.SHARE)
-    implementation(Google.GLIDE)
-
-
-    //Lottie
-    implementation(Libraries.LOTTIE)
-    implementation(Libraries.COIL_SVG)
-    implementation(Libraries.COIL)
 }
