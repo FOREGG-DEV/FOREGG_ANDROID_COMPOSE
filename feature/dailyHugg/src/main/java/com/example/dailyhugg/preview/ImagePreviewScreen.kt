@@ -112,15 +112,9 @@ fun ImagePreviewContent(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
                 .padding(bottom = 80.dp)
-                .align(Alignment.BottomCenter)
-                .clickable(
-                    interactionSource = interactionSource,
-                    indication = null,
-                    onClick = {
-                        onClickBtnConfirm(scale, offsetX, offsetY)
-                    }
-                ),
-            text = WORD_CONFIRM
+                .align(Alignment.BottomCenter),
+            text = WORD_CONFIRM,
+            onClickBtn = { onClickBtnConfirm(scale, offsetX, offsetY) }
         )
     }
 }
