@@ -1,4 +1,4 @@
-package com.hugg.calendar
+package com.hugg.calendar.calendarMain
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -30,12 +30,14 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -48,6 +50,7 @@ import com.cheonjaeung.compose.grid.VerticalGrid
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
+import com.hugg.domain.model.enums.CreateOrEditType
 import com.hugg.domain.model.enums.DayType
 import com.hugg.domain.model.enums.RecordType
 import com.hugg.domain.model.enums.TopBarMiddleType
@@ -58,15 +61,18 @@ import com.hugg.feature.uiItem.RemoteYearMonth
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
 import com.hugg.feature.uiItem.ScheduleDetailItem
+import com.hugg.feature.util.HuggToast
+import com.hugg.feature.util.TimeFormatter
 
 
 @Composable
 fun CalendarContainer(
-    navigateCreateSchedule : () -> Unit = {},
+    navigateCreateSchedule : (CreateOrEditType, RecordType, Long, String) -> Unit = {_, _, _, _ -> },
     viewModel: CalendarViewModel = hiltViewModel()
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
     val interactionSource = remember { MutableInteractionSource() }
 
     CalendarScreen(
@@ -75,10 +81,24 @@ fun CalendarContainer(
         onClickDay = { position -> viewModel.onClickDay(position) },
         onClickCancel = { viewModel.onClickDialogCancel() },
         onClickCreateCancelScheduleBtn = { viewModel.onClickCreateCancelScheduleBtn() },
-        onClickCreateScheduleBtn = { type, size -> viewModel.onClickCreateScheduleBtn(type, size)},
+        onClickCreateScheduleBtn = { type, size, day -> viewModel.onClickCreateScheduleBtn(type, size, day)},
+        onClickEditScheduleBtn = { id -> navigateCreateSchedule(CreateOrEditType.EDIT, RecordType.INJECTION, id, TimeFormatter.getToday()) },
         uiState = uiState,
         interactionSource = interactionSource
     )
+
+    LaunchedEffect(Unit){
+        viewModel.setCalendar()
+    }
+
+    LaunchedEffect(Unit){
+        viewModel.eventFlow.collect { event ->
+            when(event){
+                is CalendarEvent.GoToCreateSchedule -> { navigateCreateSchedule(CreateOrEditType.CREATE, event.type, -1, event.day) }
+                CalendarEvent.ShowErrorMaxScheduleEvent -> HuggToast.createToast(context, CALENDAR_MAX_SCHEDULE, true).show()
+            }
+        }
+    }
 }
 
 @OptIn(ExperimentalPagerApi::class)
@@ -90,7 +110,8 @@ fun CalendarScreen(
     onClickDay : ( Int ) -> Unit = {},
     onClickCancel: () -> Unit = {},
     onClickCreateCancelScheduleBtn: () -> Unit = {},
-    onClickCreateScheduleBtn: (RecordType, Int) -> Unit = {_,_ -> },
+    onClickCreateScheduleBtn: (RecordType, Int, String) -> Unit = {_,_,_ -> },
+    onClickEditScheduleBtn : (Long) -> Unit = {},
     uiState : CalendarPageState = CalendarPageState(),
     interactionSource : MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
@@ -176,6 +197,7 @@ fun CalendarScreen(
         onClickCancel = onClickCancel,
         onClickCreateCancelScheduleBtn = onClickCreateCancelScheduleBtn,
         onClickCreateScheduleBtn = onClickCreateScheduleBtn,
+        onClickEditScheduleBtn = onClickEditScheduleBtn,
         interactionSource = interactionSource
     )
 }
@@ -296,76 +318,31 @@ fun ScheduleDetailDialog(
     pagerState : PagerState = rememberPagerState(),
     onClickCancel: () -> Unit = {},
     onClickCreateCancelScheduleBtn: () -> Unit = {},
-    onClickCreateScheduleBtn: (RecordType, Int) -> Unit = {_,_ -> },
+    onClickEditScheduleBtn : (Long) -> Unit = {},
+    onClickCreateScheduleBtn: (RecordType, Int, String) -> Unit = {_,_,_ -> },
     interactionSource : MutableInteractionSource
 ) {
     Dialog(
         onDismissRequest = onClickCancel,
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
-        Column {
-
-            Box(
+        HorizontalPager(
+            count = uiState.calendarDayList.size,
+            state = pagerState,
+        ) { page ->
+            ScheduleDialogPagerItem(
                 modifier = Modifier
+                    .fillMaxWidth()
                     .padding(horizontal = 16.dp)
-                    .fillMaxWidth()
-                    .height(40.dp)
-                    .clickable(
-                        onClick = onClickCancel,
-                        interactionSource = interactionSource,
-                        indication = null
-                    )
-                    .background(
-                        if (uiState.showErrorMaxScheduleSnackBar) ErrorSnackBar else Color.Transparent,
-                        shape = RoundedCornerShape(8.dp)
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = CALENDAR_MAX_SCHEDULE,
-                    style = HuggTypography.p2,
-                    color = if (uiState.showErrorMaxScheduleSnackBar) White else Color.Transparent
-                )
-            }
-
-            Spacer(
-                modifier = Modifier
-                .size(16.dp)
-                .clickable(
-                    onClick = onClickCancel,
-                    interactionSource = interactionSource,
-                    indication = null
-                )
-            )
-
-            HorizontalPager(
-                count = uiState.calendarDayList.size,
-                state = pagerState,
-            ) { page ->
-                ScheduleDialogPagerItem(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(color = White, shape = RoundedCornerShape(20.dp))
-                        .height(454.dp),
-                    calendarDayVo = uiState.calendarDayList[page],
-                    onClickCreateCancelScheduleBtn = onClickCreateCancelScheduleBtn,
-                    uiState = uiState,
-                    onClickCreateScheduleBtn = onClickCreateScheduleBtn,
-                    interactionSource = interactionSource
-                )
-            }
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-                    .clickable(
-                        onClick = onClickCancel,
-                        interactionSource = interactionSource,
-                        indication = null
-                    )
-                    .background(Color.Transparent)
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(color = White, shape = RoundedCornerShape(20.dp))
+                    .height(454.dp),
+                calendarDayVo = uiState.calendarDayList[page],
+                onClickCreateCancelScheduleBtn = onClickCreateCancelScheduleBtn,
+                uiState = uiState,
+                onClickCreateScheduleBtn = onClickCreateScheduleBtn,
+                onClickEditScheduleBtn = onClickEditScheduleBtn,
+                interactionSource = interactionSource
             )
         }
     }
@@ -377,7 +354,8 @@ fun ScheduleDialogPagerItem(
     calendarDayVo: CalendarDayVo = CalendarDayVo(),
     uiState: CalendarPageState = CalendarPageState(),
     onClickCreateCancelScheduleBtn : () -> Unit = {},
-    onClickCreateScheduleBtn: (RecordType, Int) -> Unit = {_,_ -> },
+    onClickEditScheduleBtn : (Long) -> Unit = {},
+    onClickCreateScheduleBtn: (RecordType, Int, String) -> Unit = {_,_,_ -> },
     interactionSource : MutableInteractionSource
 ) {
     Column(
@@ -411,7 +389,9 @@ fun ScheduleDialogPagerItem(
             ) { index, scheduleVo ->
                 ScheduleDetailItem(
                     scheduleDetailVo = scheduleVo,
-                    isLastItem = calendarDayVo.scheduleList.size - 1 == index
+                    isLastItem = calendarDayVo.scheduleList.size - 1 == index,
+                    onClickEditScheduleBtn = onClickEditScheduleBtn,
+                    interactionSource = interactionSource
                 )
             }
         }
@@ -426,7 +406,7 @@ fun ScheduleDialogPagerItem(
     DialogCreateMode(
         uiState = uiState,
         onClickCreateCancelScheduleBtn = onClickCreateCancelScheduleBtn,
-        onClickCreateScheduleBtn = { recordType, _ -> onClickCreateScheduleBtn(recordType, calendarDayVo.scheduleList.size)},
+        onClickCreateScheduleBtn = { recordType, _ -> onClickCreateScheduleBtn(recordType, calendarDayVo.scheduleList.size, calendarDayVo.day)},
         interactionSource = interactionSource
     )
 }

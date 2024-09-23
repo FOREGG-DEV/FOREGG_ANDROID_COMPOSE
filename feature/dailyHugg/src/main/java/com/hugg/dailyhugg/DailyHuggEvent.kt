@@ -1,4 +1,4 @@
-package com.example.dailyhugg.main
+package com.hugg.dailyhugg
 
 import com.hugg.feature.base.Event
 

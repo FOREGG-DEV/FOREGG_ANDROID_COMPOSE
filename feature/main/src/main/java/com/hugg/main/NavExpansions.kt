@@ -6,16 +6,19 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
-import com.example.dailyhugg.main.DailyHuggScreen
+import com.hugg.dailyhugg.DailyHuggScreen
 import com.hugg.account.accountCreateOrEdit.AccountCreateOrEditContainer
 import com.hugg.account.accountMain.AccountContainer
 import com.hugg.account.subsidyCreateOrEdit.SubsidyCreateOrEditContainer
 import com.hugg.account.subsidyList.SubsidyListContainer
-import com.hugg.calendar.CalendarContainer
+import com.hugg.calendar.calendarMain.CalendarContainer
+import com.hugg.calendar.scheduleCreateOrEdit.ScheduleCreateOrEditContainer
 import com.hugg.domain.model.enums.CreateOrEditType
+import com.hugg.domain.model.enums.RecordType
 import com.hugg.domain.model.enums.SurgeryType
 import com.hugg.domain.model.request.sign.SignUpMaleRequestVo
 import com.hugg.domain.model.request.sign.SignUpRequestVo
+import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UserInfo
 import com.hugg.sign.femaleSignUp.chooseSurgery.ChooseSurgeryContainer
 import com.hugg.sign.femaleSignUp.spouseCodeFemale.SpouseCodeFemaleContainer
@@ -30,7 +33,7 @@ fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
 
         composable(Routes.OnboardingScreen.route) { OnboardingContainer(
             navigateInputSsn = { accessToken : String -> navController.navigate(route = Routes.InputSsnScreen.getRouteInputSsn(accessToken)) },
-            navigateHome = { navController.navigate(route = Routes.DailyHuggGraph.route) } // 임시!
+            navigateHome = { navController.navigate(route = Routes.CalendarGraph.route) } // 임시!
         ) }
 
         composable(
@@ -115,7 +118,7 @@ fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
             val count = it.arguments?.getInt("count") ?: 0
             val date = it.arguments?.getString("date") ?: ""
             SpouseCodeFemaleContainer(
-                navigateGoToHome = { navController.navigate(route = Routes.AccountGraph.route) }, // 임시!
+                navigateGoToHome = { navController.navigate(route = Routes.CalendarGraph.route) }, // 임시!
                 accessToken = accessToken,
                 signUpRequestVo = SignUpRequestVo(
                     surgeryType = type,
@@ -139,7 +142,7 @@ fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
             val accessToken = it.arguments?.getString("accessToken") ?: ""
             val ssn = it.arguments?.getString("ssn") ?: ""
             MaleSignUpContainer(
-                navigateGoToHome = { navController.navigate(route = Routes.AccountGraph.route) }, // 임시
+                navigateGoToHome = { navController.navigate(route = Routes.CalendarGraph.route) }, // 임시
                 accessToken = accessToken,
                 signUpMaleRequestVo = SignUpMaleRequestVo(spouseCode = "", ssn = ssn, fcmToken = ""),
                 goToBack = { navController.popBackStack() }
@@ -150,7 +153,33 @@ fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
 
 fun NavGraphBuilder.calendarGraph(navController: NavHostController) {
     navigation(startDestination = Routes.CalendarScreen.route, route = Routes.CalendarGraph.route) {
-        composable(Routes.CalendarScreen.route) { CalendarContainer() }
+
+        composable(Routes.CalendarScreen.route) { CalendarContainer(
+            navigateCreateSchedule = { pageType, recordType, id, day -> navController.navigate(Routes.CalendarScheduleCreateOrEdit.getRouteCalendarScheduleCreateOrEdit(pageType.type, recordType.type, id, day))}
+        ) }
+
+        composable(
+            route = Routes.CalendarScheduleCreateOrEdit.route,
+            arguments = listOf(
+                navArgument("pageType") { type = NavType.StringType },
+                navArgument("recordType") { type = NavType.StringType },
+                navArgument("id") { type = NavType.LongType },
+                navArgument("selectDate") { type = NavType.StringType },
+            )
+        ) {
+            val pageType = CreateOrEditType.getEnumType(it.arguments?.getString("pageType") ?: "")
+            val recordType = RecordType.getEnumType(it.arguments?.getString("recordType") ?: "")
+            val selectDate = it.arguments?.getString("selectDate") ?: TimeFormatter.getToday()
+            val id = it.arguments?.getLong("id") ?: -1
+
+            ScheduleCreateOrEditContainer(
+                goToBack = { navController.popBackStack() },
+                pageType = pageType,
+                recordType = recordType,
+                selectDate = selectDate,
+                id = id
+            )
+        }
     }
 }
 

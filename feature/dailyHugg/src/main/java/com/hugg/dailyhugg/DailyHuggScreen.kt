@@ -1,13 +1,10 @@
-package com.example.dailyhugg.main
+package com.hugg.dailyhugg
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,11 +20,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -46,10 +41,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.domain.model.enums.TopBarRightType
 import com.hugg.domain.model.response.dailyHugg.DailyHuggItemVo
+import com.hugg.feature.R
 import com.hugg.feature.component.PlusBtn
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.Background
@@ -211,7 +206,7 @@ fun DateNavigator(
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         BtnArrow(
-            arrowIcon = com.hugg.feature.R.drawable.ic_back_arrow_gs_20,
+            arrowIcon = R.drawable.ic_back_arrow_gs_20,
             interactionSource = interactionSource
         )
 
@@ -260,8 +255,8 @@ fun EmptyDailyHuggContent() {
         Spacer(modifier = Modifier.height(8.dp))
         EmptyHuggItem(
             color = MALE,
-            hugging = com.hugg.feature.R.drawable.ic_hugging_male,
-            msgBubble = com.hugg.feature.R.drawable.ic_msg_bubble_male,
+            hugging = R.drawable.ic_hugging_male,
+            msgBubble = R.drawable.ic_msg_bubble_male,
             msg = EMPTY_HUGG_MALE,
             msgBubbleAlignment = Alignment.BottomStart,
             msgPadding = PaddingValues(start = 93.dp, bottom = 45.dp),

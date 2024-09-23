@@ -5,16 +5,20 @@ import android.content.res.Resources
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.Toast
+import com.hugg.feature.R
 import com.hugg.feature.databinding.CommonToastBinding
 
 object HuggToast {
 
     private const val MARGIN_BOTTOM = 59
 
-    fun createToast(context: Context, message: String, length : Int = Toast.LENGTH_SHORT): Toast {
+    fun createToast(context: Context, message: String, isError : Boolean = false, length : Int = Toast.LENGTH_SHORT): Toast {
         val inflater = LayoutInflater.from(context)
         val binding = CommonToastBinding.inflate(inflater, null, false)
-        binding.textMessage.text = message
+        binding.apply {
+            root.setBackgroundResource(if(isError) R.drawable.bg_error_toast else R.drawable.bg_toast)
+            textMessage.text = message
+        }
 
         return Toast(context).apply {
             setGravity(Gravity.BOTTOM or Gravity.CENTER, 0, MARGIN_BOTTOM.px)
