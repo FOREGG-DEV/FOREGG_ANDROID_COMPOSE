@@ -68,15 +68,9 @@ fun DailyHuggCreationSuccessContent(
         BlankBtn(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .clickable(
-                    indication = null,
-                    interactionSource = interactionSource,
-                    onClick = {
-                        goToDailyHuggMain()
-                    }
-                ),
-            text = CONFIRM_DAILY_HUGG
+                .padding(horizontal = 16.dp),
+            text = CONFIRM_DAILY_HUGG,
+            onClickBtn = { goToDailyHuggMain() }
         )
 
         Spacer(modifier = Modifier.height(24.dp))

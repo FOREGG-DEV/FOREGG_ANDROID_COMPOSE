@@ -4,7 +4,6 @@ import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.hugg.domain.model.enums.DailyConditionType
-import com.hugg.domain.model.request.dailyHugg.CreateDailyHuggVo
 import com.hugg.domain.model.vo.dailyHugg.CreateDailyHuggDto
 import com.hugg.domain.repository.DailyHuggRepository
 import com.hugg.feature.base.BaseViewModel
@@ -13,7 +12,6 @@ import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import java.net.URL
 import javax.inject.Inject
 
 @HiltViewModel
@@ -56,8 +54,19 @@ class CreateDailyHuggViewModel @Inject constructor(
                 image = image!!,
                 dto = dtoRequestBody
             ).collect {
-                resultResponse(it, {})
+                resultResponse(it, { handleCreateDailyHuggSuccess() }, ::handleCreateDailyHuggError)
             }
+        }
+    }
+
+    private fun handleCreateDailyHuggSuccess() {
+        emitEventFlow(CreateDailyHuggEvent.GoToDailyHuggCreationSuccess)
+    }
+
+    private fun handleCreateDailyHuggError(code: String) {
+        when(code) {
+            "COMMON200" -> emitEventFlow(CreateDailyHuggEvent.GoToDailyHuggCreationSuccess)
+            "DAILY4001" -> emitEventFlow(CreateDailyHuggEvent.AlreadyExistDailyHugg)
         }
     }
 }

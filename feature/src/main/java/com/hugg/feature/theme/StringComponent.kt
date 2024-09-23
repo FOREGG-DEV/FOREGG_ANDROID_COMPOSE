@@ -131,6 +131,7 @@ const val REPLY_COUNT = "%s/50"
 const val CREATE_TITLE = "%s님\n%s년 %s\n오늘 하루 어떠셨나요?"
 const val DAILY_HUGG_CONTENT_HINT = "오늘 하루의 기분, 컨디션, 건강 상태 등 남편과 공유하고 싶은 모든 기록을 자유롭게 작성해보세요."
 const val IMAGE_PERMISSION_TEXT = "접근 권한을 허용해주세요."
+const val ALREADY_EXIST_DAILY_HUGG = "데일리 허그는 하루에 하나만 작성할 수 있어요"
 
 // DailyHuggCreationSuccess
 const val CREATION_SUCCESS_TITLE = "데일리 허그가 전달되었어요!"

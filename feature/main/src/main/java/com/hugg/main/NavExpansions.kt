@@ -239,7 +239,8 @@ fun NavGraphBuilder.dailyHuggGraph(navController: NavHostController) {
                     }
                 },
                 getSavedUri = { navController.currentBackStackEntry?.savedStateHandle?.get<Uri>("croppedUri") },
-                goToDailyHuggCreationSuccessScreen = { navController.navigate(Routes.DailyHuggCreationSuccessScreen.route) }
+                goToDailyHuggCreationSuccessScreen = { navController.navigate(Routes.DailyHuggCreationSuccessScreen.route) },
+                popScreen = { navController.popBackStack() }
             )
         }
 

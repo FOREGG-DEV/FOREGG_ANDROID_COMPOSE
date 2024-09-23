@@ -2,17 +2,13 @@ package com.example.dailyhugg.create
 
 import android.Manifest
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
-import android.util.Base64
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -32,9 +28,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,25 +37,21 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
-import com.hugg.dailyhugg.R
 import com.hugg.domain.model.enums.DailyConditionType
 import com.hugg.domain.model.enums.TopBarLeftType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.feature.component.FilledBtn
 import com.hugg.feature.component.TopBar
+import com.hugg.feature.theme.ALREADY_EXIST_DAILY_HUGG
 import com.hugg.feature.theme.Background
-import com.hugg.feature.theme.CREATE_TITLE
 import com.hugg.feature.theme.DAILY_HUGG
 import com.hugg.feature.theme.DAILY_HUGG_CONTENT_HINT
 import com.hugg.feature.theme.Gs10
@@ -76,7 +66,6 @@ import com.hugg.feature.util.UserInfo
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -84,6 +73,7 @@ import java.io.FileOutputStream
 @Composable
 fun CreateDailyHuggScreen(
     goToDailyHuggCreationSuccessScreen: () -> Unit = {},
+    popScreen: () -> Unit = {},
     goToImgPreview: (Uri?) -> Unit = {},
     getSavedUri: () -> Uri?
 ) {
@@ -116,6 +106,19 @@ fun CreateDailyHuggScreen(
         viewModel.setSelectedImageUri(getSavedUri())
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.eventFlow.collect { event ->
+            when(event) {
+                CreateDailyHuggEvent.AlreadyExistDailyHugg -> {
+                    HuggToast.createToast(context = context, message = ALREADY_EXIST_DAILY_HUGG).show()
+                }
+                CreateDailyHuggEvent.GoToDailyHuggCreationSuccess -> {
+                    goToDailyHuggCreationSuccessScreen()
+                }
+            }
+        }
+    }
+
     CreateDailyHuggContent(
         permissionLauncher = permissionLauncher,
         uiState = uiState,
@@ -131,8 +134,8 @@ fun CreateDailyHuggScreen(
                     getFilePartFromUri(context = context, uri = uri)
                 )
             }
-            goToDailyHuggCreationSuccessScreen()
-        }
+        },
+        popScreen = popScreen
     )
 }
 
@@ -146,7 +149,8 @@ fun CreateDailyHuggContent(
     interactionSource: MutableInteractionSource = remember {  MutableInteractionSource() },
     onSelectedDailyConditionType: (DailyConditionType) -> Unit = {},
     onClickBtnClose: () -> Unit = {},
-    onClickBtnCreate: () -> Unit = {}
+    onClickBtnCreate: () -> Unit = {},
+    popScreen: () -> Unit = {}
 ) {
     Box(
         modifier = Modifier
@@ -159,7 +163,8 @@ fun CreateDailyHuggContent(
             TopBar(
                 middleText = DAILY_HUGG,
                 middleItemType = TopBarMiddleType.TEXT,
-                leftItemType = TopBarLeftType.CLOSE
+                leftItemType = TopBarLeftType.CLOSE,
+                leftBtnClicked = { popScreen() }
             )
 
             Column(

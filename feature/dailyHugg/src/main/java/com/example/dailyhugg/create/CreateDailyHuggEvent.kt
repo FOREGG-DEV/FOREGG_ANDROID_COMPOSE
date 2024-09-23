@@ -1,4 +1,8 @@
 package com.example.dailyhugg.create
 
-class CreateDailyHuggEvent {
+import com.hugg.feature.base.Event
+
+sealed class CreateDailyHuggEvent: Event {
+    data object GoToDailyHuggCreationSuccess: CreateDailyHuggEvent()
+    data object AlreadyExistDailyHugg: CreateDailyHuggEvent()
 }
