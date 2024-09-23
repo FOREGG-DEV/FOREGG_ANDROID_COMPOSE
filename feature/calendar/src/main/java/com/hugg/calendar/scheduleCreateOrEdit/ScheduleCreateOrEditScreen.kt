@@ -25,6 +25,7 @@ import com.hugg.domain.model.enums.RepeatDayType
 import com.hugg.domain.model.enums.TopBarLeftType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.domain.model.enums.TopBarRightType
+import com.hugg.feature.component.HuggDialog
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
 import com.hugg.feature.util.ForeggLog
@@ -97,7 +98,7 @@ fun ScheduleCreateOrEditContainer(
     ScheduleCreateOrEditScreen(
         uiState = uiState,
         onClickTopBarLeftBtn = goToBack,
-        onClickTopBarRightBtn = { viewModel.onDeleteSchedule() },
+        onClickTopBarRightBtn = { viewModel.showDeleteDialog(true) },
         interactionSource = interactionSource,
         onClickDropDown = { viewModel.showOrCancelDropDown() },
         onClickKind = { kind -> viewModel.onChangedName(kind)},
@@ -118,6 +119,18 @@ fun ScheduleCreateOrEditContainer(
         onChangedMemo = { memo -> viewModel.onChangedMemo(memo) },
         onClickCreateOrChangeBtn = { viewModel.onClickCreateOrEdit() }
     )
+
+    if(uiState.showDeleteDialog) {
+        HuggDialog(
+            title = CALENDAR_SCHEDULE_DIALOG_DELETE,
+            positiveColor = Sunday,
+            positiveText = WORD_DELETE,
+            onClickCancel = { viewModel.showDeleteDialog(false) },
+            onClickNegative = { viewModel.showDeleteDialog(false) },
+            onClickPositive = { viewModel.onDeleteSchedule() },
+            interactionSource = interactionSource
+        )
+    }
 }
 
 @Composable
@@ -163,23 +176,55 @@ fun ScheduleCreateOrEditScreen(
 
         Spacer(modifier = Modifier.size(24.dp))
 
-        InjMedCreateOrEditScreen(
-            uiState = uiState,
-            interactionSource = interactionSource,
-            onClickDropDown = onClickDropDown,
-            onClickKind = onClickKind,
-            onChangedName = onChangedName,
-            onChangedDose = onChangedDose,
-            onClickMinusBtn = onClickMinusBtn,
-            onClickPlusBtn = onClickPlusBtn,
-            onClickTimePickerBtn = onClickTimePickerBtn,
-            onCheckedChange = onCheckedChange,
-            onClickDatePickerBtn = onClickDatePickerBtn,
-            onRepeatBtnChanged = onRepeatBtnChanged,
-            onChangedMemo = onChangedMemo,
-            onClickCreateOrChangeBtn = onClickCreateOrChangeBtn,
-            isActiveBtn = uiState.isActiveBtn
-        )
+        when(uiState.recordType) {
+            RecordType.MEDICINE,
+            RecordType.INJECTION ->{
+                InjMedCreateOrEditScreen(
+                    uiState = uiState,
+                    interactionSource = interactionSource,
+                    onClickDropDown = onClickDropDown,
+                    onClickKind = onClickKind,
+                    onChangedName = onChangedName,
+                    onChangedDose = onChangedDose,
+                    onClickMinusBtn = onClickMinusBtn,
+                    onClickPlusBtn = onClickPlusBtn,
+                    onClickTimePickerBtn = onClickTimePickerBtn,
+                    onCheckedChange = onCheckedChange,
+                    onClickDatePickerBtn = onClickDatePickerBtn,
+                    onRepeatBtnChanged = onRepeatBtnChanged,
+                    onChangedMemo = onChangedMemo,
+                    onClickCreateOrChangeBtn = onClickCreateOrChangeBtn,
+                    isActiveBtn = uiState.isActiveBtn
+                )
+            }
+            RecordType.HOSPITAL ->{
+                HospitalCreateOrEditScreen(
+                    uiState = uiState,
+                    interactionSource = interactionSource,
+                    onClickDropDown = onClickDropDown,
+                    onClickKind = onClickKind,
+                    onChangedName = onChangedName,
+                    onClickTimePickerBtn = onClickTimePickerBtn,
+                    onClickDatePickerBtn = onClickDatePickerBtn,
+                    onChangedMemo = onChangedMemo,
+                    onClickCreateOrChangeBtn = onClickCreateOrChangeBtn,
+                    isActiveBtn = uiState.isActiveBtn
+                )
+            }
+            RecordType.ETC -> {
+                EtcCreateOrEditScreen(
+                    uiState = uiState,
+                    interactionSource = interactionSource,
+                    onChangedName = onChangedName,
+                    onClickTimePickerBtn = onClickTimePickerBtn,
+                    onClickDatePickerBtn = onClickDatePickerBtn,
+                    onRepeatBtnChanged = onRepeatBtnChanged,
+                    onChangedMemo = onChangedMemo,
+                    onClickCreateOrChangeBtn = onClickCreateOrChangeBtn,
+                    isActiveBtn = uiState.isActiveBtn
+                )
+            }
+        }
     }
 }
 

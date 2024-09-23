@@ -22,15 +22,16 @@ data class ScheduleCreateOrEditPageState(
     val endDate : String = "",
     val isRepeatDay : Boolean = false,
     val memo : String = "",
+    val showDeleteDialog : Boolean = false,
 ) : PageState {
     val isActiveBtn : Boolean = when(recordType){
         RecordType.MEDICINE,
         RecordType.INJECTION -> name.isNotEmpty() && dose.isNotEmpty() && repeatTimeList.isNotEmpty() && dateIsNotEmpty()
-        RecordType.HOSPITAL -> true
-        RecordType.ETC -> true
+        RecordType.HOSPITAL -> name.isNotEmpty()
+        RecordType.ETC -> name.isNotEmpty() && dateIsNotEmpty()
     }
 
-    fun dateIsNotEmpty() : Boolean {
+    private fun dateIsNotEmpty() : Boolean {
         return if(isRepeatDay) startDate.isNotEmpty() && endDate.isNotEmpty()
             else date.isNotEmpty()
     }

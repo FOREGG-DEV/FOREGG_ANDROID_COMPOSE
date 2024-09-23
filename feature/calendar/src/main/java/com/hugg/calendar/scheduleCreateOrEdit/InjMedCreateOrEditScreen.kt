@@ -196,7 +196,7 @@ fun InjMedCreateOrEditScreen(
 }
 
 @Composable
-fun InputKindView(
+internal fun InputKindView(
     type : RecordType = RecordType.INJECTION,
     kind : String = "",
     onClickDropDown : () -> Unit = {},
@@ -813,13 +813,13 @@ fun InputMemoView(
         modifier = Modifier.padding(start = 16.dp),
         text = WORD_MEMO,
         style = HuggTypography.h3,
-        color = Gs50,
+        color = Gs80,
     )
 
     Spacer(modifier = Modifier.size(4.dp))
 
     Row(
-        modifier = Modifier.padding(start = 16.dp),
+        modifier = Modifier.padding(horizontal = 16.dp),
         verticalAlignment = Alignment.Bottom
     ) {
         Box(

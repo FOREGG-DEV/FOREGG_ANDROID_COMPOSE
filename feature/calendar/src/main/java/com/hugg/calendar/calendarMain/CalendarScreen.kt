@@ -95,7 +95,7 @@ fun CalendarContainer(
         viewModel.eventFlow.collect { event ->
             when(event){
                 is CalendarEvent.GoToCreateSchedule -> { navigateCreateSchedule(CreateOrEditType.CREATE, event.type, -1, event.day) }
-                CalendarEvent.ShowErrorMaxScheduleEvent -> HuggToast.createToast(context, CALENDAR_TOAST_SUCCESS_CREATE, true).show()
+                CalendarEvent.ShowErrorMaxScheduleEvent -> HuggToast.createToast(context, CALENDAR_MAX_SCHEDULE, true).show()
             }
         }
     }
