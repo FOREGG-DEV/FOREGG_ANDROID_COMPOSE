@@ -81,4 +81,6 @@ dependencies {
     implementation(Libraries.COIL_COMPOSE)
 
     kapt(Google.HILT_COMPILER)
+
+    implementation(Libraries.RETROFIT_CONVERTER_GSON)
 }
