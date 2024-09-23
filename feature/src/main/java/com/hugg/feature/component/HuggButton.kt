@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.hugg.feature.R
+import com.hugg.feature.theme.Gs30
 import com.hugg.feature.theme.Gs70
 import com.hugg.feature.theme.HuggTheme
 import com.hugg.feature.theme.HuggTypography
@@ -120,7 +121,7 @@ fun FilledBtn(
     ) {
         Text(
             text = text,
-            color = textColor,
+            color = if(isActive) textColor else Gs30,
             style = textStyle
         )
     }
