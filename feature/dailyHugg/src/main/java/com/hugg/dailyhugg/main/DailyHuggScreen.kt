@@ -1,4 +1,4 @@
-package com.hugg.dailyhugg
+package com.hugg.dailyhugg.main
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -66,21 +66,25 @@ import com.hugg.feature.theme.ROUND_TEXT
 import com.hugg.feature.theme.White
 
 @Composable
-fun DailyHuggScreen() {
+fun DailyHuggScreen(
+    onClickCreateDailyHugg: () -> Unit
+) {
     val viewModel: DailyHuggViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val interactionSource = remember { MutableInteractionSource() }
 
     DailyHuggContent(
         uiState = uiState,
-        interactionSource = interactionSource
+        interactionSource = interactionSource,
+        onClickCreateDailyHugg = onClickCreateDailyHugg
     )
 }
 
 @Composable
 fun DailyHuggContent(
     uiState: DailyHuggPageState = DailyHuggPageState(),
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    onClickCreateDailyHugg: () -> Unit = {}
 ) {
     Box(
         modifier = Modifier.fillMaxSize()
@@ -134,9 +138,7 @@ fun DailyHuggContent(
                 .size(56.dp)
                 .background(color = MainNormal)
                 .clickable(
-                    onClick = {
-
-                    },
+                    onClick = { onClickCreateDailyHugg() },
                     interactionSource = interactionSource,
                     indication = null
                 )
@@ -418,7 +420,7 @@ fun ReplyItem(
 @Composable
 fun UrlToImage(
     url: String,
-    ratio: Float = 319f / 244f,
+    ratio: Float = 319f / 200f,
     radius: Dp = 4.dp
 ) {
     Image(

@@ -1,10 +1,10 @@
 package com.hugg.domain.model.enums
 
 enum class DailyConditionType(val value: String) {
-    WORST("매우 안좋음"),
-    BAD("안좋음"),
-    SOSO("보통"),
-    GOOD("좋음"),
-    PERFECT("매우 좋음"),
+    WORST("화나요"),
+    BAD("슬퍼요"),
+    SOSO("불안해요"),
+    GOOD("기뻐요"),
+    PERFECT("사랑해요"),
     DEFAULT("기본 상태")
 }

@@ -1,4 +1,4 @@
-package com.hugg.dailyhugg
+package com.hugg.dailyhugg.main
 
 import com.hugg.domain.model.response.dailyHugg.DailyHuggItemVo
 import com.hugg.feature.base.PageState

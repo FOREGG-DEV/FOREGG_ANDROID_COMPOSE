@@ -62,8 +62,8 @@ object ApiModule {
 
     @Singleton
     @Provides
-    fun provideDailyRecordApi(@AuthRetrofit retrofit: Retrofit): DailyRecordApi {
-        return retrofit.create(DailyRecordApi::class.java)
+    fun provideDailyHuggApi(@AuthRetrofit retrofit: Retrofit): DailyHuggApi {
+        return retrofit.create(DailyHuggApi::class.java)
     }
 
     @Singleton

@@ -163,7 +163,7 @@ fun BottomNavView(
                 .clickable(
                     onClick = {
                         if(type == BottomNavType.DAILY_HUGG) return@clickable
-                        //navigateToRoute(Routes.CalendarGraph.route)
+                        navigateToRoute(Routes.DailyHuggGraph.route)
                     },
                     interactionSource = interactionSource,
                     indication = null

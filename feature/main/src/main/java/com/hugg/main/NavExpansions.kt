@@ -1,12 +1,16 @@
 package com.hugg.main
 
+import android.net.Uri
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
-import com.hugg.dailyhugg.DailyHuggScreen
+import com.hugg.dailyhugg.create.CreateDailyHuggScreen
+import com.hugg.dailyhugg.create.complete.DailyHuggCreationSuccessScreen
+import com.hugg.dailyhugg.preview.ImagePreviewScreen
+import com.hugg.dailyhugg.main.DailyHuggScreen
 import com.hugg.account.accountCreateOrEdit.AccountCreateOrEditContainer
 import com.hugg.account.accountMain.AccountContainer
 import com.hugg.account.subsidyCreateOrEdit.SubsidyCreateOrEditContainer
@@ -244,7 +248,55 @@ fun NavGraphBuilder.accountGraph(navController: NavHostController) {
 }
 
 fun NavGraphBuilder.dailyHuggGraph(navController: NavHostController) {
+    val popScreen = { croppedUri: Uri? ->
+        navController.previousBackStackEntry?.savedStateHandle?.set("croppedUri", croppedUri)
+        navController.popBackStack()
+    }
+
     navigation(startDestination = Routes.DailyHuggScreen.route, route = Routes.DailyHuggGraph.route) {
-        composable(Routes.DailyHuggScreen.route) { DailyHuggScreen() }
+        composable(Routes.DailyHuggScreen.route) {
+            DailyHuggScreen(
+                onClickCreateDailyHugg = { navController.navigate(Routes.CreateDailyHuggScreen.route) }
+            )
+        }
+
+        composable(Routes.CreateDailyHuggScreen.route) {
+            CreateDailyHuggScreen(
+                goToImgPreview = { uri: Uri? ->
+                    uri?.let {
+                        navController.navigate(Routes.ImagePreviewScreen.createRoute(uri))
+                    }
+                },
+                getSavedUri = { navController.currentBackStackEntry?.savedStateHandle?.get<Uri>("croppedUri") },
+                goToDailyHuggCreationSuccessScreen = { navController.navigate(Routes.DailyHuggCreationSuccessScreen.route) },
+                popScreen = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = Routes.ImagePreviewScreen.route,
+            arguments = listOf(
+                navArgument("uri") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val uriString = backStackEntry.arguments?.getString("uri")
+            val uri = uriString?.let { Uri.parse(Uri.decode(it)) }
+            ImagePreviewScreen(
+                selectedUri = uri,
+                popScreen =  { croppedUri: Uri? ->
+                    popScreen(croppedUri)
+                }
+            )
+        }
+
+        composable(Routes.DailyHuggCreationSuccessScreen.route) {
+            DailyHuggCreationSuccessScreen(
+                goToDailyHuggMain = {
+                    navController.navigate(Routes.DailyHuggScreen.route) {
+                        popUpTo(Routes.DailyHuggGraph.route) { inclusive = true }
+                    }
+                }
+            )
+        }
     }
 }

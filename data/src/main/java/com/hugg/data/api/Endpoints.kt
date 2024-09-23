@@ -40,6 +40,11 @@ object Endpoints {
         const val ID = "$DAILY/{id}"
     }
 
+    object DailyHugg {
+        private const val DAILY = "/daily"
+        const val WRITE = "$DAILY/write"
+    }
+
     object Challenge {
         private const val CHALLENGE = "/challenge"
         const val ALL = "$CHALLENGE/all"

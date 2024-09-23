@@ -13,6 +13,7 @@ class MainViewModel @Inject constructor(
         val type = when(route){
             Routes.CalendarScreen.route -> BottomNavType.CALENDAR
             Routes.AccountScreen.route -> BottomNavType.ACCOUNT
+            Routes.DailyHuggScreen.route -> BottomNavType.DAILY_HUGG
             else -> BottomNavType.OTHER
         }
 
