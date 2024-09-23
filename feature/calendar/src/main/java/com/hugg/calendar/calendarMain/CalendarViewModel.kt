@@ -1,4 +1,4 @@
-package com.hugg.calendar
+package com.hugg.calendar.calendarMain
 
 import androidx.lifecycle.viewModelScope
 import com.hugg.domain.model.enums.DayType
@@ -7,7 +7,6 @@ import com.hugg.domain.model.vo.calendar.CalendarDayVo
 import com.hugg.domain.model.vo.calendar.ScheduleDetailVo
 import com.hugg.domain.repository.ScheduleRepository
 import com.hugg.feature.base.BaseViewModel
-import com.hugg.feature.util.ForeggLog
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.TimeFormatter.getWeekListKor
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,25 +29,22 @@ class CalendarViewModel @Inject constructor(
         const val DECEMBER = 12
     }
 
-    private var year by Delegates.notNull<Int>()
-    private var month by Delegates.notNull<Int>()
+    private var today = TimeFormatter.getToday()
+    private var year = TimeFormatter.getYear(today)
+    private var month = TimeFormatter.getMonth(today)
 
     init {
-        initData()
+        updateState(
+            uiState.value.copy(
+                calendarHeadList = getHeadDayList(),
+            )
+        )
     }
 
-    private fun initData(){
-        val today = TimeFormatter.getToday()
-        year = TimeFormatter.getYear(today)
-        month = TimeFormatter.getMonth(today)
-        setCalendar()
-    }
-
-    private fun setCalendar(){
+    fun setCalendar(){
         updateState(
             uiState.value.copy(
                 selectedYearMonth = TimeFormatter.getTodayYearAndMonthKor(year, month),
-                calendarHeadList = getHeadDayList(),
             )
         )
         getScheduleList()
@@ -199,7 +195,6 @@ class CalendarViewModel @Inject constructor(
             uiState.value.copy(
                 isShowDetailDialog = false,
                 isCreateMode = false,
-                showErrorMaxScheduleSnackBar = false
             )
         )
     }
@@ -212,20 +207,11 @@ class CalendarViewModel @Inject constructor(
         )
     }
 
-    fun onClickCreateScheduleBtn(type : RecordType, size : Int){
-        if(size == 7) {
-            viewModelScope.launch {
-                updateState(uiState.value.copy(
-                    showErrorMaxScheduleSnackBar = true
-                ))
-                delay(2000)
-                updateState(uiState.value.copy(
-                    showErrorMaxScheduleSnackBar = false
-                ))
-            }
-        }
+    fun onClickCreateScheduleBtn(type : RecordType, size : Int, day : String){
+        if(size == 7) { emitEventFlow(CalendarEvent.ShowErrorMaxScheduleEvent) }
         else{
-
+            val fullDate = "${year}-${String.format("%02d", month)}-$day"
+            emitEventFlow(CalendarEvent.GoToCreateSchedule(type, fullDate))
         }
     }
 }

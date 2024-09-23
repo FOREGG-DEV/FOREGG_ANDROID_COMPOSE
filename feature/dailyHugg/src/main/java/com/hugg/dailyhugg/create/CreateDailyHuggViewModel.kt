@@ -1,4 +1,4 @@
-package com.example.dailyhugg.create
+package com.hugg.dailyhugg.create
 
 import android.net.Uri
 import androidx.lifecycle.viewModelScope

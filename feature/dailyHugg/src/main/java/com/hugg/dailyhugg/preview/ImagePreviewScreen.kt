@@ -1,4 +1,4 @@
-package com.example.dailyhugg.preview
+package com.hugg.dailyhugg.preview
 
 import android.content.Context
 import android.graphics.Bitmap

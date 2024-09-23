@@ -8,6 +8,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import com.hugg.feature.R
 
 fun Dp.toSp(): TextUnit = TextUnit(value = this.value, type = TextUnitType.Sp)
@@ -110,8 +111,8 @@ object HuggTypography {
 
     val p4: TextStyle = TextStyle(
         fontSize = 10.dp.toSp(),
-        lineHeight = 14.dp.toSp(),
-        letterSpacing = -0.03.dp.toSp(),
+        lineHeight = 10.dp.toSp(),
+        letterSpacing = (-0.03).em,
         fontFamily = huggFontFamily,
         fontWeight = FontWeight.Medium,
     )

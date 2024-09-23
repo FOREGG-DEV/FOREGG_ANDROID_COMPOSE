@@ -97,6 +97,20 @@ object TimeFormatter {
         }
     }
 
+    fun getKoreanFullDayOfWeek(dateString: String): String {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val date = LocalDate.parse(dateString, formatter)
+        return when (date.dayOfWeek) {
+            DayOfWeek.MONDAY -> "월요일"
+            DayOfWeek.TUESDAY -> "화요일"
+            DayOfWeek.WEDNESDAY -> "수요일"
+            DayOfWeek.THURSDAY -> "목요일"
+            DayOfWeek.FRIDAY -> "금요일"
+            DayOfWeek.SATURDAY -> "토요일"
+            DayOfWeek.SUNDAY -> "일요일"
+        }
+    }
+
     fun formatTimeToKor(timeString: String): String {
         val time = LocalTime.parse(timeString, DateTimeFormatter.ofPattern("HH:mm"))
         val hour = time.hour
@@ -105,6 +119,20 @@ object TimeFormatter {
         val hour12 = if (hour % 12 == 0) 12 else hour % 12
         val formattedMinute = String.format("%02d", minute)
         return "$period ${hour12}:${formattedMinute}"
+    }
+
+    fun formatKorTimeToNormalTime(timeString : String) : String {
+        val isPM = timeString.contains("오후")
+        val timeParts = timeString.replace("오전 ", "").replace("오후 ", "").split(":")
+        var hour = timeParts[0].toInt()
+        val minute = timeParts[1]
+        if (isPM && hour != 12) {
+            hour += 12
+        } else if (!isPM && hour == 12) {
+            hour = 0
+        }
+
+        return String.format("%02d:%s", hour, minute)
     }
 
     fun getPreviousMonthDate() : String {
@@ -158,5 +186,11 @@ object TimeFormatter {
         val compareDate = LocalDate.parse(date2, formatter)
 
         return originDate.isAfter(compareDate)
+    }
+
+    fun getTimeFormatByKor(hour : Int, minute : Int) : String {
+        val amPm = if (hour < 12) "오전" else "오후"
+        val hourTime = if (hour % 12 == 0 && amPm == "오후") 12 else hour % 12
+        return String.format("%s %d:%02d", amPm, hourTime, minute)
     }
 }

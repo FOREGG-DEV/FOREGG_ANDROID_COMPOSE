@@ -2,6 +2,8 @@ package com.hugg.feature.uiItem
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -32,16 +35,25 @@ import com.hugg.feature.theme.Gs90
 import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.White
 import com.hugg.feature.util.TimeFormatter
+import org.threeten.bp.LocalTime
+import org.threeten.bp.format.DateTimeFormatter
 
 @Composable
 fun ScheduleDetailItem(
     scheduleDetailVo: ScheduleDetailVo = ScheduleDetailVo(),
-    isLastItem : Boolean = false
+    isLastItem : Boolean = false,
+    onClickEditScheduleBtn : (Long) -> Unit = {},
+    interactionSource: MutableInteractionSource
 ){
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .background(color = White)
+            .clickable(
+                onClick = { onClickEditScheduleBtn(scheduleDetailVo.id) },
+                interactionSource = interactionSource,
+                indication = null
+            )
     ) {
         Box(
             modifier = Modifier
@@ -85,7 +97,11 @@ fun ScheduleDetailItem(
                 )
 
                 Row {
-                    scheduleDetailVo.repeatTimes.forEach {
+                    val sortedTimeList = scheduleDetailVo.repeatTimes.sortedBy {
+                        LocalTime.parse(it.time, DateTimeFormatter.ofPattern("HH:mm"))
+                    }
+
+                    sortedTimeList.forEach {
                         Text(
                             text = TimeFormatter.formatTimeToKor(it.time),
                             color = Gs70,
@@ -115,7 +131,7 @@ fun ScheduleDetailItem(
                 Spacer(modifier = Modifier.size(14.dp))
 
                 Image(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_push_alarm),
+                    painter = painterResource(if(scheduleDetailVo.vibration) R.drawable.ic_vibration_alarm else R.drawable.ic_push_alarm),
                     contentDescription = null
                 )
             }

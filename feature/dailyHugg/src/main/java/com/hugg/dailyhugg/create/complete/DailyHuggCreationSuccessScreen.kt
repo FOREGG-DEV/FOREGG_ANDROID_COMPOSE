@@ -1,4 +1,4 @@
-package com.example.dailyhugg.create.complete
+package com.hugg.dailyhugg.create.complete
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

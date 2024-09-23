@@ -115,14 +115,17 @@ fun SubsidyCreateOrEditContainer(
         interactionSource = interactionSource
     )
 
-    if(uiState.isShowDialog) ShowDeleteDialog(
-        interactionSource = interactionSource,
-        onClickCancel = { viewModel.cancelDeleteDialog() },
-        onClickDeleteBtn = {
-            viewModel.cancelDeleteDialog()
-            viewModel.deleteSubsidy()
-        }
-    )
+    if(uiState.isShowDialog) {
+        HuggDialog(
+            title = ACCOUNT_DIALOG_SUBSIDY_DELETE,
+            positiveColor = Sunday,
+            positiveText = WORD_DELETE,
+            onClickCancel = { viewModel.cancelDeleteDialog() },
+            onClickNegative = { viewModel.cancelDeleteDialog() },
+            onClickPositive = { viewModel.deleteSubsidy() },
+            interactionSource = interactionSource
+        )
+    }
 }
 
 @Composable
@@ -376,23 +379,6 @@ fun InputMoney(
             )
         }
     }
-}
-
-@Composable
-fun ShowDeleteDialog(
-    interactionSource: MutableInteractionSource,
-    onClickCancel : () -> Unit = {},
-    onClickDeleteBtn: () -> Unit = {}
-){
-    HuggDialog(
-        title = ACCOUNT_DIALOG_SUBSIDY_DELETE,
-        positiveColor = Sunday,
-        positiveText = WORD_DELETE,
-        onClickCancel = onClickCancel,
-        onClickNegative = onClickCancel,
-        onClickPositive = onClickDeleteBtn,
-        interactionSource = interactionSource
-    )
 }
 
 @Preview

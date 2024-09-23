@@ -1,10 +1,7 @@
-package com.example.dailyhugg.create
+package com.hugg.dailyhugg.create
 
 import android.Manifest
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Matrix
-import android.media.ExifInterface
 import android.net.Uri
 import android.os.Build
 import androidx.activity.compose.ManagedActivityResultLauncher
