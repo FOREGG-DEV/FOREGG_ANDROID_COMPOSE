@@ -6,8 +6,10 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
@@ -50,6 +52,7 @@ fun ImagePreviewScreen(
     val viewModel: ImagePreviewViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val interactionSource = remember { MutableInteractionSource() }
 
     LaunchedEffect(selectedUri) {
         viewModel.setUri(selectedUri)
@@ -62,14 +65,16 @@ fun ImagePreviewScreen(
                 val croppedUri = cropImage(context, uri, scale, offsetX, offsetY)
                 popScreen(croppedUri)
             }
-        }
+        },
+        interactionSource = interactionSource
     )
 }
 
 @Composable
 fun ImagePreviewContent(
     selectedUri: Uri? = null,
-    onClickBtnConfirm: (Float, Float, Float) -> Unit = { _, _, _ -> }
+    onClickBtnConfirm: (Float, Float, Float) -> Unit = { _, _, _ -> },
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
     var scale by remember { mutableFloatStateOf(1f) }
     var offsetX by remember { mutableFloatStateOf(0f) }
@@ -107,9 +112,15 @@ fun ImagePreviewContent(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
                 .padding(bottom = 80.dp)
-                .align(Alignment.BottomCenter),
-            text = WORD_CONFIRM,
-            onClickBtn = { onClickBtnConfirm(scale, offsetX, offsetY) }
+                .align(Alignment.BottomCenter)
+                .clickable(
+                    interactionSource = interactionSource,
+                    indication = null,
+                    onClick = {
+                        onClickBtnConfirm(scale, offsetX, offsetY)
+                    }
+                ),
+            text = WORD_CONFIRM
         )
     }
 }

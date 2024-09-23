@@ -1,6 +1,9 @@
 package com.example.dailyhugg.create.complete
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.InteractionSource
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,14 +31,18 @@ import com.hugg.feature.theme.HuggTypography
 fun DailyHuggCreationSuccessScreen(
     goToDailyHuggMain: () -> Unit = {}
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
+
     DailyHuggCreationSuccessContent(
-        goToDailyHuggMain = goToDailyHuggMain
+        goToDailyHuggMain = goToDailyHuggMain,
+        interactionSource = interactionSource
     )
 }
 
 @Composable
 fun DailyHuggCreationSuccessContent(
-    goToDailyHuggMain: () -> Unit = {}
+    goToDailyHuggMain: () -> Unit = {},
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
     Column(
         modifier = Modifier
@@ -60,9 +68,15 @@ fun DailyHuggCreationSuccessContent(
         BlankBtn(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            text = CONFIRM_DAILY_HUGG,
-            onClickBtn = { goToDailyHuggMain() }
+                .padding(horizontal = 16.dp)
+                .clickable(
+                    indication = null,
+                    interactionSource = interactionSource,
+                    onClick = {
+                        goToDailyHuggMain()
+                    }
+                ),
+            text = CONFIRM_DAILY_HUGG
         )
 
         Spacer(modifier = Modifier.height(24.dp))
