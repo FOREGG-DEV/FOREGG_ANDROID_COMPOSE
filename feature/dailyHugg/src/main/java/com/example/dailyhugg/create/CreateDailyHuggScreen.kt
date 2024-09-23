@@ -2,6 +2,9 @@ package com.example.dailyhugg.create
 
 import android.Manifest
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Matrix
+import android.media.ExifInterface
 import android.net.Uri
 import android.os.Build
 import androidx.activity.compose.ManagedActivityResultLauncher
@@ -203,11 +206,18 @@ fun CreateDailyHuggContent(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                BtnImageSelector(
-                    selectedImageUri = uiState.selectedImageUri,
-                    permissionLauncher = permissionLauncher,
-                    onClickBtnClose = onClickBtnClose
-                )
+                if (uiState.selectedImageUri == null) {
+                    BtnImageSelector(
+                        permissionLauncher = permissionLauncher,
+                        interactionSource = interactionSource
+                    )
+                } else {
+                    SelectedImageItem(
+                        selectedImageUri = uiState.selectedImageUri,
+                        onClickBtnClose = onClickBtnClose,
+                        interactionSource = interactionSource
+                    )
+                }
             }
         }
 
@@ -325,8 +335,6 @@ fun DailyHuggInputField(
 
 @Composable
 fun BtnImageSelector(
-    selectedImageUri: Uri? = null,
-    onClickBtnClose: () -> Unit = {},
     permissionLauncher: ManagedActivityResultLauncher<String, Boolean>? = null,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
@@ -348,33 +356,45 @@ fun BtnImageSelector(
             ),
         contentAlignment = Alignment.Center
     ) {
-        if (selectedImageUri != null) {
-            Image(
-                painter = rememberAsyncImagePainter(model = selectedImageUri),
-                contentDescription = null,
-                modifier = Modifier.size(80.dp),
-                contentScale = ContentScale.Crop
-            )
+        Image(
+            painter = painterResource(id = com.hugg.feature.R.drawable.ic_camera),
+            contentDescription = ""
+        )
+    }
+}
 
-            Box(
-                modifier = Modifier
-                    .size(16.dp)
-                    .padding(2.dp)
-                    .align(Alignment.TopEnd)
-                    .clickable(
-                        interactionSource = interactionSource,
-                        indication = null,
-                        onClick = { onClickBtnClose() }
-                    )
-            ) {
-                Image(
-                    painter = painterResource(id = com.hugg.feature.R.drawable.ic_circle_close),
-                    contentDescription = ""
+@Composable
+fun SelectedImageItem(
+    selectedImageUri: Uri,
+    onClickBtnClose: () -> Unit,
+    interactionSource: MutableInteractionSource
+) {
+    Box(
+        modifier = Modifier
+            .size(width = 128.dp, height = 80.dp)
+            .clip(RoundedCornerShape(8.dp)),
+        contentAlignment = Alignment.Center
+    ) {
+        Image(
+            painter = rememberAsyncImagePainter(model = selectedImageUri),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
+
+        Box(
+            modifier = Modifier
+                .size(16.dp)
+                .padding(2.dp)
+                .align(Alignment.TopEnd)
+                .clickable(
+                    interactionSource = interactionSource,
+                    indication = null,
+                    onClick = { onClickBtnClose() }
                 )
-            }
-        } else {
+        ) {
             Image(
-                painter = painterResource(id = com.hugg.feature.R.drawable.ic_camera),
+                painter = painterResource(id = com.hugg.feature.R.drawable.ic_circle_close),
                 contentDescription = ""
             )
         }
