@@ -65,7 +65,6 @@ class CreateDailyHuggViewModel @Inject constructor(
 
     private fun handleCreateDailyHuggError(code: String) {
         when(code) {
-            "COMMON200" -> emitEventFlow(CreateDailyHuggEvent.GoToDailyHuggCreationSuccess)
             "DAILY4001" -> emitEventFlow(CreateDailyHuggEvent.AlreadyExistDailyHugg)
         }
     }
