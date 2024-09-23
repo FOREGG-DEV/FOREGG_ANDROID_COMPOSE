@@ -2,8 +2,11 @@ package com.example.dailyhugg.create
 
 import android.Manifest
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
+import android.util.Base64
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -70,6 +73,13 @@ import com.hugg.feature.theme.WORD_REGISTRATION
 import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UserInfo
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
 
 @Composable
 fun CreateDailyHuggScreen(
@@ -115,7 +125,14 @@ fun CreateDailyHuggScreen(
         onSelectedDailyConditionType = { viewModel.onSelectedDailyCondition(it) },
         interactionSource = interactionSource,
         onClickBtnClose = onClickBtnClose,
-        goToDailyHuggCreationSuccessScreen = { goToDailyHuggCreationSuccessScreen() }
+        onClickBtnCreate = {
+            uiState.selectedImageUri?.let { uri ->
+                viewModel.createDailyHugg(
+                    getFilePartFromUri(context = context, uri = uri)
+                )
+            }
+            goToDailyHuggCreationSuccessScreen()
+        }
     )
 }
 
@@ -129,7 +146,7 @@ fun CreateDailyHuggContent(
     interactionSource: MutableInteractionSource = remember {  MutableInteractionSource() },
     onSelectedDailyConditionType: (DailyConditionType) -> Unit = {},
     onClickBtnClose: () -> Unit = {},
-    goToDailyHuggCreationSuccessScreen: () -> Unit = {},
+    onClickBtnCreate: () -> Unit = {}
 ) {
     Box(
         modifier = Modifier
@@ -197,7 +214,7 @@ fun CreateDailyHuggContent(
                 .align(Alignment.BottomCenter),
             isActive = uiState.clickable,
             text = WORD_REGISTRATION,
-            onClickBtn = { goToDailyHuggCreationSuccessScreen() }
+            onClickBtn = { onClickBtnCreate() }
         )
     }
 }
@@ -313,13 +330,17 @@ fun BtnImageSelector(
             .size(80.dp)
             .clip(RoundedCornerShape(8.dp))
             .background(Gs10)
-            .clickable {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    permissionLauncher?.launch(Manifest.permission.READ_MEDIA_IMAGES)
-                } else {
-                    permissionLauncher?.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null,
+                onClick = {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        permissionLauncher?.launch(Manifest.permission.READ_MEDIA_IMAGES)
+                    } else {
+                        permissionLauncher?.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    }
                 }
-            },
+            ),
         contentAlignment = Alignment.Center
     ) {
         if (selectedImageUri != null) {
@@ -353,6 +374,21 @@ fun BtnImageSelector(
             )
         }
     }
+}
+
+fun getFilePartFromUri(context: Context, uri: Uri): MultipartBody.Part? {
+    val contentResolver = context.contentResolver
+    val fileDescriptor = contentResolver.openFileDescriptor(uri, "r") ?: return null
+    val inputStream = FileInputStream(fileDescriptor.fileDescriptor)
+    val file = File(context.cacheDir, "${System.currentTimeMillis()}.jpg")
+    val outputStream = FileOutputStream(file)
+
+    inputStream.copyTo(outputStream)
+    inputStream.close()
+    outputStream.close()
+
+    val requestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
+    return MultipartBody.Part.createFormData("image", file.name, requestBody)
 }
 
 @Preview(showBackground = true, showSystemUi = true)
