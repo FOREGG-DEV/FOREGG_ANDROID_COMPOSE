@@ -57,6 +57,7 @@ import com.hugg.feature.theme.EMPTY_HUGG_MALE
 import com.hugg.feature.theme.EMPTY_REPLY
 import com.hugg.feature.theme.FEMALE
 import com.hugg.feature.theme.Gs10
+import com.hugg.feature.theme.Gs20
 import com.hugg.feature.theme.Gs60
 import com.hugg.feature.theme.Gs70
 import com.hugg.feature.theme.Gs90
@@ -199,7 +200,8 @@ fun DateNavigator(
         BtnArrow(
             arrowIcon = R.drawable.ic_back_arrow_gs_20,
             interactionSource = interactionSource,
-            onClick = { onClickBtnPreviousDay() }
+            onClick = { onClickBtnPreviousDay() },
+            tint = Gs60
         )
 
         Text(
@@ -212,7 +214,8 @@ fun DateNavigator(
 
         BtnArrow(
             interactionSource = interactionSource,
-            onClick = { onClickBtnNextDay() }
+            onClick = { onClickBtnNextDay() },
+            tint = if (date == TimeFormatter.getTodayYearMonthDayKor(TimeFormatter.getToday())) Gs20 else Gs60
         )
     }
 }
@@ -221,12 +224,13 @@ fun DateNavigator(
 fun BtnArrow(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     arrowIcon: Int = R.drawable.ic_right_arrow_gs_20,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
+    tint: Color = Color.Unspecified
 ) {
     Box(
         modifier = Modifier.clickable(
             indication = null,
-            onClick = { onClick() },
+            onClick = { if (tint == Gs60) onClick() },
             interactionSource = interactionSource
         )
     ) {
@@ -235,7 +239,7 @@ fun BtnArrow(
             contentDescription = "",
             modifier = Modifier
                 .size(48.dp),
-            tint = Color.Unspecified
+            tint = tint
         )
     }
 }
@@ -348,7 +352,7 @@ fun DailyHuggItem(
                             )
 
                             Text(
-                                text = item.date.split(' ').last(),
+                                text = item.date.split(' ').last().substring(0, 5),
                                 style = HuggTypography.p3_l,
                                 color = Gs70
                             )
