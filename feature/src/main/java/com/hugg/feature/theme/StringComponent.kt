@@ -193,6 +193,7 @@ const val DAILY_HUGG_BTN_TEXT = "기록 모아보기"
 const val EMPTY_HUGG_FEMALE = "오늘의 일상을\n 남편과 공유해봐요"
 const val EMPTY_HUGG_MALE = "남편이 답장을\n할 수 있어요"
 const val REPLY_COUNT = "%s/50"
+const val DAILY_HUGG_DATE = "%s %s"
 
 // CreateDailyHugg
 const val CREATE_TITLE = "%s님\n%s년 %s\n오늘 하루 어떠셨나요?"
