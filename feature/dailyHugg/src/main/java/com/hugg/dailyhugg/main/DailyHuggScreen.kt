@@ -1,5 +1,6 @@
 package com.hugg.dailyhugg.main
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,10 +22,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -49,21 +50,23 @@ import com.hugg.feature.component.PlusBtn
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.Background
 import com.hugg.feature.theme.DAILY_HUGG
+import com.hugg.feature.theme.DAILY_HUGG_DATE
+import com.hugg.feature.theme.DELETE_DAILY_HUGG
 import com.hugg.feature.theme.EMPTY_HUGG_FEMALE
 import com.hugg.feature.theme.EMPTY_HUGG_MALE
+import com.hugg.feature.theme.EMPTY_REPLY
 import com.hugg.feature.theme.FEMALE
+import com.hugg.feature.theme.Gs10
 import com.hugg.feature.theme.Gs60
 import com.hugg.feature.theme.Gs70
 import com.hugg.feature.theme.Gs90
 import com.hugg.feature.theme.GsBlack
-import com.hugg.feature.theme.GsWhite
 import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.MALE
-import com.hugg.feature.theme.MainLight
 import com.hugg.feature.theme.MainNormal
 import com.hugg.feature.theme.REPLY_COUNT
-import com.hugg.feature.theme.ROUND_TEXT
 import com.hugg.feature.theme.White
+import com.hugg.feature.util.TimeFormatter
 
 @Composable
 fun DailyHuggScreen(
@@ -72,11 +75,39 @@ fun DailyHuggScreen(
     val viewModel: DailyHuggViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val interactionSource = remember { MutableInteractionSource() }
+    val onClickBtnNextDay = {
+        val newDate = TimeFormatter.getNextDate(uiState.date)
+        viewModel.setDate(
+            newDate = newDate,
+            newDay = TimeFormatter.getKoreanFullDayOfWeek(newDate)
+        )
+    }
+    val onClickBtnPreviousDay = {
+        val newDate = TimeFormatter.getPreviousDate(uiState.date)
+        viewModel.setDate(
+            newDate = newDate,
+            newDay = TimeFormatter.getKoreanFullDayOfWeek(newDate)
+        )
+    }
+    val dateText = TimeFormatter.getTodayYearMonthDayKor(uiState.date)
+
+    LaunchedEffect(Unit) {
+        if (uiState.date.isEmpty()) {
+            val today = TimeFormatter.getToday()
+            viewModel.setDate(
+                newDate = today,
+                newDay = TimeFormatter.getKoreanFullDayOfWeek(today)
+            )
+        }
+    }
 
     DailyHuggContent(
         uiState = uiState,
         interactionSource = interactionSource,
-        onClickCreateDailyHugg = onClickCreateDailyHugg
+        onClickCreateDailyHugg = onClickCreateDailyHugg,
+        onClickBtnNextDay = onClickBtnNextDay,
+        onClickBtnPreviousDay = onClickBtnPreviousDay,
+        dateText = dateText
     )
 }
 
@@ -84,7 +115,10 @@ fun DailyHuggScreen(
 fun DailyHuggContent(
     uiState: DailyHuggPageState = DailyHuggPageState(),
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    onClickCreateDailyHugg: () -> Unit = {}
+    onClickCreateDailyHugg: () -> Unit = {},
+    onClickBtnNextDay: () -> Unit = {},
+    onClickBtnPreviousDay: () -> Unit = {},
+    dateText: String = ""
 ) {
     Box(
         modifier = Modifier.fillMaxSize()
@@ -97,7 +131,7 @@ fun DailyHuggContent(
             TopBar(
                 middleText = DAILY_HUGG,
                 middleItemType = TopBarMiddleType.TEXT,
-                rightItemType = TopBarRightType.DAILY_RECORD,
+                rightItemType = TopBarRightType.DAILY_RECORD
             )
 
             Column(
@@ -106,23 +140,26 @@ fun DailyHuggContent(
                     .padding(horizontal = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-                BtnRound(
+                DateNavigator(
+                    date = dateText,
+                    day = uiState.day,
                     interactionSource = interactionSource,
-                    round = uiState.round
+                    onClickBtnPreviousDay = { onClickBtnPreviousDay() },
+                    onClickBtnNextDay = { onClickBtnNextDay() }
                 )
-
-                Spacer(modifier = Modifier.height(14.dp))
-
-                DateNavigator(interactionSource = interactionSource)
 
                 Spacer(modifier = Modifier.height(22.dp))
 
-                if (uiState.dailyHugg.isEmpty()) EmptyDailyHuggContent()
+                if (uiState.dailyHugg == null) EmptyDailyHuggContent()
                 else DailyHuggItem(
-                    item = uiState.dailyHugg.last()
+                    item = uiState.dailyHugg
                 )
+                
+                Spacer(modifier = Modifier.height(16.dp))
+
+                if (uiState.dailyHugg != null) BtnDeleteDailyHugg()
             }
         }
 
@@ -147,60 +184,12 @@ fun DailyHuggContent(
 }
 
 @Composable
-fun BtnRound(
-    round: Int = 0,
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
-) {
-    Box(
-        modifier = Modifier
-            .width(84.dp)
-            .height(24.dp)
-            .clip(RoundedCornerShape(6.dp))
-            .background(MainNormal)
-            .clickable(
-                onClick = {},
-                indication = null,
-                interactionSource = interactionSource
-            )
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = String.format(ROUND_TEXT, round),
-                color = GsWhite,
-                style = HuggTypography.h4
-            )
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            Divider(
-                color = MainLight,
-                modifier = Modifier
-                    .height(20.dp)
-                    .width(0.5.dp)
-                    .padding(vertical = 3.dp)
-            )
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            Icon(
-                painter = painterResource(id = com.hugg.feature.R.drawable.ic_plus_white),
-                contentDescription = "",
-                tint = Color.Unspecified,
-                modifier = Modifier.size(12.dp)
-            )
-        }
-    }
-}
-
-@Composable
 fun DateNavigator(
-    date: String = "2024년 8월 5일 목요일",
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
+    date: String = "2024년 8월 5일",
+    day: String = "목요일",
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    onClickBtnNextDay: () -> Unit = {},
+    onClickBtnPreviousDay: () -> Unit = {}
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -209,19 +198,21 @@ fun DateNavigator(
     ) {
         BtnArrow(
             arrowIcon = R.drawable.ic_back_arrow_gs_20,
-            interactionSource = interactionSource
+            interactionSource = interactionSource,
+            onClick = { onClickBtnPreviousDay() }
         )
 
         Text(
-            text = date,
+            text = String.format(DAILY_HUGG_DATE, date, day),
             style = HuggTypography.h2,
             color = Gs90,
-            modifier = Modifier.weight(1f),
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            modifier = Modifier.weight(1f)
         )
 
         BtnArrow(
-            interactionSource = interactionSource
+            interactionSource = interactionSource,
+            onClick = { onClickBtnNextDay() }
         )
     }
 }
@@ -229,12 +220,13 @@ fun DateNavigator(
 @Composable
 fun BtnArrow(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    arrowIcon: Int = com.hugg.feature.R.drawable.ic_right_arrow_gs_20
+    arrowIcon: Int = R.drawable.ic_right_arrow_gs_20,
+    onClick: () -> Unit = {}
 ) {
     Box(
         modifier = Modifier.clickable(
             indication = null,
-            onClick = {},
+            onClick = { onClick() },
             interactionSource = interactionSource
         )
     ) {
@@ -271,8 +263,8 @@ fun EmptyDailyHuggContent() {
 @Composable
 fun EmptyHuggItem(
     color: Color = FEMALE,
-    hugging: Int = com.hugg.feature.R.drawable.ic_hugging_female,
-    msgBubble: Int = com.hugg.feature.R.drawable.ic_msg_bubble_female,
+    hugging: Int = R.drawable.ic_hugging_female,
+    msgBubble: Int = R.drawable.ic_msg_bubble_female,
     msg: String = EMPTY_HUGG_FEMALE,
     msgBubbleAlignment: Alignment = Alignment.BottomEnd,
     msgPadding: PaddingValues = PaddingValues(end = 93.dp, bottom = 45.dp),
@@ -322,7 +314,6 @@ fun EmptyHuggItem(
 fun DailyHuggItem(
     item: DailyHuggItemVo = DailyHuggItemVo()
 ) {
-
     LazyColumn {
         item {
             Box(
@@ -340,7 +331,7 @@ fun DailyHuggItem(
                         verticalAlignment = Alignment.Bottom
                     ) {
                         Icon(
-                            painter = painterResource(id = com.hugg.feature.R.drawable.ic_worst),
+                            painter = painterResource(id = R.drawable.ic_worst),
                             contentDescription = "",
                             tint = Color.Unspecified,
                         )
@@ -351,13 +342,13 @@ fun DailyHuggItem(
                             horizontalAlignment = Alignment.Start
                         ) {
                             Text(
-                                text = item.dailyConditionType.value,
+                                text = item.dailyConditionType,
                                 style = HuggTypography.p1,
                                 color = Gs90
                             )
 
                             Text(
-                                text = item.date,
+                                text = item.date.split(' ').last(),
                                 style = HuggTypography.p3_l,
                                 color = Gs70
                             )
@@ -381,7 +372,29 @@ fun DailyHuggItem(
             item {
                 ReplyItem(reply = item.reply)
             }
+        } else {
+            item {
+                EmptyReplyItem()
+            }
         }
+    }
+}
+
+@Composable
+fun EmptyReplyItem() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(8.dp))
+            .background(Gs10),
+        contentAlignment = Alignment.CenterStart
+    ) {
+        Text(
+            text = EMPTY_REPLY,
+            style = HuggTypography.p2,
+            color = Gs70,
+            modifier = Modifier.padding(12.dp)
+        )
     }
 }
 
@@ -408,7 +421,7 @@ fun ReplyItem(
 
         Text(
             text = String.format(REPLY_COUNT, reply.length),
-            style = HuggTypography.p5,
+            style = HuggTypography.p3_l,
             color = Gs70,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
@@ -434,17 +447,43 @@ fun UrlToImage(
     )
 }
 
+@Composable
+fun BtnDeleteDailyHugg(
+    onClickBtnDeleteDailyHugg: () -> Unit = {}
+) {
+    Box(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier
+                .size(width = 109.dp, height = 31.dp)
+                .clip(RoundedCornerShape(4.dp))
+                .background(Gs10)
+                .clickable { onClickBtnDeleteDailyHugg() },
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_delete_gs_30),
+                contentDescription = "",
+                tint = Gs60,
+                modifier = Modifier.size(24.dp)
+            )
+
+            Text(
+                text = DELETE_DAILY_HUGG,
+                color = Gs60,
+                style = HuggTypography.p3
+            )
+        }
+    }
+}
+
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun PreviewDailyHugg() {
     DailyHuggContent(
         uiState = DailyHuggPageState(
-            dailyHugg = listOf(DailyHuggItemVo(
-                id = 1,
-                content = "asldnaqoprubgpqouehfl;aksndvuqenbrgpouqhgopinaf;lvjnasdjgbawqougrh[oqwivn;alskdvnawlirng[oirhg[pqwirjhgaskdnv;lawnvo",
-                imageUrl = "https://discord.com/channels/1280552212116013116/1280552212116013119/1284190261890646058",
-                reply = "anlkrjgnoaiwe"
-            ))
+            dailyHugg = DailyHuggItemVo()
         )
     )
 }
