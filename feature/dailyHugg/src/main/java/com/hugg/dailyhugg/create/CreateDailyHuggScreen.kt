@@ -46,6 +46,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
 import com.hugg.domain.model.enums.DailyConditionType
+import com.hugg.domain.model.enums.DailyHuggType
 import com.hugg.domain.model.enums.TopBarLeftType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.feature.component.FilledBtn
@@ -59,6 +60,7 @@ import com.hugg.feature.theme.GsWhite
 import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.IMAGE_PERMISSION_TEXT
 import com.hugg.feature.theme.MainStrong
+import com.hugg.feature.theme.WORD_MODIFY
 import com.hugg.feature.theme.WORD_REGISTRATION
 import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.TimeFormatter
@@ -71,13 +73,14 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 
 @Composable
-fun CreateDailyHuggScreen(
+fun CreateEditDailyHuggScreen(
     goToDailyHuggCreationSuccessScreen: () -> Unit = {},
     popScreen: () -> Unit = {},
     goToImgPreview: (Uri?) -> Unit = {},
-    getSavedUri: () -> Uri?
+    getSavedUri: () -> Uri?,
+    dailyHuggType: DailyHuggType = DailyHuggType.CREATE
 ) {
-    val viewModel: CreateDailyHuggViewModel = hiltViewModel()
+    val viewModel: CreateEditDailyHuggViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val interactionSource = remember { MutableInteractionSource() }
@@ -109,17 +112,17 @@ fun CreateDailyHuggScreen(
     LaunchedEffect(Unit) {
         viewModel.eventFlow.collect { event ->
             when(event) {
-                CreateDailyHuggEvent.AlreadyExistDailyHugg -> {
+                CreateEditDailyHuggEvent.AlreadyExistEditDailyHugg -> {
                     HuggToast.createToast(context = context, message = ALREADY_EXIST_DAILY_HUGG).show()
                 }
-                CreateDailyHuggEvent.GoToDailyHuggCreationSuccess -> {
+                CreateEditDailyHuggEvent.GoToEditDailyHuggCreationSuccess -> {
                     goToDailyHuggCreationSuccessScreen()
                 }
             }
         }
     }
 
-    CreateDailyHuggContent(
+    CreateEditDailyHuggContent(
         permissionLauncher = permissionLauncher,
         uiState = uiState,
         onDailyHuggContentChanged = { viewModel.onDailyHuggContentChange(it) },
@@ -135,14 +138,15 @@ fun CreateDailyHuggScreen(
                 )
             }
         },
-        popScreen = popScreen
+        popScreen = popScreen,
+        dailyHuggType = dailyHuggType
     )
 }
 
 @Composable
-fun CreateDailyHuggContent(
+fun CreateEditDailyHuggContent(
     permissionLauncher: ManagedActivityResultLauncher<String, Boolean>? = null,
-    uiState: CreateDailyHuggPageState = CreateDailyHuggPageState(),
+    uiState: CreateEditDailyHuggPageState = CreateEditDailyHuggPageState(),
     onDailyHuggContentChanged: (String) -> Unit = {},
     year: Int = 2024,
     formattedMDW: String = "",
@@ -150,7 +154,8 @@ fun CreateDailyHuggContent(
     onSelectedDailyConditionType: (DailyConditionType) -> Unit = {},
     onClickBtnClose: () -> Unit = {},
     onClickBtnCreate: () -> Unit = {},
-    popScreen: () -> Unit = {}
+    popScreen: () -> Unit = {},
+    dailyHuggType: DailyHuggType = DailyHuggType.CREATE
 ) {
     Box(
         modifier = Modifier
@@ -225,8 +230,11 @@ fun CreateDailyHuggContent(
                 .padding(bottom = 80.dp)
                 .align(Alignment.BottomCenter),
             isActive = uiState.clickable,
-            text = WORD_REGISTRATION,
-            onClickBtn = { onClickBtnCreate() }
+            onClickBtn = { onClickBtnCreate() },
+            text = when(dailyHuggType) {
+                DailyHuggType.CREATE -> WORD_REGISTRATION
+                DailyHuggType.EDIT -> WORD_MODIFY
+            }
         )
     }
 }
@@ -416,5 +424,5 @@ fun getFilePartFromUri(context: Context, uri: Uri): MultipartBody.Part? {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun PreviewCreateDaily() {
-    CreateDailyHuggContent()
+    CreateEditDailyHuggContent()
 }
