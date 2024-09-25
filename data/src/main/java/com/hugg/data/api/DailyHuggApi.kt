@@ -12,6 +12,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
 
@@ -32,4 +33,12 @@ interface DailyHuggApi {
     suspend fun getDailyHuggByDate(
         @Path(DATE) date: String
     ): Response<ApiResponse<DailyHuggResponse>>
+
+    @Multipart
+    @PUT(Endpoints.DailyHugg.EDIT)
+    suspend fun editDailyHugg(
+        @Path("id") id: Long,
+        @Part image: MultipartBody.Part,
+        @Part("dto") dto: RequestBody
+    ): Response<ApiResponse<Unit>>
 }

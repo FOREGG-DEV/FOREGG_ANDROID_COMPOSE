@@ -3,6 +3,7 @@ plugins {
     kotlin("android")
     kotlin("kapt")
     id("dagger.hilt.android.plugin")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -76,6 +77,7 @@ dependencies {
     implementation(AndroidX.COMPOSE_GRAPHICS)
     implementation(AndroidX.COMPOSE_PREVIEW)
     implementation(AndroidX.ACTIVITY_COMPOSE)
+    implementation(AndroidX.LIVE_DATA)
 
     implementation(Libraries.COIL)
     implementation(Libraries.COIL_COMPOSE)
@@ -83,4 +85,6 @@ dependencies {
     kapt(Google.HILT_COMPILER)
 
     implementation(Libraries.RETROFIT_CONVERTER_GSON)
+
+    implementation(Kotlin.PARCELIZE)
 }

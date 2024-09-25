@@ -7,6 +7,7 @@ import com.hugg.domain.model.enums.DailyConditionType
 import com.hugg.domain.model.vo.dailyHugg.CreateDailyHuggDto
 import com.hugg.domain.repository.DailyHuggRepository
 import com.hugg.feature.base.BaseViewModel
+import com.hugg.feature.util.ForeggLog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -15,9 +16,21 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import javax.inject.Inject
 
 @HiltViewModel
-class CreateDailyHuggViewModel @Inject constructor(
+class CreateEditDailyHuggViewModel @Inject constructor(
     private val dailyHuggRepository: DailyHuggRepository
-) : BaseViewModel<CreateDailyHuggPageState>(CreateDailyHuggPageState()) {
+) : BaseViewModel<CreateEditDailyHuggPageState>(CreateEditDailyHuggPageState()) {
+    private var dailyHuggId: Long? = null
+    private val gson = Gson()
+
+    fun setPageState(pageState: CreateEditDailyHuggPageState?, id: Long?) {
+        dailyHuggId = id
+        pageState?.let {
+            updateState(
+                state = pageState
+            )
+        }
+    }
+
     fun onDailyHuggContentChange(newContent: String) {
         updateState(
             uiState.value.copy(
@@ -43,7 +56,6 @@ class CreateDailyHuggViewModel @Inject constructor(
     }
 
     fun createDailyHugg(image: MultipartBody.Part?) {
-        val gson = Gson()
         val dtoJson = gson.toJson(CreateDailyHuggDto(
             dailyConditionType = uiState.value.dailyConditionType,
             content = uiState.value.dailyHuggContent
@@ -60,12 +72,25 @@ class CreateDailyHuggViewModel @Inject constructor(
     }
 
     private fun handleCreateDailyHuggSuccess() {
-        emitEventFlow(CreateDailyHuggEvent.GoToDailyHuggCreationSuccess)
+        emitEventFlow(CreateEditDailyHuggEvent.GoToDailyHuggCreationSuccess)
     }
 
     private fun handleCreateDailyHuggError(code: String) {
         when(code) {
-            "DAILY4001" -> emitEventFlow(CreateDailyHuggEvent.AlreadyExistDailyHugg)
+            "DAILY4001" -> emitEventFlow(CreateEditDailyHuggEvent.AlreadyExistEditDailyHugg)
+        }
+    }
+
+    fun editDailyHugg(image: MultipartBody.Part?) {
+        val dtoJson = gson.toJson(CreateDailyHuggDto(
+            dailyConditionType = uiState.value.dailyConditionType,
+            content = uiState.value.dailyHuggContent
+        ))
+        val dtoRequestBody = dtoJson.toRequestBody("application/json".toMediaTypeOrNull())
+        viewModelScope.launch {
+            dailyHuggRepository.editDailyHugg(id = dailyHuggId!!, image = image!!, dto = dtoRequestBody).collect {
+                resultResponse(it, { emitEventFlow(CreateEditDailyHuggEvent.CompleteEditDailyHugg) })
+            }
         }
     }
 }

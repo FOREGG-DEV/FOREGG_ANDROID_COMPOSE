@@ -3,6 +3,7 @@ object Kotlin {
     const val COROUTINES_CORE =
         "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.K_COROUTINES_CORE}"
     const val COROUTINES = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.K_COROUTINES}"
+    const val PARCELIZE = "org.jetbrains.kotlin:kotlin-parcelize-runtime:${Versions.KOTLIN_VERSION}"
 }
 
 object Google {
@@ -27,7 +28,7 @@ object AndroidX{
     const val LIFECYCLE_VIEW_MODEL_KTX =
         "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.VIEW_MODEL_KTX}"
     const val CONSTRAINT_LAYOUT = "androidx.constraintlayout:constraintlayout:${Versions.CONSTRAINT_LAYOUT}"
-    const val LIVE_DATA = "androidx.compose.runtime:runtime-livedata:${Versions.LIFECYCLE_COMPOSE}"
+    const val LIVE_DATA = "androidx.compose.runtime:runtime-livedata:${Versions.RUNTIME_LIVE_DATA}"
     const val DATA_STORE_PROTO = "androidx.datastore:datastore:${Versions.DATA_STORE}"
     const val DATA_STORE_PREFERENCES = "androidx.datastore:datastore-preferences:${Versions.DATA_STORE}"
     const val FRAGMENT_KTX = "androidx.fragment:fragment-ktx:${Versions.FRAGMENT_KTX}"

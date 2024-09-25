@@ -1,5 +1,6 @@
 package com.hugg.dailyhugg.main
 
+import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -42,16 +43,21 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
+import com.hugg.dailyhugg.create.CreateEditDailyHuggPageState
+import com.hugg.domain.model.enums.DailyConditionType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.domain.model.enums.TopBarRightType
 import com.hugg.domain.model.response.dailyHugg.DailyHuggItemVo
 import com.hugg.feature.R
+import com.hugg.feature.component.HuggDialog
 import com.hugg.feature.component.PlusBtn
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.Background
 import com.hugg.feature.theme.DAILY_HUGG
 import com.hugg.feature.theme.DAILY_HUGG_DATE
 import com.hugg.feature.theme.DELETE_DAILY_HUGG
+import com.hugg.feature.theme.EDIT_DAILY_HUGG_DIALOG_TITLE
+import com.hugg.feature.theme.EDIT_DAILY_HUGG_DIALOG_WARNING
 import com.hugg.feature.theme.EMPTY_HUGG_FEMALE
 import com.hugg.feature.theme.EMPTY_HUGG_MALE
 import com.hugg.feature.theme.EMPTY_REPLY
@@ -71,7 +77,8 @@ import com.hugg.feature.util.TimeFormatter
 
 @Composable
 fun DailyHuggScreen(
-    onClickCreateDailyHugg: () -> Unit
+    onClickCreateDailyHugg: () -> Unit,
+    onClickDailyHuggItem: (CreateEditDailyHuggPageState, Long) -> Unit
 ) {
     val viewModel: DailyHuggViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -99,7 +106,32 @@ fun DailyHuggScreen(
                 newDate = today,
                 newDay = TimeFormatter.getKoreanFullDayOfWeek(today)
             )
+        } else {
+            viewModel.getDailyHuggBYDate(uiState.date)
         }
+    }
+
+    if (uiState.showEditDialog) {
+        HuggDialog(
+            interactionSource = interactionSource,
+            hasWarningText = true,
+            warningMessage = EDIT_DAILY_HUGG_DIALOG_WARNING,
+            title = EDIT_DAILY_HUGG_DIALOG_TITLE,
+            onClickNegative = { viewModel.updateShowDialog(false) },
+            onClickPositive = {
+                uiState.dailyHugg?.let {
+                    onClickDailyHuggItem(
+                        CreateEditDailyHuggPageState(
+                            dailyHuggContent = it.content,
+                            dailyConditionType = DailyConditionType.fromValue(it.dailyConditionType)!!,
+                            selectedImageUri = Uri.parse(it.imageUrl)
+                        ),
+                        it.id
+                    )
+                }
+                viewModel.updateShowDialog(false)
+            }
+        )
     }
 
     DailyHuggContent(
@@ -108,7 +140,10 @@ fun DailyHuggScreen(
         onClickCreateDailyHugg = onClickCreateDailyHugg,
         onClickBtnNextDay = onClickBtnNextDay,
         onClickBtnPreviousDay = onClickBtnPreviousDay,
-        dateText = dateText
+        dateText = dateText,
+        onClickDailyHuggItem = {
+            viewModel.updateShowDialog(true)
+        }
     )
 }
 
@@ -119,7 +154,8 @@ fun DailyHuggContent(
     onClickCreateDailyHugg: () -> Unit = {},
     onClickBtnNextDay: () -> Unit = {},
     onClickBtnPreviousDay: () -> Unit = {},
-    dateText: String = ""
+    dateText: String = "",
+    onClickDailyHuggItem: () -> Unit = {}
 ) {
     Box(
         modifier = Modifier.fillMaxSize()
@@ -155,7 +191,8 @@ fun DailyHuggContent(
 
                 if (uiState.dailyHugg == null) EmptyDailyHuggContent()
                 else DailyHuggItem(
-                    item = uiState.dailyHugg
+                    item = uiState.dailyHugg,
+                    onClickDailyHuggItem = onClickDailyHuggItem
                 )
                 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -316,7 +353,8 @@ fun EmptyHuggItem(
 
 @Composable
 fun DailyHuggItem(
-    item: DailyHuggItemVo = DailyHuggItemVo()
+    item: DailyHuggItemVo = DailyHuggItemVo(),
+    onClickDailyHuggItem: () -> Unit = {}
 ) {
     LazyColumn {
         item {
@@ -326,6 +364,7 @@ fun DailyHuggItem(
                     .border(BorderStroke(1.dp, FEMALE), shape = RoundedCornerShape(8.dp))
                     .clip(RoundedCornerShape(8.dp))
                     .background(White)
+                    .clickable { onClickDailyHuggItem() }
             ) {
                 Column(
                     modifier = Modifier

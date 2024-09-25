@@ -207,5 +207,10 @@ const val ALREADY_EXIST_DAILY_HUGG = "데일리 허그는 하루에 하나만 �
 const val CREATION_SUCCESS_TITLE = "데일리 허그가 전달되었어요!"
 const val CONFIRM_DAILY_HUGG = "작성한 글 확인"
 
+// EditDailyHugg
+const val COMPLETE_EDIT_DAILY_HUGG = "데일리 허그가 수정되었어요"
+const val EDIT_DAILY_HUGG_DIALOG_TITLE = "글을 수정하시겠어요?"
+const val EDIT_DAILY_HUGG_DIALOG_WARNING = "남편이 답장을 보낸 이후에는 수정할 수 없어요"
+
 // --------- 에러 Toast --------- //
 const val TOAST_ERROR_NOR_CORRECT_SPOUSE_CODE = "유효하지 않은 배우자코드입니다."

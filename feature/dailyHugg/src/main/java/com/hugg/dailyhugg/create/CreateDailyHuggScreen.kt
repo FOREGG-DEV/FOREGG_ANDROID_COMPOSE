@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.net.Uri
 import android.os.Build
+import android.provider.ContactsContract.CommonDataKinds.Website.URL
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -29,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -46,6 +48,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
 import com.hugg.domain.model.enums.DailyConditionType
+import com.hugg.domain.model.enums.DailyHuggType
 import com.hugg.domain.model.enums.TopBarLeftType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.feature.component.FilledBtn
@@ -59,25 +62,30 @@ import com.hugg.feature.theme.GsWhite
 import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.IMAGE_PERMISSION_TEXT
 import com.hugg.feature.theme.MainStrong
+import com.hugg.feature.theme.WORD_MODIFY
 import com.hugg.feature.theme.WORD_REGISTRATION
 import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UserInfo
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import java.net.URL
 
 @Composable
 fun CreateDailyHuggScreen(
     goToDailyHuggCreationSuccessScreen: () -> Unit = {},
     popScreen: () -> Unit = {},
     goToImgPreview: (Uri?) -> Unit = {},
-    getSavedUri: () -> Uri?
+    getSavedUri: () -> Uri?,
 ) {
-    val viewModel: CreateDailyHuggViewModel = hiltViewModel()
+    val viewModel: CreateEditDailyHuggViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val interactionSource = remember { MutableInteractionSource() }
@@ -101,6 +109,7 @@ fun CreateDailyHuggScreen(
     val year = TimeFormatter.getYear(TimeFormatter.getToday())
     val formattedMDW = TimeFormatter.getDateFormattedMDWKor(TimeFormatter.getToday())
     val onClickBtnClose = { viewModel.setSelectedImageUri(null) }
+    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         viewModel.setSelectedImageUri(getSavedUri())
@@ -109,17 +118,17 @@ fun CreateDailyHuggScreen(
     LaunchedEffect(Unit) {
         viewModel.eventFlow.collect { event ->
             when(event) {
-                CreateDailyHuggEvent.AlreadyExistDailyHugg -> {
+                CreateEditDailyHuggEvent.AlreadyExistEditDailyHugg -> {
                     HuggToast.createToast(context = context, message = ALREADY_EXIST_DAILY_HUGG).show()
                 }
-                CreateDailyHuggEvent.GoToDailyHuggCreationSuccess -> {
+                CreateEditDailyHuggEvent.GoToDailyHuggCreationSuccess -> {
                     goToDailyHuggCreationSuccessScreen()
                 }
             }
         }
     }
 
-    CreateDailyHuggContent(
+    CreateEditDailyHuggContent(
         permissionLauncher = permissionLauncher,
         uiState = uiState,
         onDailyHuggContentChanged = { viewModel.onDailyHuggContentChange(it) },
@@ -130,19 +139,22 @@ fun CreateDailyHuggScreen(
         onClickBtnClose = onClickBtnClose,
         onClickBtnCreate = {
             uiState.selectedImageUri?.let { uri ->
-                viewModel.createDailyHugg(
-                    getFilePartFromUri(context = context, uri = uri)
-                )
+                coroutineScope.launch {
+                    viewModel.createDailyHugg(
+                        getFilePartFromUri(context = context, uri = uri)
+                    )
+                }
             }
         },
-        popScreen = popScreen
+        popScreen = popScreen,
+        dailyHuggType = DailyHuggType.CREATE
     )
 }
 
 @Composable
-fun CreateDailyHuggContent(
+fun CreateEditDailyHuggContent(
     permissionLauncher: ManagedActivityResultLauncher<String, Boolean>? = null,
-    uiState: CreateDailyHuggPageState = CreateDailyHuggPageState(),
+    uiState: CreateEditDailyHuggPageState = CreateEditDailyHuggPageState(),
     onDailyHuggContentChanged: (String) -> Unit = {},
     year: Int = 2024,
     formattedMDW: String = "",
@@ -150,7 +162,9 @@ fun CreateDailyHuggContent(
     onSelectedDailyConditionType: (DailyConditionType) -> Unit = {},
     onClickBtnClose: () -> Unit = {},
     onClickBtnCreate: () -> Unit = {},
-    popScreen: () -> Unit = {}
+    onClickBtnEdit: () -> Unit = {},
+    popScreen: () -> Unit = {},
+    dailyHuggType: DailyHuggType = DailyHuggType.CREATE
 ) {
     Box(
         modifier = Modifier
@@ -225,8 +239,16 @@ fun CreateDailyHuggContent(
                 .padding(bottom = 80.dp)
                 .align(Alignment.BottomCenter),
             isActive = uiState.clickable,
-            text = WORD_REGISTRATION,
-            onClickBtn = { onClickBtnCreate() }
+            onClickBtn = {
+                when(dailyHuggType) {
+                    DailyHuggType.CREATE -> onClickBtnCreate()
+                    DailyHuggType.EDIT -> onClickBtnEdit()
+                }
+            },
+            text = when(dailyHuggType) {
+                DailyHuggType.CREATE -> WORD_REGISTRATION
+                DailyHuggType.EDIT -> WORD_MODIFY
+            }
         )
     }
 }
@@ -398,23 +420,53 @@ fun SelectedImageItem(
     }
 }
 
-fun getFilePartFromUri(context: Context, uri: Uri): MultipartBody.Part? {
-    val contentResolver = context.contentResolver
-    val fileDescriptor = contentResolver.openFileDescriptor(uri, "r") ?: return null
-    val inputStream = FileInputStream(fileDescriptor.fileDescriptor)
-    val file = File(context.cacheDir, "${System.currentTimeMillis()}.jpg")
-    val outputStream = FileOutputStream(file)
+suspend fun getFilePartFromUri(context: Context, uri: Uri): MultipartBody.Part? {
+    return if (uri.scheme == "https" || uri.scheme == "http") {
+        val file = downloadImageFromUrl(context, uri.toString()) ?: return null
+        val requestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
+        MultipartBody.Part.createFormData("image", file.name, requestBody)
+    } else {
+        val contentResolver = context.contentResolver
+        val fileDescriptor = contentResolver.openFileDescriptor(uri, "r") ?: return null
+        val inputStream = FileInputStream(fileDescriptor.fileDescriptor)
+        val file = File(context.cacheDir, "${System.currentTimeMillis()}.jpg")
+        val outputStream = FileOutputStream(file)
 
-    inputStream.copyTo(outputStream)
-    inputStream.close()
-    outputStream.close()
+        inputStream.copyTo(outputStream)
+        inputStream.close()
+        outputStream.close()
 
-    val requestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-    return MultipartBody.Part.createFormData("image", file.name, requestBody)
+        val requestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
+        MultipartBody.Part.createFormData("image", file.name, requestBody)
+    }
+}
+
+suspend fun downloadImageFromUrl(context: Context, urlString: String): File? {
+    return try {
+        withContext(Dispatchers.IO) {
+            val url = URL(urlString)
+            val connection = url.openConnection()
+            connection.connect()
+
+            val inputStream = connection.getInputStream()
+            val file = File(context.cacheDir, "${System.currentTimeMillis()}.jpg")
+            val outputStream = FileOutputStream(file)
+
+            inputStream.use { input ->
+                outputStream.use { output ->
+                    input.copyTo(output)
+                }
+            }
+            file
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    }
 }
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun PreviewCreateDaily() {
-    CreateDailyHuggContent()
+    CreateEditDailyHuggContent()
 }

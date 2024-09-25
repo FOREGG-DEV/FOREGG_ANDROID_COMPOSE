@@ -14,7 +14,7 @@ class DailyHuggViewModel @Inject constructor(
 ): BaseViewModel<DailyHuggPageState>(
     DailyHuggPageState()
 ) {
-    private fun getDailyHuggBYDate(date: String) {
+    fun getDailyHuggBYDate(date: String) {
         viewModelScope.launch {
             dailyHuggRepository.getDailyHuggByDate(date).collect {
                 resultResponse(it, ::onSuccessGetDailyHuggByDate, ::onFailedGetDailyHuggByDate, needLoading = true)
@@ -52,5 +52,13 @@ class DailyHuggViewModel @Inject constructor(
                 )
             )
         }
+    }
+
+    fun updateShowDialog(value: Boolean) {
+        updateState(
+            uiState.value.copy(
+                showEditDialog = value
+            )
+        )
     }
 }

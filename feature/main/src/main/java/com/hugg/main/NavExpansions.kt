@@ -17,6 +17,8 @@ import com.hugg.account.subsidyCreateOrEdit.SubsidyCreateOrEditContainer
 import com.hugg.account.subsidyList.SubsidyListContainer
 import com.hugg.calendar.calendarMain.CalendarContainer
 import com.hugg.calendar.scheduleCreateOrEdit.ScheduleCreateOrEditContainer
+import com.hugg.dailyhugg.create.CreateEditDailyHuggPageState
+import com.hugg.dailyhugg.edit.EditDailyHuggScreen
 import com.hugg.domain.model.enums.CreateOrEditType
 import com.hugg.domain.model.enums.RecordType
 import com.hugg.domain.model.enums.SurgeryType
@@ -256,7 +258,12 @@ fun NavGraphBuilder.dailyHuggGraph(navController: NavHostController) {
     navigation(startDestination = Routes.DailyHuggScreen.route, route = Routes.DailyHuggGraph.route) {
         composable(Routes.DailyHuggScreen.route) {
             DailyHuggScreen(
-                onClickCreateDailyHugg = { navController.navigate(Routes.CreateDailyHuggScreen.route) }
+                onClickCreateDailyHugg = { navController.navigate(Routes.CreateDailyHuggScreen.route) },
+                onClickDailyHuggItem = { dailyHuggPageState: CreateEditDailyHuggPageState, id: Long ->
+                    navController.navigate(Routes.EditDailyHuggScreen.createRoute(id)) {
+                        navController.currentBackStackEntry?.savedStateHandle?.set("dailyHuggPageState", dailyHuggPageState)
+                    }
+                }
             )
         }
 
@@ -296,6 +303,30 @@ fun NavGraphBuilder.dailyHuggGraph(navController: NavHostController) {
                         popUpTo(Routes.DailyHuggGraph.route) { inclusive = true }
                     }
                 }
+            )
+        }
+
+        composable(
+            route = Routes.EditDailyHuggScreen.route,
+            arguments = listOf(
+                navArgument("id") { type = NavType.LongType }
+            )
+        ) { backStackEntry ->
+            val dailyHuggPageState = navController.previousBackStackEntry
+                ?.savedStateHandle
+                ?.get<CreateEditDailyHuggPageState>("dailyHuggPageState")
+            val id = backStackEntry.arguments?.getLong("id")
+
+            EditDailyHuggScreen(
+                getSavedUri = { navController.currentBackStackEntry?.savedStateHandle?.get<Uri>("croppedUri") },
+                dailyHuggPageState = dailyHuggPageState,
+                popScreen = { navController.popBackStack() },
+                goToImgPreview = { uri: Uri? ->
+                    uri?.let {
+                        navController.navigate(Routes.ImagePreviewScreen.createRoute(uri))
+                    }
+                },
+                id = id
             )
         }
     }

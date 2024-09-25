@@ -7,5 +7,6 @@ data class DailyHuggPageState(
     val dailyHugg: DailyHuggItemVo? = null,
     val date: String = "",
     val day: String = "",
-    val isInitialization: Boolean = true
+    val isInitialization: Boolean = true,
+    val showEditDialog: Boolean = false
 ): PageState
