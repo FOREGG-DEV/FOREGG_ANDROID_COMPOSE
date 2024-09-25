@@ -53,4 +53,12 @@ class DailyHuggViewModel @Inject constructor(
             )
         }
     }
+
+    fun updateShowDialog(value: Boolean) {
+        updateState(
+            uiState.value.copy(
+                showEditDialog = value
+            )
+        )
+    }
 }
