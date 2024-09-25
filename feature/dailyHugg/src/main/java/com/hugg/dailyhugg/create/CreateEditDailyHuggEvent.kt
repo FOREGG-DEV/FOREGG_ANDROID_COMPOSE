@@ -2,7 +2,8 @@ package com.hugg.dailyhugg.create
 
 import com.hugg.feature.base.Event
 
-sealed class CreateDailyHuggEvent: Event {
-    data object GoToDailyHuggCreationSuccess: CreateDailyHuggEvent()
-    data object AlreadyExistDailyHugg: CreateDailyHuggEvent()
+sealed class CreateEditDailyHuggEvent: Event {
+    data object GoToDailyHuggCreationSuccess: CreateEditDailyHuggEvent()
+    data object AlreadyExistEditDailyHugg: CreateEditDailyHuggEvent()
+    data object CompleteEditDailyHugg: CreateEditDailyHuggEvent()
 }

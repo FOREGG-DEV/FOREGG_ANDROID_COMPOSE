@@ -1,19 +1,21 @@
 package com.hugg.dailyhugg.create
 
 import android.net.Uri
+import android.os.Parcelable
 import com.hugg.domain.model.enums.DailyConditionType
 import com.hugg.feature.base.PageState
+import kotlinx.parcelize.IgnoredOnParcel
+import kotlinx.parcelize.Parcelize
 
-data class CreateDailyHuggPageState(
+@Parcelize
+data class CreateEditDailyHuggPageState(
     val dailyHuggContent: String = "",
     val dailyConditionType: DailyConditionType = DailyConditionType.DEFAULT,
     val selectedImageUri: Uri? = null
-): PageState {
+): PageState, Parcelable {
+    @IgnoredOnParcel
     val clickable: Boolean =
-        if (
-            dailyHuggContent.isEmpty() ||
-            dailyConditionType == DailyConditionType.DEFAULT ||
-            selectedImageUri == null
-        ) false
-        else true
+        !(dailyHuggContent.isEmpty() ||
+                dailyConditionType == DailyConditionType.DEFAULT ||
+                selectedImageUri == null)
 }
