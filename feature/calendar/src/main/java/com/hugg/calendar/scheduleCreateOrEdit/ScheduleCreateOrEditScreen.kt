@@ -128,7 +128,6 @@ fun ScheduleCreateOrEditContainer(
             onClickCancel = { viewModel.showDeleteDialog(false) },
             onClickNegative = { viewModel.showDeleteDialog(false) },
             onClickPositive = { viewModel.onDeleteSchedule() },
-            interactionSource = interactionSource
         )
     }
 }

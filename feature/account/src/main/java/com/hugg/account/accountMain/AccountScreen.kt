@@ -180,7 +180,6 @@ fun AccountContainer(
             onClickCancel = { viewModel.showDeleteDialog(false) },
             onClickNegative = { viewModel.showDeleteDialog(false) },
             onClickPositive = { viewModel.deleteAccount() },
-            interactionSource = interactionSource
         )
     }
 
@@ -193,7 +192,6 @@ fun AccountContainer(
             onClickCancel = { viewModel.showCreateRoundDialog(false) },
             onClickNegative = { viewModel.showCreateRoundDialog(false) },
             onClickPositive = { viewModel.onClickCreateRoundBtn() },
-            interactionSource = interactionSource
         )
     }
 }

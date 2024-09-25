@@ -45,7 +45,6 @@ fun HuggDialog(
     onClickCancel : () -> Unit = {},
     hasWarningText : Boolean = false,
     warningMessage : String = "",
-    interactionSource : MutableInteractionSource
 ){
     Dialog(
         onDismissRequest = onClickCancel,
@@ -99,8 +98,6 @@ fun HuggDialog(
                             .background(color = negativeColor, shape = RoundedCornerShape(4.dp))
                             .clickable(
                                 onClick = onClickNegative,
-                                interactionSource = interactionSource,
-                                indication = null
                             ),
                         contentAlignment = Alignment.Center
                     ) {
@@ -124,8 +121,6 @@ fun HuggDialog(
                                 onClickCancel()
                                 onClickPositive()
                             },
-                            interactionSource = interactionSource,
-                            indication = null
                         ),
                     contentAlignment = Alignment.Center
                 ){

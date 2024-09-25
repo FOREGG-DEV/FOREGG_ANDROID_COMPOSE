@@ -128,7 +128,6 @@ fun AccountCreateOrEditContainer(
             onClickCancel = { viewModel.cancelDeleteDialog() },
             onClickNegative = { viewModel.cancelDeleteDialog() },
             onClickPositive = { viewModel.deleteAccount() },
-            interactionSource = interactionSource
         )
     }
 }
