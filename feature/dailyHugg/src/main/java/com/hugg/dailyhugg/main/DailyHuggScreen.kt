@@ -106,6 +106,8 @@ fun DailyHuggScreen(
                 newDate = today,
                 newDay = TimeFormatter.getKoreanFullDayOfWeek(today)
             )
+        } else {
+            viewModel.getDailyHuggBYDate(uiState.date)
         }
     }
 
