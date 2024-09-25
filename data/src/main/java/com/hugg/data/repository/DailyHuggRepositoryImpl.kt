@@ -3,8 +3,10 @@ package com.hugg.data.repository
 import com.hugg.data.api.DailyHuggApi
 import com.hugg.data.base.BaseRepository
 import com.hugg.data.mapper.UnitResponseMapper
+import com.hugg.data.mapper.dailyHugg.DailyHuggResponseMapper
 import com.hugg.domain.base.ApiState
 import com.hugg.domain.model.request.dailyHugg.CreateDailyHuggVo
+import com.hugg.domain.model.response.dailyHugg.DailyHuggItemVo
 import com.hugg.domain.model.vo.dailyHugg.CreateDailyHuggDto
 import com.hugg.domain.repository.DailyHuggRepository
 import kotlinx.coroutines.flow.Flow
@@ -20,5 +22,9 @@ class DailyHuggRepositoryImpl @Inject constructor(
         dto: RequestBody
     ): Flow<ApiState<Unit>> {
         return apiLaunch(apiCall = { dailyHuggApi.createDailyHugg(image = image, dto = dto) }, UnitResponseMapper)
+    }
+
+    override suspend fun getDailyHuggByDate(date: String): Flow<ApiState<DailyHuggItemVo>> {
+        return apiLaunch(apiCall = { dailyHuggApi.getDailyHuggByDate(date = date) }, DailyHuggResponseMapper)
     }
 }

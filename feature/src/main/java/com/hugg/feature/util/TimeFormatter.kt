@@ -53,6 +53,17 @@ object TimeFormatter {
         return "${year}년 ${formattedMonth}월"
     }
 
+    fun getTodayYearMonthDayKor(date: String): String {
+        val validDate = date.ifEmpty { getToday() }
+
+        val dates = validDate.split("-")
+        val year = dates[0]
+        val month = dates[1]
+        val day = dates[2]
+
+        return "${year}년 ${month}월 ${day}일"
+    }
+
     fun getDatePickerDashDate(year : Int, month : Int, day : Int) : String {
         val formattedMonth = String.format("%02d", month + 1)
         val formattedDay = String.format("%02d", day)
@@ -192,5 +203,21 @@ object TimeFormatter {
         val amPm = if (hour < 12) "오전" else "오후"
         val hourTime = if (hour % 12 == 0 && amPm == "오후") 12 else hour % 12
         return String.format("%s %d:%02d", amPm, hourTime, minute)
+    }
+
+    fun getPreviousDate(date: String): String {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val currentDate = LocalDate.parse(date, formatter)
+        val previousDate = currentDate.minusDays(1)
+
+        return previousDate.format(formatter)
+    }
+
+    fun getNextDate(date: String): String {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val currentDate = LocalDate.parse(date, formatter)
+        val nextDate = currentDate.plusDays(1)
+
+        return nextDate.format(formatter)
     }
 }
