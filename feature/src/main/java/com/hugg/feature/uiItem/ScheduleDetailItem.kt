@@ -130,7 +130,7 @@ fun ScheduleDetailItem(
             ) {
                 Spacer(modifier = Modifier.size(14.dp))
 
-                Image(
+                if(scheduleDetailVo.recordType == RecordType.INJECTION || scheduleDetailVo.recordType == RecordType.MEDICINE) Image(
                     painter = painterResource(if(scheduleDetailVo.vibration) R.drawable.ic_vibration_alarm else R.drawable.ic_push_alarm),
                     contentDescription = null
                 )
