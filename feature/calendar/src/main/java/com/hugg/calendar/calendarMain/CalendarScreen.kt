@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import com.google.accompanist.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -63,6 +64,7 @@ import com.hugg.feature.theme.*
 import com.hugg.feature.uiItem.ScheduleDetailItem
 import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.TimeFormatter
+import com.hugg.feature.util.onThrottleClick
 
 
 @Composable
@@ -464,22 +466,28 @@ fun DialogCreateMode(
             exit = fadeOut(animationSpec = tween(300))
         ) {
 
-            Row(
+            LazyRow(
                 modifier = Modifier
-                    .padding(start = 14.dp)
-                    .horizontalScroll(rememberScrollState()),
+                    .padding(start = 14.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                CancelBtn(onClickBtn = onClickCreateCancelScheduleBtn, interactionSource = interactionSource)
-
-                Spacer(modifier = Modifier.size(8.dp))
-
-                CreateScheduleBtnByType(RecordType.HOSPITAL, onClickCreateScheduleBtn, interactionSource)
-                CreateScheduleBtnByType(RecordType.INJECTION, onClickCreateScheduleBtn, interactionSource)
-                CreateScheduleBtnByType(RecordType.MEDICINE, onClickCreateScheduleBtn, interactionSource)
-                CreateScheduleBtnByType(RecordType.ETC, onClickCreateScheduleBtn, interactionSource)
-
-                Spacer(modifier = Modifier.size(16.dp))
+                item {
+                    CancelBtn(onClickBtn = onClickCreateCancelScheduleBtn, interactionSource = interactionSource)
+                    Spacer(modifier = Modifier.size(8.dp))
+                }
+                item {
+                    CreateScheduleBtnByType(RecordType.HOSPITAL, onClickCreateScheduleBtn, interactionSource)
+                }
+                item {
+                    CreateScheduleBtnByType(RecordType.INJECTION, onClickCreateScheduleBtn, interactionSource)
+                }
+                item {
+                    CreateScheduleBtnByType(RecordType.MEDICINE, onClickCreateScheduleBtn, interactionSource)
+                }
+                item {
+                    CreateScheduleBtnByType(RecordType.ETC, onClickCreateScheduleBtn, interactionSource)
+                    Spacer(modifier = Modifier.size(16.dp))
+                }
             }
         }
 
@@ -506,10 +514,9 @@ fun CreateScheduleBtnByType(
                 color = MainNormal,
                 shape = RoundedCornerShape(999.dp)
             )
-            .clickable(
-                onClick = { onClickCreateScheduleBtn(type, 0) },
-                interactionSource = interactionSource,
-                indication = null
+            .onThrottleClick(
+                onClick = { onClickCreateScheduleBtn(type, 0) } ,
+                interactionSource = interactionSource
             )
             .background(color = White)
             .padding(horizontal = 9.dp, vertical = 6.dp),
