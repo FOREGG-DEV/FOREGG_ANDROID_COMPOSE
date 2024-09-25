@@ -1,4 +1,4 @@
 package com.hugg.dailyhugg.all
 
-class DailyHuggByRoundEvent {
+class DailyHuggListEvent {
 }

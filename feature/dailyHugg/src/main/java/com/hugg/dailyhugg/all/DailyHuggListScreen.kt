@@ -1,4 +1,7 @@
-package com.hugg.dailyhugg.byRound
+package com.hugg.dailyhugg.all
 
-class DailyHuggByRoundScreen {
+import androidx.compose.runtime.Composable
+
+@Composable
+fun DailyHuggListScreen() {
 }
