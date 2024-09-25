@@ -1,4 +1,4 @@
-package com.hugg.dailyhugg.byRound
+package com.hugg.dailyhugg.all
 
 class DailyHuggByRoundViewModel {
 }
