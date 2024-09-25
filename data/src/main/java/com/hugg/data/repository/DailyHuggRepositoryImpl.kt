@@ -35,4 +35,8 @@ class DailyHuggRepositoryImpl @Inject constructor(
     ): Flow<ApiState<Unit>> {
         return apiLaunch(apiCall = { dailyHuggApi.editDailyHugg(id = id, image = image, dto = dto) }, UnitResponseMapper)
     }
+
+    override suspend fun deleteDailyHugg(id: Long): Flow<ApiState<Unit>> {
+        return apiLaunch(apiCall = { dailyHuggApi.deleteDailyHugg(id = id) }, UnitResponseMapper)
+    }
 }
