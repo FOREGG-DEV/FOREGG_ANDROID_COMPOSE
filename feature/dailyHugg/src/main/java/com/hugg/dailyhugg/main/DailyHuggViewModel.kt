@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.hugg.domain.model.response.dailyHugg.DailyHuggItemVo
 import com.hugg.domain.repository.DailyHuggRepository
 import com.hugg.feature.base.BaseViewModel
+import com.hugg.feature.util.TimeFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -14,7 +15,7 @@ class DailyHuggViewModel @Inject constructor(
 ): BaseViewModel<DailyHuggPageState>(
     DailyHuggPageState()
 ) {
-    fun getDailyHuggBYDate(date: String) {
+    fun getDailyHuggByDate(date: String) {
         viewModelScope.launch {
             dailyHuggRepository.getDailyHuggByDate(date).collect {
                 resultResponse(it, ::onSuccessGetDailyHuggByDate, ::onFailedGetDailyHuggByDate, needLoading = true)
@@ -44,7 +45,7 @@ class DailyHuggViewModel @Inject constructor(
 
     fun setDate(newDate: String, newDay: String) {
         viewModelScope.launch {
-            getDailyHuggBYDate(newDate)
+            getDailyHuggByDate(newDate)
             updateState(
                 uiState.value.copy(
                     date = newDate,
@@ -54,11 +55,32 @@ class DailyHuggViewModel @Inject constructor(
         }
     }
 
-    fun updateShowDialog(value: Boolean) {
+    fun updateShowEditDialog(value: Boolean) {
         updateState(
             uiState.value.copy(
                 showEditDialog = value
             )
         )
+    }
+
+    fun updateShowDeleteDialog(value: Boolean) {
+        updateState(
+            uiState.value.copy(
+                showDeleteDialog = value
+            )
+        )
+    }
+
+    fun deleteDailyHugg() {
+        viewModelScope.launch {
+            dailyHuggRepository.deleteDailyHugg(uiState.value.dailyHugg!!.id).collect {
+                resultResponse(it, { onSuccessDeleteDailyHugg() })
+            }
+        }
+    }
+
+    private fun onSuccessDeleteDailyHugg() {
+        getDailyHuggByDate(TimeFormatter.getToday())
+        emitEventFlow(DailyHuggEvent.CompleteDeleteDailyHugg)
     }
 }

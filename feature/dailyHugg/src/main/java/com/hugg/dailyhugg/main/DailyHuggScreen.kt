@@ -1,7 +1,6 @@
 package com.hugg.dailyhugg.main
 
 import android.net.Uri
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -35,6 +34,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -45,6 +45,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
 import com.hugg.dailyhugg.create.CreateEditDailyHuggPageState
 import com.hugg.domain.model.enums.DailyConditionType
+import com.hugg.domain.model.enums.DialogType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.domain.model.enums.TopBarRightType
 import com.hugg.domain.model.response.dailyHugg.DailyHuggItemVo
@@ -53,9 +54,11 @@ import com.hugg.feature.component.HuggDialog
 import com.hugg.feature.component.PlusBtn
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.Background
+import com.hugg.feature.theme.COMPLETE_DELETE_DAILY_HUGG
 import com.hugg.feature.theme.DAILY_HUGG
 import com.hugg.feature.theme.DAILY_HUGG_DATE
 import com.hugg.feature.theme.DELETE_DAILY_HUGG
+import com.hugg.feature.theme.DELETE_DAILY_HUGG_TITLE
 import com.hugg.feature.theme.EDIT_DAILY_HUGG_DIALOG_TITLE
 import com.hugg.feature.theme.EDIT_DAILY_HUGG_DIALOG_WARNING
 import com.hugg.feature.theme.EMPTY_HUGG_FEMALE
@@ -72,7 +75,10 @@ import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.MALE
 import com.hugg.feature.theme.MainNormal
 import com.hugg.feature.theme.REPLY_COUNT
+import com.hugg.feature.theme.Sunday
+import com.hugg.feature.theme.WORD_DELETE
 import com.hugg.feature.theme.White
+import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.TimeFormatter
 
 @Composable
@@ -83,6 +89,7 @@ fun DailyHuggScreen(
     val viewModel: DailyHuggViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val interactionSource = remember { MutableInteractionSource() }
+    val context = LocalContext.current
     val onClickBtnNextDay = {
         val newDate = TimeFormatter.getNextDate(uiState.date)
         viewModel.setDate(
@@ -107,7 +114,15 @@ fun DailyHuggScreen(
                 newDay = TimeFormatter.getKoreanFullDayOfWeek(today)
             )
         } else {
-            viewModel.getDailyHuggBYDate(uiState.date)
+            viewModel.getDailyHuggByDate(uiState.date)
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.eventFlow.collect { event ->
+            when(event) {
+                DailyHuggEvent.CompleteDeleteDailyHugg -> HuggToast.createToast(context, COMPLETE_DELETE_DAILY_HUGG).show()
+            }
         }
     }
 
@@ -117,7 +132,7 @@ fun DailyHuggScreen(
             hasWarningText = true,
             warningMessage = EDIT_DAILY_HUGG_DIALOG_WARNING,
             title = EDIT_DAILY_HUGG_DIALOG_TITLE,
-            onClickNegative = { viewModel.updateShowDialog(false) },
+            onClickNegative = { viewModel.updateShowEditDialog(false) },
             onClickPositive = {
                 uiState.dailyHugg?.let {
                     onClickDailyHuggItem(
@@ -129,8 +144,22 @@ fun DailyHuggScreen(
                         it.id
                     )
                 }
-                viewModel.updateShowDialog(false)
+                viewModel.updateShowEditDialog(false)
             }
+        )
+    }
+
+    if (uiState.showDeleteDialog) {
+        HuggDialog(
+            interactionSource = interactionSource,
+            title = DELETE_DAILY_HUGG_TITLE,
+            onClickNegative = { viewModel.updateShowDeleteDialog(false) },
+            onClickPositive = {
+                viewModel.deleteDailyHugg()
+                viewModel.updateShowDeleteDialog(false)
+            },
+            positiveColor = Sunday,
+            positiveText = WORD_DELETE
         )
     }
 
@@ -142,8 +171,9 @@ fun DailyHuggScreen(
         onClickBtnPreviousDay = onClickBtnPreviousDay,
         dateText = dateText,
         onClickDailyHuggItem = {
-            viewModel.updateShowDialog(true)
-        }
+            viewModel.updateShowEditDialog(true)
+        },
+        onClickBtnDeleteDailyHugg = { viewModel.updateShowDeleteDialog(true) }
     )
 }
 
@@ -155,7 +185,8 @@ fun DailyHuggContent(
     onClickBtnNextDay: () -> Unit = {},
     onClickBtnPreviousDay: () -> Unit = {},
     dateText: String = "",
-    onClickDailyHuggItem: () -> Unit = {}
+    onClickDailyHuggItem: () -> Unit = {},
+    onClickBtnDeleteDailyHugg: () -> Unit = {}
 ) {
     Box(
         modifier = Modifier.fillMaxSize()
@@ -197,7 +228,7 @@ fun DailyHuggContent(
                 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                if (uiState.dailyHugg != null) BtnDeleteDailyHugg()
+                if (uiState.dailyHugg != null) BtnDeleteDailyHugg(onClickBtnDeleteDailyHugg = onClickBtnDeleteDailyHugg)
             }
         }
 
