@@ -27,4 +27,12 @@ class DailyHuggRepositoryImpl @Inject constructor(
     override suspend fun getDailyHuggByDate(date: String): Flow<ApiState<DailyHuggItemVo>> {
         return apiLaunch(apiCall = { dailyHuggApi.getDailyHuggByDate(date = date) }, DailyHuggResponseMapper)
     }
+
+    override suspend fun editDailyHugg(
+        id: Long,
+        image: MultipartBody.Part,
+        dto: RequestBody
+    ): Flow<ApiState<Unit>> {
+        return apiLaunch(apiCall = { dailyHuggApi.editDailyHugg(id = id, image = image, dto = dto) }, UnitResponseMapper)
+    }
 }
