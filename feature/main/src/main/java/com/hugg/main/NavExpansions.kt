@@ -26,6 +26,7 @@ import com.hugg.domain.model.request.sign.SignUpMaleRequestVo
 import com.hugg.domain.model.request.sign.SignUpRequestVo
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UserInfo
+import com.hugg.mypage.cs.MyPageCsContainer
 import com.hugg.mypage.main.MyPageContainer
 import com.hugg.mypage.myMedicineInjection.MyPageMedInjContainer
 import com.hugg.mypage.spouse.MyPageSpouseContainer
@@ -341,7 +342,7 @@ fun NavGraphBuilder.myPageGraph(navController: NavHostController) {
         composable(Routes.MyPageScreen.route) {
             MyPageContainer(
                 navigateGoToRegistration = {},
-                navigateGoToCs = {},
+                navigateGoToCs = { navController.navigate(Routes.MyPageCsScreen.route) },
                 navigateGoToMyMedInj = { navController.navigate(Routes.MyPageMedInjScreen.route) },
                 navigateGoToSpouse = { navController.navigate(Routes.MyPageSpouseScreen.route) },
             )
@@ -357,6 +358,12 @@ fun NavGraphBuilder.myPageGraph(navController: NavHostController) {
             MyPageMedInjContainer(
                 goToBack = { navController.popBackStack() },
                 navigateDetail = { recordType, id -> navController.navigate(Routes.CalendarScheduleCreateOrEdit.getRouteCalendarScheduleCreateOrEdit(CreateOrEditType.EDIT.type, recordType.type, id, TimeFormatter.getToday()))}
+            )
+        }
+
+        composable(Routes.MyPageCsScreen.route) {
+            MyPageCsContainer(
+                goToBack = { navController.popBackStack() },
             )
         }
     }

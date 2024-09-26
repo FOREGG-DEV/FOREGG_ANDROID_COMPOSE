@@ -5,6 +5,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 
 // --------- 단어 --------- //
+const val FOREGG_EMAIL = "for.egg0302@gmail.com"
 const val WORD_HOME = "홈"
 const val WORD_DAILY_HUGG = "데일리 허그"
 const val WORD_MY = "마이"
@@ -35,6 +36,7 @@ const val WORD_EVERYDAY ="매일"
 
 // --------- 기타 --------- //
 const val COPY_COMPLETE_TEXT = "클립보드에 배우자 코드가 복사되었어요!"
+const val COPY_COMPLETE_MAIL_TEXT = "클립보드에 메일주소가 복사되었어요!"
 
 // --------- 온보딩 --------- //
 const val ONBOARDING_TITLE_1 = "주사 맞을 시간엔 알람이 울려요"
@@ -231,6 +233,10 @@ const val MY_PAGE_TERMS_OF_SERVICE_LINK = "https://abouthugg.notion.site/9f6d826
 
 const val MY_PAGE_SPOUSE_CODE = "배우자 공유코드"
 const val MY_PAGE_SPOUSE_CODE_HINT = "남편 회원가입시 붙여넣기 해주세요."
+
+const val MY_PAGE_CS_HUGG_KAKAO_PLUS = "Hugg 카카오톡 플러스 채널"
+const val MY_PAGE_CS_HUGG_EMAIL = "Hugg 공식 메일"
+const val MY_PAGE_KAKAO_CHANEL_LINK = "https://pf.kakao.com/_xjvgYG"
 
 
 // --------- 에러 Toast --------- //
