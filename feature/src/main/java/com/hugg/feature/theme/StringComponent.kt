@@ -224,6 +224,7 @@ const val EDIT_DAILY_HUGG_DIALOG_WARNING = "남편이 답장을 보낸 이후에
 const val MY_PAGE_SPOUSE = "배우자"
 const val MY_PAGE_REGISTER_SPOUSE = "배우자를 등록해주세요"
 const val MY_PAGE_MY_MEDICINE_INJECTION = "나의 약, 주사 정보"
+fun MY_PAGE_SPOUSE_MEDICINE_INJECTION(spouse : String) = "${spouse}님의 약, 주사 정보"
 const val MY_PAGE_NOTICE = "공지사항"
 const val MY_PAGE_FAQ = "FAQ"
 const val MY_PAGE_CS_ASK = "문의사항"

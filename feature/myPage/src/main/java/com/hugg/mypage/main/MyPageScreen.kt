@@ -28,9 +28,11 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.hugg.domain.model.enums.GenderType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
+import com.hugg.feature.util.UserInfo
 import com.hugg.feature.util.onThrottleClick
 
 
@@ -99,7 +101,10 @@ fun MyPageScreen(
                     .fillMaxWidth()
                     .height(48.dp)
                     .onThrottleClick(
-                        onClick = { navigateGoToSpouse() },
+                        onClick = {
+                            if(UserInfo.info.genderType == GenderType.MALE) return@onThrottleClick
+                            navigateGoToSpouse()
+                        },
                         interactionSource = interactionSource
                     ),
                 verticalAlignment = Alignment.CenterVertically
@@ -130,7 +135,7 @@ fun MyPageScreen(
                 contentAlignment = Alignment.CenterStart
             ) {
                 Text(
-                    text = MY_PAGE_MY_MEDICINE_INJECTION,
+                    text = if(UserInfo.info.genderType == GenderType.FEMALE) MY_PAGE_MY_MEDICINE_INJECTION else MY_PAGE_SPOUSE_MEDICINE_INJECTION(UserInfo.info.spouse),
                     style = HuggTypography.p2,
                     color = Black,
                 )

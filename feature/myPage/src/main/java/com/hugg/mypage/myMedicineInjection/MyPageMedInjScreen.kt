@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.hugg.domain.model.enums.GenderType
 import com.hugg.domain.model.enums.HuggTabClickedType
 import com.hugg.domain.model.enums.ProfileMedicineInjectionType
 import com.hugg.domain.model.enums.RecordType
@@ -36,6 +37,7 @@ import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
 import com.hugg.feature.uiItem.ScheduleDetailItem
 import com.hugg.feature.util.TimeFormatter
+import com.hugg.feature.util.UserInfo
 import com.hugg.feature.util.onThrottleClick
 
 
@@ -77,7 +79,7 @@ fun MyPageMedInjScreen(
             leftBtnClicked = goToBack,
             leftItemType = TopBarLeftType.BACK,
             middleItemType = TopBarMiddleType.TEXT,
-            middleText = MY_PAGE_MY_MEDICINE_INJECTION
+            middleText = if(UserInfo.info.genderType == GenderType.FEMALE) MY_PAGE_MY_MEDICINE_INJECTION else MY_PAGE_SPOUSE_MEDICINE_INJECTION(UserInfo.info.spouse)
         )
 
         LazyColumn{
@@ -132,7 +134,10 @@ fun MyMedInjItem(
             .fillMaxWidth()
             .padding(horizontal = 8.dp)
             .onThrottleClick(
-                onClick = { onClickItem(recordType, item.id) },
+                onClick = {
+                    if(UserInfo.info.genderType == GenderType.MALE) return@onThrottleClick
+                    onClickItem(recordType, item.id)
+                },
                 interactionSource = interactionSource
             )
     ) {
