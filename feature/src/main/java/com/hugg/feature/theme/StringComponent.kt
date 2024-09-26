@@ -214,5 +214,9 @@ const val COMPLETE_EDIT_DAILY_HUGG = "데일리 허그가 수정되었어요"
 const val EDIT_DAILY_HUGG_DIALOG_TITLE = "글을 수정하시겠어요?"
 const val EDIT_DAILY_HUGG_DIALOG_WARNING = "남편이 답장을 보낸 이후에는 수정할 수 없어요"
 
+// DailyHuggList
+const val DAILY_HUGG_LIST_TITLE = "데일리 허그 모아보기"
+const val DAILY_HUGG_LIST_EMPTY_BUBBLE = "아직 작성된\n데일리 허그가 없어요"
+
 // --------- 에러 Toast --------- //
 const val TOAST_ERROR_NOR_CORRECT_SPOUSE_CODE = "유효하지 않은 배우자코드입니다."
