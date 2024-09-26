@@ -192,7 +192,7 @@ fun SpouseCodeCopyView(
                 contentAlignment = Alignment.Center
             ){
                 Image(
-                    painter = painterResource(id = R.drawable.ic_calendar_white),
+                    painter = painterResource(id = R.drawable.ic_copy_white),
                     contentDescription = null
                 )
             }

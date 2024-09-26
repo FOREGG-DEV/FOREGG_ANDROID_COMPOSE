@@ -1,4 +1,4 @@
-package com.hugg.mypage
+package com.hugg.mypage.main
 
 import androidx.lifecycle.viewModelScope
 import com.hugg.domain.model.response.profile.ProfileDetailResponseVo

@@ -1,4 +1,4 @@
-package com.hugg.mypage
+package com.hugg.mypage.main
 
 import com.hugg.feature.base.PageState
 

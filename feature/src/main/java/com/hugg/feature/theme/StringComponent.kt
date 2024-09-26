@@ -226,6 +226,9 @@ const val MY_PAGE_CS_ASK = "문의사항"
 const val MY_PAGE_TERMS_OF_SERVICE = "이용약관"
 const val MY_PAGE_PROFILE_MANAGEMENT = "계정관리"
 
+const val MY_PAGE_SPOUSE_CODE = "배우자 공유코드"
+const val MY_PAGE_SPOUSE_CODE_HINT = "남편 회원가입시 붙여넣기 해주세요."
+
 
 // --------- 에러 Toast --------- //
 const val TOAST_ERROR_NOR_CORRECT_SPOUSE_CODE = "유효하지 않은 배우자코드입니다."
