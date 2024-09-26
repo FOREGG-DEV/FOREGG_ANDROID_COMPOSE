@@ -26,6 +26,7 @@ import com.hugg.domain.model.request.sign.SignUpMaleRequestVo
 import com.hugg.domain.model.request.sign.SignUpRequestVo
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UserInfo
+import com.hugg.mypage.MyPageContainer
 import com.hugg.sign.femaleSignUp.chooseSurgery.ChooseSurgeryContainer
 import com.hugg.sign.femaleSignUp.spouseCodeFemale.SpouseCodeFemaleContainer
 import com.hugg.sign.femaleSignUp.startSurgery.SurgeryStartContainer
@@ -329,5 +330,17 @@ fun NavGraphBuilder.dailyHuggGraph(navController: NavHostController) {
                 id = id
             )
         }
+    }
+}
+
+fun NavGraphBuilder.myPageGraph(navController: NavHostController) {
+    navigation(startDestination = Routes.MyPageScreen.route, route = Routes.MyPageGraph.route) {
+
+        composable(Routes.MyPageScreen.route) { MyPageContainer(
+            navigateGoToRegistration = {},
+            navigateGoToCs = {},
+            navigateGoToMyMedInj = {},
+            navigateGoToSpouse = {},
+        ) }
     }
 }

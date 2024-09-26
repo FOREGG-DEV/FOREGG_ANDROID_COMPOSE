@@ -74,6 +74,7 @@ fun MainScreen(
                         calendarGraph(navController)
                         accountGraph(navController)
                         dailyHuggGraph(navController)
+                        myPageGraph(navController)
                     }
                 }
 
@@ -217,7 +218,7 @@ fun BottomNavView(
                 .clickable(
                     onClick = {
                         if(type == BottomNavType.PROFILE) return@clickable
-                        //navigateToRoute(Routes.CalendarGraph.route)
+                        navigateToRoute(Routes.MyPageGraph.route)
                     },
                     interactionSource = interactionSource,
                     indication = null

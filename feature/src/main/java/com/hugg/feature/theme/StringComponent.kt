@@ -7,10 +7,11 @@ import androidx.compose.ui.text.withStyle
 // --------- 단어 --------- //
 const val WORD_HOME = "홈"
 const val WORD_DAILY_HUGG = "데일리 허그"
-const val WORD_MY = "마정"
+const val WORD_MY = "마이"
 const val WORD_SKIP = "skip"
 const val WORD_NEXT = "다음"
 const val WORD_DAILY_RECORD = "하루기록"
+const val WORD_MY_PAGE = "마이페이지"
 const val WORD_SIGN_UP = "회원가입"
 const val WORD_ROUND = "회차"
 const val WORD_NO = "아니요"
@@ -213,6 +214,18 @@ const val CONFIRM_DAILY_HUGG = "작성한 글 확인"
 const val COMPLETE_EDIT_DAILY_HUGG = "데일리 허그가 수정되었어요"
 const val EDIT_DAILY_HUGG_DIALOG_TITLE = "글을 수정하시겠어요?"
 const val EDIT_DAILY_HUGG_DIALOG_WARNING = "남편이 답장을 보낸 이후에는 수정할 수 없어요"
+
+
+// --------- 마이페이지 --------- //
+const val MY_PAGE_SPOUSE = "배우자"
+const val MY_PAGE_REGISTER_SPOUSE = "배우자를 등록해주세요"
+const val MY_PAGE_MY_MEDICINE_INJECTION = "나의 약, 주사 정보"
+const val MY_PAGE_NOTICE = "공지사항"
+const val MY_PAGE_FAQ = "FAQ"
+const val MY_PAGE_CS_ASK = "문의사항"
+const val MY_PAGE_TERMS_OF_SERVICE = "이용약관"
+const val MY_PAGE_PROFILE_MANAGEMENT = "계정관리"
+
 
 // --------- 에러 Toast --------- //
 const val TOAST_ERROR_NOR_CORRECT_SPOUSE_CODE = "유효하지 않은 배우자코드입니다."
