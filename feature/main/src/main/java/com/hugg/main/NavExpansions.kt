@@ -29,6 +29,7 @@ import com.hugg.feature.util.UserInfo
 import com.hugg.mypage.cs.MyPageCsContainer
 import com.hugg.mypage.main.MyPageContainer
 import com.hugg.mypage.myMedicineInjection.MyPageMedInjContainer
+import com.hugg.mypage.profileManagement.MyPageProfileManagementContainer
 import com.hugg.mypage.spouse.MyPageSpouseContainer
 import com.hugg.sign.femaleSignUp.chooseSurgery.ChooseSurgeryContainer
 import com.hugg.sign.femaleSignUp.spouseCodeFemale.SpouseCodeFemaleContainer
@@ -341,7 +342,7 @@ fun NavGraphBuilder.myPageGraph(navController: NavHostController) {
 
         composable(Routes.MyPageScreen.route) {
             MyPageContainer(
-                navigateGoToRegistration = {},
+                navigateGoToRegistration = { navController.navigate(Routes.MyPageProfileManagementScreen.route) },
                 navigateGoToCs = { navController.navigate(Routes.MyPageCsScreen.route) },
                 navigateGoToMyMedInj = { navController.navigate(Routes.MyPageMedInjScreen.route) },
                 navigateGoToSpouse = { navController.navigate(Routes.MyPageSpouseScreen.route) },
@@ -364,6 +365,17 @@ fun NavGraphBuilder.myPageGraph(navController: NavHostController) {
         composable(Routes.MyPageCsScreen.route) {
             MyPageCsContainer(
                 goToBack = { navController.popBackStack() },
+            )
+        }
+
+        composable(Routes.MyPageProfileManagementScreen.route) {
+            MyPageProfileManagementContainer(
+                goToBack = { navController.popBackStack() },
+                navigateToSignGraph = { navController.navigate(Routes.SignGraph.route){
+                        popUpTo(0) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                }
             )
         }
     }

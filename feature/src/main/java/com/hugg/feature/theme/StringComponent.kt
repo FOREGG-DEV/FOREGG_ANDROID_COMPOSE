@@ -33,6 +33,8 @@ const val WORD_ALARM = "알람"
 const val WORD_START = "시작"
 const val WORD_END = "종료"
 const val WORD_EVERYDAY ="매일"
+const val WORD_LOGOUT = "로그아웃"
+const val WORD_UNREGISTER = "탈퇴"
 
 // --------- 기타 --------- //
 const val COPY_COMPLETE_TEXT = "클립보드에 배우자 코드가 복사되었어요!"
@@ -238,6 +240,15 @@ const val MY_PAGE_CS_HUGG_KAKAO_PLUS = "Hugg 카카오톡 플러스 채널"
 const val MY_PAGE_CS_HUGG_EMAIL = "Hugg 공식 메일"
 const val MY_PAGE_KAKAO_CHANEL_LINK = "https://pf.kakao.com/_xjvgYG"
 
+const val MY_PAGE_PROFILE_MANAGEMENT_LOGOUT = "계정 로그아웃"
+const val MY_PAGE_PROFILE_MANAGEMENT_UNREGISTER = "계정 탈퇴"
+const val MY_PAGE_LOGOUT_DIALOG = "Hugg에서 로그아웃 하시겠습니까?"
+const val MY_PAGE_LOGOUT_COMPLETE_DIALOG = "로그아웃이 완료되었습니다."
+const val MY_PAGE_UNREGISTER_DIALOG = "Hugg에서 탈퇴 하시겠습니까?"
+const val MY_PAGE_UNREGISTER_COMPLETE_DIALOG = "탈퇴가 완료되었습니다."
+
 
 // --------- 에러 Toast --------- //
 const val TOAST_ERROR_NOR_CORRECT_SPOUSE_CODE = "유효하지 않은 배우자코드입니다."
+const val TOAST_ERROR_FAILED_LOGOUT = "로그아웃에 실패했습니다."
+const val TOAST_ERROR_FAILED_UNREGISTER = "회원탈에 실패했습니다."

@@ -73,4 +73,6 @@ dependencies {
 
     kapt(Google.HILT_COMPILER)
 
+    implementation(KAKAO.AUTH)
+
 }

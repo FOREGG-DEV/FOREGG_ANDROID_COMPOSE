@@ -83,7 +83,6 @@ dependencies {
     kapt(Google.HILT_COMPILER)
 
     implementation(KAKAO.AUTH)
-    implementation(KAKAO.SHARE)
     implementation(Google.GLIDE)
 
     implementation(Libraries.PAGER)
