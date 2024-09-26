@@ -123,7 +123,6 @@ fun SubsidyCreateOrEditContainer(
             onClickCancel = { viewModel.cancelDeleteDialog() },
             onClickNegative = { viewModel.cancelDeleteDialog() },
             onClickPositive = { viewModel.deleteSubsidy() },
-            interactionSource = interactionSource
         )
     }
 }
