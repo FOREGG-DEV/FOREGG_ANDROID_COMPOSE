@@ -20,4 +20,6 @@ data class MyMedicineInjectionItemResponse(
     val repeatDays : String? = null,
     @SerializedName("name")
     val name : String = "",
+    @SerializedName("dose")
+    val dose : String = "",
 )

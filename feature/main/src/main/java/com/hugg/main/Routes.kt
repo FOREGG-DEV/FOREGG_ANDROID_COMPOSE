@@ -63,4 +63,5 @@ sealed class Routes(val route : String){
     data object MyPageGraph : Routes("my_page_graph")
     data object MyPageScreen : Routes("my_page")
     data object MyPageSpouseScreen : Routes("my_page_spouse")
+    data object MyPageMedInjScreen : Routes("my_page_medicine_injection")
 }

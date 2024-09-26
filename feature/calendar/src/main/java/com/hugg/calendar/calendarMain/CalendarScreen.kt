@@ -84,7 +84,7 @@ fun CalendarContainer(
         onClickCancel = { viewModel.onClickDialogCancel() },
         onClickCreateCancelScheduleBtn = { viewModel.onClickCreateCancelScheduleBtn() },
         onClickCreateScheduleBtn = { type, size, day -> viewModel.onClickCreateScheduleBtn(type, size, day)},
-        onClickEditScheduleBtn = { id -> navigateCreateSchedule(CreateOrEditType.EDIT, RecordType.INJECTION, id, TimeFormatter.getToday()) },
+        onClickEditScheduleBtn = { id, recordType -> navigateCreateSchedule(CreateOrEditType.EDIT, recordType, id, TimeFormatter.getToday()) },
         uiState = uiState,
         interactionSource = interactionSource
     )
@@ -113,7 +113,7 @@ fun CalendarScreen(
     onClickCancel: () -> Unit = {},
     onClickCreateCancelScheduleBtn: () -> Unit = {},
     onClickCreateScheduleBtn: (RecordType, Int, String) -> Unit = {_,_,_ -> },
-    onClickEditScheduleBtn : (Long) -> Unit = {},
+    onClickEditScheduleBtn : (Long, RecordType) -> Unit = {_, _ -> },
     uiState : CalendarPageState = CalendarPageState(),
     interactionSource : MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
@@ -320,7 +320,7 @@ fun ScheduleDetailDialog(
     pagerState : PagerState = rememberPagerState(),
     onClickCancel: () -> Unit = {},
     onClickCreateCancelScheduleBtn: () -> Unit = {},
-    onClickEditScheduleBtn : (Long) -> Unit = {},
+    onClickEditScheduleBtn : (Long, RecordType) -> Unit = {_, _ -> },
     onClickCreateScheduleBtn: (RecordType, Int, String) -> Unit = {_,_,_ -> },
     interactionSource : MutableInteractionSource
 ) {
@@ -356,7 +356,7 @@ fun ScheduleDialogPagerItem(
     calendarDayVo: CalendarDayVo = CalendarDayVo(),
     uiState: CalendarPageState = CalendarPageState(),
     onClickCreateCancelScheduleBtn : () -> Unit = {},
-    onClickEditScheduleBtn : (Long) -> Unit = {},
+    onClickEditScheduleBtn : (Long, RecordType) -> Unit = {_, _ -> },
     onClickCreateScheduleBtn: (RecordType, Int, String) -> Unit = {_,_,_ -> },
     interactionSource : MutableInteractionSource
 ) {
