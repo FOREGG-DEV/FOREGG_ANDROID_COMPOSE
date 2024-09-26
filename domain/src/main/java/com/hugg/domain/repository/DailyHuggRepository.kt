@@ -10,4 +10,5 @@ interface DailyHuggRepository {
     suspend fun createDailyHugg(image: MultipartBody.Part, dto: RequestBody): Flow<ApiState<Unit>>
     suspend fun getDailyHuggByDate(date: String): Flow<ApiState<DailyHuggItemVo>>
     suspend fun editDailyHugg(id: Long, image: MultipartBody.Part, dto: RequestBody): Flow<ApiState<Unit>>
+    suspend fun deleteDailyHugg(id: Long): Flow<ApiState<Unit>>
 }

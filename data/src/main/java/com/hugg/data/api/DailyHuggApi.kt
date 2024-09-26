@@ -9,6 +9,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
@@ -40,5 +41,10 @@ interface DailyHuggApi {
         @Path("id") id: Long,
         @Part image: MultipartBody.Part,
         @Part("dto") dto: RequestBody
+    ): Response<ApiResponse<Unit>>
+
+    @DELETE(Endpoints.DailyHugg.DELETE)
+    suspend fun deleteDailyHugg(
+        @Path("id") id: Long
     ): Response<ApiResponse<Unit>>
 }
