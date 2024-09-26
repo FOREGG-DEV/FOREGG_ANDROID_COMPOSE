@@ -1,5 +1,8 @@
 package com.hugg.mypage.main
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -19,8 +22,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hugg.domain.model.enums.TopBarMiddleType
@@ -38,6 +43,7 @@ fun MyPageContainer(
     viewModel: MyPageViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     LaunchedEffect(Unit){
         viewModel.getMyInfo()
@@ -48,7 +54,10 @@ fun MyPageContainer(
         navigateGoToSpouse = navigateGoToSpouse,
         navigateGoToMyMedInj = navigateGoToMyMedInj,
         navigateGoToCs = navigateGoToCs,
-        navigateGoToRegistration = navigateGoToRegistration
+        navigateGoToRegistration = navigateGoToRegistration,
+        onClickNotice = { goToWebLink(context, MY_PAGE_NOTICE_LINK) },
+        onClickFaq = { goToWebLink(context, MY_PAGE_FAQ_LINK) },
+        onClickTermsOfService = { goToWebLink(context, MY_PAGE_TERMS_OF_SERVICE_LINK) }
     )
 }
 
@@ -60,6 +69,9 @@ fun MyPageScreen(
     navigateGoToMyMedInj : () -> Unit = {},
     navigateGoToCs : () -> Unit = {},
     navigateGoToRegistration : () -> Unit = {},
+    onClickNotice : () -> Unit = {},
+    onClickFaq : () -> Unit = {},
+    onClickTermsOfService : () -> Unit = {},
 ) {
     Column(
         modifier = Modifier
@@ -139,7 +151,7 @@ fun MyPageScreen(
                     .fillMaxWidth()
                     .height(48.dp)
                     .onThrottleClick(
-                        onClick = { },
+                        onClick = onClickNotice,
                         interactionSource = interactionSource
                     ),
                 contentAlignment = Alignment.CenterStart
@@ -156,7 +168,7 @@ fun MyPageScreen(
                     .fillMaxWidth()
                     .height(48.dp)
                     .onThrottleClick(
-                        onClick = { },
+                        onClick = onClickFaq,
                         interactionSource = interactionSource
                     ),
                 contentAlignment = Alignment.CenterStart
@@ -190,7 +202,7 @@ fun MyPageScreen(
                     .fillMaxWidth()
                     .height(48.dp)
                     .onThrottleClick(
-                        onClick = { },
+                        onClick = onClickTermsOfService,
                         interactionSource = interactionSource
                     ),
                 contentAlignment = Alignment.CenterStart
@@ -225,6 +237,13 @@ fun MyPageScreen(
             )
         }
     }
+}
+
+private fun goToWebLink(context: Context, url : String){
+    val intent = Intent(Intent.ACTION_VIEW).apply {
+        data = Uri.parse(url)
+    }
+    context.startActivity(intent)
 }
 
 @Preview
