@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -24,6 +25,7 @@ fun <T> throttleClickEvent(
 ): T {
     val interval = 500L
     var canClick by remember { mutableStateOf(true) }
+    val coroutineScope = rememberCoroutineScope()
 
     val result = content(
         object : ThrottleClickInterface {
@@ -32,7 +34,7 @@ fun <T> throttleClickEvent(
                     canClick = false
                     event()
 
-                    CoroutineScope(Dispatchers.Main).launch {
+                    coroutineScope.launch {
                         delay(interval)
                         canClick = true
                     }
