@@ -98,6 +98,7 @@ import com.hugg.feature.theme.WORD_DELETE
 import com.hugg.feature.theme.White
 import com.hugg.feature.uiItem.AccountCardItem
 import com.hugg.feature.uiItem.RemoteRound
+import com.hugg.feature.uiItem.ScheduleDetailItem
 import com.hugg.feature.uiItem.SubsidyTotalBoxItem
 import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.TimeFormatter
@@ -136,7 +137,7 @@ fun AccountContainer(
         onClickDateFilter = { viewModel.onClickBottomSheetOnOff() },
         onClickGoToSubsidyList = { navigateToSubsidyList(uiState.nowRound) },
         onClickCreateAccountBtn = { navigateToCreateOrEditAccount(-1, CreateOrEditType.CREATE) },
-        onClickAccountCard = { id -> if(uiState.isDeleteMode) viewModel.onClickCard(id) else navigateToCreateOrEditAccount(id, CreateOrEditType.EDIT) },
+        onClickAccountCard = { ledgerId, expenditureId -> if(uiState.isDeleteMode) viewModel.onClickCard(expenditureId) else navigateToCreateOrEditAccount(ledgerId, CreateOrEditType.EDIT) },
         onLongClickAccountCard = { id -> viewModel.onLongClickItem(id) },
         onDeleteAccountList = { viewModel.showDeleteDialog(true) },
         interactionSource = interactionSource
@@ -212,7 +213,7 @@ fun AccountScreen(
     isFilterAtTop: Boolean = false,
     onClickDateFilter: () -> Unit = {},
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    onClickAccountCard : (Long) -> Unit = {},
+    onClickAccountCard : (Long, Long) -> Unit = {_, _ -> },
     onLongClickAccountCard : (Long) -> Unit = {},
     onDeleteAccountList : () -> Unit = {}
 ) {
@@ -302,6 +303,9 @@ fun AccountScreen(
 
             itemsIndexed(
                 items = uiState.accountList,
+                key = { _, accountVo ->
+                    accountVo.expenditureId
+                }
             ) { _, accountVo ->
                 AccountCardItem(
                     item = accountVo,

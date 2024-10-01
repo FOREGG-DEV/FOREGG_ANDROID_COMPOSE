@@ -18,6 +18,7 @@ interface AccountRepository {
     suspend fun getByCount(request : Int) : Flow<ApiState<AccountResponseVo>>
     suspend fun getByMonth(request : String) : Flow<ApiState<AccountResponseVo>>
     suspend fun delete(request : Long) : Flow<ApiState<Unit>>
+    suspend fun deleteExpenditure(request : Long) : Flow<ApiState<Unit>>
     suspend fun getAccountDetail(request : Long) : Flow<ApiState<AccountDetailResponseVo>>
     suspend fun createAccount(request : AccountCreateRequestVo) : Flow<ApiState<Unit>>
     suspend fun editAccount(request : AccountEditRequestVo) : Flow<ApiState<Unit>>

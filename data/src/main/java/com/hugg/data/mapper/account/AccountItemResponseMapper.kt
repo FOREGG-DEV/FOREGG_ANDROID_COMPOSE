@@ -23,6 +23,7 @@ object AccountItemResponseMapper: Mapper.ResponseMapper<AccountResponse, Account
                 ledgerDetailResponseDTOS = ledgerDetailResponseDTOS.map {
                     AccountItemResponseVo(
                         ledgerId = it.ledgerId,
+                        expenditureId = it.expenditureId,
                         date = it.date,
                         round = it.count,
                         color = it.color,

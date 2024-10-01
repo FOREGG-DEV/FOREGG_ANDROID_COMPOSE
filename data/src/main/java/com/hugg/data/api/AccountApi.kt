@@ -49,6 +49,11 @@ interface AccountApi {
         @Path(PATH_ID) id : Long,
     ) : Response<ApiResponse<Unit>>
 
+    @DELETE(Endpoints.ACCOUNT.DELETE_EXPENDITURE)
+    suspend fun deleteExpenditure(
+        @Path(PATH_ID) id : Long,
+    ) : Response<ApiResponse<Unit>>
+
     @GET(Endpoints.ACCOUNT.GET_DETAIL)
     suspend fun getAccountDetail(
         @Path(PATH_ID) id : Long,

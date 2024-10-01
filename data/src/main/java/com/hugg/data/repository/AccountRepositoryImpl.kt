@@ -41,6 +41,10 @@ class AccountRepositoryImpl @Inject constructor(
         return apiLaunch(apiCall = { accountApi.delete(request) }, UnitResponseMapper )
     }
 
+    override suspend fun deleteExpenditure(request: Long): Flow<ApiState<Unit>> {
+        return apiLaunch(apiCall = { accountApi.deleteExpenditure(request) }, UnitResponseMapper )
+    }
+
     override suspend fun getAccountDetail(request: Long): Flow<ApiState<AccountDetailResponseVo>> {
         return apiLaunch(apiCall = { accountApi.getAccountDetail(request) }, AccountDetailResponseMapper )
     }

@@ -15,7 +15,6 @@ import com.hugg.feature.base.BaseViewModel
 import com.hugg.feature.theme.ACCOUNT_ALL
 import com.hugg.feature.theme.ACCOUNT_PERSONAL
 import com.hugg.feature.theme.ACCOUNT_SUBSIDY
-import com.hugg.feature.util.ForeggLog
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UnitFormatter.getMoneyFormatWithUnit
 import com.hugg.feature.util.UserInfo
@@ -176,7 +175,7 @@ class AccountViewModel @Inject constructor(
         else {
             val newList = uiState.value.accountList.map {
                 it.copy(
-                    isSelected = if (it.id == id) !it.isSelected else it.isSelected
+                    isSelected = if (it.ledgerId == id) !it.isSelected else it.isSelected
                 )
             }
             updateState(
@@ -191,7 +190,7 @@ class AccountViewModel @Inject constructor(
     fun onClickCard(id : Long){
         val newList = uiState.value.accountList.map {
             it.copy(
-                isSelected = if (it.id == id) !it.isSelected else it.isSelected
+                isSelected = if (it.expenditureId == id) !it.isSelected else it.isSelected
             )
         }
         updateState(
@@ -206,7 +205,7 @@ class AccountViewModel @Inject constructor(
         val deleteList = uiState.value.accountList.filter { it.isSelected }
         deleteList.forEachIndexed { index, accountCardVo ->
             viewModelScope.launch {
-                accountRepository.delete(accountCardVo.id).collect {
+                accountRepository.deleteExpenditure(accountCardVo.expenditureId).collect {
                     resultResponse(it, { handleSuccessDeleteAccount(deleteList.size - 1 == index) })
                 }
             }
@@ -299,7 +298,8 @@ class AccountViewModel @Inject constructor(
     private fun getAccountCardList(list : List<AccountItemResponseVo>) : List<AccountCardVo>{
         return list.map {
             AccountCardVo(
-                id = it.ledgerId,
+                ledgerId = it.ledgerId,
+                expenditureId = it.expenditureId,
                 date = it.date,
                 round = it.round,
                 color = it.color,
