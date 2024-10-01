@@ -166,7 +166,7 @@ class AccountViewModel @Inject constructor(
 
     fun showDeleteDialog(isShow : Boolean){
         updateState(
-            uiState.value.copy(isShowDeleteDialog = true)
+            uiState.value.copy(isShowDeleteDialog = isShow)
         )
     }
 
@@ -175,7 +175,7 @@ class AccountViewModel @Inject constructor(
         else {
             val newList = uiState.value.accountList.map {
                 it.copy(
-                    isSelected = if (it.ledgerId == id) !it.isSelected else it.isSelected
+                    isSelected = if (it.expenditureId == id) !it.isSelected else it.isSelected
                 )
             }
             updateState(
@@ -201,7 +201,7 @@ class AccountViewModel @Inject constructor(
         )
     }
 
-    fun deleteAccount(){
+    fun deleteExpenditure(){
         val deleteList = uiState.value.accountList.filter { it.isSelected }
         deleteList.forEachIndexed { index, accountCardVo ->
             viewModelScope.launch {
@@ -247,6 +247,7 @@ class AccountViewModel @Inject constructor(
 
     private fun handleSuccessDeleteAccount(isComplete : Boolean){
         if(isComplete) {
+            updateState(uiState.value.copy(isDeleteMode = false))
             emitEventFlow(AccountEvent.SuccessDeleteAccountEvent)
             setView()
         }

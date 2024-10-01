@@ -7,7 +7,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -61,13 +60,10 @@ import com.hugg.feature.R
 import com.hugg.feature.component.HuggDialog
 import com.hugg.feature.component.HuggTabBar
 import com.hugg.feature.component.PlusBtn
-import com.hugg.feature.uiItem.RemoteYearMonth
 import com.hugg.feature.component.TopBar
-import com.hugg.feature.theme.ACCOUNT_ADD_ROUND
 import com.hugg.feature.theme.ACCOUNT_ALL
 import com.hugg.feature.theme.ACCOUNT_ALL_EXPENSE
 import com.hugg.feature.theme.ACCOUNT_DIALOG_CREATE_ROUND
-import com.hugg.feature.theme.ACCOUNT_DIALOG_DELETE
 import com.hugg.feature.theme.ACCOUNT_DIALOG_WARNING_CREATE_ROUND
 import com.hugg.feature.theme.ACCOUNT_LIST_DIALOG_DELETE
 import com.hugg.feature.theme.ACCOUNT_MONTH
@@ -84,7 +80,6 @@ import com.hugg.feature.theme.CalendarPill
 import com.hugg.feature.theme.EmptySubsidyBoxColor
 import com.hugg.feature.theme.Gs20
 import com.hugg.feature.theme.Gs30
-import com.hugg.feature.theme.Gs50
 import com.hugg.feature.theme.Gs60
 import com.hugg.feature.theme.Gs70
 import com.hugg.feature.theme.Gs80
@@ -98,12 +93,10 @@ import com.hugg.feature.theme.WORD_DELETE
 import com.hugg.feature.theme.White
 import com.hugg.feature.uiItem.AccountCardItem
 import com.hugg.feature.uiItem.RemoteRound
-import com.hugg.feature.uiItem.ScheduleDetailItem
 import com.hugg.feature.uiItem.SubsidyTotalBoxItem
 import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UnitFormatter
-import com.hugg.feature.util.UserInfo
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -180,7 +173,7 @@ fun AccountContainer(
             positiveText = WORD_DELETE,
             onClickCancel = { viewModel.showDeleteDialog(false) },
             onClickNegative = { viewModel.showDeleteDialog(false) },
-            onClickPositive = { viewModel.deleteAccount() },
+            onClickPositive = { viewModel.deleteExpenditure() },
         )
     }
 

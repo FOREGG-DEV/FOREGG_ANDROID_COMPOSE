@@ -199,7 +199,7 @@ fun NavGraphBuilder.accountGraph(navController: NavHostController) {
 
         composable(Routes.AccountScreen.route) { AccountContainer(
             navigateToSubsidyList = { round -> navController.navigate(Routes.AccountSubsidyList.getRouteAccountSubsidyList(round)) },
-            navigateToCreateOrEditAccount = { id, type -> navController.navigate(Routes.AccountCreateOrEdit.getRouteAccountCreateOrEdit(id, type.name))}
+            navigateToCreateOrEditAccount = { id, type -> navController.navigate(Routes.AccountCreateOrEdit.getRouteAccountCreateOrEdit(id, type.type))}
         ) }
 
         composable(
@@ -210,7 +210,7 @@ fun NavGraphBuilder.accountGraph(navController: NavHostController) {
         ) {
             val round = it.arguments?.getInt("round") ?: UserInfo.info.round
             SubsidyListContainer(
-                onClickCreateEditSubsidyBtn = {id, type, round -> navController.navigate(Routes.AccountSubsidyCreateOrEdit.getRouteAccountSubsidyCreateOrEdit(id, type.name, round)) },
+                onClickCreateEditSubsidyBtn = {id, type, round -> navController.navigate(Routes.AccountSubsidyCreateOrEdit.getRouteAccountSubsidyCreateOrEdit(id, type.type, round)) },
                 nowRound = round,
                 goToBack = { navController.popBackStack() }
             )
@@ -245,7 +245,7 @@ fun NavGraphBuilder.accountGraph(navController: NavHostController) {
             val id = it.arguments?.getLong("id") ?: -1
             val type = CreateOrEditType.getEnumType(it.arguments?.getString("type") ?: "")
             AccountCreateOrEditContainer(
-                navigateCreateSubsidy = { round -> navController.navigate(Routes.AccountSubsidyCreateOrEdit.getRouteAccountSubsidyCreateOrEdit(id, type.name, round))},
+                navigateCreateSubsidy = { round -> navController.navigate(Routes.AccountSubsidyCreateOrEdit.getRouteAccountSubsidyCreateOrEdit(id, type.type, round))},
                 id = id,
                 type = type,
                 goToBack = { navController.popBackStack() }
