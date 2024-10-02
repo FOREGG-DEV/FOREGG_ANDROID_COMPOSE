@@ -1,6 +1,7 @@
 package com.hugg.account.accountCreateOrEdit
 
 import androidx.lifecycle.viewModelScope
+import com.hugg.domain.base.StatusCode
 import com.hugg.domain.model.enums.AccountColorType
 import com.hugg.domain.model.enums.CreateOrEditType
 import com.hugg.domain.model.request.account.AccountCreateRequestVo
@@ -154,7 +155,7 @@ class AccountCreateOrEditViewModel @Inject constructor(
         val request = getAccountCreateRequest()
         viewModelScope.launch {
             accountRepository.createAccount(request).collect {
-                resultResponse(it, { emitEventFlow(AccountCreateOrEditEvent.SuccessCreateAccountEvent) } )
+                resultResponse(it, { emitEventFlow(AccountCreateOrEditEvent.SuccessCreateAccountEvent) }, ::handleErrorCreateOrEditAccount )
             }
         }
     }
@@ -166,8 +167,14 @@ class AccountCreateOrEditViewModel @Inject constructor(
         )
         viewModelScope.launch {
             accountRepository.editAccount(request).collect {
-                resultResponse(it, { emitEventFlow(AccountCreateOrEditEvent.SuccessModifyAccountEvent) } )
+                resultResponse(it, { emitEventFlow(AccountCreateOrEditEvent.SuccessModifyAccountEvent) }, ::handleErrorCreateOrEditAccount )
             }
+        }
+    }
+
+    private fun handleErrorCreateOrEditAccount(code : String){
+        when(code){
+            StatusCode.LEDGER.EXCEED_SUBSIDY -> emitEventFlow(AccountCreateOrEditEvent.ErrorExceedSubsidyEvent)
         }
     }
 

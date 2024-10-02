@@ -101,6 +101,9 @@ fun AccountCreateOrEditContainer(
                     HuggToast.createToast(context, ACCOUNT_TOAST_SUCCESS_DELETE).show()
                     goToBack()
                 }
+                AccountCreateOrEditEvent.ErrorExceedSubsidyEvent -> {
+                    HuggToast.createToast(context, TOAST_EXCEED_SUBSIDY).show()
+                }
             }
         }
     }

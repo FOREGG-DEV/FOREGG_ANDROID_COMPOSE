@@ -254,3 +254,5 @@ const val MY_PAGE_UNREGISTER_COMPLETE_DIALOG = "탈퇴가 완료되었습니다.
 const val TOAST_ERROR_NOR_CORRECT_SPOUSE_CODE = "유효하지 않은 배우자코드입니다."
 const val TOAST_ERROR_FAILED_LOGOUT = "로그아웃에 실패했습니다."
 const val TOAST_ERROR_FAILED_UNREGISTER = "회원탈에 실패했습니다."
+
+const val TOAST_EXCEED_SUBSIDY = "지원금의 한도가 초과되었습니다."
