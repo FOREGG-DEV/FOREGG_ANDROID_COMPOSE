@@ -31,6 +31,7 @@ import com.hugg.mypage.main.MyPageContainer
 import com.hugg.mypage.myMedicineInjection.MyPageMedInjContainer
 import com.hugg.mypage.profileManagement.MyPageProfileManagementContainer
 import com.hugg.mypage.spouse.MyPageSpouseContainer
+import com.hugg.sign.accessPermission.AccessPermissionContainer
 import com.hugg.sign.femaleSignUp.chooseSurgery.ChooseSurgeryContainer
 import com.hugg.sign.femaleSignUp.spouseCodeFemale.SpouseCodeFemaleContainer
 import com.hugg.sign.femaleSignUp.startSurgery.SurgeryStartContainer
@@ -56,6 +57,19 @@ fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
         ) {
             val accessToken = it.arguments?.getString("accessToken") ?: ""
             ServiceTermsContainer(
+                navigateAccessPermission = { navController.navigate(route = Routes.AccessPermissionScreen.getRouteAccessPermission(accessToken)) },
+                goToBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = Routes.AccessPermissionScreen.route,
+            arguments = listOf(
+                navArgument("accessToken") { type = NavType.StringType },
+            )
+        ) {
+            val accessToken = it.arguments?.getString("accessToken") ?: ""
+            AccessPermissionContainer(
                 navigateInputSsn = { navController.navigate(route = Routes.InputSsnScreen.getRouteInputSsn(accessToken)) },
                 goToBack = { navController.popBackStack() }
             )

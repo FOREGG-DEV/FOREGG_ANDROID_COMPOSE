@@ -36,6 +36,7 @@ const val WORD_END = "종료"
 const val WORD_EVERYDAY ="매일"
 const val WORD_LOGOUT = "로그아웃"
 const val WORD_UNREGISTER = "탈퇴"
+const val WORD_NOTIFICATION = "알림"
 
 // --------- 기타 --------- //
 const val COPY_COMPLETE_TEXT = "클립보드에 배우자 코드가 복사되었어요!"
@@ -80,6 +81,15 @@ val SIGN_UP_I_AGREE_PERSONAL_TERM = buildAnnotatedString {
 }
 const val SIGN_UP_I_AGREE_AGE_TERM = "본인은 만 14세 이상입니다."
 const val SIGN_UP_TERMS_ASK = "약관 문의"
+
+const val SIGN_UP_ACCESS_PERMISSION_TITLE = "앱 접근 권한을 안내드려요"
+const val SIGN_UP_ACCESS_PERMISSION_CONTENT = "허그는 꼭 필요한 권한만 선택적으로 받고 있어요!"
+const val SIGN_UP_ACCESS_PERMISSION_DETAIL_EXPLAIN = "아래 선택 접근 권한은 해당 기능 이용 시 동의를 받고 있으며,\n비 허용 시에도 해당 기능 외 서비스 이용이 가능합니다."
+const val SIGN_UP_ACCESS_PERMISSION_OPTIONAL_TITLE = "선택적 접근 권한"
+const val SIGN_UP_ACCESS_PERMISSION_NOTIFICATION = "캘린더 알림, 챌린지, 데일리허그"
+const val SIGN_UP_ACCESS_PERMISSION_PHOTO_CAMERA = "사진 및 카메라"
+const val SIGN_UP_ACCESS_PERMISSION_CHANGE_PERMISSION = "접근권한 변경"
+const val SIGN_UP_ACCESS_PERMISSION_CHANGE_PERMISSION_EXPLAIN = "휴대폰 설정 > Hugg"
 
 val SIGN_UP_INPUT_SSN = buildAnnotatedString {
     withStyle(style = SpanStyle(color = Gs80)) {

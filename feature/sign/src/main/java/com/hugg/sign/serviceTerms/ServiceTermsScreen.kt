@@ -47,7 +47,7 @@ import com.hugg.feature.util.onThrottleClick
 
 @Composable
 fun ServiceTermsContainer(
-    navigateInputSsn : () -> Unit = {},
+    navigateAccessPermission : () -> Unit = {},
     goToBack : () -> Unit = {},
     viewModel: ServiceTermsViewModel = hiltViewModel()
 ) {
@@ -57,6 +57,7 @@ fun ServiceTermsContainer(
     ServiceTermsScreen(
         uiState = uiState,
         onClickTopBarLeftBtn = goToBack,
+        onClickNextPageBtn = navigateAccessPermission,
         onClickAllAgreeBtn = { viewModel.updateAllTerm() },
         onClickServiceTermAgreeBtn = { viewModel.updateServiceTerm() },
         onClickPersonalTermAgreeBtn = { viewModel.updatePersonalTerm() },
