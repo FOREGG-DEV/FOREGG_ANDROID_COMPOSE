@@ -2,6 +2,7 @@ package com.hugg.feature.theme
 
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 
 // --------- 단어 --------- //
@@ -52,6 +53,34 @@ const val ONBOARDING_CONTENT_3 = "가계부 기능을 통해, 정부지원금과
 const val ONBOARDING_CONTENT_4 = "난자는 영양 상태, 호르몬 변화에 큰 영향을 받아요.\n챌린지를 통해 건강한 생활습관을 지켜나가요."
 
 // --------- 회원가입 --------- //
+const val SIGN_UP_SERVICE_TERMS_TITLE = "허그를 이용하려면\n약관 동의가 필요해요!"
+const val SIGN_UP_SERVICE_TERMS_ALL_AGREE = "전체 동의"
+const val SIGN_UP_ESSENTIAL_WORD = "(필수)"
+val SIGN_UP_I_AGREE_SERVICE_TERM = buildAnnotatedString {
+    pushStringAnnotation(tag = "serviceTerm", annotation = "serviceTerm")
+    withStyle(style = SpanStyle(
+        color = Gs90,
+        textDecoration = TextDecoration.Underline
+    )) {
+        append("허그 이용약관")
+    }
+    pop()
+    append("에 동의합니다.")
+}
+val SIGN_UP_I_AGREE_PERSONAL_TERM = buildAnnotatedString {
+    pushStringAnnotation(tag = "personalTerm", annotation = "personalTerm")
+    withStyle(style = SpanStyle(
+        color = Gs90,
+        textDecoration = TextDecoration.Underline
+    )) {
+        append("개인정보 수집/이용")
+    }
+    pop()
+    append("에 동의합니다.")
+}
+const val SIGN_UP_I_AGREE_AGE_TERM = "본인은 만 14세 이상입니다."
+const val SIGN_UP_TERMS_ASK = "약관 문의"
+
 val SIGN_UP_INPUT_SSN = buildAnnotatedString {
     withStyle(style = SpanStyle(color = Gs80)) {
         append("주민번호 ")
@@ -234,6 +263,7 @@ const val MY_PAGE_PROFILE_MANAGEMENT = "계정관리"
 const val MY_PAGE_NOTICE_LINK = "https://abouthugg.notion.site/Hugg-c673654437704c938ec5d7762ca338a0?pvs=4"
 const val MY_PAGE_FAQ_LINK = "https://abouthugg.notion.site/Hugg-Q-A-1d703027d86d4dd2abafce3ad594927e?pvs=4"
 const val MY_PAGE_TERMS_OF_SERVICE_LINK = "https://abouthugg.notion.site/9f6d826b7f354ec8af9a2832ad34310d?pvs=4"
+const val TERMS_OF_PERSONAL_LINK = "https://abouthugg.notion.site/cceda9674078471da91421d5bf7d3f26?pvs=4"
 
 const val MY_PAGE_SPOUSE_CODE = "배우자 공유코드"
 const val MY_PAGE_SPOUSE_CODE_HINT = "남편 회원가입시 붙여넣기 해주세요."
