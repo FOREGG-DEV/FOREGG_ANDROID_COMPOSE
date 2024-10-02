@@ -1,5 +1,10 @@
 package com.hugg.sign.accessPermission
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -18,6 +23,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import com.hugg.domain.model.enums.TopBarLeftType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.feature.component.BlankBtn
@@ -33,6 +40,7 @@ import com.hugg.feature.component.SignUpIndicator
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
 import com.hugg.feature.R
+import com.hugg.feature.util.ForeggLog
 
 
 @Composable
@@ -42,33 +50,30 @@ fun AccessPermissionContainer(
 ) {
     val context = LocalContext.current
 
-    // 권한 요청 런처 설정
-    val notificationPermissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission()
-    ) { _ -> }
-
-    val cameraPermissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        if (isGranted) {
-            // 카메라 권한이 승인되었을 때 처리할 내용
-            println("카메라 권한 승인")
-        } else {
-            // 카메라 권한이 거부되었을 때 처리할 내용
-            println("카메라 권한 거부")
-        }
+    val permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        arrayOf(
+            Manifest.permission.POST_NOTIFICATIONS,
+            Manifest.permission.READ_MEDIA_IMAGES,
+            Manifest.permission.CAMERA
+        )
+    } else {
+        arrayOf(
+            Manifest.permission.CAMERA
+        )
     }
 
-    val photoPermissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        if (isGranted) {
-            // 저장소(사진) 권한이 승인되었을 때 처리할 내용
-            println("사진 권한 승인")
-        } else {
-            // 저장소(사진) 권한이 거부되었을 때 처리할 내용
-            println("사진 권한 거부")
-        }
+    val launcherMultiplePermissions = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissionsMap ->
+        val areGranted = permissionsMap.values.reduce { acc, next -> acc && next }
+    }
+
+    LaunchedEffect(Unit) {
+        checkAndRequestPermissions(
+            context,
+            permissions,
+            launcherMultiplePermissions
+        )
     }
 
     AccessPermissionScreen(
@@ -247,6 +252,21 @@ fun AccessPermissionScreen(
 
             Spacer(modifier = Modifier.height(80.dp))
         }
+    }
+}
+
+fun checkAndRequestPermissions(
+    context: Context,
+    permissions: Array<String>,
+    launcher: ManagedActivityResultLauncher<Array<String>, Map<String, Boolean>>,
+) {
+    if (permissions.all {
+            ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
+        }){
+        ForeggLog.D("이미 모든 권한이 부여되었습니다.")
+    }
+    else {
+        launcher.launch(permissions)
     }
 }
 
