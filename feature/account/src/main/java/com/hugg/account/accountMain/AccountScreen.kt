@@ -8,6 +8,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,6 +29,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -43,7 +45,9 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
@@ -97,6 +101,7 @@ import com.hugg.feature.theme.White
 import com.hugg.feature.uiItem.AccountCardItem
 import com.hugg.feature.uiItem.RemoteRound
 import com.hugg.feature.uiItem.SubsidyTotalBoxItem
+import com.hugg.feature.util.ForeggLog
 import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UnitFormatter
@@ -114,6 +119,7 @@ fun AccountContainer(
     val context = LocalContext.current
     var isFilterAtTop by remember { mutableStateOf(false) }
     val interactionSource = remember { MutableInteractionSource() }
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(Unit){
         viewModel.setView()
@@ -137,6 +143,10 @@ fun AccountContainer(
         onLongClickAccountCard = { id -> viewModel.onLongClickItem(id) },
         onDeleteAccountList = { viewModel.showDeleteDialog(true) },
         onChangedMemo = { memo -> viewModel.onChangedMemo(memo)},
+        onKeyboardDone = {
+            viewModel.inputMemoDone()
+            keyboardController?.hide()
+        },
         interactionSource = interactionSource
     )
 
@@ -213,6 +223,7 @@ fun AccountScreen(
     onClickAccountCard : (Long, Long) -> Unit = {_, _ -> },
     onLongClickAccountCard : (Long) -> Unit = {},
     onChangedMemo : (String) -> Unit = {},
+    onKeyboardDone : () -> Unit = {},
     onDeleteAccountList : () -> Unit = {}
 ) {
 
@@ -225,7 +236,10 @@ fun AccountScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Background),
+            .background(Background)
+            .pointerInput(Unit) {
+                onKeyboardDone()
+            },
     ) {
 
         TopBar(
@@ -284,6 +298,7 @@ fun AccountScreen(
                     onClickDateFilter = onClickDateFilter,
                     onClickGoToSubsidyList = onClickGoToSubsidyList,
                     onChangedMemo = onChangedMemo,
+                    onKeyboardDone = onKeyboardDone,
                     interactionSource = interactionSource
                 )
 
@@ -432,6 +447,7 @@ fun AccountTotalBox(
     onClickDateFilter: () -> Unit = {},
     onClickGoToSubsidyList: () -> Unit = {},
     onChangedMemo : (String) -> Unit = {},
+    onKeyboardDone : () -> Unit = {},
     interactionSource: MutableInteractionSource
 ) {
     Column(
@@ -507,6 +523,7 @@ fun AccountTotalBox(
                     textStyle = HuggTypography.h4.copy(
                         color = Gs70,
                     ),
+                    keyboardActions = KeyboardActions(onDone = {onKeyboardDone()}),
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -730,10 +747,4 @@ fun FilterItem(
             color = if(uiState.selectedFilterList.contains(text)) White else Gs60
         )
     }
-}
-
-@Preview
-@Composable
-internal fun PreviewMainContainer() {
-    //EmptySubsidyBox()
 }

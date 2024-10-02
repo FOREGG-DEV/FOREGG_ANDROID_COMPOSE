@@ -2,6 +2,7 @@ package com.hugg.domain.repository
 
 import com.hugg.domain.base.ApiState
 import com.hugg.domain.model.request.account.AccountCreateRequestVo
+import com.hugg.domain.model.request.account.AccountEditMemoRequestVo
 import com.hugg.domain.model.request.account.AccountEditRequestVo
 import com.hugg.domain.model.request.account.AccountGetConditionRequestVo
 import com.hugg.domain.model.request.account.SubsidyCreateEditRequestVo
@@ -28,5 +29,6 @@ interface AccountRepository {
     suspend fun deleteSubsidy(request : Long) : Flow<ApiState<Unit>>
     suspend fun getSubsidies(request : Int) : Flow<ApiState<List<SubsidyListResponseVo>>>
     suspend fun createRound() : Flow<ApiState<Unit>>
+    suspend fun modifyMemo(count : Int, request: AccountEditMemoRequestVo) : Flow<ApiState<Unit>>
 
 }

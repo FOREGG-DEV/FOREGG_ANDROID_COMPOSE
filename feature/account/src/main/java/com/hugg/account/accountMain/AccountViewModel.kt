@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.hugg.domain.model.enums.AccountBottomSheetType
 import com.hugg.domain.model.enums.AccountColorType
 import com.hugg.domain.model.enums.AccountTabType
+import com.hugg.domain.model.request.account.AccountEditMemoRequestVo
 import com.hugg.domain.model.request.account.AccountGetConditionRequestVo
 import com.hugg.domain.model.response.account.AccountItemResponseVo
 import com.hugg.domain.model.response.account.AccountResponseVo
@@ -15,6 +16,7 @@ import com.hugg.feature.base.BaseViewModel
 import com.hugg.feature.theme.ACCOUNT_ALL
 import com.hugg.feature.theme.ACCOUNT_PERSONAL
 import com.hugg.feature.theme.ACCOUNT_SUBSIDY
+import com.hugg.feature.util.ForeggLog
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UnitFormatter.getMoneyFormatWithUnit
 import com.hugg.feature.util.UserInfo
@@ -328,5 +330,14 @@ class AccountViewModel @Inject constructor(
     fun onChangedMemo(memo : String){
         if(memo.length >= 21) return
         updateState(uiState.value.copy(memo = memo))
+    }
+
+    fun inputMemoDone() {
+        val request = AccountEditMemoRequestVo(memo = uiState.value.memo)
+        viewModelScope.launch {
+            accountRepository.modifyMemo(uiState.value.nowRound, request).collect {
+                resultResponse(it, {})
+            }
+        }
     }
 }
