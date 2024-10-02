@@ -222,6 +222,7 @@ class AccountViewModel @Inject constructor(
 
         updateState(
             uiState.value.copy(
+                memo = result.memo,
                 personalExpense = getMoneyFormatWithUnit(result.personalSum),
                 subsidyExpense = getMoneyFormatWithUnit(result.subsidySum),
                 totalExpense = getMoneyFormatWithUnit(result.total.toInt()),
@@ -322,5 +323,10 @@ class AccountViewModel @Inject constructor(
         updateState(
             uiState.value.copy(filterList = filterBoxList)
         )
+    }
+
+    fun onChangedMemo(memo : String){
+        if(memo.length >= 21) return
+        updateState(uiState.value.copy(memo = memo))
     }
 }

@@ -1,6 +1,7 @@
 package com.hugg.domain.model.response.account
 
 data class AccountResponseVo(
+    val memo : String = "",
     val personalSum : Int = 0,
     val subsidySum : Int = 0,
     val subsidyAvailable : List<AccountSubsidyAvailableItemVo> = emptyList(),

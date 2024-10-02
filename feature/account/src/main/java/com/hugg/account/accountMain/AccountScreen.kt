@@ -27,6 +27,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -43,6 +44,7 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -69,6 +71,7 @@ import com.hugg.feature.theme.ACCOUNT_LIST_DIALOG_DELETE
 import com.hugg.feature.theme.ACCOUNT_MONTH
 import com.hugg.feature.theme.ACCOUNT_PERSONAL
 import com.hugg.feature.theme.ACCOUNT_ROUND
+import com.hugg.feature.theme.ACCOUNT_ROUND_MEMO
 import com.hugg.feature.theme.ACCOUNT_SUBSIDY_ALL
 import com.hugg.feature.theme.ACCOUNT_SUGGEST_ADD_SUBSIDY
 import com.hugg.feature.theme.ACCOUNT_TOAST_SUCCESS_DELETE
@@ -133,6 +136,7 @@ fun AccountContainer(
         onClickAccountCard = { ledgerId, expenditureId -> if(uiState.isDeleteMode) viewModel.onClickCard(expenditureId) else navigateToCreateOrEditAccount(ledgerId, CreateOrEditType.EDIT) },
         onLongClickAccountCard = { id -> viewModel.onLongClickItem(id) },
         onDeleteAccountList = { viewModel.showDeleteDialog(true) },
+        onChangedMemo = { memo -> viewModel.onChangedMemo(memo)},
         interactionSource = interactionSource
     )
 
@@ -208,6 +212,7 @@ fun AccountScreen(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     onClickAccountCard : (Long, Long) -> Unit = {_, _ -> },
     onLongClickAccountCard : (Long) -> Unit = {},
+    onChangedMemo : (String) -> Unit = {},
     onDeleteAccountList : () -> Unit = {}
 ) {
 
@@ -278,6 +283,7 @@ fun AccountScreen(
                     uiState = uiState,
                     onClickDateFilter = onClickDateFilter,
                     onClickGoToSubsidyList = onClickGoToSubsidyList,
+                    onChangedMemo = onChangedMemo,
                     interactionSource = interactionSource
                 )
 
@@ -425,6 +431,7 @@ fun AccountTotalBox(
     uiState: AccountPageState = AccountPageState(),
     onClickDateFilter: () -> Unit = {},
     onClickGoToSubsidyList: () -> Unit = {},
+    onChangedMemo : (String) -> Unit = {},
     interactionSource: MutableInteractionSource
 ) {
     Column(
@@ -465,7 +472,49 @@ fun AccountTotalBox(
             }
         }
 
-        if (uiState.tabType != AccountTabType.ALL) Spacer(modifier = Modifier.size(22.dp))
+        if (uiState.tabType == AccountTabType.ROUND) {
+            Spacer(modifier = Modifier.size(16.dp))
+
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 12.dp)
+                    .fillMaxWidth(),
+            ) {
+                if(uiState.memo.isEmpty()){
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_write_gs_70),
+                            contentDescription = null
+                        )
+
+                        Spacer(modifier = Modifier.size(4.dp))
+
+                        Text(
+                            text = ACCOUNT_ROUND_MEMO,
+                            style = HuggTypography.h4,
+                            color = Gs70
+                        )
+                    }
+                }
+
+                BasicTextField(
+                    value = uiState.memo,
+                    onValueChange = { value ->
+                        onChangedMemo(value)
+                    },
+                    textStyle = HuggTypography.h4.copy(
+                        color = Gs70,
+                    ),
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        }
+
+        if (uiState.tabType == AccountTabType.MONTH) Spacer(modifier = Modifier.size(22.dp))
+        if (uiState.tabType == AccountTabType.ROUND) Spacer(modifier = Modifier.size(12.dp))
 
         TotalBoxItem(AccountColorType.RED, uiState)
 
