@@ -42,7 +42,7 @@ const val PAGE_COUNT = 4
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun OnboardingContainer(
-    navigateInputSsn : (String) -> Unit = {},
+    navigateServiceTerms : (String) -> Unit = {},
     navigateHome : () -> Unit = {},
     viewModel: OnboardingViewModel = hiltViewModel()
 ) {
@@ -57,7 +57,7 @@ fun OnboardingContainer(
                 OnboardingEvent.MoveLastPage -> pagerState.animateScrollToPage(pagerState.pageCount - 1)
                 OnboardingEvent.MovePrevPage -> pagerState.animateScrollToPage(pagerState.currentPage - 1)
                 OnboardingEvent.GoToMainEvent -> navigateHome()
-                is OnboardingEvent.GoToSignUpEvent -> { navigateInputSsn(event.accessToken) }
+                is OnboardingEvent.GoToSignUpEvent -> { navigateServiceTerms(event.accessToken) }
             }
         }
     }

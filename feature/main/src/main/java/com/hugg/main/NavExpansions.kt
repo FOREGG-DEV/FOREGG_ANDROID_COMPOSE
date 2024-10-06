@@ -31,6 +31,7 @@ import com.hugg.mypage.main.MyPageContainer
 import com.hugg.mypage.myMedicineInjection.MyPageMedInjContainer
 import com.hugg.mypage.profileManagement.MyPageProfileManagementContainer
 import com.hugg.mypage.spouse.MyPageSpouseContainer
+import com.hugg.sign.accessPermission.AccessPermissionContainer
 import com.hugg.sign.femaleSignUp.chooseSurgery.ChooseSurgeryContainer
 import com.hugg.sign.femaleSignUp.spouseCodeFemale.SpouseCodeFemaleContainer
 import com.hugg.sign.femaleSignUp.startSurgery.SurgeryStartContainer
@@ -38,14 +39,41 @@ import com.hugg.sign.femaleSignUp.surgeryCount.SurgeryCountContainer
 import com.hugg.sign.inputSsn.InputSsnContainer
 import com.hugg.sign.maleSignUp.MaleSignUpContainer
 import com.hugg.sign.onboarding.OnboardingContainer
+import com.hugg.sign.serviceTerms.ServiceTermsContainer
 
 fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
     navigation(startDestination = Routes.OnboardingScreen.route, route = Routes.SignGraph.route) {
 
         composable(Routes.OnboardingScreen.route) { OnboardingContainer(
-            navigateInputSsn = { accessToken : String -> navController.navigate(route = Routes.InputSsnScreen.getRouteInputSsn(accessToken)) },
+            navigateServiceTerms = { accessToken : String -> navController.navigate(route = Routes.ServiceTermsScreen.getRouteServiceTerms(accessToken)) },
             navigateHome = { navController.navigate(route = Routes.CalendarGraph.route) } // 임시!
         ) }
+
+        composable(
+            route = Routes.ServiceTermsScreen.route,
+            arguments = listOf(
+                navArgument("accessToken") { type = NavType.StringType },
+            )
+        ) {
+            val accessToken = it.arguments?.getString("accessToken") ?: ""
+            ServiceTermsContainer(
+                navigateAccessPermission = { navController.navigate(route = Routes.AccessPermissionScreen.getRouteAccessPermission(accessToken)) },
+                goToBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = Routes.AccessPermissionScreen.route,
+            arguments = listOf(
+                navArgument("accessToken") { type = NavType.StringType },
+            )
+        ) {
+            val accessToken = it.arguments?.getString("accessToken") ?: ""
+            AccessPermissionContainer(
+                navigateInputSsn = { navController.navigate(route = Routes.InputSsnScreen.getRouteInputSsn(accessToken)) },
+                goToBack = { navController.popBackStack() }
+            )
+        }
 
         composable(
             route = Routes.InputSsnScreen.route,

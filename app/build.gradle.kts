@@ -11,7 +11,7 @@ plugins {
 }
 
 android {
-    namespace = "com.hugg.app"
+    namespace = "com.hugg.presentation"
     compileSdk = 34
 
     val localPropsFile = rootProject.file("local.properties")
@@ -23,11 +23,11 @@ android {
     defaultConfig {
         buildConfigField("String", "KAKAO_NATIVE_KEY", localProps.getProperty("kakao_native_key"))
         manifestPlaceholders["Key"]
-        applicationId = "com.hugg.app"
+        applicationId = "com.hugg.presentation"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 20
+        versionName = "2.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
