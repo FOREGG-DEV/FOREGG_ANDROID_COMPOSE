@@ -31,6 +31,7 @@ import com.hugg.mypage.main.MyPageContainer
 import com.hugg.mypage.myMedicineInjection.MyPageMedInjContainer
 import com.hugg.mypage.profileManagement.MyPageProfileManagementContainer
 import com.hugg.mypage.spouse.MyPageSpouseContainer
+import com.hugg.sign.accessPermission.AccessPermissionContainer
 import com.hugg.sign.femaleSignUp.chooseSurgery.ChooseSurgeryContainer
 import com.hugg.sign.femaleSignUp.spouseCodeFemale.SpouseCodeFemaleContainer
 import com.hugg.sign.femaleSignUp.startSurgery.SurgeryStartContainer
@@ -38,14 +39,41 @@ import com.hugg.sign.femaleSignUp.surgeryCount.SurgeryCountContainer
 import com.hugg.sign.inputSsn.InputSsnContainer
 import com.hugg.sign.maleSignUp.MaleSignUpContainer
 import com.hugg.sign.onboarding.OnboardingContainer
+import com.hugg.sign.serviceTerms.ServiceTermsContainer
 
 fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
     navigation(startDestination = Routes.OnboardingScreen.route, route = Routes.SignGraph.route) {
 
         composable(Routes.OnboardingScreen.route) { OnboardingContainer(
-            navigateInputSsn = { accessToken : String -> navController.navigate(route = Routes.InputSsnScreen.getRouteInputSsn(accessToken)) },
+            navigateServiceTerms = { accessToken : String -> navController.navigate(route = Routes.ServiceTermsScreen.getRouteServiceTerms(accessToken)) },
             navigateHome = { navController.navigate(route = Routes.CalendarGraph.route) } // 임시!
         ) }
+
+        composable(
+            route = Routes.ServiceTermsScreen.route,
+            arguments = listOf(
+                navArgument("accessToken") { type = NavType.StringType },
+            )
+        ) {
+            val accessToken = it.arguments?.getString("accessToken") ?: ""
+            ServiceTermsContainer(
+                navigateAccessPermission = { navController.navigate(route = Routes.AccessPermissionScreen.getRouteAccessPermission(accessToken)) },
+                goToBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = Routes.AccessPermissionScreen.route,
+            arguments = listOf(
+                navArgument("accessToken") { type = NavType.StringType },
+            )
+        ) {
+            val accessToken = it.arguments?.getString("accessToken") ?: ""
+            AccessPermissionContainer(
+                navigateInputSsn = { navController.navigate(route = Routes.InputSsnScreen.getRouteInputSsn(accessToken)) },
+                goToBack = { navController.popBackStack() }
+            )
+        }
 
         composable(
             route = Routes.InputSsnScreen.route,
@@ -199,7 +227,7 @@ fun NavGraphBuilder.accountGraph(navController: NavHostController) {
 
         composable(Routes.AccountScreen.route) { AccountContainer(
             navigateToSubsidyList = { round -> navController.navigate(Routes.AccountSubsidyList.getRouteAccountSubsidyList(round)) },
-            navigateToCreateOrEditAccount = { id, type -> navController.navigate(Routes.AccountCreateOrEdit.getRouteAccountCreateOrEdit(id, type.name))}
+            navigateToCreateOrEditAccount = { id, type -> navController.navigate(Routes.AccountCreateOrEdit.getRouteAccountCreateOrEdit(id, type.type))}
         ) }
 
         composable(
@@ -210,7 +238,7 @@ fun NavGraphBuilder.accountGraph(navController: NavHostController) {
         ) {
             val round = it.arguments?.getInt("round") ?: UserInfo.info.round
             SubsidyListContainer(
-                onClickCreateEditSubsidyBtn = {id, type, round -> navController.navigate(Routes.AccountSubsidyCreateOrEdit.getRouteAccountSubsidyCreateOrEdit(id, type.name, round)) },
+                onClickCreateEditSubsidyBtn = {id, type, round -> navController.navigate(Routes.AccountSubsidyCreateOrEdit.getRouteAccountSubsidyCreateOrEdit(id, type.type, round)) },
                 nowRound = round,
                 goToBack = { navController.popBackStack() }
             )
@@ -245,7 +273,7 @@ fun NavGraphBuilder.accountGraph(navController: NavHostController) {
             val id = it.arguments?.getLong("id") ?: -1
             val type = CreateOrEditType.getEnumType(it.arguments?.getString("type") ?: "")
             AccountCreateOrEditContainer(
-                navigateCreateSubsidy = { round -> navController.navigate(Routes.AccountSubsidyCreateOrEdit.getRouteAccountSubsidyCreateOrEdit(id, type.name, round))},
+                navigateCreateSubsidy = { round -> navController.navigate(Routes.AccountSubsidyCreateOrEdit.getRouteAccountSubsidyCreateOrEdit(id, type.type, round))},
                 id = id,
                 type = type,
                 goToBack = { navController.popBackStack() }

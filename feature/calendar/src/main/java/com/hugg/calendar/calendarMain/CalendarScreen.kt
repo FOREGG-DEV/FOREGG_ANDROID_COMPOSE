@@ -507,7 +507,7 @@ fun CreateScheduleBtnByType(
         RecordType.HOSPITAL -> WORD_HOSPITAL
         RecordType.ETC -> WORD_ETC
     }
-    Row(
+    Box(
         modifier = Modifier
             .border(
                 width = 1.dp,
@@ -520,14 +520,8 @@ fun CreateScheduleBtnByType(
             )
             .background(color = White)
             .padding(horizontal = 9.dp, vertical = 6.dp),
-        verticalAlignment = Alignment.CenterVertically
+        contentAlignment = Alignment.Center
     ) {
-        Box(
-            modifier = Modifier
-                .size(16.dp)
-                .background(Gs10)
-        )
-        Spacer(modifier = Modifier.size(4.dp))
         Text(
             text = text,
             style = HuggTypography.h4,
@@ -535,7 +529,7 @@ fun CreateScheduleBtnByType(
         )
     }
 
-    Spacer(modifier = Modifier.size(8.dp))
+    Spacer(modifier = Modifier.size(4.dp))
 }
 
 fun getDayTextColor(calendarDayVo: CalendarDayVo) : Color {

@@ -7,6 +7,13 @@ sealed class Routes(val route : String){
     //----------------SIGN_GRAPH----------------//
     data object SignGraph : Routes("sign_graph")
     data object OnboardingScreen : Routes("onboarding")
+    data object ServiceTermsScreen : Routes("service_terms/{accessToken}") {
+        fun getRouteServiceTerms(accessToken : String) : String = "service_terms/$accessToken"
+    }
+
+    data object AccessPermissionScreen : Routes("access_permission/{accessToken}"){
+        fun getRouteAccessPermission(accessToken : String) : String = "access_permission/$accessToken"
+    }
     data object InputSsnScreen : Routes("input_ssn/{accessToken}"){
         fun getRouteInputSsn(accessToken : String) : String = "input_ssn/$accessToken"
     }

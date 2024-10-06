@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.hugg.domain.model.enums.AccountBottomSheetType
 import com.hugg.domain.model.enums.AccountColorType
 import com.hugg.domain.model.enums.AccountTabType
+import com.hugg.domain.model.request.account.AccountEditMemoRequestVo
 import com.hugg.domain.model.request.account.AccountGetConditionRequestVo
 import com.hugg.domain.model.response.account.AccountItemResponseVo
 import com.hugg.domain.model.response.account.AccountResponseVo
@@ -167,7 +168,7 @@ class AccountViewModel @Inject constructor(
 
     fun showDeleteDialog(isShow : Boolean){
         updateState(
-            uiState.value.copy(isShowDeleteDialog = true)
+            uiState.value.copy(isShowDeleteDialog = isShow)
         )
     }
 
@@ -176,7 +177,7 @@ class AccountViewModel @Inject constructor(
         else {
             val newList = uiState.value.accountList.map {
                 it.copy(
-                    isSelected = if (it.id == id) !it.isSelected else it.isSelected
+                    isSelected = if (it.expenditureId == id) !it.isSelected else it.isSelected
                 )
             }
             updateState(
@@ -191,7 +192,7 @@ class AccountViewModel @Inject constructor(
     fun onClickCard(id : Long){
         val newList = uiState.value.accountList.map {
             it.copy(
-                isSelected = if (it.id == id) !it.isSelected else it.isSelected
+                isSelected = if (it.expenditureId == id) !it.isSelected else it.isSelected
             )
         }
         updateState(
@@ -202,11 +203,11 @@ class AccountViewModel @Inject constructor(
         )
     }
 
-    fun deleteAccount(){
+    fun deleteExpenditure(){
         val deleteList = uiState.value.accountList.filter { it.isSelected }
         deleteList.forEachIndexed { index, accountCardVo ->
             viewModelScope.launch {
-                accountRepository.delete(accountCardVo.id).collect {
+                accountRepository.deleteExpenditure(accountCardVo.expenditureId).collect {
                     resultResponse(it, { handleSuccessDeleteAccount(deleteList.size - 1 == index) })
                 }
             }
@@ -223,6 +224,7 @@ class AccountViewModel @Inject constructor(
 
         updateState(
             uiState.value.copy(
+                memo = result.memo,
                 personalExpense = getMoneyFormatWithUnit(result.personalSum),
                 subsidyExpense = getMoneyFormatWithUnit(result.subsidySum),
                 totalExpense = getMoneyFormatWithUnit(result.total.toInt()),
@@ -248,6 +250,7 @@ class AccountViewModel @Inject constructor(
 
     private fun handleSuccessDeleteAccount(isComplete : Boolean){
         if(isComplete) {
+            updateState(uiState.value.copy(isDeleteMode = false))
             emitEventFlow(AccountEvent.SuccessDeleteAccountEvent)
             setView()
         }
@@ -299,7 +302,8 @@ class AccountViewModel @Inject constructor(
     private fun getAccountCardList(list : List<AccountItemResponseVo>) : List<AccountCardVo>{
         return list.map {
             AccountCardVo(
-                id = it.ledgerId,
+                ledgerId = it.ledgerId,
+                expenditureId = it.expenditureId,
                 date = it.date,
                 round = it.round,
                 color = it.color,
@@ -321,5 +325,19 @@ class AccountViewModel @Inject constructor(
         updateState(
             uiState.value.copy(filterList = filterBoxList)
         )
+    }
+
+    fun onChangedMemo(memo : String){
+        if(memo.length >= 21) return
+        updateState(uiState.value.copy(memo = memo))
+    }
+
+    fun inputMemoDone() {
+        val request = AccountEditMemoRequestVo(memo = uiState.value.memo)
+        viewModelScope.launch {
+            accountRepository.modifyMemo(uiState.value.nowRound, request).collect {
+                resultResponse(it, {})
+            }
+        }
     }
 }

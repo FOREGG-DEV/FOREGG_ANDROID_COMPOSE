@@ -2,7 +2,6 @@ package com.hugg.feature.uiItem
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -39,7 +38,7 @@ import com.hugg.feature.util.UnitFormatter.getMoneyFormatWithUnit
 @Composable
 fun AccountCardItem(
     item : AccountCardVo = AccountCardVo(),
-    onClickCard : (Long) -> Unit = {},
+    onClickCard : (Long, Long) -> Unit = {_, _ -> },
     onLongClickCard : (Long) -> Unit = {},
     interactionSource: MutableInteractionSource,
 ){
@@ -66,8 +65,8 @@ fun AccountCardItem(
             .background(color = if(item.isSelected) SelectedCardColor else White, shape = RoundedCornerShape(8.dp))
             .padding(top = 8.dp, bottom = 11.dp, start = 12.dp, end = 12.dp)
             .combinedClickable(
-                onLongClick = { onLongClickCard(item.id) },
-                onClick = { onClickCard(item.id) },
+                onLongClick = { onLongClickCard(item.expenditureId) },
+                onClick = { onClickCard(item.ledgerId, item.expenditureId) },
                 interactionSource = interactionSource,
                 indication = null
             )

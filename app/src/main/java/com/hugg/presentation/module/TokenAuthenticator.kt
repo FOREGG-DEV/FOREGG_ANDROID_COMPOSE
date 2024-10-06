@@ -1,4 +1,4 @@
-package com.hugg.app.module
+package com.hugg.presentation.module
 
 import android.util.Log
 import com.hugg.domain.base.ApiState

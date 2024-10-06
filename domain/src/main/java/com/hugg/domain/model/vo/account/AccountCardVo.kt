@@ -3,7 +3,8 @@ package com.hugg.domain.model.vo.account
 import com.hugg.domain.model.enums.AccountColorType
 
 data class AccountCardVo(
-    val id : Long = -1,
+    val ledgerId : Long = -1,
+    val expenditureId : Long = -1,
     val date : String = "",
     val round : Int = -1,
     val color : AccountColorType = AccountColorType.RED,

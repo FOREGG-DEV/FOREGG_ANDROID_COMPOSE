@@ -1,4 +1,4 @@
-package com.hugg.app
+package com.hugg.presentation
 
 import android.app.Application
 import com.google.firebase.FirebaseApp
