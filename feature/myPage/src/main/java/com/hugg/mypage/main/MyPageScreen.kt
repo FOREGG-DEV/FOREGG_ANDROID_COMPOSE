@@ -46,6 +46,7 @@ fun MyPageContainer(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val interactionSource = remember { MutableInteractionSource() }
 
     LaunchedEffect(Unit){
         viewModel.getMyInfo()
@@ -54,6 +55,7 @@ fun MyPageContainer(
     MyPageScreen(
         uiState = uiState,
         navigateGoToSpouse = navigateGoToSpouse,
+        interactionSource = interactionSource,
         navigateGoToMyMedInj = navigateGoToMyMedInj,
         navigateGoToCs = navigateGoToCs,
         navigateGoToRegistration = navigateGoToRegistration,
@@ -102,7 +104,7 @@ fun MyPageScreen(
                     .height(48.dp)
                     .onThrottleClick(
                         onClick = {
-                            if(UserInfo.info.genderType == GenderType.MALE) return@onThrottleClick
+                            if (UserInfo.info.genderType == GenderType.MALE) return@onThrottleClick
                             navigateGoToSpouse()
                         },
                         interactionSource = interactionSource

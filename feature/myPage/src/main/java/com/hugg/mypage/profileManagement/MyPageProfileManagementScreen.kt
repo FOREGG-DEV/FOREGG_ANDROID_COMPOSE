@@ -1,7 +1,6 @@
 package com.hugg.mypage.profileManagement
 
 import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -129,47 +128,46 @@ fun MyPageProfileManagementScreen(
 
         Spacer(modifier = Modifier.size(24.dp))
 
-        Box(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .background(color = White, shape = RoundedCornerShape(8.dp))
-                .fillMaxWidth()
-                .height(48.dp)
-                .onThrottleClick(
-                    onClick = onClickLogout,
-                    interactionSource = interactionSource
-                )
-                .padding(horizontal = 12.dp),
-            contentAlignment = Alignment.CenterStart
-        ){
-            Text(
-                text = MY_PAGE_PROFILE_MANAGEMENT_LOGOUT,
-                style = HuggTypography.p2,
-                color = Black
-            )
-        }
+        MenuButtonBox(
+            onClickBtn = onClickLogout,
+            interactionSource = interactionSource,
+            text = MY_PAGE_PROFILE_MANAGEMENT_LOGOUT
+        )
 
         Spacer(modifier = Modifier.size(8.dp))
 
-        Box(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .background(color = White, shape = RoundedCornerShape(8.dp))
-                .fillMaxWidth()
-                .height(48.dp)
-                .onThrottleClick(
-                    onClick = onClickUnregister,
-                    interactionSource = interactionSource
-                )
-                .padding(horizontal = 12.dp),
-            contentAlignment = Alignment.CenterStart
-        ){
-            Text(
-                text = MY_PAGE_PROFILE_MANAGEMENT_UNREGISTER,
-                style = HuggTypography.p2,
-                color = Unregister
+        MenuButtonBox(
+            onClickBtn = onClickUnregister,
+            interactionSource = interactionSource,
+            text = MY_PAGE_PROFILE_MANAGEMENT_UNREGISTER
+        )
+    }
+}
+
+@Composable
+fun MenuButtonBox(
+    onClickBtn : () -> Unit = {},
+    interactionSource: MutableInteractionSource,
+    text : String = "",
+){
+    Box(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .background(color = White, shape = RoundedCornerShape(8.dp))
+            .fillMaxWidth()
+            .height(48.dp)
+            .onThrottleClick(
+                onClick = onClickBtn,
+                interactionSource = interactionSource
             )
-        }
+            .padding(horizontal = 12.dp),
+        contentAlignment = Alignment.CenterStart
+    ){
+        Text(
+            text = text,
+            style = HuggTypography.p2,
+            color = if(text == MY_PAGE_PROFILE_MANAGEMENT_LOGOUT) Black else Unregister
+        )
     }
 }
 
