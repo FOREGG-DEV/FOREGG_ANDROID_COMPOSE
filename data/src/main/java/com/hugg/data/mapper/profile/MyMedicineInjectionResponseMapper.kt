@@ -15,7 +15,8 @@ object MyMedicineInjectionResponseMapper: Mapper.ResponseMapper<MyMedicineInject
                     startDate = it.startDate ?: "",
                     endDate = it.endDate ?: "",
                     repeatDays = it.repeatDays ?: "",
-                    name = it.name
+                    name = it.name,
+                    dose = it.dose
                 )
             }
         } ?: emptyList()

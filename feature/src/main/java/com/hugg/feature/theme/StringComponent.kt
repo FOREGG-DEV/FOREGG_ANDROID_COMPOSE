@@ -2,15 +2,18 @@ package com.hugg.feature.theme
 
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 
 // --------- 단어 --------- //
+const val FOREGG_EMAIL = "for.egg0302@gmail.com"
 const val WORD_HOME = "홈"
 const val WORD_DAILY_HUGG = "데일리 허그"
-const val WORD_MY = "마정"
+const val WORD_MY = "마이"
 const val WORD_SKIP = "skip"
 const val WORD_NEXT = "다음"
 const val WORD_DAILY_RECORD = "하루기록"
+const val WORD_MY_PAGE = "마이페이지"
 const val WORD_SIGN_UP = "회원가입"
 const val WORD_ROUND = "회차"
 const val WORD_NO = "아니요"
@@ -31,9 +34,13 @@ const val WORD_ALARM = "알람"
 const val WORD_START = "시작"
 const val WORD_END = "종료"
 const val WORD_EVERYDAY ="매일"
+const val WORD_LOGOUT = "로그아웃"
+const val WORD_UNREGISTER = "탈퇴"
+const val WORD_NOTIFICATION = "알림"
 
 // --------- 기타 --------- //
 const val COPY_COMPLETE_TEXT = "클립보드에 배우자 코드가 복사되었어요!"
+const val COPY_COMPLETE_MAIL_TEXT = "클립보드에 메일주소가 복사되었어요!"
 
 // --------- 온보딩 --------- //
 const val ONBOARDING_TITLE_1 = "주사 맞을 시간엔 알람이 울려요"
@@ -47,6 +54,43 @@ const val ONBOARDING_CONTENT_3 = "가계부 기능을 통해, 정부지원금과
 const val ONBOARDING_CONTENT_4 = "난자는 영양 상태, 호르몬 변화에 큰 영향을 받아요.\n챌린지를 통해 건강한 생활습관을 지켜나가요."
 
 // --------- 회원가입 --------- //
+const val SIGN_UP_SERVICE_TERMS_TITLE = "허그를 이용하려면\n약관 동의가 필요해요!"
+const val SIGN_UP_SERVICE_TERMS_ALL_AGREE = "전체 동의"
+const val SIGN_UP_ESSENTIAL_WORD = "(필수)"
+val SIGN_UP_I_AGREE_SERVICE_TERM = buildAnnotatedString {
+    pushStringAnnotation(tag = "serviceTerm", annotation = "serviceTerm")
+    withStyle(style = SpanStyle(
+        color = Gs90,
+        textDecoration = TextDecoration.Underline
+    )) {
+        append("허그 이용약관")
+    }
+    pop()
+    append("에 동의합니다.")
+}
+val SIGN_UP_I_AGREE_PERSONAL_TERM = buildAnnotatedString {
+    pushStringAnnotation(tag = "personalTerm", annotation = "personalTerm")
+    withStyle(style = SpanStyle(
+        color = Gs90,
+        textDecoration = TextDecoration.Underline
+    )) {
+        append("개인정보 수집/이용")
+    }
+    pop()
+    append("에 동의합니다.")
+}
+const val SIGN_UP_I_AGREE_AGE_TERM = "본인은 만 14세 이상입니다."
+const val SIGN_UP_TERMS_ASK = "약관 문의"
+
+const val SIGN_UP_ACCESS_PERMISSION_TITLE = "앱 접근 권한을 안내드려요"
+const val SIGN_UP_ACCESS_PERMISSION_CONTENT = "허그는 꼭 필요한 권한만 선택적으로 받고 있어요!"
+const val SIGN_UP_ACCESS_PERMISSION_DETAIL_EXPLAIN = "아래 선택 접근 권한은 해당 기능 이용 시 동의를 받고 있으며,\n비 허용 시에도 해당 기능 외 서비스 이용이 가능합니다."
+const val SIGN_UP_ACCESS_PERMISSION_OPTIONAL_TITLE = "선택적 접근 권한"
+const val SIGN_UP_ACCESS_PERMISSION_NOTIFICATION = "캘린더 알림, 챌린지, 데일리허그"
+const val SIGN_UP_ACCESS_PERMISSION_PHOTO_CAMERA = "사진 및 카메라"
+const val SIGN_UP_ACCESS_PERMISSION_CHANGE_PERMISSION = "접근권한 변경"
+const val SIGN_UP_ACCESS_PERMISSION_CHANGE_PERMISSION_EXPLAIN = "휴대폰 설정 > Hugg"
+
 val SIGN_UP_INPUT_SSN = buildAnnotatedString {
     withStyle(style = SpanStyle(color = Gs80)) {
         append("주민번호 ")
@@ -147,6 +191,7 @@ const val ACCOUNT_SUBSIDY = "지원"
 const val ACCOUNT_CHOOSE_DATE = "기간 선택"
 const val ACCOUNT_DIVIDE_DATE = "-"
 const val ACCOUNT_ADD_ROUND = "회차 추가"
+const val ACCOUNT_ROUND_MEMO = "회차 메모"
 const val ACCOUNT_SUGGEST_ADD_SUBSIDY = "지원금을 추가해보세요"
 const val ACCOUNT_AVAILABLE_MONEY = "사용 가능 금액"
 const val ACCOUNT_MONEY_UNIT = "원"
@@ -214,5 +259,40 @@ const val COMPLETE_EDIT_DAILY_HUGG = "데일리 허그가 수정되었어요"
 const val EDIT_DAILY_HUGG_DIALOG_TITLE = "글을 수정하시겠어요?"
 const val EDIT_DAILY_HUGG_DIALOG_WARNING = "남편이 답장을 보낸 이후에는 수정할 수 없어요"
 
+
+// --------- 마이페이지 --------- //
+const val MY_PAGE_SPOUSE = "배우자"
+const val MY_PAGE_REGISTER_SPOUSE = "배우자를 등록해주세요"
+const val MY_PAGE_MY_MEDICINE_INJECTION = "나의 약, 주사 정보"
+fun MY_PAGE_SPOUSE_MEDICINE_INJECTION(spouse : String) = "${spouse}님의 약, 주사 정보"
+const val MY_PAGE_NOTICE = "공지사항"
+const val MY_PAGE_FAQ = "FAQ"
+const val MY_PAGE_CS_ASK = "문의사항"
+const val MY_PAGE_TERMS_OF_SERVICE = "이용약관"
+const val MY_PAGE_PROFILE_MANAGEMENT = "계정관리"
+const val MY_PAGE_NOTICE_LINK = "https://abouthugg.notion.site/Hugg-c673654437704c938ec5d7762ca338a0?pvs=4"
+const val MY_PAGE_FAQ_LINK = "https://abouthugg.notion.site/Hugg-Q-A-1d703027d86d4dd2abafce3ad594927e?pvs=4"
+const val MY_PAGE_TERMS_OF_SERVICE_LINK = "https://abouthugg.notion.site/9f6d826b7f354ec8af9a2832ad34310d?pvs=4"
+const val TERMS_OF_PERSONAL_LINK = "https://abouthugg.notion.site/cceda9674078471da91421d5bf7d3f26?pvs=4"
+
+const val MY_PAGE_SPOUSE_CODE = "배우자 공유코드"
+const val MY_PAGE_SPOUSE_CODE_HINT = "남편 회원가입시 붙여넣기 해주세요."
+
+const val MY_PAGE_CS_HUGG_KAKAO_PLUS = "Hugg 카카오톡 플러스 채널"
+const val MY_PAGE_CS_HUGG_EMAIL = "Hugg 공식 메일"
+const val MY_PAGE_KAKAO_CHANEL_LINK = "https://pf.kakao.com/_xjvgYG"
+
+const val MY_PAGE_PROFILE_MANAGEMENT_LOGOUT = "계정 로그아웃"
+const val MY_PAGE_PROFILE_MANAGEMENT_UNREGISTER = "계정 탈퇴"
+const val MY_PAGE_LOGOUT_DIALOG = "Hugg에서 로그아웃 하시겠습니까?"
+const val MY_PAGE_LOGOUT_COMPLETE_DIALOG = "로그아웃이 완료되었습니다."
+const val MY_PAGE_UNREGISTER_DIALOG = "Hugg에서 탈퇴 하시겠습니까?"
+const val MY_PAGE_UNREGISTER_COMPLETE_DIALOG = "탈퇴가 완료되었습니다."
+
+
 // --------- 에러 Toast --------- //
 const val TOAST_ERROR_NOR_CORRECT_SPOUSE_CODE = "유효하지 않은 배우자코드입니다."
+const val TOAST_ERROR_FAILED_LOGOUT = "로그아웃에 실패했습니다."
+const val TOAST_ERROR_FAILED_UNREGISTER = "회원탈에 실패했습니다."
+
+const val TOAST_EXCEED_SUBSIDY = "지원금의 한도가 초과되었습니다."

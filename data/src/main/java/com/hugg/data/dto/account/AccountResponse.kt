@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName
 import com.hugg.domain.model.enums.AccountColorType
 
 data class AccountResponse(
+    @SerializedName("memo")
+    val memo : String? = "",
     @SerializedName("personalSum")
     val personalSum : Int = 0,
     @SerializedName("subsidySum")

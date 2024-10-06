@@ -26,6 +26,12 @@ import com.hugg.domain.model.request.sign.SignUpMaleRequestVo
 import com.hugg.domain.model.request.sign.SignUpRequestVo
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UserInfo
+import com.hugg.mypage.cs.MyPageCsContainer
+import com.hugg.mypage.main.MyPageContainer
+import com.hugg.mypage.myMedicineInjection.MyPageMedInjContainer
+import com.hugg.mypage.profileManagement.MyPageProfileManagementContainer
+import com.hugg.mypage.spouse.MyPageSpouseContainer
+import com.hugg.sign.accessPermission.AccessPermissionContainer
 import com.hugg.sign.femaleSignUp.chooseSurgery.ChooseSurgeryContainer
 import com.hugg.sign.femaleSignUp.spouseCodeFemale.SpouseCodeFemaleContainer
 import com.hugg.sign.femaleSignUp.startSurgery.SurgeryStartContainer
@@ -33,14 +39,41 @@ import com.hugg.sign.femaleSignUp.surgeryCount.SurgeryCountContainer
 import com.hugg.sign.inputSsn.InputSsnContainer
 import com.hugg.sign.maleSignUp.MaleSignUpContainer
 import com.hugg.sign.onboarding.OnboardingContainer
+import com.hugg.sign.serviceTerms.ServiceTermsContainer
 
 fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
     navigation(startDestination = Routes.OnboardingScreen.route, route = Routes.SignGraph.route) {
 
         composable(Routes.OnboardingScreen.route) { OnboardingContainer(
-            navigateInputSsn = { accessToken : String -> navController.navigate(route = Routes.InputSsnScreen.getRouteInputSsn(accessToken)) },
+            navigateServiceTerms = { accessToken : String -> navController.navigate(route = Routes.ServiceTermsScreen.getRouteServiceTerms(accessToken)) },
             navigateHome = { navController.navigate(route = Routes.CalendarGraph.route) } // 임시!
         ) }
+
+        composable(
+            route = Routes.ServiceTermsScreen.route,
+            arguments = listOf(
+                navArgument("accessToken") { type = NavType.StringType },
+            )
+        ) {
+            val accessToken = it.arguments?.getString("accessToken") ?: ""
+            ServiceTermsContainer(
+                navigateAccessPermission = { navController.navigate(route = Routes.AccessPermissionScreen.getRouteAccessPermission(accessToken)) },
+                goToBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = Routes.AccessPermissionScreen.route,
+            arguments = listOf(
+                navArgument("accessToken") { type = NavType.StringType },
+            )
+        ) {
+            val accessToken = it.arguments?.getString("accessToken") ?: ""
+            AccessPermissionContainer(
+                navigateInputSsn = { navController.navigate(route = Routes.InputSsnScreen.getRouteInputSsn(accessToken)) },
+                goToBack = { navController.popBackStack() }
+            )
+        }
 
         composable(
             route = Routes.InputSsnScreen.route,
@@ -194,7 +227,7 @@ fun NavGraphBuilder.accountGraph(navController: NavHostController) {
 
         composable(Routes.AccountScreen.route) { AccountContainer(
             navigateToSubsidyList = { round -> navController.navigate(Routes.AccountSubsidyList.getRouteAccountSubsidyList(round)) },
-            navigateToCreateOrEditAccount = { id, type -> navController.navigate(Routes.AccountCreateOrEdit.getRouteAccountCreateOrEdit(id, type.name))}
+            navigateToCreateOrEditAccount = { id, type -> navController.navigate(Routes.AccountCreateOrEdit.getRouteAccountCreateOrEdit(id, type.type))}
         ) }
 
         composable(
@@ -205,7 +238,7 @@ fun NavGraphBuilder.accountGraph(navController: NavHostController) {
         ) {
             val round = it.arguments?.getInt("round") ?: UserInfo.info.round
             SubsidyListContainer(
-                onClickCreateEditSubsidyBtn = {id, type, round -> navController.navigate(Routes.AccountSubsidyCreateOrEdit.getRouteAccountSubsidyCreateOrEdit(id, type.name, round)) },
+                onClickCreateEditSubsidyBtn = {id, type, round -> navController.navigate(Routes.AccountSubsidyCreateOrEdit.getRouteAccountSubsidyCreateOrEdit(id, type.type, round)) },
                 nowRound = round,
                 goToBack = { navController.popBackStack() }
             )
@@ -240,7 +273,7 @@ fun NavGraphBuilder.accountGraph(navController: NavHostController) {
             val id = it.arguments?.getLong("id") ?: -1
             val type = CreateOrEditType.getEnumType(it.arguments?.getString("type") ?: "")
             AccountCreateOrEditContainer(
-                navigateCreateSubsidy = { round -> navController.navigate(Routes.AccountSubsidyCreateOrEdit.getRouteAccountSubsidyCreateOrEdit(id, type.name, round))},
+                navigateCreateSubsidy = { round -> navController.navigate(Routes.AccountSubsidyCreateOrEdit.getRouteAccountSubsidyCreateOrEdit(id, type.type, round))},
                 id = id,
                 type = type,
                 goToBack = { navController.popBackStack() }
@@ -327,6 +360,50 @@ fun NavGraphBuilder.dailyHuggGraph(navController: NavHostController) {
                     }
                 },
                 id = id
+            )
+        }
+    }
+}
+
+fun NavGraphBuilder.myPageGraph(navController: NavHostController) {
+    navigation(startDestination = Routes.MyPageScreen.route, route = Routes.MyPageGraph.route) {
+
+        composable(Routes.MyPageScreen.route) {
+            MyPageContainer(
+                navigateGoToRegistration = { navController.navigate(Routes.MyPageProfileManagementScreen.route) },
+                navigateGoToCs = { navController.navigate(Routes.MyPageCsScreen.route) },
+                navigateGoToMyMedInj = { navController.navigate(Routes.MyPageMedInjScreen.route) },
+                navigateGoToSpouse = { navController.navigate(Routes.MyPageSpouseScreen.route) },
+            )
+        }
+
+        composable(Routes.MyPageSpouseScreen.route) {
+            MyPageSpouseContainer(
+                goToBack = { navController.popBackStack() },
+            )
+        }
+
+        composable(Routes.MyPageMedInjScreen.route) {
+            MyPageMedInjContainer(
+                goToBack = { navController.popBackStack() },
+                navigateDetail = { recordType, id -> navController.navigate(Routes.CalendarScheduleCreateOrEdit.getRouteCalendarScheduleCreateOrEdit(CreateOrEditType.EDIT.type, recordType.type, id, TimeFormatter.getToday()))}
+            )
+        }
+
+        composable(Routes.MyPageCsScreen.route) {
+            MyPageCsContainer(
+                goToBack = { navController.popBackStack() },
+            )
+        }
+
+        composable(Routes.MyPageProfileManagementScreen.route) {
+            MyPageProfileManagementContainer(
+                goToBack = { navController.popBackStack() },
+                navigateToSignGraph = { navController.navigate(Routes.SignGraph.route){
+                        popUpTo(0) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                }
             )
         }
     }

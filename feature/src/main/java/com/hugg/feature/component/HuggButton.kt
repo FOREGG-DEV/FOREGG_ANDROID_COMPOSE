@@ -15,7 +15,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,9 +29,11 @@ import androidx.compose.ui.unit.dp
 import com.hugg.feature.R
 import com.hugg.feature.theme.Gs30
 import com.hugg.feature.theme.Gs70
-import com.hugg.feature.theme.HuggTheme
 import com.hugg.feature.theme.HuggTypography
+import com.hugg.feature.theme.InActiveBlankBtn
+import com.hugg.feature.theme.InActiveMainLight
 import com.hugg.feature.theme.InActiveMainNormal
+import com.hugg.feature.theme.MainLight
 import com.hugg.feature.theme.MainNormal
 import com.hugg.feature.theme.White
 
@@ -44,21 +45,26 @@ fun BlankBtn(
     text : String = "테스트",
     textStyle: TextStyle = HuggTypography.btn,
     textColor : Color = Gs70,
+    isActive : Boolean = true,
     contentPadding : PaddingValues = PaddingValues(horizontal = 0.dp, vertical = 16.dp),
-    strokeColor: Color = MainNormal
+    strokeColor: Color = MainLight
 ) {
     Button(
         modifier = modifier,
         onClick = onClickBtn,
-        colors = ButtonDefaults
-            .buttonColors(containerColor = White),
         shape = RoundedCornerShape(radius),
-        border = BorderStroke(1.dp, strokeColor),
-        contentPadding = contentPadding
+        border = BorderStroke(1.dp, if(isActive) strokeColor else InActiveMainLight),
+        contentPadding = contentPadding,
+        enabled = isActive,
+        colors = ButtonDefaults
+            .buttonColors(
+                containerColor = White,
+                disabledContainerColor = InActiveBlankBtn
+            ),
     ) {
         Text(
             text = text,
-            color = textColor,
+            color = if(isActive) textColor else Gs30,
             style = textStyle
         )
     }

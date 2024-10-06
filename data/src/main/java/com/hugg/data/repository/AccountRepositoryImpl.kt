@@ -9,6 +9,7 @@ import com.hugg.data.mapper.account.SubsidyDetailResponseMapper
 import com.hugg.data.mapper.account.SubsidyResponseMapper
 import com.hugg.domain.base.ApiState
 import com.hugg.domain.model.request.account.AccountCreateRequestVo
+import com.hugg.domain.model.request.account.AccountEditMemoRequestVo
 import com.hugg.domain.model.request.account.AccountEditRequestVo
 import com.hugg.domain.model.request.account.AccountGetConditionRequestVo
 import com.hugg.domain.model.request.account.SubsidyCreateEditRequestVo
@@ -39,6 +40,10 @@ class AccountRepositoryImpl @Inject constructor(
 
     override suspend fun delete(request: Long): Flow<ApiState<Unit>> {
         return apiLaunch(apiCall = { accountApi.delete(request) }, UnitResponseMapper )
+    }
+
+    override suspend fun deleteExpenditure(request: Long): Flow<ApiState<Unit>> {
+        return apiLaunch(apiCall = { accountApi.deleteExpenditure(request) }, UnitResponseMapper )
     }
 
     override suspend fun getAccountDetail(request: Long): Flow<ApiState<AccountDetailResponseVo>> {
@@ -75,5 +80,9 @@ class AccountRepositoryImpl @Inject constructor(
 
     override suspend fun createRound(): Flow<ApiState<Unit>> {
         return apiLaunch(apiCall = { accountApi.createRound() }, UnitResponseMapper )
+    }
+
+    override suspend fun modifyMemo(count: Int, request: AccountEditMemoRequestVo): Flow<ApiState<Unit>> {
+        return apiLaunch(apiCall = { accountApi.modifyMemo(count, request) }, UnitResponseMapper )
     }
 }

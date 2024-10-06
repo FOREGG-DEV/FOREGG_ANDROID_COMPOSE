@@ -7,6 +7,7 @@ import com.hugg.data.dto.account.AccountResponseListItem
 import com.hugg.data.dto.account.SubsidyDetailResponse
 import com.hugg.data.dto.account.SubsidyResponse
 import com.hugg.domain.model.request.account.AccountCreateRequestVo
+import com.hugg.domain.model.request.account.AccountEditMemoRequestVo
 import com.hugg.domain.model.request.account.SubsidyCreateEditRequestVo
 import com.hugg.domain.model.request.account.SubsidyRequestVo
 import retrofit2.Response
@@ -46,6 +47,11 @@ interface AccountApi {
 
     @DELETE(Endpoints.ACCOUNT.DELETE)
     suspend fun delete(
+        @Path(PATH_ID) id : Long,
+    ) : Response<ApiResponse<Unit>>
+
+    @DELETE(Endpoints.ACCOUNT.DELETE_EXPENDITURE)
+    suspend fun deleteExpenditure(
         @Path(PATH_ID) id : Long,
     ) : Response<ApiResponse<Unit>>
 
@@ -93,4 +99,10 @@ interface AccountApi {
 
     @POST(Endpoints.ACCOUNT.CREATE_COUNT)
     suspend fun createRound() : Response<ApiResponse<Unit>>
+
+    @PUT(Endpoints.ACCOUNT.PUT_EDIT_MEMO)
+    suspend fun modifyMemo(
+        @Path(PATH_COUNT) count: Int,
+        @Body request : AccountEditMemoRequestVo
+    ) : Response<ApiResponse<Unit>>
 }

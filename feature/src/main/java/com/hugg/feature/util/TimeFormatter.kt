@@ -5,6 +5,7 @@ import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
 import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.DateTimeFormatterBuilder
 import org.threeten.bp.format.TextStyle
 import java.util.Locale
 
@@ -109,7 +110,12 @@ object TimeFormatter {
     }
 
     fun getKoreanFullDayOfWeek(dateString: String): String {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val formatter = DateTimeFormatterBuilder()
+            .appendOptional(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+            .appendOptional(DateTimeFormatter.ofPattern("yyyy-MM-d"))
+            .appendOptional(DateTimeFormatter.ofPattern("yyyy-M-dd"))
+            .appendOptional(DateTimeFormatter.ofPattern("yyyy-M-d"))
+            .toFormatter(Locale.KOREA)
         val date = LocalDate.parse(dateString, formatter)
         return when (date.dayOfWeek) {
             DayOfWeek.MONDAY -> "월요일"

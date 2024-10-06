@@ -7,4 +7,5 @@ sealed class AccountCreateOrEditEvent : Event {
     data object SuccessCreateAccountEvent : AccountCreateOrEditEvent()
     data object SuccessModifyAccountEvent : AccountCreateOrEditEvent()
     data object SuccessDeleteAccountEvent : AccountCreateOrEditEvent()
+    data object ErrorExceedSubsidyEvent : AccountCreateOrEditEvent()
 }
