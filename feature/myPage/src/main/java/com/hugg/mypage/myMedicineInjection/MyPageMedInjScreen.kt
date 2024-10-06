@@ -48,6 +48,7 @@ fun MyPageMedInjContainer(
     viewModel: MyPageMedInjViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val interactionSource = remember { MutableInteractionSource() }
 
     LaunchedEffect(Unit){
         viewModel.getMyMedicineInjection()
@@ -56,6 +57,7 @@ fun MyPageMedInjContainer(
     MyPageMedInjScreen(
         uiState = uiState,
         goToBack = goToBack,
+        interactionSource = interactionSource,
         onClickTab = { type -> viewModel.onClickTab(type) },
         onClickItem = navigateDetail
     )
@@ -135,7 +137,7 @@ fun MyMedInjItem(
             .padding(horizontal = 8.dp)
             .onThrottleClick(
                 onClick = {
-                    if(UserInfo.info.genderType == GenderType.MALE) return@onThrottleClick
+                    if (UserInfo.info.genderType == GenderType.MALE) return@onThrottleClick
                     onClickItem(recordType, item.id)
                 },
                 interactionSource = interactionSource
