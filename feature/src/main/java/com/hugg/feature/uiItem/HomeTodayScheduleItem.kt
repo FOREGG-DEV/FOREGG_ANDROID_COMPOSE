@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hugg.domain.model.enums.RecordType
@@ -162,9 +163,12 @@ fun HomeTodayScheduleItem(
             Spacer(modifier = Modifier.size(3.dp))
 
             Text(
+                modifier = Modifier.padding(end = 12.dp),
                 text = item.memo,
+                maxLines = 2,
                 style = HuggTypography.p3_l,
-                color = Gs70
+                color = Gs70,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }
