@@ -66,10 +66,6 @@ dependencies {
     implementation(Google.HILT_ANDROID)
     implementation(Google.HILT_CORE)
     implementation(Google.HILT_COMPOSE)
-    implementation(Google.FCM)
-    implementation(Google.FCM_KTX)
-    implementation(Google.FIREBASE_ANALYTICS)
-    implementation(platform(Google.FIREBASE_BOM))
 
     implementation(AndroidX.COMPOSE_BOM)
     implementation(AndroidX.COMPOSE_MATERIAL)
@@ -78,17 +74,7 @@ dependencies {
     implementation(AndroidX.COMPOSE_PREVIEW)
     implementation(AndroidX.ACTIVITY_COMPOSE)
 
-
-
     kapt(Google.HILT_COMPILER)
 
-    implementation(KAKAO.AUTH)
-    implementation(KAKAO.SHARE)
-    implementation(Google.GLIDE)
-
-
-    //Lottie
-    implementation(Libraries.LOTTIE)
-    implementation(Libraries.COIL_SVG)
-    implementation(Libraries.COIL)
+    implementation(Libraries.PAGER)
 }

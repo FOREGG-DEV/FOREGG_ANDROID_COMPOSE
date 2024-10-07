@@ -518,8 +518,9 @@ fun CreateScheduleBtnByType(
                 onClick = { onClickCreateScheduleBtn(type, 0) } ,
                 interactionSource = interactionSource
             )
+            .width(60.dp)
             .background(color = White)
-            .padding(horizontal = 9.dp, vertical = 6.dp),
+            .padding(vertical = 6.dp),
         contentAlignment = Alignment.Center
     ) {
         Text(

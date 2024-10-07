@@ -74,6 +74,7 @@ fun MainScreen(
                 ) {
                     NavHost(navController = navController, startDestination = Routes.SignGraph.route) {
                         signNavGraph(navController)
+                        homeGraph(navController)
                         calendarGraph(navController)
                         accountGraph(navController)
                         dailyHuggGraph(navController)
@@ -113,7 +114,7 @@ fun BottomNavView(
                 .clickable(
                     onClick = {
                         if(type == BottomNavType.HOME) return@clickable
-                        //navigateToRoute()
+                        navigateToRoute(Routes.HomeGraph.route)
                     },
                     interactionSource = interactionSource,
                     indication = null

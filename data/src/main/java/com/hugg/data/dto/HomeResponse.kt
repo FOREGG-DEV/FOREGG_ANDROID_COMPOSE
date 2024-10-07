@@ -15,6 +15,8 @@ data class HomeResponse(
     val homeRecordResponseVo: List<HomeRecordResponseVo> = emptyList(),
     @SerializedName("ssn")
     val ssn: String = "",
+    @SerializedName("todo")
+    val todo: Boolean = false,
     @SerializedName("dailyConditionType")
     val dailyConditionType: DailyConditionType? = DailyConditionType.DEFAULT,
     @SerializedName("dailyContent")

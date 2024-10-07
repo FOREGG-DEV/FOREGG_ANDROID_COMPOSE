@@ -289,6 +289,11 @@ const val MY_PAGE_LOGOUT_COMPLETE_DIALOG = "로그아웃이 완료되었습니�
 const val MY_PAGE_UNREGISTER_DIALOG = "Hugg에서 탈퇴 하시겠습니까?"
 const val MY_PAGE_UNREGISTER_COMPLETE_DIALOG = "탈퇴가 완료되었습니다."
 
+// --------- 홈 --------- //
+const val HOME_TODAY_SCHEDULE_FEMALE = "%s님의\n%d월 %d일 일정이에요."
+const val HOME_TODAY_SCHEDULE_MALE = "%s, %s님의\n%d월 %d일 일정이에요."
+const val HOME_RECORD_MEDICAL = "진료 내용 기록하기"
+
 
 // --------- 에러 Toast --------- //
 const val TOAST_ERROR_NOR_CORRECT_SPOUSE_CODE = "유효하지 않은 배우자코드입니다."

@@ -15,6 +15,7 @@ class MainViewModel @Inject constructor(
             Routes.AccountScreen.route -> BottomNavType.ACCOUNT
             Routes.DailyHuggScreen.route -> BottomNavType.DAILY_HUGG
             Routes.MyPageScreen.route -> BottomNavType.PROFILE
+            Routes.HomeScreen.route -> BottomNavType.HOME
             else -> BottomNavType.OTHER
         }
 

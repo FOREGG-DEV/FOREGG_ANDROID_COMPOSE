@@ -26,6 +26,7 @@ import com.hugg.domain.model.request.sign.SignUpMaleRequestVo
 import com.hugg.domain.model.request.sign.SignUpRequestVo
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UserInfo
+import com.hugg.home.homeMain.HomeContainer
 import com.hugg.mypage.cs.MyPageCsContainer
 import com.hugg.mypage.main.MyPageContainer
 import com.hugg.mypage.myMedicineInjection.MyPageMedInjContainer
@@ -46,7 +47,7 @@ fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
 
         composable(Routes.OnboardingScreen.route) { OnboardingContainer(
             navigateServiceTerms = { accessToken : String -> navController.navigate(route = Routes.ServiceTermsScreen.getRouteServiceTerms(accessToken)) },
-            navigateHome = { navController.navigate(route = Routes.CalendarGraph.route) } // 임시!
+            navigateHome = { navController.navigate(route = Routes.HomeGraph.route) }
         ) }
 
         composable(
@@ -157,7 +158,7 @@ fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
             val count = it.arguments?.getInt("count") ?: 0
             val date = it.arguments?.getString("date") ?: ""
             SpouseCodeFemaleContainer(
-                navigateGoToHome = { navController.navigate(route = Routes.CalendarGraph.route) }, // 임시!
+                navigateGoToHome = { navController.navigate(route = Routes.HomeGraph.route) },
                 accessToken = accessToken,
                 signUpRequestVo = SignUpRequestVo(
                     surgeryType = type,
@@ -181,7 +182,7 @@ fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
             val accessToken = it.arguments?.getString("accessToken") ?: ""
             val ssn = it.arguments?.getString("ssn") ?: ""
             MaleSignUpContainer(
-                navigateGoToHome = { navController.navigate(route = Routes.CalendarGraph.route) }, // 임시
+                navigateGoToHome = { navController.navigate(route = Routes.HomeGraph.route) },
                 accessToken = accessToken,
                 signUpMaleRequestVo = SignUpMaleRequestVo(spouseCode = "", ssn = ssn, fcmToken = ""),
                 goToBack = { navController.popBackStack() }
@@ -406,5 +407,17 @@ fun NavGraphBuilder.myPageGraph(navController: NavHostController) {
                 }
             )
         }
+    }
+}
+
+fun NavGraphBuilder.homeGraph(navController: NavHostController) {
+    navigation(startDestination = Routes.HomeScreen.route, route = Routes.HomeGraph.route) {
+
+        composable(Routes.HomeScreen.route) { HomeContainer(
+            navigateGoToCalendarDetail = { id -> },
+            navigateGoToChallenge = {},
+            navigateGoToDailyHugg = {},
+            navigateGoToNotification = {}
+        ) }
     }
 }

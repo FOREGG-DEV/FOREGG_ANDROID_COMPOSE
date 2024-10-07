@@ -47,6 +47,7 @@ dependencies {
 
     implementation(project(":feature"))
     implementation(project(":feature:sign"))
+    implementation(project(":feature:home"))
     implementation(project(":feature:calendar"))
     implementation(project(":feature:account"))
     implementation(project(":feature:dailyHugg"))
