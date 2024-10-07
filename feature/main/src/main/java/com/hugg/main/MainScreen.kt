@@ -1,5 +1,6 @@
 package com.hugg.main
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -22,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -29,6 +31,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.hugg.domain.model.enums.BottomNavType
+import com.hugg.feature.R
 import com.hugg.feature.theme.Gs50
 import com.hugg.feature.theme.Gs80
 import com.hugg.feature.theme.HuggTheme
@@ -117,11 +120,12 @@ fun BottomNavView(
                 ),
             horizontalAlignment = Alignment.CenterHorizontally
         ){
-            Box(modifier = Modifier
-                .padding(top = 6.dp, start = 10.dp, end = 10.dp)
-                .size(28.dp)
-                .background(Gs50)
+            Image(
+                modifier = Modifier.padding(top = 6.dp, start = 10.dp, end = 10.dp ),
+                painter = painterResource(id = if (type == BottomNavType.HOME) R.drawable.ic_home_active else R.drawable.ic_home_inactive),
+                contentDescription = null
             )
+
             Spacer(modifier = Modifier.size(3.dp))
 
             Text(
@@ -144,11 +148,13 @@ fun BottomNavView(
                 ),
             horizontalAlignment = Alignment.CenterHorizontally
         ){
-            Box(modifier = Modifier
-                .padding(top = 6.dp, start = 10.dp, end = 10.dp)
-                .size(28.dp)
-                .background(Gs50)
+
+            Image(
+                modifier = Modifier.padding(top = 6.dp, start = 10.dp, end = 10.dp ),
+                painter = painterResource(id = if (type == BottomNavType.CALENDAR) R.drawable.ic_calendar_active else R.drawable.ic_calendar_inactive),
+                contentDescription = null
             )
+
             Spacer(modifier = Modifier.size(3.dp))
 
             Text(
@@ -171,11 +177,12 @@ fun BottomNavView(
                 ),
             horizontalAlignment = Alignment.CenterHorizontally
         ){
-            Box(modifier = Modifier
-                .padding(top = 6.dp, start = 10.dp, end = 10.dp)
-                .size(28.dp)
-                .background(Gs50)
+            Image(
+                modifier = Modifier.padding(top = 6.dp, start = 10.dp, end = 10.dp ),
+                painter = painterResource(id = if (type == BottomNavType.DAILY_HUGG) R.drawable.ic_daily_hugg_active else R.drawable.ic_daily_hugg_inactive),
+                contentDescription = null
             )
+
             Spacer(modifier = Modifier.size(3.dp))
 
             Text(
@@ -198,11 +205,12 @@ fun BottomNavView(
                 ),
             horizontalAlignment = Alignment.CenterHorizontally
         ){
-            Box(modifier = Modifier
-                .padding(top = 6.dp, start = 10.dp, end = 10.dp)
-                .size(28.dp)
-                .background(Gs50)
+            Image(
+                modifier = Modifier.padding(top = 6.dp, start = 10.dp, end = 10.dp ),
+                painter = painterResource(id = if (type == BottomNavType.ACCOUNT) R.drawable.ic_account_active else R.drawable.ic_account_inactive),
+                contentDescription = null
             )
+
             Spacer(modifier = Modifier.size(3.dp))
 
             Text(
@@ -225,11 +233,12 @@ fun BottomNavView(
                 ),
             horizontalAlignment = Alignment.CenterHorizontally
         ){
-            Box(modifier = Modifier
-                .padding(top = 6.dp, start = 10.dp, end = 10.dp)
-                .size(28.dp)
-                .background(Gs50)
+            Image(
+                modifier = Modifier.padding(top = 6.dp, start = 10.dp, end = 10.dp ),
+                painter = painterResource(id = if (type == BottomNavType.PROFILE) R.drawable.ic_my_page_active else R.drawable.ic_my_page_inactive),
+                contentDescription = null
             )
+
             Spacer(modifier = Modifier.size(3.dp))
 
             Text(
