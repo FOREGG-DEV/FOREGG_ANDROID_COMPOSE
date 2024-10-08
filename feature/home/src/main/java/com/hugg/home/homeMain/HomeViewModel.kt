@@ -64,14 +64,6 @@ class HomeViewModel @Inject constructor(
                 todayScheduleList = splitTodayScheduleByRepeatedTime(result.homeRecordResponseVo)
             )
         )
-//        viewModelScope.launch {
-//            dailyConditionTypeImageStateFlow.update { getDailyConditionTypeImage(result.dailyConditionType) }
-//            dailyContentStateFlow.update { result.dailyContent }
-//            medicalRecordStateFlow.update { result.latestMedicalRecord }
-//            medicalRecordIdStateFlow.update { result.medicalRecordId }
-//            if (UserInfo.info.genderType == GenderType.FEMALE) formattedTextStateFlow.update { resourceProvider.getString(R.string.today_schedule_format, userNameStateFlow.value, month, day) }
-//            else formattedTextStateFlow.update { resourceProvider.getString(R.string.today_schedule_husband_format, userNameStateFlow.value, husbandNameStateFlow.value, month, day) }
-//        }
     }
 
     private fun splitTodayScheduleByRepeatedTime(currentList: List<HomeRecordResponseVo>): List<HomeTodayScheduleCardVo> {
@@ -124,29 +116,8 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun handleSuccessGetMyChallengeList(list: List<MyChallengeListItemVo>) {
-        val dummy = listOf<MyChallengeListItemVo>(
-            MyChallengeListItemVo(
-                id = -2,
-                description = "대충 설명 1",
-                image = "https://drive.google.com/uc?export=download&id=1ncLWFCTQHIC3Sthy79CitXgwmA3Jxf02",
-                name = "대충 제목 입니다. 1"
-            ),
-            MyChallengeListItemVo(
-                id = -2,
-                description = "대충 설명 2",
-                image = "https://drive.google.com/uc?export=download&id=1ncLWFCTQHIC3Sthy79CitXgwmA3Jxf02",
-                name = "대충 제목 입니다. 2",
-                successDays = listOf("화")
-            ),
-            MyChallengeListItemVo(
-                id = -2,
-                description = "대충 설명 3",
-                image = "https://drive.google.com/uc?export=download&id=1ncLWFCTQHIC3Sthy79CitXgwmA3Jxf02",
-                name = "대충 제목 입니다. 3",
-            )
-        )
         updateState(
-            uiState.value.copy(challengeList = getSortedByCompleteChallenge(dummy))
+            uiState.value.copy(challengeList = getSortedByCompleteChallenge(list))
         )
     }
 
@@ -174,7 +145,6 @@ class HomeViewModel @Inject constructor(
     }
 
     fun completeChallenge(content : String){
-        ForeggLog.D(content)
         updateShowChallengeCompleteDialog(true)
         //        viewModelScope.launch {
 //            challengeRepository.completeChallenge(id).collect {
