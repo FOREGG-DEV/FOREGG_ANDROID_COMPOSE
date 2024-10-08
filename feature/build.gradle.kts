@@ -71,4 +71,5 @@ dependencies {
     kapt(Google.HILT_COMPILER)
 
     implementation(Libraries.COIL_COMPOSE)
+    implementation(Libraries.LOTTIE)
 }

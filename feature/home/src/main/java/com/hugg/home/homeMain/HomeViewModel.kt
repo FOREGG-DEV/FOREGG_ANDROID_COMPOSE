@@ -175,6 +175,7 @@ class HomeViewModel @Inject constructor(
 
     fun completeChallenge(content : String){
         ForeggLog.D(content)
+        updateShowChallengeCompleteDialog(true)
         //        viewModelScope.launch {
 //            challengeRepository.completeChallenge(id).collect {
 //                resultResponse(it, { updateShowInputImpressionDialog(true) })
@@ -184,5 +185,9 @@ class HomeViewModel @Inject constructor(
 
     fun updateShowInputImpressionDialog(isShow : Boolean){
         updateState(uiState.value.copy(showInputImpressionDialog = isShow))
+    }
+
+    fun updateShowChallengeCompleteDialog(isShow : Boolean){
+        updateState(uiState.value.copy(showCompleteChallengeDialog = isShow))
     }
 }

@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,8 +30,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.hugg.domain.model.enums.DialogType
+import com.hugg.feature.R
 import com.hugg.feature.theme.Black
+import com.hugg.feature.theme.CHALLENGE_COMPLETE
+import com.hugg.feature.theme.CHALLENGE_GET_POINT
 import com.hugg.feature.theme.DIALOG_MAX_LENGTH
 import com.hugg.feature.theme.Gs10
 import com.hugg.feature.theme.Gs30
@@ -42,10 +50,12 @@ import com.hugg.feature.theme.Sunday
 import com.hugg.feature.theme.WORD_NO
 import com.hugg.feature.theme.WORD_YES
 import com.hugg.feature.theme.White
+import com.hugg.feature.theme.challenge
 import com.hugg.feature.theme.h2
 import com.hugg.feature.theme.h3
 import com.hugg.feature.theme.p1_l
 import com.hugg.feature.theme.p3_l
+import com.hugg.feature.util.ForeggLog
 
 @Composable
 fun HuggDialog(
@@ -227,6 +237,57 @@ fun HuggInputDialog(
                     onClickCancel()
                     onClickPositive(inputContent)
                 }
+            )
+        }
+    }
+}
+
+@Composable
+fun ChallengeCompleteDialog(
+    onClickCancel : () -> Unit = {},
+    points : Int = 0,
+){
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.challenge_complete))
+    val progress by animateLottieCompositionAsState(
+        composition,
+        iterations = 1
+    )
+
+    LaunchedEffect(progress) {
+        if (progress == 1f) {
+            onClickCancel()
+        }
+    }
+
+    Dialog(
+        onDismissRequest = onClickCancel,
+        properties = DialogProperties(usePlatformDefaultWidth = false)
+    ){
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ){
+            Text(
+                text = CHALLENGE_COMPLETE,
+                color = White,
+                style = challenge()
+            )
+
+            Spacer(modifier = Modifier.size(8.dp))
+
+            LottieAnimation(
+                composition = composition,
+                progress = progress,
+                modifier = Modifier.size(258.dp)
+            )
+
+            Spacer(modifier = Modifier.size(8.dp))
+
+            Text(
+                text = CHALLENGE_GET_POINT(points),
+                color = White,
+                style = challenge()
             )
         }
     }

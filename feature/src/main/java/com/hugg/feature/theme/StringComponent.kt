@@ -305,6 +305,14 @@ const val HOME_PARTICIPATE_CHALLENGE = "챌린지 참여"
 
 // --------- 챌린지 --------- //
 const val CHALLENGE_DIALOG_INPUT_IMPRESSION_TITLE = "한 줄 소감을 입력해주세요"
+const val CHALLENGE_COMPLETE = "챌린지 성공"
+fun CHALLENGE_GET_POINT(points : Int) = buildAnnotatedString {
+    withStyle(style = SpanStyle(color = Sub)) {
+        append("${points}P")
+    }
+    append(" 획득!")
+}
+
 
 
 // --------- 에러 Toast --------- //

@@ -44,6 +44,7 @@ import com.hugg.domain.model.enums.TopBarRightType
 import com.hugg.domain.model.response.challenge.MyChallengeListItemVo
 import com.hugg.domain.model.response.home.HomeRecordResponseVo
 import com.hugg.domain.model.vo.home.HomeTodayScheduleCardVo
+import com.hugg.feature.component.ChallengeCompleteDialog
 import com.hugg.feature.component.HuggDialog
 import com.hugg.feature.component.HuggInputDialog
 import com.hugg.feature.component.TopBar
@@ -102,6 +103,13 @@ fun HomeContainer(
             positiveText = WORD_CONFIRM,
             onClickCancel = { viewModel.updateShowInputImpressionDialog(false) },
             onClickPositive = { content -> viewModel.completeChallenge(content)}
+        )
+    }
+
+    if(uiState.showCompleteChallengeDialog){
+        ChallengeCompleteDialog(
+            onClickCancel = { viewModel.updateShowChallengeCompleteDialog(false) },
+            points = 500 // 임시
         )
     }
 }
