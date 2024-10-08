@@ -628,7 +628,8 @@ internal fun SelectAlarmOnAndOffView(
                     uncheckedThumbColor = White,
                     uncheckedTrackColor = Gs20,
                     uncheckedBorderColor = Gs20,
-                )
+                ),
+                thumbContent = {}
             )
         }
 
@@ -793,7 +794,8 @@ internal fun SelectRepeatEveryDayView(
                     uncheckedThumbColor = White,
                     uncheckedTrackColor = Gs20,
                     uncheckedBorderColor = Gs20,
-                )
+                ),
+                thumbContent = {}
             )
         }
 
@@ -858,5 +860,5 @@ fun InputMemoView(
 @Preview
 @Composable
 internal fun PrevainContainer() {
-    ScheduleCreateOrEditScreen()
+    SelectAlarmOnAndOffView()
 }

@@ -40,6 +40,7 @@ class MainActivity : ComponentActivity() {
             getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         currentFocus?.let {
             imm.hideSoftInputFromWindow(it.windowToken, 0)
+            it.clearFocus()
         }
         return super.dispatchTouchEvent(ev)
     }

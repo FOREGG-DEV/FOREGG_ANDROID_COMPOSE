@@ -77,4 +77,5 @@ dependencies {
     kapt(Google.HILT_COMPILER)
 
     implementation(Libraries.PAGER)
+    implementation(Libraries.COIL_COMPOSE)
 }

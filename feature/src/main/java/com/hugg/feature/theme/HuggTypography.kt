@@ -22,6 +22,12 @@ val huggFontFamily = FontFamily(
     Font(R.font.pretendard_regular, FontWeight.Normal),
 )
 
+val huggSemiFontFamily = FontFamily(
+    Font(R.font.gmarketsans_bold, FontWeight.Bold),
+    Font(R.font.gmarketsans_light, FontWeight.Light),
+    Font(R.font.gmarketsans_medium, FontWeight.Medium),
+)
+
 @Composable
 fun btn() : TextStyle = TextStyle(
     fontFamily = huggFontFamily,
@@ -137,4 +143,12 @@ fun p5(): TextStyle = TextStyle(
     letterSpacing = dpToSp((-0.03).dp),
     lineHeight = dpToSp(dp = (11.2).dp),
     fontSize = dpToSp(dp = 8.dp)
+)
+
+@Composable
+fun challenge() : TextStyle = TextStyle(
+    fontSize = dpToSp(dp = 40.dp),
+    lineHeight = dpToSp(dp = 40.dp),
+    fontFamily = huggSemiFontFamily,
+    fontWeight = FontWeight.Normal,
 )

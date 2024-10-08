@@ -36,7 +36,7 @@ object Versions {
     const val RETROFIT = "2.9.0"
     const val OKHTTP = "4.10.0"
     const val PAGER = "0.28.0"
-    const val LOTTIE = "3.7.0"
+    const val LOTTIE = "6.5.2"
     const val COIL = "2.3.0"
     const val GRID = "2.0.0"
 
