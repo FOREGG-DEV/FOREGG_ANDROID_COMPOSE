@@ -23,6 +23,7 @@ object Endpoints {
         const val DELETE = "$RECORD/{id}/delete"
         const val DETAIL = "$RECORD/{id}/detail"
         const val SCHEDULE_LIST = "schedule"
+        const val CHECK_TODO = "$RECORD/checkTodo/{id}"
     }
 
     object Home {

@@ -8,6 +8,7 @@ import com.hugg.domain.model.response.profile.ProfileDetailResponseVo
 import com.hugg.domain.model.vo.home.HomeTodayScheduleCardVo
 import com.hugg.domain.repository.HomeRepository
 import com.hugg.domain.repository.ProfileRepository
+import com.hugg.domain.repository.ScheduleRepository
 import com.hugg.feature.base.BaseViewModel
 import com.hugg.feature.util.ForeggLog
 import com.hugg.feature.util.UserInfo
@@ -22,7 +23,8 @@ import kotlin.math.abs
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val homeRepository: HomeRepository
+    private val homeRepository: HomeRepository,
+    private val scheduleRepository: ScheduleRepository
 ) : BaseViewModel<HomePageState>(
     HomePageState()
 ) {
@@ -99,4 +101,11 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun onClickTodo(id : Long) {
+        viewModelScope.launch {
+            scheduleRepository.checkTodoRecord(id).collect {
+                resultResponse(it, { getHome() })
+            }
+        }
+    }
 }

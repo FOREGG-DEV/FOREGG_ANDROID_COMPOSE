@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -80,6 +81,7 @@ fun HomeContainer(
         navigateGoToChallenge = navigateGoToChallenge,
         navigateGoToNotification = navigateGoToNotification,
         navigateGoToDailyHugg = navigateGoToDailyHugg,
+        onClickTodo = { id -> viewModel.onClickTodo(id) }
     )
 }
 
@@ -90,6 +92,7 @@ fun HomeScreen(
     pagerState : PagerState = rememberPagerState(),
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     navigateGoToCalendarDetail : (Long) -> Unit = {},
+    onClickTodo: (Long) -> Unit = {},
     navigateGoToChallenge : () -> Unit = {},
     navigateGoToNotification : () -> Unit = {},
     navigateGoToDailyHugg : () -> Unit = {},
@@ -113,7 +116,21 @@ fun HomeScreen(
                 TodayRecordHorizontalPager(
                     itemList = uiState.todayScheduleList,
                     pagerState = pagerState,
-                    interactionSource = interactionSource
+                    interactionSource = interactionSource,
+                    onClickTodo = onClickTodo,
+                    onClickDetail = navigateGoToCalendarDetail
+                )
+            }
+
+            item {
+                Spacer(modifier = Modifier.size(32.dp))
+
+                Box(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .aspectRatio(343f / 88f)
+                        .background(color = Gs80, shape = RoundedCornerShape(8.dp))
+                        .fillMaxWidth()
                 )
             }
         }
@@ -125,8 +142,9 @@ fun HomeScreen(
 fun TodayRecordHorizontalPager(
     itemList : List<HomeTodayScheduleCardVo>,
     pagerState: PagerState,
-    interactionSource: MutableInteractionSource
-
+    interactionSource: MutableInteractionSource,
+    onClickTodo : (Long) -> Unit = {},
+    onClickDetail : (Long) -> Unit = {},
 ){
     val configuration = LocalConfiguration.current
     val screenWidthDp = configuration.screenWidthDp.dp
@@ -164,7 +182,9 @@ fun TodayRecordHorizontalPager(
             ) { page ->
                 HomeTodayScheduleItem(
                     item = itemList[page],
-                    interactionSource = interactionSource
+                    interactionSource = interactionSource,
+                    onClickDetail = onClickDetail,
+                    onClickTodo = onClickTodo
                 )
             }
         }

@@ -10,6 +10,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -57,4 +58,9 @@ interface ScheduleApi {
     suspend fun getScheduleList(
         @Query(QUERY_YEAR_AND_MONTH) yearmonth : String
     ) : Response<ApiResponse<ScheduleListResponse>>
+
+    @PATCH(Endpoints.RECORD.CHECK_TODO)
+    suspend fun checkTodoSchedule(
+        @Path(PATH_ID) id : Long
+    ) : Response<ApiResponse<Unit>>
 }
