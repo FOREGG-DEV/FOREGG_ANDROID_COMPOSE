@@ -14,10 +14,12 @@ import com.hugg.domain.repository.ProfileRepository
 import com.hugg.domain.repository.ScheduleRepository
 import com.hugg.feature.base.BaseViewModel
 import com.hugg.feature.util.ForeggLog
+import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UserInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.threeten.bp.LocalDate
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -122,9 +124,40 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun handleSuccessGetMyChallengeList(list: List<MyChallengeListItemVo>) {
-        updateState(
-            uiState.value.copy(challengeList = list)
+        val dummy = listOf<MyChallengeListItemVo>(
+            MyChallengeListItemVo(
+                id = -2,
+                description = "대충 설명 1",
+                image = "https://drive.google.com/uc?export=download&id=1ncLWFCTQHIC3Sthy79CitXgwmA3Jxf02",
+                name = "대충 제목 입니다. 1"
+            ),
+            MyChallengeListItemVo(
+                id = -2,
+                description = "대충 설명 2",
+                image = "https://drive.google.com/uc?export=download&id=1ncLWFCTQHIC3Sthy79CitXgwmA3Jxf02",
+                name = "대충 제목 입니다. 2",
+                successDays = listOf("화")
+            ),
+            MyChallengeListItemVo(
+                id = -2,
+                description = "대충 설명 3",
+                image = "https://drive.google.com/uc?export=download&id=1ncLWFCTQHIC3Sthy79CitXgwmA3Jxf02",
+                name = "대충 제목 입니다. 3",
+            )
         )
+        updateState(
+            uiState.value.copy(challengeList = getSortedByCompleteChallenge(dummy))
+        )
+    }
+
+    private fun getSortedByCompleteChallenge(list: List<MyChallengeListItemVo>) : List<MyChallengeListItemVo>{
+        val newList = list.map {
+            it.copy(
+                isCompleteToday = it.successDays?.any { it == TimeFormatter.getKoreanDayOfWeek(LocalDate.now().dayOfWeek) } == true
+            )
+        }
+
+        return newList.sortedBy { it.isCompleteToday }
     }
 
     fun onClickTodo(id : Long) {
@@ -133,5 +166,23 @@ class HomeViewModel @Inject constructor(
                 resultResponse(it, { getHome() })
             }
         }
+    }
+
+    fun selectIncompleteChallenge(id: Long) {
+        updateState(uiState.value.copy(selectedChallengeId = id))
+        updateShowInputImpressionDialog(true)
+    }
+
+    fun completeChallenge(content : String){
+        ForeggLog.D(content)
+        //        viewModelScope.launch {
+//            challengeRepository.completeChallenge(id).collect {
+//                resultResponse(it, { updateShowInputImpressionDialog(true) })
+//            }
+//        }
+    }
+
+    fun updateShowInputImpressionDialog(isShow : Boolean){
+        updateState(uiState.value.copy(showInputImpressionDialog = isShow))
     }
 }

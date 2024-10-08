@@ -69,4 +69,6 @@ dependencies {
     implementation(Google.HILT_CORE)
     implementation(Google.HILT_COMPOSE)
     kapt(Google.HILT_COMPILER)
+
+    implementation(Libraries.COIL_COMPOSE)
 }

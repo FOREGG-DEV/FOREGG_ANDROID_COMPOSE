@@ -7,4 +7,7 @@ import com.hugg.feature.base.PageState
 data class HomePageState(
     val todayScheduleList : List<HomeTodayScheduleCardVo> = emptyList(),
     val challengeList: List<MyChallengeListItemVo> = emptyList(),
+    val selectedChallengeId : Long = -1,
+    val showInputImpressionDialog : Boolean = false,
+    val showCompleteChallengeDialog : Boolean = false,
 ) : PageState

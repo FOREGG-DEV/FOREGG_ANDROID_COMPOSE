@@ -1,5 +1,6 @@
 package com.hugg.home.homeMain
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -43,9 +44,13 @@ import com.hugg.domain.model.enums.TopBarRightType
 import com.hugg.domain.model.response.challenge.MyChallengeListItemVo
 import com.hugg.domain.model.response.home.HomeRecordResponseVo
 import com.hugg.domain.model.vo.home.HomeTodayScheduleCardVo
+import com.hugg.feature.component.HuggDialog
+import com.hugg.feature.component.HuggInputDialog
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
+import com.hugg.feature.uiItem.HomeMyChallengeItem
 import com.hugg.feature.uiItem.HomeTodayScheduleItem
+import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UserInfo
 import com.hugg.feature.util.onThrottleClick
@@ -64,6 +69,7 @@ fun HomeContainer(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val pagerState = rememberPagerState()
     val interactionSource = remember { MutableInteractionSource() }
+    val context = LocalContext.current
 
     LaunchedEffect(Unit){
         viewModel.getHome()
@@ -84,8 +90,20 @@ fun HomeContainer(
         navigateGoToChallenge = navigateGoToChallenge,
         navigateGoToNotification = navigateGoToNotification,
         navigateGoToDailyHugg = navigateGoToDailyHugg,
-        onClickTodo = { id -> viewModel.onClickTodo(id) }
+        onClickTodo = { id -> viewModel.onClickTodo(id) },
+        context = context,
+        onClickCompleteChallenge = { id -> viewModel.selectIncompleteChallenge(id)}
     )
+
+    if(uiState.showInputImpressionDialog){
+        HuggInputDialog(
+            title = CHALLENGE_DIALOG_INPUT_IMPRESSION_TITLE,
+            maxLength = 15,
+            positiveText = WORD_CONFIRM,
+            onClickCancel = { viewModel.updateShowInputImpressionDialog(false) },
+            onClickPositive = { content -> viewModel.completeChallenge(content)}
+        )
+    }
 }
 
 @OptIn(ExperimentalPagerApi::class)
@@ -99,6 +117,8 @@ fun HomeScreen(
     navigateGoToChallenge : () -> Unit = {},
     navigateGoToNotification : () -> Unit = {},
     navigateGoToDailyHugg : () -> Unit = {},
+    context : Context,
+    onClickCompleteChallenge : (Long) -> Unit = {},
 ) {
     Column(
         modifier = Modifier
@@ -144,7 +164,9 @@ fun HomeScreen(
                     MyChallengeView(
                         challengeList = uiState.challengeList,
                         navigateGoToChallenge = navigateGoToChallenge,
-                        interactionSource = interactionSource
+                        interactionSource = interactionSource,
+                        context = context,
+                        onClickCompleteChallenge = onClickCompleteChallenge
                     )
                 }
             }
@@ -218,7 +240,9 @@ fun TodayRecordHorizontalPager(
 fun MyChallengeView(
     challengeList : List<MyChallengeListItemVo> = emptyList(),
     navigateGoToChallenge: () -> Unit = {},
-    interactionSource: MutableInteractionSource
+    interactionSource: MutableInteractionSource,
+    context : Context,
+    onClickCompleteChallenge : (Long) -> Unit = {},
 ){
     Row(
         modifier = Modifier.padding(horizontal = 16.dp)
@@ -250,6 +274,18 @@ fun MyChallengeView(
             navigateGoToChallenge = navigateGoToChallenge,
             interactionSource = interactionSource
         )
+    }
+    else{
+        repeat(challengeList.size) { index ->
+            HomeMyChallengeItem(
+                item = challengeList[index],
+                context = context,
+                onClickCompleteChallenge = onClickCompleteChallenge,
+                interactionSource = interactionSource
+            )
+
+            Spacer(modifier = Modifier.size(8.dp))
+        }
     }
 }
 
@@ -299,11 +335,4 @@ fun EmptyChallengeView(
             )
         }
     }
-}
-
-@OptIn(ExperimentalPagerApi::class)
-@Preview
-@Composable
-internal fun PreviewMainContainer() {
-    HomeScreen()
 }

@@ -37,6 +37,10 @@ const val WORD_EVERYDAY ="매일"
 const val WORD_LOGOUT = "로그아웃"
 const val WORD_UNREGISTER = "탈퇴"
 const val WORD_NOTIFICATION = "알림"
+const val WORD_COMPLETE = "완료"
+const val WORD_INCOMPLETE = "미완료"
+
+const val DIALOG_MAX_LENGTH = "최대 %d"
 
 // --------- 기타 --------- //
 const val COPY_COMPLETE_TEXT = "클립보드에 배우자 코드가 복사되었어요!"
@@ -298,6 +302,9 @@ const val HOME_MY_CHALLENGE = "생활습관 챌린지"
 const val HOME_EMPTY_MY_CHALLENGE_TITLE = "챌린지에 참여해 보세요."
 const val HOME_EMPTY_MY_CHALLENGE_CONTENT = "어쩌구 저쩌구 다양한 생활 습관 챌린지를 같이 할 수 있어요"
 const val HOME_PARTICIPATE_CHALLENGE = "챌린지 참여"
+
+// --------- 챌린지 --------- //
+const val CHALLENGE_DIALOG_INPUT_IMPRESSION_TITLE = "한 줄 소감을 입력해주세요"
 
 
 // --------- 에러 Toast --------- //
