@@ -28,8 +28,9 @@ import com.hugg.feature.theme.ACCOUNT_ADD_ROUND
 import com.hugg.feature.theme.Gs20
 import com.hugg.feature.theme.Gs50
 import com.hugg.feature.theme.Gs90
-import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.White
+import com.hugg.feature.theme.h2
+import com.hugg.feature.theme.p2
 import com.hugg.feature.util.UnitFormatter
 import com.hugg.feature.util.UserInfo
 
@@ -71,7 +72,7 @@ fun RemoteRound(
                 modifier = Modifier.align(Alignment.CenterVertically),
                 text = UnitFormatter.getRoundFormat(nowRound),
                 color = Gs90,
-                style = HuggTypography.h2
+                style = h2()
             )
 
             Spacer(modifier = Modifier.size(35.dp))
@@ -115,7 +116,7 @@ fun RemoteRound(
                                 indication = null
                             ),
                         text = ACCOUNT_ADD_ROUND,
-                        style = HuggTypography.p2,
+                        style = p2(),
                         color = Gs50
                     )
                 }

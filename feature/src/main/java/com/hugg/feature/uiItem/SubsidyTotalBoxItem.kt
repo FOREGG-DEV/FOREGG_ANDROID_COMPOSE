@@ -27,7 +27,8 @@ import com.hugg.feature.theme.CalendarHospital
 import com.hugg.feature.theme.CalendarInjection
 import com.hugg.feature.theme.Gs60
 import com.hugg.feature.theme.Gs80
-import com.hugg.feature.theme.HuggTypography
+import com.hugg.feature.theme.p1
+import com.hugg.feature.theme.p3
 import com.hugg.feature.util.UnitFormatter
 
 @Composable
@@ -65,7 +66,7 @@ fun SubsidyTotalBoxItem(
 
         Text(
             text = UnitFormatter.getSubsidyTitleFormat(item.nickname),
-            style = HuggTypography.p1,
+            style = p1(),
             color = Gs80
         )
 
@@ -80,7 +81,7 @@ fun SubsidyTotalBoxItem(
 
         Text(
             text = ACCOUNT_AVAILABLE_MONEY,
-            style = HuggTypography.p3,
+            style = p3(),
             color = Gs60
         )
 
@@ -88,7 +89,7 @@ fun SubsidyTotalBoxItem(
 
         Text(
             text = UnitFormatter.getMoneyFormatWithUnit(item.amount),
-            style = HuggTypography.p1,
+            style = p1(),
             color = Gs80
         )
 

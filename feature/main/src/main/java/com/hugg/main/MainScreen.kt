@@ -35,13 +35,13 @@ import com.hugg.feature.R
 import com.hugg.feature.theme.Gs50
 import com.hugg.feature.theme.Gs80
 import com.hugg.feature.theme.HuggTheme
-import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.WORD_ACCOUNT
 import com.hugg.feature.theme.WORD_CALENDAR
 import com.hugg.feature.theme.WORD_DAILY_HUGG
 import com.hugg.feature.theme.WORD_HOME
 import com.hugg.feature.theme.WORD_MY
 import com.hugg.feature.theme.White
+import com.hugg.feature.theme.p4
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Composable
@@ -132,7 +132,7 @@ fun BottomNavView(
             Text(
                 modifier = Modifier.padding(bottom = 1.dp),
                 text = WORD_HOME,
-                style = HuggTypography.p4,
+                style = p4(),
                 color = if(type == BottomNavType.HOME) Gs80 else Gs50
             )
         }
@@ -161,7 +161,7 @@ fun BottomNavView(
             Text(
                 modifier = Modifier.padding(bottom = 1.dp),
                 text = WORD_CALENDAR,
-                style = HuggTypography.p4,
+                style = p4(),
                 color = if(type == BottomNavType.CALENDAR) Gs80 else Gs50
             )
         }
@@ -189,7 +189,7 @@ fun BottomNavView(
             Text(
                 modifier = Modifier.padding(bottom = 1.dp),
                 text = WORD_DAILY_HUGG,
-                style = HuggTypography.p4,
+                style = p4(),
                 color = if(type == BottomNavType.DAILY_HUGG) Gs80 else Gs50
             )
         }
@@ -217,7 +217,7 @@ fun BottomNavView(
             Text(
                 modifier = Modifier.padding(bottom = 1.dp),
                 text = WORD_ACCOUNT,
-                style = HuggTypography.p4,
+                style = p4(),
                 color = if(type == BottomNavType.ACCOUNT) Gs80 else Gs50
             )
         }
@@ -245,7 +245,7 @@ fun BottomNavView(
             Text(
                 modifier = Modifier.padding(bottom = 1.dp),
                 text = WORD_MY,
-                style = HuggTypography.p4,
+                style = p4(),
                 color = if(type == BottomNavType.PROFILE) Gs80 else Gs50
             )
         }

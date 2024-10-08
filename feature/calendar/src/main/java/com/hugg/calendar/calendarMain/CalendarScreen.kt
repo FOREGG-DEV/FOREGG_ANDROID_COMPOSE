@@ -211,7 +211,7 @@ fun CalendarHeadItem(
     Text(
         text = item.day,
         color = if(item.isSunday) Sunday else Gs80,
-        style = HuggTypography.h4
+        style = h4()
     )
 }
 
@@ -248,7 +248,7 @@ fun CalendarDayItem(
                 textAlign = TextAlign.Center,
                 text = item.day,
                 color = getDayTextColor(item),
-                style = HuggTypography.p2
+                style = p2()
             )
         }
 
@@ -295,7 +295,7 @@ fun CalendarDayItem(
                     text = text,
                     color = Gs70,
                     maxLines = 1,
-                    style = HuggTypography.p5,
+                    style = p5(),
                 )
             }
 
@@ -369,7 +369,7 @@ fun ScheduleDialogPagerItem(
             modifier = Modifier
                 .padding(start = 16.dp),
             text = calendarDayVo.realDate,
-            style = HuggTypography.h2,
+            style = h2(),
             color = Gs80
         )
 
@@ -379,7 +379,7 @@ fun ScheduleDialogPagerItem(
             modifier = Modifier
                 .padding(start = 16.dp),
             text = CALENDAR_EMPTY_SCHEDULE,
-            style = HuggTypography.h4,
+            style = h4(),
             color = Gs50
         )
         else LazyColumn {
@@ -515,7 +515,7 @@ fun CreateScheduleBtnByType(
                 shape = RoundedCornerShape(999.dp)
             )
             .onThrottleClick(
-                onClick = { onClickCreateScheduleBtn(type, 0) } ,
+                onClick = { onClickCreateScheduleBtn(type, 0) },
                 interactionSource = interactionSource
             )
             .width(60.dp)
@@ -525,7 +525,7 @@ fun CreateScheduleBtnByType(
     ) {
         Text(
             text = text,
-            style = HuggTypography.h4,
+            style = h4(),
             color = Gs80
         )
     }

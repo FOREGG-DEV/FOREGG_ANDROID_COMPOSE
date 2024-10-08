@@ -32,8 +32,10 @@ import com.hugg.feature.theme.CalendarPill
 import com.hugg.feature.theme.Gs10
 import com.hugg.feature.theme.Gs70
 import com.hugg.feature.theme.Gs90
-import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.White
+import com.hugg.feature.theme.h2
+import com.hugg.feature.theme.p2_l
+import com.hugg.feature.theme.p3
 import com.hugg.feature.util.TimeFormatter
 import org.threeten.bp.LocalTime
 import org.threeten.bp.format.DateTimeFormatter
@@ -50,7 +52,12 @@ fun ScheduleDetailItem(
             .fillMaxWidth()
             .background(color = White)
             .clickable(
-                onClick = { onClickEditScheduleBtn(scheduleDetailVo.id, scheduleDetailVo.recordType) },
+                onClick = {
+                    onClickEditScheduleBtn(
+                        scheduleDetailVo.id,
+                        scheduleDetailVo.recordType
+                    )
+                },
                 interactionSource = interactionSource,
                 indication = null
             )
@@ -93,7 +100,7 @@ fun ScheduleDetailItem(
                 Text(
                     text = scheduleDetailVo.name,
                     color = Gs90,
-                    style = HuggTypography.h2
+                    style = h2()
                 )
 
                 Row {
@@ -105,7 +112,7 @@ fun ScheduleDetailItem(
                         Text(
                             text = TimeFormatter.formatTimeToKor(it.time),
                             color = Gs70,
-                            style = HuggTypography.p2_l
+                            style = p2_l()
                         )
 
                         Spacer(modifier = Modifier.size(4.dp))
@@ -117,7 +124,7 @@ fun ScheduleDetailItem(
                 Text(
                     text = scheduleDetailVo.memo,
                     color = Gs70,
-                    style = HuggTypography.p3,
+                    style = p3(),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )

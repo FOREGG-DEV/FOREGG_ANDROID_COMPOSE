@@ -115,7 +115,7 @@ fun SpouseCodeFemaleScreen(
 
             Text(
                 color = Gs80,
-                style = HuggTypography.h1,
+                style = h1(),
                 text = SIGN_UP_SPOUSE_CODE_FEMALE
             )
 
@@ -131,7 +131,7 @@ fun SpouseCodeFemaleScreen(
 
             Text(
                 color = Gs90,
-                style = HuggTypography.p2_l,
+                style = p2_l(),
                 text = SIGN_UP_SPOUSE_CODE_FEMALE_HINT
             )
 
@@ -203,7 +203,7 @@ fun SpouseCodeCopyView(
         Text(
             modifier = Modifier.padding(end = 39.dp),
             color = Black,
-            style = HuggTypography.h3,
+            style = h3(),
             text = uiState.spouseCode
         )
     }

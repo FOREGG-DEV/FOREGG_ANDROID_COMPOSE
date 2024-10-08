@@ -118,7 +118,7 @@ fun InputSsnScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                style = HuggTypography.h1,
+                style = h1(),
                 text = SIGN_UP_INPUT_SSN
             )
 
@@ -164,7 +164,7 @@ fun SsnInputView(
             if(index == 6) {
                 Text(
                     color = Gs50,
-                    style = HuggTypography.h3,
+                    style = h3(),
                     text = SIGN_UP_DIVIDE_SSN
                 )
                 Spacer(modifier = Modifier.width(4.dp))
@@ -210,7 +210,7 @@ fun SsnItemView(
             onValueChange = { value ->
                 onChangedValue(value, position)
             },
-            textStyle = HuggTypography.h3.copy(
+            textStyle = h3().copy(
                 color = Gs90,
                 textAlign = TextAlign.Center
             ),

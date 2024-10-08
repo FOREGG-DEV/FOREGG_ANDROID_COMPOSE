@@ -101,7 +101,7 @@ fun SurgeryCountScreen(
 
             Text(
                 color = Gs80,
-                style = HuggTypography.h1,
+                style = h1(),
                 text = SIGN_UP_SURGERY_COUNT
             )
 
@@ -121,7 +121,7 @@ fun SurgeryCountScreen(
                 Spacer(modifier = Modifier.width(8.dp))
 
                 Text(
-                    style = HuggTypography.h3,
+                    style = h3(),
                     color = Gs70,
                     text = WORD_ROUND
                 )
@@ -187,7 +187,7 @@ fun CountingView(
 
         Text(
             color = Black,
-            style = HuggTypography.h3,
+            style = h3(),
             text = uiState.count.toString()
         )
 

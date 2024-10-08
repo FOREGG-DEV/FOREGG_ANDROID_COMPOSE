@@ -165,7 +165,7 @@ fun MenuButtonBox(
     ){
         Text(
             text = text,
-            style = HuggTypography.p2,
+            style = p2(),
             color = if(text == MY_PAGE_PROFILE_MANAGEMENT_LOGOUT) Black else Unregister
         )
     }

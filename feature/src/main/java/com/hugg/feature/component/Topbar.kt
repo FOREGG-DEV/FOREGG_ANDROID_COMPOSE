@@ -36,9 +36,10 @@ import com.hugg.feature.theme.Gs20
 import com.hugg.feature.theme.Gs50
 import com.hugg.feature.theme.Gs60
 import com.hugg.feature.theme.HuggTheme
-import com.hugg.feature.theme.HuggTypography
-import com.hugg.feature.theme.WORD_DAILY_RECORD
 import com.hugg.feature.theme.WORD_SKIP
+import com.hugg.feature.theme.h3
+import com.hugg.feature.theme.h4
+import com.hugg.feature.theme.p2
 
 @Composable
 fun TopBar(
@@ -209,7 +210,7 @@ fun DrawMiddleText(
     Text(
         text = middleText,
         color = Black,
-        style = HuggTypography.h3
+        style = h3()
     )
 }
 
@@ -231,7 +232,7 @@ fun DrawRightSkipBtn(
             ),
         text = WORD_SKIP,
         color = Gs60,
-        style = HuggTypography.h4
+        style = h4()
     )
     Spacer(modifier = Modifier.width(17.dp))
 }
@@ -247,7 +248,7 @@ fun DrawDailyRecordBtn(
         onClickBtn = rightBtnClicked,
         radius = 6.dp,
         text = DAILY_HUGG_BTN_TEXT,
-        textStyle = HuggTypography.p2,
+        textStyle = p2(),
         textColor = Gs50,
         strokeColor = Gs20,
         contentPadding = PaddingValues(vertical = 6.dp)

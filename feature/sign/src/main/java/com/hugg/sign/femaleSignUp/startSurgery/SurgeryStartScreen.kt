@@ -121,7 +121,7 @@ fun SurgeryStartScreen(
 
             Text(
                 color = Gs80,
-                style = HuggTypography.h1,
+                style = h1(),
                 text = SIGN_UP_SURGERY_START
             )
 
@@ -191,7 +191,7 @@ fun DatePickerView(
         Text(
             modifier = Modifier.padding(end = 27.dp),
             color = Black,
-            style = HuggTypography.h3,
+            style = h3(),
             text = uiState.date
         )
     }

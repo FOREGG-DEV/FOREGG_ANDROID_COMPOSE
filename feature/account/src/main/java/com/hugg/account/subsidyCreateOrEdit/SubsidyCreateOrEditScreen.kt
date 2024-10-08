@@ -61,11 +61,12 @@ import com.hugg.feature.theme.Background
 import com.hugg.feature.theme.Gs50
 import com.hugg.feature.theme.Gs80
 import com.hugg.feature.theme.Gs90
-import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.Sunday
 import com.hugg.feature.theme.WORD_DELETE
 import com.hugg.feature.theme.WORD_MODIFY
 import com.hugg.feature.theme.WORD_REGISTRATION
+import com.hugg.feature.theme.h3
+import com.hugg.feature.theme.p3_l
 import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.UserInfo
 
@@ -210,7 +211,7 @@ fun InputNickName(
         ) {
             Text(
                 text = ACCOUNT_SUBSIDY_NICKNAME,
-                style = HuggTypography.h3,
+                style = h3(),
                 color = Gs80
             )
 
@@ -218,7 +219,7 @@ fun InputNickName(
 
             Text(
                 text = ACCOUNT_MAX_TWO_WORD,
-                style = HuggTypography.p3_l,
+                style = p3_l(),
                 color = Sunday
             )
         }
@@ -234,7 +235,7 @@ fun InputNickName(
             if (nickname.isEmpty()) {
                 Text(
                     text = ACCOUNT_NICKNAME_TEXT_FIELD_HINT,
-                    style = HuggTypography.h3,
+                    style = h3(),
                     color = Gs50,
                 )
             }
@@ -244,7 +245,7 @@ fun InputNickName(
                 onValueChange = { value ->
                     onChangedNickname(value)
                 },
-                textStyle = HuggTypography.h3.copy(
+                textStyle = h3().copy(
                     color = Gs90,
                 ),
                 singleLine = true,
@@ -256,7 +257,7 @@ fun InputNickName(
 
         Text(
             text = ACCOUNT_NICKNAME_DETAIL_EXPLAIN,
-            style = HuggTypography.p3_l,
+            style = p3_l(),
             color = Gs50,
         )
     }
@@ -272,7 +273,7 @@ fun InputContent(
     Column {
         Text(
             text = ACCOUNT_SUBSIDY_CONTENT,
-            style = HuggTypography.h3,
+            style = h3(),
             color = Gs80
         )
 
@@ -293,7 +294,7 @@ fun InputContent(
             if (content.isEmpty()) {
                 Text(
                     text = ACCOUNT_CONTENT_TEXT_FIELD_HINT,
-                    style = HuggTypography.h3,
+                    style = h3(),
                     color = Gs50,
                 )
             }
@@ -306,7 +307,7 @@ fun InputContent(
                 onValueChange = { value ->
                     onChangedContent(value)
                 },
-                textStyle = HuggTypography.h3.copy(
+                textStyle = h3().copy(
                     color = Gs90,
                 )
             )
@@ -322,7 +323,7 @@ fun InputMoney(
     Column {
         Text(
             text = ACCOUNT_SUBSIDY_MONEY_TITLE,
-            style = HuggTypography.h3,
+            style = h3(),
             color = Gs80
         )
 
@@ -342,7 +343,7 @@ fun InputMoney(
                 if (money.isEmpty()) {
                     Text(
                         text = "0",
-                        style = HuggTypography.h3,
+                        style = h3(),
                         color = Gs50,
                     )
                 }
@@ -351,7 +352,7 @@ fun InputMoney(
 
                 Text(
                     text = ACCOUNT_MONEY_UNIT,
-                    style = HuggTypography.h3,
+                    style = h3(),
                     color = Gs50,
                 )
             }
@@ -364,7 +365,7 @@ fun InputMoney(
                 onValueChange = { value ->
                     onChangedMoney(value.text)
                 },
-                textStyle = HuggTypography.h3.copy(
+                textStyle = h3().copy(
                     color = Gs90,
                     textAlign = TextAlign.End
                 ),

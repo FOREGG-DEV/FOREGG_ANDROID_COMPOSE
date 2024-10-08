@@ -98,7 +98,7 @@ fun MaleSignUpScreen(
 
             Text(
                 color = Gs80,
-                style = HuggTypography.h1,
+                style = h1(),
                 text = SIGN_UP_MALE
             )
 
@@ -118,7 +118,7 @@ fun MaleSignUpScreen(
                     onValueChange = { value ->
                         onChangedSpouseCode(value)
                     },
-                    textStyle = HuggTypography.h3.copy(
+                    textStyle = h3().copy(
                         color = Black,
                         textAlign = TextAlign.Center
                     ),
@@ -130,7 +130,7 @@ fun MaleSignUpScreen(
 
             Text(
                 color = Gs90,
-                style = HuggTypography.p2_l,
+                style = p2_l(),
                 text = SIGN_UP_SPOUSE_CODE_MALE_HINT
             )
         }

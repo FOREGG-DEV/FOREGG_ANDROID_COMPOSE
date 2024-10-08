@@ -90,7 +90,7 @@ fun MyPageCsScreen(
         Text(
             modifier = Modifier.padding(start = 16.dp),
             text = MY_PAGE_CS_HUGG_KAKAO_PLUS,
-            style = HuggTypography.h3,
+            style = h3(),
             color = Gs90
         )
 
@@ -114,7 +114,7 @@ fun MyPageCsScreen(
         Text(
             modifier = Modifier.padding(start = 16.dp),
             text = MY_PAGE_CS_HUGG_EMAIL,
-            style = HuggTypography.h3,
+            style = h3(),
             color = Gs90
         )
 
@@ -136,7 +136,7 @@ fun MyPageCsScreen(
             Text(
                 modifier = Modifier.padding(start = 12.dp),
                 color = Black,
-                style = HuggTypography.p2,
+                style = p2(),
                 text = FOREGG_EMAIL
             )
 

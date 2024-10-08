@@ -38,7 +38,7 @@ import com.hugg.feature.theme.ACCOUNT_ADD_SUBSIDY
 import com.hugg.feature.theme.ACCOUNT_SUBSIDY_MONEY
 import com.hugg.feature.theme.Background
 import com.hugg.feature.theme.Gs70
-import com.hugg.feature.theme.HuggTypography
+import com.hugg.feature.theme.btn
 import com.hugg.feature.uiItem.RemoteRound
 import com.hugg.feature.uiItem.SubsidyDetailBox
 import com.hugg.feature.util.UserInfo
@@ -187,7 +187,7 @@ fun EmptySubsidyBox(
 
             Text(
                 text = ACCOUNT_ADD_SUBSIDY,
-                style = HuggTypography.btn,
+                style = btn(),
                 color = Gs70
             )
         }

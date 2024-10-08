@@ -93,13 +93,17 @@ import com.hugg.feature.theme.Gs60
 import com.hugg.feature.theme.Gs70
 import com.hugg.feature.theme.Gs80
 import com.hugg.feature.theme.Gs90
-import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.MainNormal
 import com.hugg.feature.theme.Sunday
 import com.hugg.feature.theme.WORD_ACCOUNT
 import com.hugg.feature.theme.WORD_ADD
 import com.hugg.feature.theme.WORD_DELETE
 import com.hugg.feature.theme.White
+import com.hugg.feature.theme.h2
+import com.hugg.feature.theme.h3
+import com.hugg.feature.theme.h4
+import com.hugg.feature.theme.p1
+import com.hugg.feature.theme.p2
 import com.hugg.feature.uiItem.AccountCardItem
 import com.hugg.feature.uiItem.RemoteRound
 import com.hugg.feature.uiItem.SubsidyTotalBoxItem
@@ -416,7 +420,7 @@ fun RemoteMonth(
             modifier = Modifier.align(Alignment.CenterVertically),
             text = date,
             color = Gs90,
-            style = HuggTypography.h2
+            style = h2()
         )
 
         Spacer(modifier = Modifier.size(9.dp))
@@ -469,7 +473,7 @@ fun AccountTotalBox(
 
                 Text(
                     text = "${TimeFormatter.getDotsDate(uiState.startDay)} - ${TimeFormatter.getDotsDate(uiState.endDay)}",
-                    style = HuggTypography.h4,
+                    style = h4(),
                     color = Gs70
                 )
 
@@ -511,7 +515,7 @@ fun AccountTotalBox(
 
                         Text(
                             text = ACCOUNT_ROUND_MEMO,
-                            style = HuggTypography.h4,
+                            style = h4(),
                             color = Gs70
                         )
                     }
@@ -522,7 +526,7 @@ fun AccountTotalBox(
                     onValueChange = { value ->
                         onChangedMemo(value)
                     },
-                    textStyle = HuggTypography.h4.copy(
+                    textStyle = h4().copy(
                         color = Gs70,
                     ),
                     keyboardActions = KeyboardActions(onDone = {onKeyboardDone()}),
@@ -590,7 +594,7 @@ fun AccountTotalBox(
 
             Text(
                 text = ACCOUNT_ALL_EXPENSE,
-                style = HuggTypography.h2,
+                style = h2(),
                 color = Gs90
             )
 
@@ -598,7 +602,7 @@ fun AccountTotalBox(
 
             Text(
                 text = uiState.totalExpense,
-                style = HuggTypography.h2,
+                style = h2(),
                 color = Gs90
             )
 
@@ -643,7 +647,7 @@ fun TotalBoxItem(
 
         Text(
             text = text,
-            style = HuggTypography.p1,
+            style = p1(),
             color = Gs80
         )
 
@@ -651,7 +655,7 @@ fun TotalBoxItem(
 
         Text(
             text = if (colorType == AccountColorType.RED) uiState.personalExpense else uiState.subsidyExpense, // 아직 서버 미반영
-            style = HuggTypography.p1,
+            style = p1(),
             color = Gs80
         )
 
@@ -682,7 +686,7 @@ fun EmptySubsidyBox(
 
         Text(
             text = ACCOUNT_SUGGEST_ADD_SUBSIDY,
-            style = HuggTypography.h3,
+            style = h3(),
             color = Gs80
         )
 
@@ -731,7 +735,11 @@ fun FilterItem(
         modifier = Modifier
             .padding(end = 4.dp)
             .size(width = 78.dp, height = 28.dp)
-            .border(width = 1.dp, color = if(uiState.selectedFilterList.contains(text)) Gs70 else Gs20, shape = RoundedCornerShape(999.dp))
+            .border(
+                width = 1.dp,
+                color = if (uiState.selectedFilterList.contains(text)) Gs70 else Gs20,
+                shape = RoundedCornerShape(999.dp)
+            )
             .background(
                 color = if (uiState.selectedFilterList.contains(text)) Gs70 else White,
                 shape = RoundedCornerShape(999.dp)
@@ -746,7 +754,7 @@ fun FilterItem(
         Text(
             textAlign = TextAlign.Center,
             text = if(uiState.tabType == AccountTabType.ROUND && text != ACCOUNT_ALL && text != ACCOUNT_PERSONAL) UnitFormatter.getSubsidyTitleWithoutMoneyFormat(text) else text,
-            style = if(uiState.selectedFilterList.contains(text)) HuggTypography.h4 else HuggTypography.p2 ,
+            style = if(uiState.selectedFilterList.contains(text)) h4() else p2() ,
             color = if(uiState.selectedFilterList.contains(text)) White else Gs60
         )
     }

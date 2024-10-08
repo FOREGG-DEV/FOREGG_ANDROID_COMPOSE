@@ -49,12 +49,12 @@ import com.hugg.feature.theme.Gs50
 import com.hugg.feature.theme.Gs70
 import com.hugg.feature.theme.Gs80
 import com.hugg.feature.theme.Gs90
-import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.MainNormal
 import com.hugg.feature.theme.WORD_MEMO
 import com.hugg.feature.theme.WORD_MODIFY
 import com.hugg.feature.theme.WORD_REGISTRATION
 import com.hugg.feature.theme.White
+import com.hugg.feature.theme.h3
 
 @Composable
 fun HospitalCreateOrEditScreen(
@@ -125,7 +125,7 @@ internal fun InputTreatmentView(
 
     Text(
         text = CALENDAR_SCHEDULE_HOSPITAL_TREATMENT_CONTENT,
-        style = HuggTypography.h3,
+        style = h3(),
         color = Gs80
     )
 
@@ -155,7 +155,7 @@ internal fun InputTreatmentView(
                 if (kind.isEmpty()) {
                     Text(
                         text = CALENDAR_SCHEDULE_HOSPITAL_TREATMENT_CONTENT_HINT,
-                        style = HuggTypography.h3,
+                        style = h3(),
                         color = Gs50,
                     )
                 }
@@ -165,7 +165,7 @@ internal fun InputTreatmentView(
                     onValueChange = { value ->
                         onChangedKind(value)
                     },
-                    textStyle = HuggTypography.h3.copy(
+                    textStyle = h3().copy(
                         color = Gs90,
                         textAlign = TextAlign.Start
                     ),
@@ -196,7 +196,7 @@ internal fun InputTreatmentView(
                 DropdownMenuItem(
                     text = {
                         Text(
-                            style = HuggTypography.h3,
+                            style = h3(),
                             color = Gs70,
                             text = kind
                         )
@@ -222,7 +222,7 @@ internal fun SelectDateAndTimeView(
 ){
     Text(
         text = CALENDAR_SCHEDULE_DATE_AND_TIME_PICKER,
-        style = HuggTypography.h3,
+        style = h3(),
         color = Gs80
     )
     
@@ -264,7 +264,7 @@ internal fun SelectDateAndTimeView(
 
         Text(
             color = Gs50,
-            style = HuggTypography.h3,
+            style = h3(),
             text = date
         )
     }
@@ -307,7 +307,7 @@ internal fun SelectDateAndTimeView(
 
         Text(
             color = Gs50,
-            style = HuggTypography.h3,
+            style = h3(),
             text = time
         )
     }
@@ -320,7 +320,7 @@ fun InputHospitalMemoView(
 ){
     Text(
         text = WORD_MEMO,
-        style = HuggTypography.h3,
+        style = h3(),
         color = Gs80,
     )
 
@@ -338,7 +338,7 @@ fun InputHospitalMemoView(
             if (memo.isEmpty()) {
                 Text(
                     text = CALENDAR_SCHEDULE_HOSPITAL_MEMO_HINT,
-                    style = HuggTypography.h3,
+                    style = h3(),
                     color = Gs50,
                 )
             }
@@ -348,7 +348,7 @@ fun InputHospitalMemoView(
                 onValueChange = { value ->
                     onChangedMemo(value)
                 },
-                textStyle = HuggTypography.h3.copy(
+                textStyle = h3().copy(
                     color = Gs90,
                     textAlign = TextAlign.Start
                 ),

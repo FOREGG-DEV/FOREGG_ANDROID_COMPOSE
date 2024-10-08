@@ -228,7 +228,7 @@ fun SelectDateView(
 ){
     Text(
         text = ACCOUNT_CREATE_DATE_TITLE,
-        style = HuggTypography.h3,
+        style = h3(),
         color = Gs80
     )
 
@@ -271,7 +271,7 @@ fun SelectDateView(
         Text(
             modifier = Modifier.padding(end = 27.dp),
             color = Gs50,
-            style = HuggTypography.h3,
+            style = h3(),
             text = date
         )
     }
@@ -286,7 +286,7 @@ fun SelectRoundView(
 ){
     Text(
         text = ACCOUNT_CREATE_ROUND_TITLE,
-        style = HuggTypography.h3,
+        style = h3(),
         color = Gs80
     )
 
@@ -310,7 +310,7 @@ fun SelectRoundView(
                         .width(51.dp)
                         .height(48.dp)
                         .background(
-                            color = if(round == 0) Disabled else Gs10,
+                            color = if (round == 0) Disabled else Gs10,
                             shape = RoundedCornerShape(topStart = 8.dp, bottomStart = 8.dp)
                         )
                         .clickable(
@@ -329,7 +329,7 @@ fun SelectRoundView(
 
             Text(
                 color = Black,
-                style = HuggTypography.h3,
+                style = h3(),
                 text = round.toString()
             )
 
@@ -343,7 +343,7 @@ fun SelectRoundView(
                         .width(51.dp)
                         .height(48.dp)
                         .background(
-                            color = if(round == UserInfo.info.round) Disabled else Gs10,
+                            color = if (round == UserInfo.info.round) Disabled else Gs10,
                             shape = RoundedCornerShape(topEnd = 8.dp, bottomEnd = 8.dp)
                         )
                         .clickable(
@@ -365,7 +365,7 @@ fun SelectRoundView(
         Spacer(modifier = Modifier.width(8.dp))
 
         Text(
-            style = HuggTypography.h3,
+            style = h3(),
             color = Gs70,
             text = ACCOUNT_ROUND_UNIT_WITHOUT_CAR
         )
@@ -385,7 +385,7 @@ fun ContentAndAmountView(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            style = HuggTypography.h3,
+            style = h3(),
             color = Gs80,
             text = ACCOUNT_CREATE_CONTENT_AMOUNT_TITLE
         )
@@ -407,7 +407,7 @@ fun ContentAndAmountView(
                         indication = null
                     ),
                 text = ACCOUNT_ADD_SUBSIDY_LIST,
-                style = HuggTypography.p3,
+                style = p3(),
                 color = Gs50
             )
         }
@@ -424,7 +424,7 @@ fun ContentAndAmountView(
         if (content.isEmpty()) {
             Text(
                 text = ACCOUNT_CREATE_CONTENT_HINT,
-                style = HuggTypography.h3,
+                style = h3(),
                 color = Gs50,
             )
         }
@@ -434,7 +434,7 @@ fun ContentAndAmountView(
             onValueChange = { value ->
                 onChangedContent(value)
             },
-            textStyle = HuggTypography.h3.copy(
+            textStyle = h3().copy(
                 color = Gs90,
             ),
             singleLine = true,
@@ -481,7 +481,7 @@ fun ExpenditureItemView(
 
         Text(
             text = if(item.color != AccountColorType.RED) UnitFormatter.getSubsidyTitleFormat(item.nickname) else item.nickname,
-            style = HuggTypography.p1,
+            style = p1(),
             color = Gs80
         )
 
@@ -501,7 +501,7 @@ fun ExpenditureItemView(
                 if (item.money.isEmpty()) {
                     Text(
                         text = "0",
-                        style = HuggTypography.h3,
+                        style = h3(),
                         color = Gs50,
                     )
                 }
@@ -510,7 +510,7 @@ fun ExpenditureItemView(
 
                 Text(
                     text = ACCOUNT_MONEY_UNIT,
-                    style = HuggTypography.h3,
+                    style = h3(),
                     color = Gs50,
                 )
             }
@@ -523,7 +523,7 @@ fun ExpenditureItemView(
                 onValueChange = { value ->
                     onChangedMoney(value.text, item.nickname)
                 },
-                textStyle = HuggTypography.h3.copy(
+                textStyle = h3().copy(
                     color = Gs90,
                     textAlign = TextAlign.End
                 ),
@@ -545,7 +545,7 @@ fun InputMemoView(
     onChangedMemo : (String) -> Unit = {}
 ){
     Text(
-        style = HuggTypography.h3,
+        style = h3(),
         color = Gs80,
         text = WORD_MEMO
     )
@@ -561,7 +561,7 @@ fun InputMemoView(
         if (memo.isEmpty()) {
             Text(
                 text = ACCOUNT_CREATE_MEMO_HINT,
-                style = HuggTypography.h3,
+                style = h3(),
                 color = Gs50,
             )
         }
@@ -571,7 +571,7 @@ fun InputMemoView(
             onValueChange = { value ->
                 onChangedMemo(value)
             },
-            textStyle = HuggTypography.h3.copy(
+            textStyle = h3().copy(
                 color = Gs90,
             ),
             singleLine = true,

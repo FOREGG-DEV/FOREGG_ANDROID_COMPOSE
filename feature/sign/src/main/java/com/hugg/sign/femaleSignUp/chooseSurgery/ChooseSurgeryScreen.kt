@@ -108,7 +108,7 @@ fun ChooseSurgeryScreen(
 
             Text(
                 color = Gs80,
-                style = HuggTypography.h1,
+                style = h1(),
                 text = SIGN_UP_CHOOSE_SURGERY
             )
 
@@ -125,7 +125,7 @@ fun ChooseSurgeryScreen(
                 Spacer(modifier = Modifier.width(12.dp))
                 Text(
                     color = Gs90,
-                    style = HuggTypography.h3,
+                    style = h3(),
                     text = uiState.surgeryType.type
                 )
 
@@ -203,7 +203,7 @@ fun SurgeryDropDown(
         ){
             Text(
                 modifier = Modifier.padding(start = 12.dp),
-                style = HuggTypography.h3,
+                style = h3(),
                 color = Gs70,
                 text = SurgeryType.THINK_SURGERY.type
             )
@@ -222,7 +222,7 @@ fun SurgeryDropDown(
         ){
             Text(
                 modifier = Modifier.padding(start = 12.dp),
-                style = HuggTypography.h3,
+                style = h3(),
                 color = Gs70,
                 text = SurgeryType.IUI.type
             )
@@ -241,7 +241,7 @@ fun SurgeryDropDown(
         ){
             Text(
                 modifier = Modifier.padding(start = 12.dp),
-                style = HuggTypography.h3,
+                style = h3(),
                 color = Gs70,
                 text = SurgeryType.EGG_FREEZING.type
             )
@@ -260,7 +260,7 @@ fun SurgeryDropDown(
         ){
             Text(
                 modifier = Modifier.padding(start = 12.dp),
-                style = HuggTypography.h3,
+                style = h3(),
                 color = Gs70,
                 text = SurgeryType.IN_VITRO_FERTILIZATION.type
             )

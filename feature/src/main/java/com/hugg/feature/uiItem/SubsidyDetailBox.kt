@@ -30,12 +30,13 @@ import com.hugg.feature.theme.CalendarHospital
 import com.hugg.feature.theme.CalendarInjection
 import com.hugg.feature.theme.Gs70
 import com.hugg.feature.theme.Gs90
-import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.SubsidyColorBlue
 import com.hugg.feature.theme.SubsidyColorGreen
 import com.hugg.feature.theme.SubsidyColorYellow
 import com.hugg.feature.theme.White
-import com.hugg.feature.util.ForeggLog
+import com.hugg.feature.theme.h2
+import com.hugg.feature.theme.h3
+import com.hugg.feature.theme.p1
 import com.hugg.feature.util.UnitFormatter
 
 @Composable
@@ -86,7 +87,7 @@ fun SubsidyDetailBox(
 
                 Text(
                     text = UnitFormatter.getSubsidyTitleFormat(item.nickname),
-                    style = HuggTypography.h2,
+                    style = h2(),
                     color = Gs90
                 )
 
@@ -94,7 +95,7 @@ fun SubsidyDetailBox(
 
                 Text(
                     text = UnitFormatter.getMoneyFormatWithUnit(item.amount),
-                    style = HuggTypography.h2,
+                    style = h2(),
                     color = Gs90
                 )
             }
@@ -134,7 +135,7 @@ fun SubsidyDetailBox(
                 ) {
                     Text(
                         text = UnitFormatter.getPercentFormat(item.percent),
-                        style = HuggTypography.h3,
+                        style = h3(),
                         color = Gs70
                     )
                 }
@@ -156,7 +157,7 @@ fun DetailMoneyView(
 
         Text(
             text = text,
-            style = HuggTypography.h2,
+            style = h2(),
             color = Gs70
         )
 
@@ -164,7 +165,7 @@ fun DetailMoneyView(
 
         Text(
             text = UnitFormatter.getMoneyFormatWithUnit(money),
-            style = HuggTypography.p1,
+            style = p1(),
             color = Gs90
         )
     }
