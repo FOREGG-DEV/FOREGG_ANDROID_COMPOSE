@@ -17,7 +17,8 @@ import androidx.compose.ui.unit.dp
 import com.hugg.feature.R
 import com.hugg.feature.theme.Black
 import com.hugg.feature.theme.Gs80
-import com.hugg.feature.theme.HuggTypography
+import com.hugg.feature.theme.h1
+import com.hugg.feature.theme.p1
 
 @Composable
 fun OnBoardingItem(
@@ -38,7 +39,7 @@ fun OnBoardingItem(
             modifier = Modifier.padding(horizontal = 16.dp),
             textAlign = TextAlign.Center,
             text = title,
-            style = HuggTypography.h1,
+            style = h1(),
             color = Black
         )
         Spacer(modifier = Modifier.height(8.dp))
@@ -46,7 +47,7 @@ fun OnBoardingItem(
             modifier = Modifier.padding(horizontal = 16.dp),
             textAlign = TextAlign.Center,
             text = content,
-            style = HuggTypography.p1,
+            style = p1(),
             color = Gs80
         )
     }

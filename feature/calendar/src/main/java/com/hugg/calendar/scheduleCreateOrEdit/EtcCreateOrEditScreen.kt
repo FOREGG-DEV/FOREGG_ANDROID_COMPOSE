@@ -36,11 +36,11 @@ import com.hugg.feature.theme.CALENDAR_SCHEDULE_ETC_TIME_PICKER_TITLE
 import com.hugg.feature.theme.Gs50
 import com.hugg.feature.theme.Gs80
 import com.hugg.feature.theme.Gs90
-import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.MainNormal
 import com.hugg.feature.theme.WORD_MODIFY
 import com.hugg.feature.theme.WORD_REGISTRATION
 import com.hugg.feature.theme.White
+import com.hugg.feature.theme.h3
 
 @Composable
 fun EtcCreateOrEditScreen(
@@ -110,7 +110,7 @@ fun InputEtcContentView(
     Text(
         modifier = Modifier.padding(horizontal = 16.dp),
         text = CALENDAR_SCHEDULE_ETC_CONTENT_TITLE,
-        style = HuggTypography.h3,
+        style = h3(),
         color = Gs80,
     )
 
@@ -129,7 +129,7 @@ fun InputEtcContentView(
             if (content.isEmpty()) {
                 Text(
                     text = CALENDAR_SCHEDULE_ETC_CONTENT_HINT,
-                    style = HuggTypography.h3,
+                    style = h3(),
                     color = Gs50,
                 )
             }
@@ -139,7 +139,7 @@ fun InputEtcContentView(
                 onValueChange = { value ->
                     onChangedName(value)
                 },
-                textStyle = HuggTypography.h3.copy(
+                textStyle = h3().copy(
                     color = Gs90,
                     textAlign = TextAlign.Start
                 ),
@@ -162,7 +162,7 @@ internal fun SelectEtcTimePickerView(
     Text(
         modifier = Modifier.padding(horizontal = 16.dp),
         text = CALENDAR_SCHEDULE_ETC_TIME_PICKER_TITLE,
-        style = HuggTypography.h3,
+        style = h3(),
         color = Gs80,
     )
     
@@ -205,7 +205,7 @@ internal fun SelectEtcTimePickerView(
 
         Text(
             color = Gs50,
-            style = HuggTypography.h3,
+            style = h3(),
             text = time
         )
     }

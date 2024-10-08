@@ -156,7 +156,7 @@ fun TodayRecordHorizontalPager(
                     String.format(HOME_TODAY_SCHEDULE_FEMALE, UserInfo.info.name, TimeFormatter.getMonth(today), TimeFormatter.getDay(today))
                 else String.format(HOME_TODAY_SCHEDULE_MALE, UserInfo.info.spouse, UserInfo.info.name, TimeFormatter.getMonth(today), TimeFormatter.getDay(today)),
         color = Black,
-        style = HuggTypography.h2
+        style = h2()
     )
 
     Spacer(modifier = Modifier.size(8.dp))

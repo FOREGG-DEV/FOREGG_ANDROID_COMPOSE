@@ -59,11 +59,12 @@ import com.hugg.feature.theme.DAILY_HUGG
 import com.hugg.feature.theme.DAILY_HUGG_CONTENT_HINT
 import com.hugg.feature.theme.Gs10
 import com.hugg.feature.theme.GsWhite
-import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.IMAGE_PERMISSION_TEXT
 import com.hugg.feature.theme.MainStrong
 import com.hugg.feature.theme.WORD_MODIFY
 import com.hugg.feature.theme.WORD_REGISTRATION
+import com.hugg.feature.theme.h1
+import com.hugg.feature.theme.p2
 import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UserInfo
@@ -196,7 +197,7 @@ fun CreateEditDailyHuggContent(
                         }
                         append("\n오늘 하루 어떠셨나요?")
                     },
-                    style = HuggTypography.h1,
+                    style = h1(),
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -336,13 +337,13 @@ fun DailyHuggInputField(
                 .fillMaxSize()
                 .padding(12.dp)
                 .align(Alignment.TopStart),
-            textStyle = HuggTypography.p2,
+            textStyle = p2(),
             decorationBox = { innerTextField ->
                 if (content.isEmpty()) {
                     Text(
                         text = DAILY_HUGG_CONTENT_HINT,
                         color = Color.Gray,
-                        style = HuggTypography.p2,
+                        style = p2(),
                         modifier = Modifier.align(Alignment.TopStart)
                     )
                 }

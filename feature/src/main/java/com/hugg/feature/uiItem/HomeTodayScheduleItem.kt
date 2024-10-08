@@ -35,13 +35,16 @@ import com.hugg.feature.theme.Gs50
 import com.hugg.feature.theme.Gs70
 import com.hugg.feature.theme.Gs80
 import com.hugg.feature.theme.HOME_RECORD_MEDICAL
-import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.MainNormal
 import com.hugg.feature.theme.WORD_ETC
 import com.hugg.feature.theme.WORD_HOSPITAL
 import com.hugg.feature.theme.WORD_INJECTION
 import com.hugg.feature.theme.WORD_MEDICINE
 import com.hugg.feature.theme.White
+import com.hugg.feature.theme.h1
+import com.hugg.feature.theme.p2
+import com.hugg.feature.theme.p3
+import com.hugg.feature.theme.p3_l
 import com.hugg.feature.util.onThrottleClick
 
 @Composable
@@ -95,7 +98,7 @@ fun HomeTodayScheduleItem(
                 ){
                     Text(
                         text = boxText,
-                        style = HuggTypography.p3,
+                        style = p3(),
                         color = Gs80
                     )
                 }
@@ -115,7 +118,7 @@ fun HomeTodayScheduleItem(
 
                     Text(
                         text = item.time,
-                        style = HuggTypography.h1,
+                        style = h1(),
                         color = if(item.todo) Gs50 else Gs80,
                         textDecoration = if(item.todo) TextDecoration.LineThrough else null
                     )
@@ -123,7 +126,7 @@ fun HomeTodayScheduleItem(
 
                 Text(
                     text = item.name,
-                    style = HuggTypography.p2,
+                    style = p2(),
                     color = if(item.todo) Gs50 else Gs80,
                     textDecoration = if(item.todo) TextDecoration.LineThrough else null
                 )
@@ -155,7 +158,7 @@ fun HomeTodayScheduleItem(
                 onClickBtn = { onClickDetail(item.id) },
                 radius = 4.dp,
                 text = HOME_RECORD_MEDICAL,
-                textStyle = HuggTypography.p2,
+                textStyle = p2(),
                 contentPadding = PaddingValues(vertical = 5.dp)
             )
         }
@@ -166,7 +169,7 @@ fun HomeTodayScheduleItem(
                 modifier = Modifier.padding(end = 12.dp),
                 text = item.memo,
                 maxLines = 2,
-                style = HuggTypography.p3_l,
+                style = p3_l(),
                 color = Gs70,
                 overflow = TextOverflow.Ellipsis
             )

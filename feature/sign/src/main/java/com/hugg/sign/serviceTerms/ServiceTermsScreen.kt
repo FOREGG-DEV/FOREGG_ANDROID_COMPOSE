@@ -110,7 +110,7 @@ fun ServiceTermsScreen(
 
             Text(
                 color = Gs80,
-                style = HuggTypography.h1,
+                style = h1(),
                 text = SIGN_UP_SERVICE_TERMS_TITLE
             )
 
@@ -139,7 +139,7 @@ fun ServiceTermsScreen(
 
                 Text(
                     text = SIGN_UP_SERVICE_TERMS_ALL_AGREE,
-                    style = HuggTypography.h3,
+                    style = h3(),
                     color = Black
                 )
             }
@@ -197,7 +197,7 @@ fun ServiceTermsScreen(
             ) {
                 Text(
                     text = SIGN_UP_TERMS_ASK,
-                    style = HuggTypography.p2,
+                    style = p2(),
                     color = Gs70
                 )
 
@@ -205,7 +205,7 @@ fun ServiceTermsScreen(
 
                 Text(
                     text = FOREGG_EMAIL,
-                    style = HuggTypography.p2,
+                    style = p2(),
                     color = Gs70
                 )
             }
@@ -247,7 +247,7 @@ fun TermTextRow(
         if(termsText.isEmpty()) {
             ClickableText(
                 text = annotateText,
-                style = HuggTypography.p2,
+                style = p2(),
                 onClick = { offset ->
                     annotateText.getStringAnnotations(tag = annotateTag, start = offset, end = offset)
                         .firstOrNull()?.let {
@@ -259,7 +259,7 @@ fun TermTextRow(
         else{
             Text(
                 text = termsText,
-                style = HuggTypography.p2,
+                style = p2(),
                 color = Gs90
             )
         }
@@ -268,7 +268,7 @@ fun TermTextRow(
 
         Text(
             text = SIGN_UP_ESSENTIAL_WORD,
-            style = HuggTypography.p2,
+            style = p2(),
             color = MainStrong
         )
 

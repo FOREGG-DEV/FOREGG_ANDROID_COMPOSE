@@ -25,7 +25,7 @@ import com.hugg.feature.theme.CONFIRM_DAILY_HUGG
 import com.hugg.feature.theme.CREATION_SUCCESS_TITLE
 import com.hugg.feature.theme.DAILY_HUGG
 import com.hugg.feature.theme.GsBlack
-import com.hugg.feature.theme.HuggTypography
+import com.hugg.feature.theme.h1
 
 @Composable
 fun DailyHuggCreationSuccessScreen(
@@ -59,7 +59,7 @@ fun DailyHuggCreationSuccessContent(
 
         Text(
             text = CREATION_SUCCESS_TITLE,
-            style = HuggTypography.h1,
+            style = h1(),
             color = GsBlack
         )
 

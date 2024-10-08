@@ -86,7 +86,6 @@ import com.hugg.feature.theme.Gs60
 import com.hugg.feature.theme.Gs70
 import com.hugg.feature.theme.Gs80
 import com.hugg.feature.theme.Gs90
-import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.MainNormal
 import com.hugg.feature.theme.WORD_ALARM
 import com.hugg.feature.theme.WORD_END
@@ -95,6 +94,10 @@ import com.hugg.feature.theme.WORD_MODIFY
 import com.hugg.feature.theme.WORD_REGISTRATION
 import com.hugg.feature.theme.WORD_START
 import com.hugg.feature.theme.White
+import com.hugg.feature.theme.h2
+import com.hugg.feature.theme.h3
+import com.hugg.feature.theme.h4
+import com.hugg.feature.theme.p3_l
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UserInfo
 
@@ -213,7 +216,7 @@ internal fun InputKindView(
     Text(
         modifier = Modifier.padding(start = 16.dp),
         text = text,
-        style = HuggTypography.h3,
+        style = h3(),
         color = Gs80
     )
 
@@ -244,7 +247,7 @@ internal fun InputKindView(
                 if (kind.isEmpty()) {
                     Text(
                         text = hint,
-                        style = HuggTypography.h3,
+                        style = h3(),
                         color = Gs50,
                     )
                 }
@@ -254,7 +257,7 @@ internal fun InputKindView(
                     onValueChange = { value ->
                         onChangedKind(value)
                     },
-                    textStyle = HuggTypography.h3.copy(
+                    textStyle = h3().copy(
                         color = Gs90,
                         textAlign = TextAlign.Start
                     ),
@@ -286,7 +289,7 @@ internal fun InputKindView(
                 DropdownMenuItem(
                     text = {
                         Text(
-                            style = HuggTypography.h3,
+                            style = h3(),
                             color = Gs70,
                             text = kind
                         )
@@ -315,7 +318,7 @@ internal fun InputDoseView(
     Text(
         modifier = Modifier.padding(start = 16.dp),
         text = title,
-        style = HuggTypography.h3,
+        style = h3(),
         color = Gs80
     )
 
@@ -334,7 +337,7 @@ internal fun InputDoseView(
             if (dose.isEmpty()) {
                 Text(
                     text = CALENDAR_SCHEDULE_DOSE_HINT,
-                    style = HuggTypography.h3,
+                    style = h3(),
                     color = Gs50,
                 )
             }
@@ -344,7 +347,7 @@ internal fun InputDoseView(
                 onValueChange = { value ->
                     onChangedDose(value)
                 },
-                textStyle = HuggTypography.h3.copy(
+                textStyle = h3().copy(
                     color = Gs90,
                     textAlign = TextAlign.Start
                 ),
@@ -360,7 +363,7 @@ internal fun InputDoseView(
 
         Text(
             text = doseUnit,
-            style = HuggTypography.h3,
+            style = h3(),
             color = Gs70
         )
     }
@@ -410,7 +413,7 @@ internal fun InjectionDoseChipView(
     ){
         Text(
             text = basicDose,
-            style = HuggTypography.h4,
+            style = h4(),
             color = if(dose == basicDose) White else Gs80
         )
     }
@@ -433,7 +436,7 @@ internal fun SelectDailyTakeCount(
     Text(
         modifier = Modifier.padding(horizontal = 16.dp),
         color = Gs80,
-        style = HuggTypography.h3,
+        style = h3(),
         text = title
     )
 
@@ -479,7 +482,7 @@ internal fun SelectDailyTakeCount(
 
             Text(
                 color = Black,
-                style = HuggTypography.h3,
+                style = h3(),
                 text = repeatCount.toString()
             )
 
@@ -515,7 +518,7 @@ internal fun SelectDailyTakeCount(
         Spacer(modifier = Modifier.width(8.dp))
 
         Text(
-            style = HuggTypography.h3,
+            style = h3(),
             color = Gs70,
             text = ACCOUNT_ROUND_UNIT_WITHOUT_CAR
         )
@@ -584,7 +587,7 @@ internal fun TimePickerView(
 
         Text(
             color = Gs50,
-            style = HuggTypography.h3,
+            style = h3(),
             text = time
         )
     }
@@ -607,7 +610,7 @@ internal fun SelectAlarmOnAndOffView(
         ) {
             Text(
                 color = Gs80,
-                style = HuggTypography.h2,
+                style = h2(),
                 text = WORD_ALARM
             )
 
@@ -633,7 +636,7 @@ internal fun SelectAlarmOnAndOffView(
 
         Text(
             color = Gs60,
-            style = HuggTypography.p3_l,
+            style = p3_l(),
             text = CALENDAR_SCHEDULE_ALARM_HINT
         )
     }
@@ -652,7 +655,7 @@ internal fun SelectRepeatDateView(
     Text(
         modifier = Modifier.padding(start = 16.dp),
         text = CALENDAR_SCHEDULE_DATE_PICK_AND_REPEAT,
-        style = HuggTypography.h3,
+        style = h3(),
         color = Gs80
     )
 
@@ -733,7 +736,7 @@ internal fun DatePickerView(
 
         Text(
             color = Gs50,
-            style = HuggTypography.h3,
+            style = h3(),
             text = if(date.isEmpty()) hintText else date + " ${TimeFormatter.getKoreanFullDayOfWeek(date)}"
         )
 
@@ -747,7 +750,7 @@ internal fun DatePickerView(
 
         Text(
             color = Gs50,
-            style = HuggTypography.h3,
+            style = h3(),
             text = endText
         )
 
@@ -772,7 +775,7 @@ internal fun SelectRepeatEveryDayView(
         ) {
             Text(
                 color = Gs80,
-                style = HuggTypography.h2,
+                style = h2(),
                 text = CALENDAR_SCHEDULE_REPEAT_EVERYDAY
             )
 
@@ -798,7 +801,7 @@ internal fun SelectRepeatEveryDayView(
 
         Text(
             color = Gs60,
-            style = HuggTypography.p3_l,
+            style = p3_l(),
             text = CALENDAR_SCHEDULE_REPEAT_EVERYDAY_HINT
         )
     }
@@ -812,7 +815,7 @@ fun InputMemoView(
     Text(
         modifier = Modifier.padding(start = 16.dp),
         text = WORD_MEMO,
-        style = HuggTypography.h3,
+        style = h3(),
         color = Gs80,
     )
 
@@ -831,7 +834,7 @@ fun InputMemoView(
             if (memo.isEmpty()) {
                 Text(
                     text = CALENDAR_SCHEDULE_MEMO_HINT,
-                    style = HuggTypography.h3,
+                    style = h3(),
                     color = Gs50,
                 )
             }
@@ -841,7 +844,7 @@ fun InputMemoView(
                 onValueChange = { value ->
                     onChangedMemo(value)
                 },
-                textStyle = HuggTypography.h3.copy(
+                textStyle = h3().copy(
                     color = Gs90,
                     textAlign = TextAlign.Start
                 ),

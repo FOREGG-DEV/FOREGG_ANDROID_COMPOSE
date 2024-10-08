@@ -113,7 +113,7 @@ fun MyPageScreen(
             ) {
                 Text(
                     text = MY_PAGE_SPOUSE,
-                    style = HuggTypography.p2,
+                    style = p2(),
                     color = Black
                 )
 
@@ -121,7 +121,7 @@ fun MyPageScreen(
 
                 Text(
                     text = uiState.spouse.ifEmpty { MY_PAGE_REGISTER_SPOUSE },
-                    style = HuggTypography.p3,
+                    style = p3(),
                     color = Gs50
                 )
             }
@@ -138,7 +138,7 @@ fun MyPageScreen(
             ) {
                 Text(
                     text = if(UserInfo.info.genderType == GenderType.FEMALE) MY_PAGE_MY_MEDICINE_INJECTION else MY_PAGE_SPOUSE_MEDICINE_INJECTION(UserInfo.info.spouse),
-                    style = HuggTypography.p2,
+                    style = p2(),
                     color = Black,
                 )
             }
@@ -165,7 +165,7 @@ fun MyPageScreen(
             ) {
                 Text(
                     text = MY_PAGE_NOTICE,
-                    style = HuggTypography.p2,
+                    style = p2(),
                     color = Black,
                 )
             }
@@ -182,7 +182,7 @@ fun MyPageScreen(
             ) {
                 Text(
                     text = MY_PAGE_FAQ,
-                    style = HuggTypography.p2,
+                    style = p2(),
                     color = Black,
                 )
             }
@@ -199,7 +199,7 @@ fun MyPageScreen(
             ) {
                 Text(
                     text = MY_PAGE_CS_ASK,
-                    style = HuggTypography.p2,
+                    style = p2(),
                     color = Black,
                 )
             }
@@ -216,7 +216,7 @@ fun MyPageScreen(
             ) {
                 Text(
                     text = MY_PAGE_TERMS_OF_SERVICE,
-                    style = HuggTypography.p2,
+                    style = p2(),
                     color = Black,
                 )
             }
@@ -239,7 +239,7 @@ fun MyPageScreen(
         ) {
             Text(
                 text = MY_PAGE_PROFILE_MANAGEMENT,
-                style = HuggTypography.p2,
+                style = p2(),
                 color = Black,
             )
         }

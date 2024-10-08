@@ -44,9 +44,12 @@ import com.hugg.feature.theme.Gs30
 import com.hugg.feature.theme.Gs60
 import com.hugg.feature.theme.Gs70
 import com.hugg.feature.theme.Gs80
-import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.WORD_CONFIRM
 import com.hugg.feature.theme.White
+import com.hugg.feature.theme.h2
+import com.hugg.feature.theme.h3
+import com.hugg.feature.theme.h4
+import com.hugg.feature.theme.p1_l
 import com.hugg.feature.util.TimeFormatter
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -125,7 +128,7 @@ fun DatePickBottomSheet(
                 Text(
                     modifier = Modifier.padding(top = 12.dp),
                     text = ACCOUNT_CHOOSE_DATE,
-                    style = HuggTypography.h2,
+                    style = h2(),
                     color = Black
                 )
 
@@ -156,7 +159,7 @@ fun DatePickBottomSheet(
                 ){
                     Text(
                         text = WORD_CONFIRM,
-                        style = HuggTypography.h4,
+                        style = h4(),
                         color = Gs60
                     )
                 }
@@ -214,7 +217,7 @@ fun DatePickBottomSheet(
                                 indication = null
                             ),
                         text = TimeFormatter.getDotsDate(startDay),
-                        style = HuggTypography.p1_l,
+                        style = p1_l(),
                         color = Gs80
                     )
 
@@ -222,7 +225,7 @@ fun DatePickBottomSheet(
 
                     Text(
                         text = ACCOUNT_DIVIDE_DATE,
-                        style = HuggTypography.p1_l,
+                        style = p1_l(),
                         color = Gs80
                     )
 
@@ -239,7 +242,7 @@ fun DatePickBottomSheet(
                                 indication = null
                             ),
                         text = TimeFormatter.getDotsDate(endDay),
-                        style = HuggTypography.p1_l,
+                        style = p1_l(),
                         color = Gs80
                     )
 
@@ -280,7 +283,7 @@ fun RowScope.BottomSheetDatePickItem(
     ){
         Text(
             text = itemType.text,
-            style = HuggTypography.h3,
+            style = h3(),
             color = if (activeType == itemType) White else Gs70
         )
     }

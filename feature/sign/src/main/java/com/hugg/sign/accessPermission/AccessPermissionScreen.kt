@@ -118,7 +118,7 @@ fun AccessPermissionScreen(
 
             Text(
                 color = Gs80,
-                style = HuggTypography.h1,
+                style = h1(),
                 text = SIGN_UP_ACCESS_PERMISSION_TITLE
             )
 
@@ -127,7 +127,7 @@ fun AccessPermissionScreen(
             Text(
                 modifier = Modifier.padding(start = 4.dp),
                 color = Gs70,
-                style = HuggTypography.h3,
+                style = h3(),
                 text = SIGN_UP_ACCESS_PERMISSION_CONTENT
             )
 
@@ -142,7 +142,7 @@ fun AccessPermissionScreen(
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = SIGN_UP_ACCESS_PERMISSION_DETAIL_EXPLAIN,
-                    style = HuggTypography.p3_l,
+                    style = p3_l(),
                     color = Gs80,
                     textAlign = TextAlign.Center
                 )
@@ -151,7 +151,7 @@ fun AccessPermissionScreen(
 
                 Text(
                     text = SIGN_UP_ACCESS_PERMISSION_OPTIONAL_TITLE,
-                    style = HuggTypography.p2,
+                    style = p2(),
                     color = MainStrong,
                 )
 
@@ -174,7 +174,7 @@ fun AccessPermissionScreen(
                     Column {
                         Text(
                             text = WORD_NOTIFICATION,
-                            style = HuggTypography.h3,
+                            style = h3(),
                             color = Gs90
                         )
 
@@ -182,7 +182,7 @@ fun AccessPermissionScreen(
 
                         Text(
                             text = SIGN_UP_ACCESS_PERMISSION_NOTIFICATION,
-                            style = HuggTypography.p2_l,
+                            style = p2_l(),
                             color = Gs90
                         )
                     }
@@ -207,7 +207,7 @@ fun AccessPermissionScreen(
                     Column {
                         Text(
                             text = SIGN_UP_ACCESS_PERMISSION_PHOTO_CAMERA,
-                            style = HuggTypography.h3,
+                            style = h3(),
                             color = Gs90
                         )
 
@@ -215,7 +215,7 @@ fun AccessPermissionScreen(
 
                         Text(
                             text = DAILY_HUGG,
-                            style = HuggTypography.p2_l,
+                            style = p2_l(),
                             color = Gs90
                         )
                     }
@@ -225,7 +225,7 @@ fun AccessPermissionScreen(
 
                 Text(
                     text = SIGN_UP_ACCESS_PERMISSION_CHANGE_PERMISSION,
-                    style = HuggTypography.p2,
+                    style = p2(),
                     color = MainStrong,
                 )
 
@@ -233,7 +233,7 @@ fun AccessPermissionScreen(
 
                 Text(
                     text = SIGN_UP_ACCESS_PERMISSION_CHANGE_PERMISSION_EXPLAIN,
-                    style = HuggTypography.h4,
+                    style = h4(),
                     color = Gs90,
                 )
             }
