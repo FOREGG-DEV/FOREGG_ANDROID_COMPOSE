@@ -2,6 +2,7 @@ package com.hugg.home.homeMain
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -38,6 +40,7 @@ import com.hugg.domain.model.enums.GenderType
 import com.hugg.domain.model.enums.TopBarLeftType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.domain.model.enums.TopBarRightType
+import com.hugg.domain.model.response.challenge.MyChallengeListItemVo
 import com.hugg.domain.model.response.home.HomeRecordResponseVo
 import com.hugg.domain.model.vo.home.HomeTodayScheduleCardVo
 import com.hugg.feature.component.TopBar
@@ -133,6 +136,18 @@ fun HomeScreen(
                         .fillMaxWidth()
                 )
             }
+
+            item {
+                Spacer(modifier = Modifier.size(32.dp))
+
+                if(UserInfo.info.genderType == GenderType.FEMALE){
+                    MyChallengeView(
+                        challengeList = uiState.challengeList,
+                        navigateGoToChallenge = navigateGoToChallenge,
+                        interactionSource = interactionSource
+                    )
+                }
+            }
         }
     }
 }
@@ -152,9 +167,17 @@ fun TodayRecordHorizontalPager(
     val today = TimeFormatter.getToday()
     Text(
         modifier = Modifier.padding(start = 16.dp),
-        text = if(UserInfo.info.genderType == GenderType.FEMALE)
-                    String.format(HOME_TODAY_SCHEDULE_FEMALE, UserInfo.info.name, TimeFormatter.getMonth(today), TimeFormatter.getDay(today))
-                else String.format(HOME_TODAY_SCHEDULE_MALE, UserInfo.info.spouse, UserInfo.info.name, TimeFormatter.getMonth(today), TimeFormatter.getDay(today)),
+        text = if(UserInfo.info.genderType == GenderType.FEMALE) String.format(HOME_TODAY_SCHEDULE_FEMALE_NAME, UserInfo.info.name)
+                else String.format(HOME_TODAY_SCHEDULE_MALE_NAME, UserInfo.info.spouse, UserInfo.info.name),
+        color = Black,
+        style = h2()
+    )
+
+    Text(
+        modifier = Modifier
+            .padding(start = 16.dp)
+            .offset(y = (-2).dp),
+        text = String.format(HOME_TODAY_RECORD, TimeFormatter.getMonth(today), TimeFormatter.getDay(today)),
         color = Black,
         style = h2()
     )
@@ -187,6 +210,93 @@ fun TodayRecordHorizontalPager(
                     onClickTodo = onClickTodo
                 )
             }
+        }
+    }
+}
+
+@Composable
+fun MyChallengeView(
+    challengeList : List<MyChallengeListItemVo> = emptyList(),
+    navigateGoToChallenge: () -> Unit = {},
+    interactionSource: MutableInteractionSource
+){
+    Row(
+        modifier = Modifier.padding(horizontal = 16.dp)
+    ) {
+        Text(
+            text = HOME_MY_CHALLENGE,
+            style = h2(),
+            color = Gs90
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Image(
+            modifier = Modifier
+                .padding(top = 1.dp)
+                .onThrottleClick(
+                    onClick = navigateGoToChallenge,
+                    interactionSource = interactionSource
+                ),
+            painter = painterResource(id = com.hugg.feature.R.drawable.ic_right_arrow_navigate_gs_50),
+            contentDescription = null,
+        )
+    }
+
+    Spacer(modifier = Modifier.size(8.dp))
+
+    if(challengeList.isEmpty()) {
+        EmptyChallengeView(
+            navigateGoToChallenge = navigateGoToChallenge,
+            interactionSource = interactionSource
+        )
+    }
+}
+
+@Composable
+fun EmptyChallengeView(
+    navigateGoToChallenge: () -> Unit = {},
+    interactionSource: MutableInteractionSource
+){
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth()
+            .background(color = White, shape = RoundedCornerShape(6.dp))
+            .padding(top = 22.dp, bottom = 18.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        Text(
+            text = HOME_EMPTY_MY_CHALLENGE_TITLE,
+            style = h4(),
+            color = Gs70
+        )
+
+        Spacer(modifier = Modifier.size(4.dp))
+
+        Text(
+            text = HOME_EMPTY_MY_CHALLENGE_CONTENT,
+            style = p3(),
+            color = Gs50
+        )
+
+        Spacer(modifier = Modifier.size(16.dp))
+
+        Box(
+            modifier = Modifier
+                .border(width = 1.dp, color = Gs10, shape = RoundedCornerShape(6.dp))
+                .padding(horizontal = 24.dp, vertical = 5.dp)
+                .onThrottleClick(
+                    onClick = navigateGoToChallenge,
+                    interactionSource = interactionSource
+                )
+        ){
+            Text(
+                text = HOME_PARTICIPATE_CHALLENGE,
+                style = h4(),
+                color = Gs70
+            )
         }
     }
 }

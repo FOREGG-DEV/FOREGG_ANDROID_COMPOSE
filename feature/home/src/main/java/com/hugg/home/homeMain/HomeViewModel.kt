@@ -2,10 +2,13 @@ package com.hugg.home.homeMain
 
 import androidx.lifecycle.viewModelScope
 import com.hugg.domain.model.enums.GenderType
+import com.hugg.domain.model.enums.HomeChallengeViewType
+import com.hugg.domain.model.response.challenge.MyChallengeListItemVo
 import com.hugg.domain.model.response.home.HomeRecordResponseVo
 import com.hugg.domain.model.response.home.HomeResponseVo
 import com.hugg.domain.model.response.profile.ProfileDetailResponseVo
 import com.hugg.domain.model.vo.home.HomeTodayScheduleCardVo
+import com.hugg.domain.repository.ChallengeRepository
 import com.hugg.domain.repository.HomeRepository
 import com.hugg.domain.repository.ProfileRepository
 import com.hugg.domain.repository.ScheduleRepository
@@ -24,14 +27,31 @@ import kotlin.math.abs
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val homeRepository: HomeRepository,
-    private val scheduleRepository: ScheduleRepository
+    private val scheduleRepository: ScheduleRepository,
+    private val challengeRepository: ChallengeRepository
 ) : BaseViewModel<HomePageState>(
     HomePageState()
 ) {
     fun getHome(){
+        getTodayRecord()
+        when(UserInfo.info.genderType){
+            GenderType.MALE -> {}
+            GenderType.FEMALE -> getMyChallengeList()
+        }
+    }
+
+    private fun getTodayRecord(){
         viewModelScope.launch {
             homeRepository.getHome().collect {
                 resultResponse(it, ::handleInitScheduleStatesSuccess)
+            }
+        }
+    }
+
+    private fun getMyChallengeList(){
+        viewModelScope.launch {
+            challengeRepository.getMyChallenge().collect {
+                resultResponse(it, ::handleSuccessGetMyChallengeList)
             }
         }
     }
@@ -99,6 +119,12 @@ class HomeViewModel @Inject constructor(
                 schedule
             }
         }
+    }
+
+    private fun handleSuccessGetMyChallengeList(list: List<MyChallengeListItemVo>) {
+        updateState(
+            uiState.value.copy(challengeList = list)
+        )
     }
 
     fun onClickTodo(id : Long) {
