@@ -7,6 +7,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -729,6 +730,8 @@ fun FilterItem(
     Box(
         modifier = Modifier
             .padding(end = 4.dp)
+            .size(width = 78.dp, height = 28.dp)
+            .border(width = 1.dp, color = if(uiState.selectedFilterList.contains(text)) Gs70 else Gs20, shape = RoundedCornerShape(999.dp))
             .background(
                 color = if (uiState.selectedFilterList.contains(text)) Gs70 else White,
                 shape = RoundedCornerShape(999.dp)
@@ -737,8 +740,7 @@ fun FilterItem(
                 onClick = { onClickFilterBox(text) },
                 interactionSource = interactionSource,
                 indication = null
-            )
-            .padding(horizontal = 25.dp, vertical = 3.dp),
+            ),
         contentAlignment = Alignment.Center
     ) {
         Text(

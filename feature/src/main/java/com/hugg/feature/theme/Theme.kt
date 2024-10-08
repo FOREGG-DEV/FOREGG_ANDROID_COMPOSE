@@ -44,10 +44,7 @@ fun HuggTheme(
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
+    val colorScheme = LightColorScheme
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {

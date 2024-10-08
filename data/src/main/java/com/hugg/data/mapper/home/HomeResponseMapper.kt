@@ -9,11 +9,7 @@ object HomeResponseMapper: Mapper.ResponseMapper<HomeResponse, HomeResponseVo> {
     override fun mapDtoToModel(type: HomeResponse?): HomeResponseVo {
         return type?.run {
             HomeResponseVo(
-                userName = userName,
-                spouseName = spouseName ?: "",
-                todayDate = todayDate,
                 homeRecordResponseVo = homeRecordResponseVo,
-                ssn = ssn,
                 dailyConditionType = dailyConditionType ?: DailyConditionType.DEFAULT,
                 dailyContent = dailyContent ?: "",
                 latestMedicalRecord = latestMedicalRecord ?: "",

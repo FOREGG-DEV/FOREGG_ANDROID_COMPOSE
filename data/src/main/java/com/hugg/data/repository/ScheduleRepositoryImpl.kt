@@ -46,4 +46,8 @@ class ScheduleRepositoryImpl @Inject constructor(
     override suspend fun getMedicalRecordAndSideEffect(id: Long): Flow<ApiState<MedicalRecord>> {
         return apiLaunch(apiCall = { scheduleApi.getMedicalRecordAndSideEffect(id) }, ScheduleSideEffectResponseMapper)
     }
+
+    override suspend fun checkTodoRecord(id: Long): Flow<ApiState<Unit>> {
+        return apiLaunch(apiCall = { scheduleApi.checkTodoSchedule(id) }, UnitResponseMapper)
+    }
 }

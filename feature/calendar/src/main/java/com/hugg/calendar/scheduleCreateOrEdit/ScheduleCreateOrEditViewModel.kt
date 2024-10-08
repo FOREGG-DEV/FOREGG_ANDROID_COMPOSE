@@ -34,7 +34,7 @@ class ScheduleCreateOrEditViewModel @Inject constructor(
         )
         when(pageType){
             CreateOrEditType.CREATE -> {
-                updateNormalDate(selectDate)
+                updateNormalDate(TimeFormatter.getParseNormalDashDate(selectDate))
                 updateRecordType(recordType)
             }
             CreateOrEditType.EDIT -> {

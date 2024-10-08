@@ -73,4 +73,8 @@ sealed class Routes(val route : String){
     data object MyPageMedInjScreen : Routes("my_page_medicine_injection")
     data object MyPageCsScreen : Routes("my_page_customer_service")
     data object MyPageProfileManagementScreen : Routes("my_page_profile_management")
+
+    //----------------HOME_GRAPH----------------//
+    data object HomeGraph : Routes("home_graph")
+    data object HomeScreen : Routes("home")
 }
