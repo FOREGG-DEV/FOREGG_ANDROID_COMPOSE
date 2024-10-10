@@ -7,4 +7,5 @@ data class MyMedicineInjectionResponseVo(
     val endDate : String = "",
     val repeatDays : String = "",
     val name : String = "",
+    val dose : String = "",
 )

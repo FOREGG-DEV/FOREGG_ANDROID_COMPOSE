@@ -321,7 +321,7 @@ fun InputHospitalMemoView(
     Text(
         text = WORD_MEMO,
         style = HuggTypography.h3,
-        color = Gs50,
+        color = Gs80,
     )
 
     Spacer(modifier = Modifier.size(4.dp))
@@ -351,9 +351,6 @@ fun InputHospitalMemoView(
                 textStyle = HuggTypography.h3.copy(
                     color = Gs90,
                     textAlign = TextAlign.Start
-                ),
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Number
                 ),
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth()

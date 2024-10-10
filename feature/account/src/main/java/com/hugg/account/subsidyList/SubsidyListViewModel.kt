@@ -4,7 +4,6 @@ import androidx.lifecycle.viewModelScope
 import com.hugg.domain.model.response.account.SubsidyListResponseVo
 import com.hugg.domain.repository.AccountRepository
 import com.hugg.feature.base.BaseViewModel
-import com.hugg.feature.util.UserInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

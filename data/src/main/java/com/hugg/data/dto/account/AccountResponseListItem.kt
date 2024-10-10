@@ -6,6 +6,8 @@ import com.hugg.domain.model.enums.AccountColorType
 data class AccountResponseListItem(
     @SerializedName("ledgerId")
     val ledgerId : Long = -1,
+    @SerializedName("expenditureId")
+    val expenditureId : Long = -1,
     @SerializedName("date")
     val date : String = "",
     @SerializedName("count")

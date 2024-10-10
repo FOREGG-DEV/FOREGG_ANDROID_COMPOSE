@@ -101,6 +101,9 @@ fun AccountCreateOrEditContainer(
                     HuggToast.createToast(context, ACCOUNT_TOAST_SUCCESS_DELETE).show()
                     goToBack()
                 }
+                AccountCreateOrEditEvent.ErrorExceedSubsidyEvent -> {
+                    HuggToast.createToast(context, TOAST_EXCEED_SUBSIDY).show()
+                }
             }
         }
     }
@@ -128,7 +131,6 @@ fun AccountCreateOrEditContainer(
             onClickCancel = { viewModel.cancelDeleteDialog() },
             onClickNegative = { viewModel.cancelDeleteDialog() },
             onClickPositive = { viewModel.deleteAccount() },
-            interactionSource = interactionSource
         )
     }
 }

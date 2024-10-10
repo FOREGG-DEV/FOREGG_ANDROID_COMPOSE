@@ -10,6 +10,7 @@ object AccountItemResponseMapper: Mapper.ResponseMapper<AccountResponse, Account
     override fun mapDtoToModel(type: AccountResponse?): AccountResponseVo {
         return type?.run {
             AccountResponseVo(
+                memo = memo ?: "",
                 personalSum = personalSum,
                 subsidySum = subsidySum ?: 0,
                 subsidyAvailable = subsidyAvailable?.map {
@@ -23,6 +24,7 @@ object AccountItemResponseMapper: Mapper.ResponseMapper<AccountResponse, Account
                 ledgerDetailResponseDTOS = ledgerDetailResponseDTOS.map {
                     AccountItemResponseVo(
                         ledgerId = it.ledgerId,
+                        expenditureId = it.expenditureId,
                         date = it.date,
                         round = it.count,
                         color = it.color,

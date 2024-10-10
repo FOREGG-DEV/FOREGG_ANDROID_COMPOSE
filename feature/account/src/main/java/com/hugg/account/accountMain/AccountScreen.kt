@@ -7,8 +7,8 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,6 +28,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,12 +40,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -61,18 +67,16 @@ import com.hugg.feature.R
 import com.hugg.feature.component.HuggDialog
 import com.hugg.feature.component.HuggTabBar
 import com.hugg.feature.component.PlusBtn
-import com.hugg.feature.uiItem.RemoteYearMonth
 import com.hugg.feature.component.TopBar
-import com.hugg.feature.theme.ACCOUNT_ADD_ROUND
 import com.hugg.feature.theme.ACCOUNT_ALL
 import com.hugg.feature.theme.ACCOUNT_ALL_EXPENSE
 import com.hugg.feature.theme.ACCOUNT_DIALOG_CREATE_ROUND
-import com.hugg.feature.theme.ACCOUNT_DIALOG_DELETE
 import com.hugg.feature.theme.ACCOUNT_DIALOG_WARNING_CREATE_ROUND
 import com.hugg.feature.theme.ACCOUNT_LIST_DIALOG_DELETE
 import com.hugg.feature.theme.ACCOUNT_MONTH
 import com.hugg.feature.theme.ACCOUNT_PERSONAL
 import com.hugg.feature.theme.ACCOUNT_ROUND
+import com.hugg.feature.theme.ACCOUNT_ROUND_MEMO
 import com.hugg.feature.theme.ACCOUNT_SUBSIDY_ALL
 import com.hugg.feature.theme.ACCOUNT_SUGGEST_ADD_SUBSIDY
 import com.hugg.feature.theme.ACCOUNT_TOAST_SUCCESS_DELETE
@@ -84,7 +88,6 @@ import com.hugg.feature.theme.CalendarPill
 import com.hugg.feature.theme.EmptySubsidyBoxColor
 import com.hugg.feature.theme.Gs20
 import com.hugg.feature.theme.Gs30
-import com.hugg.feature.theme.Gs50
 import com.hugg.feature.theme.Gs60
 import com.hugg.feature.theme.Gs70
 import com.hugg.feature.theme.Gs80
@@ -99,13 +102,13 @@ import com.hugg.feature.theme.White
 import com.hugg.feature.uiItem.AccountCardItem
 import com.hugg.feature.uiItem.RemoteRound
 import com.hugg.feature.uiItem.SubsidyTotalBoxItem
+import com.hugg.feature.util.ForeggLog
 import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UnitFormatter
-import com.hugg.feature.util.UserInfo
 import kotlinx.coroutines.flow.distinctUntilChanged
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun AccountContainer(
     navigateToSubsidyList : (Int) -> Unit = {},
@@ -117,6 +120,7 @@ fun AccountContainer(
     val context = LocalContext.current
     var isFilterAtTop by remember { mutableStateOf(false) }
     val interactionSource = remember { MutableInteractionSource() }
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(Unit){
         viewModel.setView()
@@ -136,9 +140,14 @@ fun AccountContainer(
         onClickDateFilter = { viewModel.onClickBottomSheetOnOff() },
         onClickGoToSubsidyList = { navigateToSubsidyList(uiState.nowRound) },
         onClickCreateAccountBtn = { navigateToCreateOrEditAccount(-1, CreateOrEditType.CREATE) },
-        onClickAccountCard = { id -> if(uiState.isDeleteMode) viewModel.onClickCard(id) else navigateToCreateOrEditAccount(id, CreateOrEditType.EDIT) },
+        onClickAccountCard = { ledgerId, expenditureId -> if(uiState.isDeleteMode) viewModel.onClickCard(expenditureId) else navigateToCreateOrEditAccount(ledgerId, CreateOrEditType.EDIT) },
         onLongClickAccountCard = { id -> viewModel.onLongClickItem(id) },
         onDeleteAccountList = { viewModel.showDeleteDialog(true) },
+        onChangedMemo = { memo -> viewModel.onChangedMemo(memo)},
+        onKeyboardDone = {
+            viewModel.inputMemoDone()
+            keyboardController?.hide()
+        },
         interactionSource = interactionSource
     )
 
@@ -179,8 +188,7 @@ fun AccountContainer(
             positiveText = WORD_DELETE,
             onClickCancel = { viewModel.showDeleteDialog(false) },
             onClickNegative = { viewModel.showDeleteDialog(false) },
-            onClickPositive = { viewModel.deleteAccount() },
-            interactionSource = interactionSource
+            onClickPositive = { viewModel.deleteExpenditure() },
         )
     }
 
@@ -193,7 +201,6 @@ fun AccountContainer(
             onClickCancel = { viewModel.showCreateRoundDialog(false) },
             onClickNegative = { viewModel.showCreateRoundDialog(false) },
             onClickPositive = { viewModel.onClickCreateRoundBtn() },
-            interactionSource = interactionSource
         )
     }
 }
@@ -214,8 +221,10 @@ fun AccountScreen(
     isFilterAtTop: Boolean = false,
     onClickDateFilter: () -> Unit = {},
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    onClickAccountCard : (Long) -> Unit = {},
+    onClickAccountCard : (Long, Long) -> Unit = {_, _ -> },
     onLongClickAccountCard : (Long) -> Unit = {},
+    onChangedMemo : (String) -> Unit = {},
+    onKeyboardDone : () -> Unit = {},
     onDeleteAccountList : () -> Unit = {}
 ) {
 
@@ -228,7 +237,10 @@ fun AccountScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Background),
+            .background(Background)
+            .pointerInput(Unit) {
+                onKeyboardDone()
+            },
     ) {
 
         TopBar(
@@ -286,6 +298,8 @@ fun AccountScreen(
                     uiState = uiState,
                     onClickDateFilter = onClickDateFilter,
                     onClickGoToSubsidyList = onClickGoToSubsidyList,
+                    onChangedMemo = onChangedMemo,
+                    onKeyboardDone = onKeyboardDone,
                     interactionSource = interactionSource
                 )
 
@@ -304,6 +318,9 @@ fun AccountScreen(
 
             itemsIndexed(
                 items = uiState.accountList,
+                key = { _, accountVo ->
+                    accountVo.expenditureId
+                }
             ) { _, accountVo ->
                 AccountCardItem(
                     item = accountVo,
@@ -430,6 +447,8 @@ fun AccountTotalBox(
     uiState: AccountPageState = AccountPageState(),
     onClickDateFilter: () -> Unit = {},
     onClickGoToSubsidyList: () -> Unit = {},
+    onChangedMemo : (String) -> Unit = {},
+    onKeyboardDone : () -> Unit = {},
     interactionSource: MutableInteractionSource
 ) {
     Column(
@@ -470,7 +489,50 @@ fun AccountTotalBox(
             }
         }
 
-        if (uiState.tabType != AccountTabType.ALL) Spacer(modifier = Modifier.size(22.dp))
+        if (uiState.tabType == AccountTabType.ROUND) {
+            Spacer(modifier = Modifier.size(16.dp))
+
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 12.dp)
+                    .fillMaxWidth(),
+            ) {
+                if(uiState.memo.isEmpty()){
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_write_gs_70),
+                            contentDescription = null
+                        )
+
+                        Spacer(modifier = Modifier.size(4.dp))
+
+                        Text(
+                            text = ACCOUNT_ROUND_MEMO,
+                            style = HuggTypography.h4,
+                            color = Gs70
+                        )
+                    }
+                }
+
+                BasicTextField(
+                    value = uiState.memo,
+                    onValueChange = { value ->
+                        onChangedMemo(value)
+                    },
+                    textStyle = HuggTypography.h4.copy(
+                        color = Gs70,
+                    ),
+                    keyboardActions = KeyboardActions(onDone = {onKeyboardDone()}),
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        }
+
+        if (uiState.tabType == AccountTabType.MONTH) Spacer(modifier = Modifier.size(22.dp))
+        if (uiState.tabType == AccountTabType.ROUND) Spacer(modifier = Modifier.size(12.dp))
 
         TotalBoxItem(AccountColorType.RED, uiState)
 
@@ -686,10 +748,4 @@ fun FilterItem(
             color = if(uiState.selectedFilterList.contains(text)) White else Gs60
         )
     }
-}
-
-@Preview
-@Composable
-internal fun PreviewMainContainer() {
-    //EmptySubsidyBox()
 }

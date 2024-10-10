@@ -16,6 +16,7 @@ object StatusCode {
 
     object LEDGER {
         const val NO_EXIST_LEDGER = "LEDGER4001"
+        const val EXCEED_SUBSIDY = "SUBSIDY4002"
     }
 
     object DAILY {

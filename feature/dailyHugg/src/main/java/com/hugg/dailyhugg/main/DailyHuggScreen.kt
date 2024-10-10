@@ -130,7 +130,6 @@ fun DailyHuggScreen(
 
     if (uiState.showEditDialog) {
         HuggDialog(
-            interactionSource = interactionSource,
             hasWarningText = true,
             warningMessage = EDIT_DAILY_HUGG_DIALOG_WARNING,
             title = EDIT_DAILY_HUGG_DIALOG_TITLE,
@@ -153,7 +152,6 @@ fun DailyHuggScreen(
 
     if (uiState.showDeleteDialog) {
         HuggDialog(
-            interactionSource = interactionSource,
             title = DELETE_DAILY_HUGG_TITLE,
             onClickNegative = { viewModel.updateShowDeleteDialog(false) },
             onClickPositive = {

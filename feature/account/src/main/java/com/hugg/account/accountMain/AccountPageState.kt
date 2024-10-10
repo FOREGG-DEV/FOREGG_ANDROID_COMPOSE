@@ -12,6 +12,7 @@ data class AccountPageState(
     val tabType : AccountTabType = AccountTabType.ROUND,
     val startDay : String = "",
     val endDay : String = "",
+    val memo : String = "",
     val selectedYearMonth : String = "",
     val isCurrentMonth : Boolean = false,
     val nowRound : Int = UserInfo.info.round,

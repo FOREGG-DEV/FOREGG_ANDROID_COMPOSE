@@ -42,7 +42,7 @@ import org.threeten.bp.format.DateTimeFormatter
 fun ScheduleDetailItem(
     scheduleDetailVo: ScheduleDetailVo = ScheduleDetailVo(),
     isLastItem : Boolean = false,
-    onClickEditScheduleBtn : (Long) -> Unit = {},
+    onClickEditScheduleBtn : (Long, RecordType) -> Unit = {_, _ -> },
     interactionSource: MutableInteractionSource
 ){
     Column(
@@ -50,7 +50,7 @@ fun ScheduleDetailItem(
             .fillMaxWidth()
             .background(color = White)
             .clickable(
-                onClick = { onClickEditScheduleBtn(scheduleDetailVo.id) },
+                onClick = { onClickEditScheduleBtn(scheduleDetailVo.id, scheduleDetailVo.recordType) },
                 interactionSource = interactionSource,
                 indication = null
             )
@@ -130,7 +130,7 @@ fun ScheduleDetailItem(
             ) {
                 Spacer(modifier = Modifier.size(14.dp))
 
-                Image(
+                if(scheduleDetailVo.recordType == RecordType.INJECTION || scheduleDetailVo.recordType == RecordType.MEDICINE) Image(
                     painter = painterResource(if(scheduleDetailVo.vibration) R.drawable.ic_vibration_alarm else R.drawable.ic_push_alarm),
                     contentDescription = null
                 )

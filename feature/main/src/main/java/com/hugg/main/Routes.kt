@@ -7,6 +7,13 @@ sealed class Routes(val route : String){
     //----------------SIGN_GRAPH----------------//
     data object SignGraph : Routes("sign_graph")
     data object OnboardingScreen : Routes("onboarding")
+    data object ServiceTermsScreen : Routes("service_terms/{accessToken}") {
+        fun getRouteServiceTerms(accessToken : String) : String = "service_terms/$accessToken"
+    }
+
+    data object AccessPermissionScreen : Routes("access_permission/{accessToken}"){
+        fun getRouteAccessPermission(accessToken : String) : String = "access_permission/$accessToken"
+    }
     data object InputSsnScreen : Routes("input_ssn/{accessToken}"){
         fun getRouteInputSsn(accessToken : String) : String = "input_ssn/$accessToken"
     }
@@ -59,4 +66,12 @@ sealed class Routes(val route : String){
         fun createRoute(id: Long) = "edit_daily_hugg/$id"
     }
     data object DailyHuggListScreen: Routes("daily_hugg_list")
+
+    //----------------MY_PAGE_GRAPH----------------//
+    data object MyPageGraph : Routes("my_page_graph")
+    data object MyPageScreen : Routes("my_page")
+    data object MyPageSpouseScreen : Routes("my_page_spouse")
+    data object MyPageMedInjScreen : Routes("my_page_medicine_injection")
+    data object MyPageCsScreen : Routes("my_page_customer_service")
+    data object MyPageProfileManagementScreen : Routes("my_page_profile_management")
 }

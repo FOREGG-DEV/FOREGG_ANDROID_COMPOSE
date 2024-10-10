@@ -35,6 +35,7 @@ import com.hugg.feature.theme.SubsidyColorBlue
 import com.hugg.feature.theme.SubsidyColorGreen
 import com.hugg.feature.theme.SubsidyColorYellow
 import com.hugg.feature.theme.White
+import com.hugg.feature.util.ForeggLog
 import com.hugg.feature.util.UnitFormatter
 
 @Composable
@@ -100,11 +101,11 @@ fun SubsidyDetailBox(
 
             Spacer(modifier = Modifier.size(8.dp))
 
-            DetailMoneyView(ACCOUNT_EXPENDITURE)
+            DetailMoneyView(ACCOUNT_EXPENDITURE, item)
 
             Spacer(modifier = Modifier.size(8.dp))
 
-            DetailMoneyView(ACCOUNT_AVAILABLE_MONEY)
+            DetailMoneyView(ACCOUNT_AVAILABLE_MONEY, item)
 
             Spacer(modifier = Modifier.size(16.dp))
 
