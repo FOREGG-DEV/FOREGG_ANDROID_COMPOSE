@@ -21,9 +21,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.hugg.domain.model.enums.HuggTabClickedType
 import com.hugg.feature.theme.Gs50
+import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.MainNormal
 import com.hugg.feature.theme.White
-import com.hugg.feature.theme.h2
 
 @Composable
 fun HuggTabBar(
@@ -104,9 +104,9 @@ fun RowScope.TabItem(
             ),
         contentAlignment = Alignment.Center
     ){
-        Text(
+        HuggText(
             text = text,
-            style = h2(),
+            style = HuggTypography.h2,
             color = if(type == clickedType) White else Gs50
         )
     }

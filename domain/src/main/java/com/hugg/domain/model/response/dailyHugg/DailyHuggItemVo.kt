@@ -8,6 +8,6 @@ data class DailyHuggItemVo(
     val day: String = "",
     val dailyConditionType: String = "",
     val content: String = "",
-    val imageUrl: String = "",
+    val imageUrl: String? = null,
     val reply: String = ""
 )

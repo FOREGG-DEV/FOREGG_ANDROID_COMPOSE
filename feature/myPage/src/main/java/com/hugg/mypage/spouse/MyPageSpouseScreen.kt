@@ -91,7 +91,7 @@ fun MyPageSpouseScreen(
         Text(
             modifier = Modifier.padding(start = 16.dp),
             text = MY_PAGE_SPOUSE_CODE,
-            style = h3(),
+            style = HuggTypography.h3,
             color = Gs90
         )
 
@@ -113,7 +113,7 @@ fun MyPageSpouseScreen(
             Text(
                 modifier = Modifier.padding(start = 12.dp),
                 color = Black,
-                style = p2(),
+                style = HuggTypography.p2,
                 text = uiState.spouseCode
             )
 
@@ -141,7 +141,7 @@ fun MyPageSpouseScreen(
         Text(
             modifier = Modifier.padding(start = 16.dp),
             text = MY_PAGE_SPOUSE_CODE_HINT,
-            style = p3_l(),
+            style = HuggTypography.p3_l,
             color = Gs90
         )
 

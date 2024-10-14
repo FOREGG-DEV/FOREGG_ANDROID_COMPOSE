@@ -83,4 +83,8 @@ class DailyHuggViewModel @Inject constructor(
         getDailyHuggByDate(TimeFormatter.getToday())
         emitEventFlow(DailyHuggEvent.CompleteDeleteDailyHugg)
     }
+
+    fun onClickBtnDailyHuggList() {
+        emitEventFlow(DailyHuggEvent.GoToDailyHuggList)
+    }
 }

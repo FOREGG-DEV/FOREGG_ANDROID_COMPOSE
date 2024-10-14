@@ -57,6 +57,7 @@ import com.hugg.domain.model.enums.RecordType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.domain.model.vo.calendar.CalendarDayVo
 import com.hugg.feature.component.CancelBtn
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.component.PlusBtn
 import com.hugg.feature.uiItem.RemoteYearMonth
 import com.hugg.feature.component.TopBar
@@ -208,10 +209,10 @@ fun CalendarScreen(
 fun CalendarHeadItem(
     item : CalendarDayVo = CalendarDayVo()
 ){
-    Text(
+    HuggText(
         text = item.day,
         color = if(item.isSunday) Sunday else Gs80,
-        style = h4()
+        style = HuggTypography.h4
     )
 }
 
@@ -244,11 +245,11 @@ fun CalendarDayItem(
             color = if(item.isToday) Sub else White,
             shape = RoundedCornerShape(4.dp)
         ) {
-            Text(
+            HuggText(
                 textAlign = TextAlign.Center,
                 text = item.day,
                 color = getDayTextColor(item),
-                style = p2()
+                style = HuggTypography.p2
             )
         }
 
@@ -291,11 +292,11 @@ fun CalendarDayItem(
                     .height(14.dp),
                 contentAlignment = Alignment.CenterStart
             ){
-                if(!scheduleDetailVo.isContinueSchedule) Text(
+                if(!scheduleDetailVo.isContinueSchedule) HuggText(
                     text = text,
                     color = Gs70,
                     maxLines = 1,
-                    style = p5(),
+                    style = HuggTypography.p5,
                 )
             }
 
@@ -365,21 +366,21 @@ fun ScheduleDialogPagerItem(
     ) {
         Spacer(modifier = Modifier.size(20.dp))
 
-        Text(
+        HuggText(
             modifier = Modifier
                 .padding(start = 16.dp),
             text = calendarDayVo.realDate,
-            style = h2(),
+            style = HuggTypography.h2,
             color = Gs80
         )
 
         Spacer(modifier = Modifier.size(16.dp))
 
-        if (calendarDayVo.scheduleList.isEmpty()) Text(
+        if (calendarDayVo.scheduleList.isEmpty()) HuggText(
             modifier = Modifier
                 .padding(start = 16.dp),
             text = CALENDAR_EMPTY_SCHEDULE,
-            style = h4(),
+            style = HuggTypography.h4,
             color = Gs50
         )
         else LazyColumn {
@@ -523,9 +524,9 @@ fun CreateScheduleBtnByType(
             .padding(vertical = 6.dp),
         contentAlignment = Alignment.Center
     ) {
-        Text(
+        HuggText(
             text = text,
-            style = h4(),
+            style = HuggTypography.h4,
             color = Gs80
         )
     }

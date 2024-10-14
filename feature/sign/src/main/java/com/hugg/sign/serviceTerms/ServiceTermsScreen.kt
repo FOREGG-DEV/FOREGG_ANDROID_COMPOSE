@@ -23,15 +23,18 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -42,6 +45,7 @@ import com.hugg.feature.component.SignUpIndicator
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
 import com.hugg.feature.R
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.util.onThrottleClick
 
 
@@ -108,9 +112,9 @@ fun ServiceTermsScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(
+            HuggText(
                 color = Gs80,
-                style = h1(),
+                style = HuggTypography.h1,
                 text = SIGN_UP_SERVICE_TERMS_TITLE
             )
 
@@ -137,9 +141,9 @@ fun ServiceTermsScreen(
 
                 Spacer(modifier = Modifier.size(8.dp))
 
-                Text(
+                HuggText(
                     text = SIGN_UP_SERVICE_TERMS_ALL_AGREE,
-                    style = h3(),
+                    style = HuggTypography.h3,
                     color = Black
                 )
             }
@@ -195,17 +199,17 @@ fun ServiceTermsScreen(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
+                HuggText(
                     text = SIGN_UP_TERMS_ASK,
-                    style = p2(),
+                    style = HuggTypography.p2,
                     color = Gs70
                 )
 
                 Spacer(modifier = Modifier.size(4.dp))
 
-                Text(
+                HuggText(
                     text = FOREGG_EMAIL,
-                    style = p2(),
+                    style = HuggTypography.p2,
                     color = Gs70
                 )
             }
@@ -245,30 +249,36 @@ fun TermTextRow(
         Spacer(modifier = Modifier.size(8.dp))
 
         if(termsText.isEmpty()) {
-            ClickableText(
-                text = annotateText,
-                style = p2(),
-                onClick = { offset ->
-                    annotateText.getStringAnnotations(tag = annotateTag, start = offset, end = offset)
-                        .firstOrNull()?.let {
-                            onClickTermsDetailBtn()
-                        }
-                }
-            )
+            CompositionLocalProvider(LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1f)) {
+                ClickableText(
+                    text = annotateText,
+                    style = HuggTypography.p2,
+                    onClick = { offset ->
+                        annotateText.getStringAnnotations(
+                            tag = annotateTag,
+                            start = offset,
+                            end = offset
+                        )
+                            .firstOrNull()?.let {
+                                onClickTermsDetailBtn()
+                            }
+                    }
+                )
+            }
         }
         else{
-            Text(
+            HuggText(
                 text = termsText,
-                style = p2(),
+                style = HuggTypography.p2,
                 color = Gs90
             )
         }
 
         Spacer(modifier = Modifier.size(4.dp))
 
-        Text(
+        HuggText(
             text = SIGN_UP_ESSENTIAL_WORD,
-            style = p2(),
+            style = HuggTypography.p2,
             color = MainStrong
         )
 

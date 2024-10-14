@@ -19,13 +19,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.feature.component.BlankBtn
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.Background
 import com.hugg.feature.theme.CONFIRM_DAILY_HUGG
 import com.hugg.feature.theme.CREATION_SUCCESS_TITLE
 import com.hugg.feature.theme.DAILY_HUGG
 import com.hugg.feature.theme.GsBlack
-import com.hugg.feature.theme.h1
+import com.hugg.feature.theme.HuggTypography
 
 @Composable
 fun DailyHuggCreationSuccessScreen(
@@ -57,9 +58,9 @@ fun DailyHuggCreationSuccessContent(
 
         Spacer(modifier = Modifier.height(122.dp))
 
-        Text(
+        HuggText(
             text = CREATION_SUCCESS_TITLE,
-            style = h1(),
+            style = HuggTypography.h1,
             color = GsBlack
         )
 

@@ -47,6 +47,7 @@ import com.hugg.domain.model.vo.home.HomeTodayScheduleCardVo
 import com.hugg.feature.component.ChallengeCompleteDialog
 import com.hugg.feature.component.HuggDialog
 import com.hugg.feature.component.HuggInputDialog
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
 import com.hugg.feature.uiItem.HomeMyChallengeItem
@@ -195,21 +196,21 @@ fun TodayRecordHorizontalPager(
     val screenWidthDp = configuration.screenWidthDp.dp
     val itemWidth = 285.dp
     val today = TimeFormatter.getToday()
-    Text(
+    HuggText(
         modifier = Modifier.padding(start = 16.dp),
         text = if(UserInfo.info.genderType == GenderType.FEMALE) String.format(HOME_TODAY_SCHEDULE_FEMALE_NAME, UserInfo.info.name)
-                else String.format(HOME_TODAY_SCHEDULE_MALE_NAME, UserInfo.info.spouse, UserInfo.info.name),
+        else String.format(HOME_TODAY_SCHEDULE_MALE_NAME, UserInfo.info.spouse, UserInfo.info.name),
         color = Black,
-        style = h2()
+        style = HuggTypography.h2
     )
 
-    Text(
+    HuggText(
         modifier = Modifier
             .padding(start = 16.dp)
             .offset(y = (-2).dp),
         text = String.format(HOME_TODAY_RECORD, TimeFormatter.getMonth(today), TimeFormatter.getDay(today)),
         color = Black,
-        style = h2()
+        style = HuggTypography.h2
     )
 
     Spacer(modifier = Modifier.size(8.dp))
@@ -255,9 +256,9 @@ fun MyChallengeView(
     Row(
         modifier = Modifier.padding(horizontal = 16.dp)
     ) {
-        Text(
+        HuggText(
             text = HOME_MY_CHALLENGE,
-            style = h2(),
+            style = HuggTypography.h2,
             color = Gs90
         )
 
@@ -311,17 +312,17 @@ fun EmptyChallengeView(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Text(
+        HuggText(
             text = HOME_EMPTY_MY_CHALLENGE_TITLE,
-            style = h4(),
+            style = HuggTypography.h4,
             color = Gs70
         )
 
         Spacer(modifier = Modifier.size(4.dp))
 
-        Text(
+        HuggText(
             text = HOME_EMPTY_MY_CHALLENGE_CONTENT,
-            style = p3(),
+            style = HuggTypography.p3,
             color = Gs50
         )
 
@@ -336,9 +337,9 @@ fun EmptyChallengeView(
                     interactionSource = interactionSource
                 )
         ){
-            Text(
+            HuggText(
                 text = HOME_PARTICIPATE_CHALLENGE,
-                style = h4(),
+                style = HuggTypography.h4,
                 color = Gs70
             )
         }

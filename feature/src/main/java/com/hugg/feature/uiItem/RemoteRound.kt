@@ -24,13 +24,13 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.hugg.feature.R
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.theme.ACCOUNT_ADD_ROUND
 import com.hugg.feature.theme.Gs20
 import com.hugg.feature.theme.Gs50
 import com.hugg.feature.theme.Gs90
+import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.White
-import com.hugg.feature.theme.h2
-import com.hugg.feature.theme.p2
 import com.hugg.feature.util.UnitFormatter
 import com.hugg.feature.util.UserInfo
 
@@ -68,11 +68,11 @@ fun RemoteRound(
 
             Spacer(modifier = Modifier.size(35.dp))
 
-            Text(
+            HuggText(
                 modifier = Modifier.align(Alignment.CenterVertically),
                 text = UnitFormatter.getRoundFormat(nowRound),
                 color = Gs90,
-                style = h2()
+                style = HuggTypography.h2
             )
 
             Spacer(modifier = Modifier.size(35.dp))
@@ -107,7 +107,7 @@ fun RemoteRound(
                         .background(color = White, shape = RoundedCornerShape(4.dp)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(
+                    HuggText(
                         modifier = Modifier
                             .padding(horizontal = 8.dp, vertical = 6.dp)
                             .clickable(
@@ -116,7 +116,7 @@ fun RemoteRound(
                                 indication = null
                             ),
                         text = ACCOUNT_ADD_ROUND,
-                        style = p2(),
+                        style = HuggTypography.p2,
                         color = Gs50
                     )
                 }

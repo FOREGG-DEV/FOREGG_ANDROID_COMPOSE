@@ -5,18 +5,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -24,7 +21,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -32,16 +28,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.hugg.domain.model.enums.BottomNavType
 import com.hugg.feature.R
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.theme.Gs50
 import com.hugg.feature.theme.Gs80
 import com.hugg.feature.theme.HuggTheme
+import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.WORD_ACCOUNT
 import com.hugg.feature.theme.WORD_CALENDAR
 import com.hugg.feature.theme.WORD_DAILY_HUGG
 import com.hugg.feature.theme.WORD_HOME
 import com.hugg.feature.theme.WORD_MY
 import com.hugg.feature.theme.White
-import com.hugg.feature.theme.p4
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Composable
@@ -129,10 +126,10 @@ fun BottomNavView(
 
             Spacer(modifier = Modifier.size(3.dp))
 
-            Text(
+            HuggText(
                 modifier = Modifier.padding(bottom = 1.dp),
                 text = WORD_HOME,
-                style = p4(),
+                style = HuggTypography.p4,
                 color = if(type == BottomNavType.HOME) Gs80 else Gs50
             )
         }
@@ -158,10 +155,10 @@ fun BottomNavView(
 
             Spacer(modifier = Modifier.size(3.dp))
 
-            Text(
+            HuggText(
                 modifier = Modifier.padding(bottom = 1.dp),
                 text = WORD_CALENDAR,
-                style = p4(),
+                style = HuggTypography.p4,
                 color = if(type == BottomNavType.CALENDAR) Gs80 else Gs50
             )
         }
@@ -186,10 +183,10 @@ fun BottomNavView(
 
             Spacer(modifier = Modifier.size(3.dp))
 
-            Text(
+            HuggText(
                 modifier = Modifier.padding(bottom = 1.dp),
                 text = WORD_DAILY_HUGG,
-                style = p4(),
+                style = HuggTypography.p4,
                 color = if(type == BottomNavType.DAILY_HUGG) Gs80 else Gs50
             )
         }
@@ -214,10 +211,10 @@ fun BottomNavView(
 
             Spacer(modifier = Modifier.size(3.dp))
 
-            Text(
+            HuggText(
                 modifier = Modifier.padding(bottom = 1.dp),
                 text = WORD_ACCOUNT,
-                style = p4(),
+                style = HuggTypography.p4,
                 color = if(type == BottomNavType.ACCOUNT) Gs80 else Gs50
             )
         }
@@ -242,10 +239,10 @@ fun BottomNavView(
 
             Spacer(modifier = Modifier.size(3.dp))
 
-            Text(
+            HuggText(
                 modifier = Modifier.padding(bottom = 1.dp),
                 text = WORD_MY,
-                style = p4(),
+                style = HuggTypography.p4,
                 color = if(type == BottomNavType.PROFILE) Gs80 else Gs50
             )
         }

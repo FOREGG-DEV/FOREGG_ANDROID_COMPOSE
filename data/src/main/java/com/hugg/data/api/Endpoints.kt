@@ -42,7 +42,7 @@ object Endpoints {
     }
 
     object DailyHugg {
-        private const val DAILY = "/daily"
+        const val DAILY = "/daily"
         const val WRITE = "$DAILY/write"
         const val BYDATE = "$DAILY/byDate/{date}"
         const val EDIT = "$DAILY/{id}"

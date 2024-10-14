@@ -43,6 +43,7 @@ import com.hugg.feature.theme.*
 import com.hugg.feature.R
 import com.hugg.feature.component.FilledBtn
 import com.hugg.feature.component.HuggSnackBar
+import com.hugg.feature.component.HuggText
 
 
 @Composable
@@ -113,9 +114,9 @@ fun SpouseCodeFemaleScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(
+            HuggText(
                 color = Gs80,
-                style = h1(),
+                style = HuggTypography.h1,
                 text = SIGN_UP_SPOUSE_CODE_FEMALE
             )
 
@@ -129,9 +130,9 @@ fun SpouseCodeFemaleScreen(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Text(
+            HuggText(
                 color = Gs90,
-                style = p2_l(),
+                style = HuggTypography.p2_l,
                 text = SIGN_UP_SPOUSE_CODE_FEMALE_HINT
             )
 
@@ -200,10 +201,10 @@ fun SpouseCodeCopyView(
 
         Spacer(modifier = Modifier.width(30.dp))
 
-        Text(
+        HuggText(
             modifier = Modifier.padding(end = 39.dp),
             color = Black,
-            style = h3(),
+            style = HuggTypography.h3,
             text = uiState.spouseCode
         )
     }

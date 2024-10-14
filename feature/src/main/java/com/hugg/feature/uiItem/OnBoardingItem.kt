@@ -15,10 +15,10 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.hugg.feature.R
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.theme.Black
 import com.hugg.feature.theme.Gs80
-import com.hugg.feature.theme.h1
-import com.hugg.feature.theme.p1
+import com.hugg.feature.theme.HuggTypography
 
 @Composable
 fun OnBoardingItem(
@@ -35,19 +35,19 @@ fun OnBoardingItem(
             contentDescription = null
         )
         Spacer(modifier = Modifier.height(12.dp))
-        Text(
+        HuggText(
             modifier = Modifier.padding(horizontal = 16.dp),
             textAlign = TextAlign.Center,
             text = title,
-            style = h1(),
+            style = HuggTypography.h1,
             color = Black
         )
         Spacer(modifier = Modifier.height(8.dp))
-        Text(
+        HuggText(
             modifier = Modifier.padding(horizontal = 16.dp),
             textAlign = TextAlign.Center,
             text = content,
-            style = p1(),
+            style = HuggTypography.p1,
             color = Gs80
         )
     }

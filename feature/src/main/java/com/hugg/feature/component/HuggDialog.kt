@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,8 +26,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -44,18 +47,13 @@ import com.hugg.feature.theme.Gs10
 import com.hugg.feature.theme.Gs30
 import com.hugg.feature.theme.Gs70
 import com.hugg.feature.theme.Gs80
+import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.Gs90
 import com.hugg.feature.theme.MainNormal
 import com.hugg.feature.theme.Sunday
 import com.hugg.feature.theme.WORD_NO
 import com.hugg.feature.theme.WORD_YES
 import com.hugg.feature.theme.White
-import com.hugg.feature.theme.challenge
-import com.hugg.feature.theme.h2
-import com.hugg.feature.theme.h3
-import com.hugg.feature.theme.p1_l
-import com.hugg.feature.theme.p3_l
-import com.hugg.feature.util.ForeggLog
 
 @Composable
 fun HuggDialog(
@@ -84,13 +82,13 @@ fun HuggDialog(
         ) {
             Spacer(modifier = Modifier.size(if(hasWarningText) 24.dp else 40.dp))
 
-            Text(
+            HuggText(
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth(),
                 maxLines = 1,
                 text = title,
-                style = h2(),
+                style = HuggTypography.h2,
                 color = Black,
                 textAlign = TextAlign.Center
             )
@@ -98,13 +96,13 @@ fun HuggDialog(
             if(hasWarningText) {
                 Spacer(modifier = Modifier.size(2.dp))
 
-                Text(
+                HuggText(
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
                         .fillMaxWidth(),
                     maxLines = 1,
                     text = warningMessage,
-                    style = p1_l(),
+                    style = HuggTypography.p1_l,
                     color = Sunday,
                     textAlign = TextAlign.Center
                 )
@@ -126,9 +124,9 @@ fun HuggDialog(
                             ),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(
+                        HuggText(
                             text = negativeText,
-                            style = h2(),
+                            style = HuggTypography.h2,
                             color = Gs80
                         )
                     }
@@ -149,9 +147,9 @@ fun HuggDialog(
                         ),
                     contentAlignment = Alignment.Center
                 ){
-                    Text(
+                    HuggText(
                         text = positiveText,
-                        style = h2(),
+                        style = HuggTypography.h2,
                         color = White
                     )
                 }
@@ -184,13 +182,13 @@ fun HuggInputDialog(
                 .padding(top = 24.dp, bottom = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
+            HuggText(
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth(),
                 maxLines = 1,
                 text = title,
-                style = h2(),
+                style = HuggTypography.h2,
                 color = Black,
                 textAlign = TextAlign.Center
             )
@@ -204,7 +202,7 @@ fun HuggInputDialog(
                         inputContent = value
                     }
                 },
-                textStyle = p1_l().copy(
+                textStyle = HuggTypography.p1_l.copy(
                     textAlign = TextAlign.Center,
                     color = Gs90,
                 ),
@@ -213,14 +211,19 @@ fun HuggInputDialog(
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth()
                     .border(width = 1.dp, color = Gs30, shape = RoundedCornerShape(4.dp))
-                    .padding(vertical = 12.dp)
+                    .padding(vertical = 12.dp),
+                decorationBox = { innerTextField ->
+                    CompositionLocalProvider(LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1f)) {
+                        innerTextField()
+                    }
+                }
             )
 
             Spacer(modifier = Modifier.size(5.dp))
 
-            Text(
+            HuggText(
                 text = String.format(DIALOG_MAX_LENGTH, maxLength),
-                style = p3_l(),
+                style = HuggTypography.p3_l,
                 color = Gs70
             )
 
@@ -268,7 +271,7 @@ fun ChallengeCompleteDialog(
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ){
-            Text(
+            HuggText(
                 text = CHALLENGE_COMPLETE,
                 color = White,
                 style = challenge()

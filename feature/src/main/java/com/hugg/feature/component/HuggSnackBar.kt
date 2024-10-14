@@ -20,8 +20,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.White
-import com.hugg.feature.theme.p2
 
 @Composable
 fun HuggSnackBar(
@@ -36,9 +36,9 @@ fun HuggSnackBar(
            .background(color = Color(0xCC2C2C2C), shape = RoundedCornerShape(8.dp)),
         contentAlignment = Alignment.Center
     ){
-        Text(
+        HuggText(
             color = White,
-            style = p2(),
+            style = HuggTypography.p2,
             text = text,
             textAlign = TextAlign.Center,
         )

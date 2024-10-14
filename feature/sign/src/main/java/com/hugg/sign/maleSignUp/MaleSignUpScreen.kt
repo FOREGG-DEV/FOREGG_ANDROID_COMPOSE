@@ -14,13 +14,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -28,6 +31,7 @@ import com.hugg.domain.model.enums.TopBarLeftType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.domain.model.request.sign.SignUpMaleRequestVo
 import com.hugg.feature.component.FilledBtn
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.component.SignUpIndicator
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
@@ -96,9 +100,9 @@ fun MaleSignUpScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(
+            HuggText(
                 color = Gs80,
-                style = h1(),
+                style = HuggTypography.h1,
                 text = SIGN_UP_MALE
             )
 
@@ -118,19 +122,24 @@ fun MaleSignUpScreen(
                     onValueChange = { value ->
                         onChangedSpouseCode(value)
                     },
-                    textStyle = h3().copy(
+                    textStyle = HuggTypography.h3.copy(
                         color = Black,
                         textAlign = TextAlign.Center
                     ),
                     singleLine = true,
+                    decorationBox = { innerTextField ->
+                        CompositionLocalProvider(LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1f)) {
+                            innerTextField()
+                        }
+                    }
                 )
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Text(
+            HuggText(
                 color = Gs90,
-                style = p2_l(),
+                style = HuggTypography.p2_l,
                 text = SIGN_UP_SPOUSE_CODE_MALE_HINT
             )
         }

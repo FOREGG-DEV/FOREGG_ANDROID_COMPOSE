@@ -16,6 +16,5 @@ data class CreateEditDailyHuggPageState(
     @IgnoredOnParcel
     val clickable: Boolean =
         !(dailyHuggContent.isEmpty() ||
-                dailyConditionType == DailyConditionType.DEFAULT ||
-                selectedImageUri == null)
+                dailyConditionType == DailyConditionType.DEFAULT)
 }
