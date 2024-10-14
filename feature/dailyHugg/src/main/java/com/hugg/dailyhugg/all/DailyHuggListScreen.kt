@@ -184,7 +184,7 @@ fun DailyHuggList(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        items(items) { item ->
+        items(items, key = {it.id} ) { item ->
             DailyHuggListItem(
                 item = item,
                 goToDailyHuggDetail = goToDailyHuggDetail,
