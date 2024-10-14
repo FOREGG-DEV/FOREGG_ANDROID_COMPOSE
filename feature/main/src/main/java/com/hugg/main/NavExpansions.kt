@@ -290,7 +290,14 @@ fun NavGraphBuilder.dailyHuggGraph(navController: NavHostController) {
     }
 
     navigation(startDestination = Routes.DailyHuggScreen.route, route = Routes.DailyHuggGraph.route) {
-        composable(Routes.DailyHuggScreen.route) {
+        composable(
+            route = Routes.DailyHuggScreen.route,
+            arguments = listOf(
+                navArgument("date") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val date = backStackEntry.arguments?.getString("date") ?: ""
+
             DailyHuggScreen(
                 onClickCreateDailyHugg = { navController.navigate(Routes.CreateDailyHuggScreen.route) },
                 onClickDailyHuggItem = { dailyHuggPageState: CreateEditDailyHuggPageState, id: Long ->
@@ -298,7 +305,9 @@ fun NavGraphBuilder.dailyHuggGraph(navController: NavHostController) {
                         navController.currentBackStackEntry?.savedStateHandle?.set("dailyHuggPageState", dailyHuggPageState)
                     }
                 },
-                goToDailyHuggList = { navController.navigate(Routes.DailyHuggListScreen.route) }
+                goToDailyHuggList = { navController.navigate(Routes.DailyHuggListScreen.route) },
+                popScreen = { navController.popBackStack() },
+                selectedDate = date
             )
         }
 
@@ -367,7 +376,10 @@ fun NavGraphBuilder.dailyHuggGraph(navController: NavHostController) {
 
         composable(Routes.DailyHuggListScreen.route) {
             DailyHuggListScreen(
-                popScreen = { navController.popBackStack() }
+                popScreen = { navController.popBackStack() },
+                goToDailyHuggDetail = { date: String ->
+                    navController.navigate(Routes.DailyHuggScreen.createRoute(date))
+                }
             )
         }
     }
