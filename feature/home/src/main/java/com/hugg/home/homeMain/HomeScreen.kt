@@ -1,7 +1,9 @@
 package com.hugg.home.homeMain
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,6 +14,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -38,12 +41,18 @@ import com.hugg.domain.model.enums.GenderType
 import com.hugg.domain.model.enums.TopBarLeftType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.domain.model.enums.TopBarRightType
+import com.hugg.domain.model.response.challenge.MyChallengeListItemVo
 import com.hugg.domain.model.response.home.HomeRecordResponseVo
 import com.hugg.domain.model.vo.home.HomeTodayScheduleCardVo
+import com.hugg.feature.component.ChallengeCompleteDialog
+import com.hugg.feature.component.HuggDialog
+import com.hugg.feature.component.HuggInputDialog
 import com.hugg.feature.component.HuggText
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
+import com.hugg.feature.uiItem.HomeMyChallengeItem
 import com.hugg.feature.uiItem.HomeTodayScheduleItem
+import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UserInfo
 import com.hugg.feature.util.onThrottleClick
@@ -62,6 +71,7 @@ fun HomeContainer(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val pagerState = rememberPagerState()
     val interactionSource = remember { MutableInteractionSource() }
+    val context = LocalContext.current
 
     LaunchedEffect(Unit){
         viewModel.getHome()
@@ -82,8 +92,27 @@ fun HomeContainer(
         navigateGoToChallenge = navigateGoToChallenge,
         navigateGoToNotification = navigateGoToNotification,
         navigateGoToDailyHugg = navigateGoToDailyHugg,
-        onClickTodo = { id -> viewModel.onClickTodo(id) }
+        onClickTodo = { id -> viewModel.onClickTodo(id) },
+        context = context,
+        onClickCompleteChallenge = { id -> viewModel.selectIncompleteChallenge(id)}
     )
+
+    if(uiState.showInputImpressionDialog){
+        HuggInputDialog(
+            title = CHALLENGE_DIALOG_INPUT_IMPRESSION_TITLE,
+            maxLength = 15,
+            positiveText = WORD_CONFIRM,
+            onClickCancel = { viewModel.updateShowInputImpressionDialog(false) },
+            onClickPositive = { content -> viewModel.completeChallenge(content)}
+        )
+    }
+
+    if(uiState.showCompleteChallengeDialog){
+        ChallengeCompleteDialog(
+            onClickCancel = { viewModel.updateShowChallengeCompleteDialog(false) },
+            points = 500 // 임시
+        )
+    }
 }
 
 @OptIn(ExperimentalPagerApi::class)
@@ -97,6 +126,8 @@ fun HomeScreen(
     navigateGoToChallenge : () -> Unit = {},
     navigateGoToNotification : () -> Unit = {},
     navigateGoToDailyHugg : () -> Unit = {},
+    context : Context,
+    onClickCompleteChallenge : (Long) -> Unit = {},
 ) {
     Column(
         modifier = Modifier
@@ -134,6 +165,20 @@ fun HomeScreen(
                         .fillMaxWidth()
                 )
             }
+
+            item {
+                Spacer(modifier = Modifier.size(32.dp))
+
+                if(UserInfo.info.genderType == GenderType.FEMALE){
+                    MyChallengeView(
+                        challengeList = uiState.challengeList,
+                        navigateGoToChallenge = navigateGoToChallenge,
+                        interactionSource = interactionSource,
+                        context = context,
+                        onClickCompleteChallenge = onClickCompleteChallenge
+                    )
+                }
+            }
         }
     }
 }
@@ -153,9 +198,17 @@ fun TodayRecordHorizontalPager(
     val today = TimeFormatter.getToday()
     HuggText(
         modifier = Modifier.padding(start = 16.dp),
-        text = if(UserInfo.info.genderType == GenderType.FEMALE)
-                    String.format(HOME_TODAY_SCHEDULE_FEMALE, UserInfo.info.name, TimeFormatter.getMonth(today), TimeFormatter.getDay(today))
-                else String.format(HOME_TODAY_SCHEDULE_MALE, UserInfo.info.spouse, UserInfo.info.name, TimeFormatter.getMonth(today), TimeFormatter.getDay(today)),
+        text = if(UserInfo.info.genderType == GenderType.FEMALE) String.format(HOME_TODAY_SCHEDULE_FEMALE_NAME, UserInfo.info.name)
+        else String.format(HOME_TODAY_SCHEDULE_MALE_NAME, UserInfo.info.spouse, UserInfo.info.name),
+        color = Black,
+        style = HuggTypography.h2
+    )
+
+    HuggText(
+        modifier = Modifier
+            .padding(start = 16.dp)
+            .offset(y = (-2).dp),
+        text = String.format(HOME_TODAY_RECORD, TimeFormatter.getMonth(today), TimeFormatter.getDay(today)),
         color = Black,
         style = HuggTypography.h2
     )
@@ -192,9 +245,103 @@ fun TodayRecordHorizontalPager(
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
-@Preview
 @Composable
-internal fun PreviewMainContainer() {
-    HomeScreen()
+fun MyChallengeView(
+    challengeList : List<MyChallengeListItemVo> = emptyList(),
+    navigateGoToChallenge: () -> Unit = {},
+    interactionSource: MutableInteractionSource,
+    context : Context,
+    onClickCompleteChallenge : (Long) -> Unit = {},
+){
+    Row(
+        modifier = Modifier.padding(horizontal = 16.dp)
+    ) {
+        HuggText(
+            text = HOME_MY_CHALLENGE,
+            style = HuggTypography.h2,
+            color = Gs90
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Image(
+            modifier = Modifier
+                .padding(top = 1.dp)
+                .onThrottleClick(
+                    onClick = navigateGoToChallenge,
+                    interactionSource = interactionSource
+                ),
+            painter = painterResource(id = com.hugg.feature.R.drawable.ic_right_arrow_navigate_gs_50),
+            contentDescription = null,
+        )
+    }
+
+    Spacer(modifier = Modifier.size(8.dp))
+
+    if(challengeList.isEmpty()) {
+        EmptyChallengeView(
+            navigateGoToChallenge = navigateGoToChallenge,
+            interactionSource = interactionSource
+        )
+    }
+    else{
+        repeat(challengeList.size) { index ->
+            HomeMyChallengeItem(
+                item = challengeList[index],
+                context = context,
+                onClickCompleteChallenge = onClickCompleteChallenge,
+                interactionSource = interactionSource
+            )
+
+            Spacer(modifier = Modifier.size(8.dp))
+        }
+    }
+}
+
+@Composable
+fun EmptyChallengeView(
+    navigateGoToChallenge: () -> Unit = {},
+    interactionSource: MutableInteractionSource
+){
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth()
+            .background(color = White, shape = RoundedCornerShape(6.dp))
+            .padding(top = 22.dp, bottom = 18.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        HuggText(
+            text = HOME_EMPTY_MY_CHALLENGE_TITLE,
+            style = HuggTypography.h4,
+            color = Gs70
+        )
+
+        Spacer(modifier = Modifier.size(4.dp))
+
+        HuggText(
+            text = HOME_EMPTY_MY_CHALLENGE_CONTENT,
+            style = HuggTypography.p3,
+            color = Gs50
+        )
+
+        Spacer(modifier = Modifier.size(16.dp))
+
+        Box(
+            modifier = Modifier
+                .border(width = 1.dp, color = Gs10, shape = RoundedCornerShape(6.dp))
+                .padding(horizontal = 24.dp, vertical = 5.dp)
+                .onThrottleClick(
+                    onClick = navigateGoToChallenge,
+                    interactionSource = interactionSource
+                )
+        ){
+            HuggText(
+                text = HOME_PARTICIPATE_CHALLENGE,
+                style = HuggTypography.h4,
+                color = Gs70
+            )
+        }
+    }
 }

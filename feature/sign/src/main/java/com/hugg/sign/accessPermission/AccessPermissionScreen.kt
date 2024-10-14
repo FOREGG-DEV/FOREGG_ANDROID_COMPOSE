@@ -162,10 +162,6 @@ fun AccessPermissionScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Image(
-                        modifier = Modifier
-                            .width(48.dp)
-                            .height(48.dp)
-                            .padding(12.dp),
                         painter = painterResource(id = R.drawable.ic_notification_empty_gs_80),
                         contentDescription = null
                     )
@@ -195,10 +191,6 @@ fun AccessPermissionScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Image(
-                        modifier = Modifier
-                            .width(48.dp)
-                            .height(48.dp)
-                            .padding(12.dp),
                         painter = painterResource(id = R.drawable.ic_camera_empty_gs_80),
                         contentDescription = null
                     )

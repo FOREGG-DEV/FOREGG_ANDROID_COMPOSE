@@ -15,6 +15,12 @@ val huggFontFamily = FontFamily(
     Font(R.font.pretendard_regular, FontWeight.Normal),
 )
 
+val huggSemiFontFamily = FontFamily(
+    Font(R.font.gmarketsans_bold, FontWeight.Bold),
+    Font(R.font.gmarketsans_light, FontWeight.Light),
+    Font(R.font.gmarketsans_medium, FontWeight.Medium),
+)
+
 object HuggTypography {
     val btn: TextStyle = TextStyle(
         fontFamily = huggFontFamily,
@@ -117,6 +123,13 @@ object HuggTypography {
         lineHeight = (11.2).sp,
         letterSpacing = (-0.03).sp,
         fontFamily = huggFontFamily,
+        fontWeight = FontWeight.Normal,
+    )
+
+    val challenge : TextStyle = TextStyle(
+        fontSize = 40.sp,
+        lineHeight = 40.sp,
+        fontFamily = huggSemiFontFamily,
         fontWeight = FontWeight.Normal,
     )
 }

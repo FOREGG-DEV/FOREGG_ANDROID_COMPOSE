@@ -51,6 +51,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
@@ -125,6 +126,7 @@ fun AccountContainer(
     var isFilterAtTop by remember { mutableStateOf(false) }
     val interactionSource = remember { MutableInteractionSource() }
     val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
 
     LaunchedEffect(Unit){
         viewModel.setView()
@@ -150,6 +152,7 @@ fun AccountContainer(
         onChangedMemo = { memo -> viewModel.onChangedMemo(memo)},
         onKeyboardDone = {
             viewModel.inputMemoDone()
+            focusManager.clearFocus()
             keyboardController?.hide()
         },
         interactionSource = interactionSource

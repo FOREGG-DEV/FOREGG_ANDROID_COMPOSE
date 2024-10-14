@@ -37,6 +37,10 @@ const val WORD_EVERYDAY ="매일"
 const val WORD_LOGOUT = "로그아웃"
 const val WORD_UNREGISTER = "탈퇴"
 const val WORD_NOTIFICATION = "알림"
+const val WORD_COMPLETE = "완료"
+const val WORD_INCOMPLETE = "미완료"
+
+const val DIALOG_MAX_LENGTH = "최대 %d"
 
 // --------- 기타 --------- //
 const val COPY_COMPLETE_TEXT = "클립보드에 배우자 코드가 복사되었어요!"
@@ -290,9 +294,25 @@ const val MY_PAGE_UNREGISTER_DIALOG = "Hugg에서 탈퇴 하시겠습니까?"
 const val MY_PAGE_UNREGISTER_COMPLETE_DIALOG = "탈퇴가 완료되었습니다."
 
 // --------- 홈 --------- //
-const val HOME_TODAY_SCHEDULE_FEMALE = "%s님의\n%d월 %d일 일정이에요."
-const val HOME_TODAY_SCHEDULE_MALE = "%s, %s님의\n%d월 %d일 일정이에요."
+const val HOME_TODAY_SCHEDULE_FEMALE_NAME = "%s님의"
+const val HOME_TODAY_SCHEDULE_MALE_NAME = "%s, %s님의"
+const val HOME_TODAY_RECORD = "%d월 %d일 일정이에요."
 const val HOME_RECORD_MEDICAL = "진료 내용 기록하기"
+const val HOME_MY_CHALLENGE = "생활습관 챌린지"
+const val HOME_EMPTY_MY_CHALLENGE_TITLE = "챌린지에 참여해 보세요."
+const val HOME_EMPTY_MY_CHALLENGE_CONTENT = "어쩌구 저쩌구 다양한 생활 습관 챌린지를 같이 할 수 있어요"
+const val HOME_PARTICIPATE_CHALLENGE = "챌린지 참여"
+
+// --------- 챌린지 --------- //
+const val CHALLENGE_DIALOG_INPUT_IMPRESSION_TITLE = "한 줄 소감을 입력해주세요"
+const val CHALLENGE_COMPLETE = "챌린지 성공"
+fun CHALLENGE_GET_POINT(points : Int) = buildAnnotatedString {
+    withStyle(style = SpanStyle(color = Sub)) {
+        append("${points}P")
+    }
+    append(" 획득!")
+}
+
 
 
 // DailyHuggList
