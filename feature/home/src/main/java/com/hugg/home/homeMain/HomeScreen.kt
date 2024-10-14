@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -42,6 +43,7 @@ import com.hugg.domain.model.enums.TopBarLeftType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.domain.model.enums.TopBarRightType
 import com.hugg.domain.model.response.challenge.MyChallengeListItemVo
+import com.hugg.domain.model.response.dailyHugg.DailyHuggListItemVo
 import com.hugg.domain.model.response.home.HomeRecordResponseVo
 import com.hugg.domain.model.vo.home.HomeTodayScheduleCardVo
 import com.hugg.feature.component.ChallengeCompleteDialog
@@ -50,6 +52,7 @@ import com.hugg.feature.component.HuggInputDialog
 import com.hugg.feature.component.HuggText
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
+import com.hugg.feature.uiItem.DailyHuggListItem
 import com.hugg.feature.uiItem.HomeMyChallengeItem
 import com.hugg.feature.uiItem.HomeTodayScheduleItem
 import com.hugg.feature.util.HuggToast
@@ -66,6 +69,7 @@ fun HomeContainer(
     navigateGoToChallenge : () -> Unit = {},
     navigateGoToNotification : () -> Unit = {},
     navigateGoToDailyHugg : () -> Unit = {},
+    navigateGoToDailyHuggDetail: (String) -> Unit = {},
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -98,7 +102,8 @@ fun HomeContainer(
         navigateGoToDailyHugg = navigateGoToDailyHugg,
         onClickTodo = { id, time -> viewModel.onClickTodo(id, time) },
         context = context,
-        onClickCompleteChallenge = { id -> viewModel.selectIncompleteChallenge(id)}
+        onClickCompleteChallenge = { id -> viewModel.selectIncompleteChallenge(id)},
+        navigateGoToDailyHuggDetail = navigateGoToDailyHuggDetail
     )
 
     if(uiState.showInputImpressionDialog){
@@ -130,6 +135,7 @@ fun HomeScreen(
     navigateGoToChallenge : () -> Unit = {},
     navigateGoToNotification : () -> Unit = {},
     navigateGoToDailyHugg : () -> Unit = {},
+    navigateGoToDailyHuggDetail : (String) -> Unit = {},
     context : Context,
     onClickCompleteChallenge : (Long) -> Unit = {},
 ) {
@@ -180,6 +186,14 @@ fun HomeScreen(
                         interactionSource = interactionSource,
                         context = context,
                         onClickCompleteChallenge = onClickCompleteChallenge
+                    )
+                }
+                else{
+                    DailyHuggView(
+                        navigateGoToDailyHugg = navigateGoToDailyHugg,
+                        navigateGoToDailyHuggDetail = navigateGoToDailyHuggDetail,
+                        dailyHuggList = uiState.dailyHuggList,
+                        interactionSource = interactionSource
                     )
                 }
             }
@@ -243,7 +257,7 @@ fun TodayRecordHorizontalPager(
                     item = itemList[page],
                     interactionSource = interactionSource,
                     onClickDetail = onClickDetail,
-                    onClickTodo = onClickTodo
+                    onClickTodo = onClickTodo,
                 )
             }
         }
@@ -347,6 +361,73 @@ fun EmptyChallengeView(
                 style = HuggTypography.h4,
                 color = Gs70
             )
+        }
+    }
+}
+
+@Composable
+fun DailyHuggView(
+    navigateGoToDailyHugg: () -> Unit = {},
+    navigateGoToDailyHuggDetail : (String) -> Unit = {},
+    dailyHuggList : List<DailyHuggListItemVo> = emptyList(),
+    interactionSource : MutableInteractionSource
+){
+    Row(
+        modifier = Modifier.padding(horizontal = 16.dp)
+    ) {
+        HuggText(
+            text = DAILY_HUGG,
+            style = HuggTypography.h2,
+            color = Gs90
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Image(
+            modifier = Modifier
+                .padding(top = 1.dp)
+                .onThrottleClick(
+                    onClick = navigateGoToDailyHugg,
+                    interactionSource = interactionSource
+                ),
+            painter = painterResource(id = com.hugg.feature.R.drawable.ic_right_arrow_navigate_gs_50),
+            contentDescription = null,
+        )
+    }
+
+    Spacer(modifier = Modifier.size(8.dp))
+
+    if(dailyHuggList.isEmpty()){
+        Box(
+            modifier = Modifier
+                .background(color = White, shape = RoundedCornerShape(6.dp))
+                .padding(vertical = 20.dp),
+            contentAlignment = Alignment.Center
+        ){
+            HuggText(
+                text = HOME_EMPTY_DAILY_HUGG,
+                style = HuggTypography.h4,
+                color = Gs70
+            )
+        }
+    }
+    else{
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth()
+        ) {
+            repeat(dailyHuggList.size){
+                DailyHuggListItem(
+                    item = dailyHuggList[it],
+                    goToDailyHuggDetail = navigateGoToDailyHuggDetail,
+                    interactionSource = interactionSource,
+                    dateColor = if(dailyHuggList[it].date.split(" ")[0] == TimeFormatter.getToday()) MainNormal else Gs40,
+                    borderColor = if(TimeFormatter.getKoreanFullDayOfWeek(dailyHuggList[it].date.split(" ")[0]) == "토요일") Sub else White
+                )
+
+                Spacer(modifier = Modifier.size(8.dp))
+            }
         }
     }
 }

@@ -4,11 +4,13 @@ import androidx.lifecycle.viewModelScope
 import com.hugg.domain.model.enums.GenderType
 import com.hugg.domain.model.enums.HomeChallengeViewType
 import com.hugg.domain.model.response.challenge.MyChallengeListItemVo
+import com.hugg.domain.model.response.dailyHugg.DailyHuggListResponseVo
 import com.hugg.domain.model.response.home.HomeRecordResponseVo
 import com.hugg.domain.model.response.home.HomeResponseVo
 import com.hugg.domain.model.response.profile.ProfileDetailResponseVo
 import com.hugg.domain.model.vo.home.HomeTodayScheduleCardVo
 import com.hugg.domain.repository.ChallengeRepository
+import com.hugg.domain.repository.DailyHuggRepository
 import com.hugg.domain.repository.HomeRepository
 import com.hugg.domain.repository.ProfileRepository
 import com.hugg.domain.repository.ScheduleRepository
@@ -30,14 +32,15 @@ import kotlin.math.abs
 class HomeViewModel @Inject constructor(
     private val homeRepository: HomeRepository,
     private val scheduleRepository: ScheduleRepository,
-    private val challengeRepository: ChallengeRepository
+    private val challengeRepository: ChallengeRepository,
+    private val dailyHuggRepository: DailyHuggRepository
 ) : BaseViewModel<HomePageState>(
     HomePageState()
 ) {
     fun getHome(){
         getTodayRecord()
         when(UserInfo.info.genderType){
-            GenderType.MALE -> {}
+            GenderType.MALE -> getDailyHuggList()
             GenderType.FEMALE -> getMyChallengeList()
         }
     }
@@ -155,5 +158,21 @@ class HomeViewModel @Inject constructor(
 
     fun updateShowChallengeCompleteDialog(isShow : Boolean){
         updateState(uiState.value.copy(showCompleteChallengeDialog = isShow))
+    }
+
+    private fun getDailyHuggList() {
+        viewModelScope.launch {
+            dailyHuggRepository.getDailyHuggList(0).collect {
+                resultResponse(it, ::onSuccessGetDailyHuggList)
+            }
+        }
+    }
+
+    private fun onSuccessGetDailyHuggList(response: DailyHuggListResponseVo) {
+        updateState(
+            uiState.value.copy(
+                dailyHuggList = response.dailyHuggList.take(3),
+            )
+        )
     }
 }

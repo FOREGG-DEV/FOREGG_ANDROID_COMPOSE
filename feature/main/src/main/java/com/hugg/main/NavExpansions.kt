@@ -344,7 +344,7 @@ fun NavGraphBuilder.dailyHuggGraph(navController: NavHostController) {
         composable(Routes.DailyHuggCreationSuccessScreen.route) {
             DailyHuggCreationSuccessScreen(
                 goToDailyHuggMain = {
-                    navController.navigate(Routes.DailyHuggScreen.createRoute("")) {
+                    navController.navigate(Routes.DailyHuggScreen.createRoute(TimeFormatter.getToday())) {
                         popUpTo(Routes.DailyHuggGraph.route) { inclusive = true }
                     }
                 }
@@ -436,8 +436,9 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController) {
         composable(Routes.HomeScreen.route) { HomeContainer(
             navigateGoToCalendarDetail = { id -> navController.navigate(Routes.CalendarScheduleCreateOrEdit.getRouteCalendarScheduleCreateOrEdit(CreateOrEditType.EDIT.type, RecordType.ETC.type, id, TimeFormatter.getToday()))},
             navigateGoToChallenge = {},
-            navigateGoToDailyHugg = {},
-            navigateGoToNotification = {}
+            navigateGoToDailyHugg = { navController.navigate(Routes.DailyHuggGraph.route)},
+            navigateGoToNotification = {},
+            navigateGoToDailyHuggDetail = { date -> navController.navigate(Routes.DailyHuggScreen.createRoute(date)) }
         ) }
     }
 }
