@@ -8,8 +8,8 @@ data class HomeRecordResponseVo(
     val id: Long = -1,
     @SerializedName("recordType")
     val recordType: RecordType = RecordType.ETC,
-    @SerializedName("times")
-    val times: List<String> = emptyList(),
+    @SerializedName("time")
+    val time: String = "",
     @SerializedName("name")
     val name: String = "",
     @SerializedName("memo")

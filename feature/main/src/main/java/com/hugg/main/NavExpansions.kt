@@ -344,7 +344,7 @@ fun NavGraphBuilder.dailyHuggGraph(navController: NavHostController) {
         composable(Routes.DailyHuggCreationSuccessScreen.route) {
             DailyHuggCreationSuccessScreen(
                 goToDailyHuggMain = {
-                    navController.navigate(Routes.DailyHuggScreen.route) {
+                    navController.navigate(Routes.DailyHuggScreen.createRoute("")) {
                         popUpTo(Routes.DailyHuggGraph.route) { inclusive = true }
                     }
                 }

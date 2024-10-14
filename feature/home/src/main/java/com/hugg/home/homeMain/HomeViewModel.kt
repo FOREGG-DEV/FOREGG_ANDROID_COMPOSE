@@ -61,31 +61,22 @@ class HomeViewModel @Inject constructor(
     private fun handleInitScheduleStatesSuccess(result: HomeResponseVo) {
         updateState(
             uiState.value.copy(
-                todayScheduleList = splitTodayScheduleByRepeatedTime(result.homeRecordResponseVo)
+                todayScheduleList = splitListItem(result.homeRecordResponseVo)
             )
         )
     }
 
-    private fun splitTodayScheduleByRepeatedTime(currentList: List<HomeRecordResponseVo>): List<HomeTodayScheduleCardVo> {
-        val newList = mutableListOf<HomeTodayScheduleCardVo>()
-        for(list in currentList) {
-            val subList = splitListItem(list)
-            newList.addAll(subList)
-        }
-        return updateNearestTime(newList.sortedBy { it.time })
-    }
-
-    private fun splitListItem(list: HomeRecordResponseVo): List<HomeTodayScheduleCardVo> {
-        return list.times.map { repeatTime ->
+    private fun splitListItem(list: List<HomeRecordResponseVo>): List<HomeTodayScheduleCardVo> {
+        return updateNearestTime(list.map {
             HomeTodayScheduleCardVo(
-                id = list.id,
-                recordType = list.recordType,
-                time = repeatTime,
-                name = list.name,
-                memo = list.memo,
-                todo = list.todo
+                id = it.id,
+                recordType = it.recordType,
+                time = it.time,
+                name = it.name,
+                memo = it.memo,
+                todo = it.todo
             )
-        }
+        }.sortedBy { it.time })
     }
 
     private fun updateNearestTime(scheduleList: List<HomeTodayScheduleCardVo>): List<HomeTodayScheduleCardVo> {
@@ -131,9 +122,9 @@ class HomeViewModel @Inject constructor(
         return newList.sortedBy { it.isCompleteToday }
     }
 
-    fun onClickTodo(id : Long) {
+    fun onClickTodo(id : Long, time : String) {
         viewModelScope.launch {
-            scheduleRepository.checkTodoRecord(id).collect {
+            scheduleRepository.checkTodoRecord(id, time).collect {
                 resultResponse(it, { getHome() })
             }
         }

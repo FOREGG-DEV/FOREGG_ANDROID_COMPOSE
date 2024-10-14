@@ -92,7 +92,7 @@ fun HomeContainer(
         navigateGoToChallenge = navigateGoToChallenge,
         navigateGoToNotification = navigateGoToNotification,
         navigateGoToDailyHugg = navigateGoToDailyHugg,
-        onClickTodo = { id -> viewModel.onClickTodo(id) },
+        onClickTodo = { id, time -> viewModel.onClickTodo(id, time) },
         context = context,
         onClickCompleteChallenge = { id -> viewModel.selectIncompleteChallenge(id)}
     )
@@ -122,7 +122,7 @@ fun HomeScreen(
     pagerState : PagerState = rememberPagerState(),
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     navigateGoToCalendarDetail : (Long) -> Unit = {},
-    onClickTodo: (Long) -> Unit = {},
+    onClickTodo: (Long, String) -> Unit = {_, _ -> },
     navigateGoToChallenge : () -> Unit = {},
     navigateGoToNotification : () -> Unit = {},
     navigateGoToDailyHugg : () -> Unit = {},
@@ -189,7 +189,7 @@ fun TodayRecordHorizontalPager(
     itemList : List<HomeTodayScheduleCardVo>,
     pagerState: PagerState,
     interactionSource: MutableInteractionSource,
-    onClickTodo : (Long) -> Unit = {},
+    onClickTodo : (Long, String) -> Unit = {_, _ -> },
     onClickDetail : (Long) -> Unit = {},
 ){
     val configuration = LocalConfiguration.current
