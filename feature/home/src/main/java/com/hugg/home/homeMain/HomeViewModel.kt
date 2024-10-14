@@ -123,11 +123,16 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onClickTodo(id : Long, time : String) {
+        updateClickTodoState(true)
         viewModelScope.launch {
             scheduleRepository.checkTodoRecord(id, time).collect {
                 resultResponse(it, { getHome() })
             }
         }
+    }
+
+    fun updateClickTodoState(isClick : Boolean){
+        updateState(uiState.value.copy(isClickTodo = isClick))
     }
 
     fun selectIncompleteChallenge(id: Long) {

@@ -10,4 +10,5 @@ data class HomePageState(
     val selectedChallengeId : Long = -1,
     val showInputImpressionDialog : Boolean = false,
     val showCompleteChallengeDialog : Boolean = false,
+    val isClickTodo : Boolean = false,
 ) : PageState

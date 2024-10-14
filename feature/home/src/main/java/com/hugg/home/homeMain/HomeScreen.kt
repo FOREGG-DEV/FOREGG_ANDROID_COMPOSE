@@ -78,6 +78,10 @@ fun HomeContainer(
     }
 
     LaunchedEffect(uiState.todayScheduleList) {
+        if(uiState.isClickTodo){
+            viewModel.updateClickTodoState(false)
+            return@LaunchedEffect
+        }
         val initialPage = uiState.todayScheduleList.indexOfFirst { it.isNearlyNowTime }
         if (initialPage != -1) {
             pagerState.scrollToPage(initialPage)
@@ -232,7 +236,8 @@ fun TodayRecordHorizontalPager(
                 state = pagerState,
                 contentPadding = PaddingValues(start = 16.dp, end = screenWidthDp - itemWidth),
                 modifier = Modifier.fillMaxWidth(),
-                itemSpacing = 8.dp
+                itemSpacing = 8.dp,
+                key = { page -> page }
             ) { page ->
                 HomeTodayScheduleItem(
                     item = itemList[page],
