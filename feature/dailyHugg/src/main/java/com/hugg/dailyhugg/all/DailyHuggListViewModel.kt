@@ -24,8 +24,10 @@ class DailyHuggListViewModel @Inject constructor(
     private fun onSuccessGetDailyHuggList(response: DailyHuggListResponseVo) {
         updateState(
             uiState.value.copy(
-                dailyHuggList = response.dailyHuggList,
-                currentPage = response.currentPage
+                dailyHuggList = uiState.value.dailyHuggList + response.dailyHuggList,
+                currentPage = response.currentPage,
+                totalPages = response.totalPages,
+                totalItems = response.totalItems
             )
         )
     }

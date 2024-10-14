@@ -16,13 +16,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,6 +51,7 @@ import com.hugg.feature.theme.GsWhite
 import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.MainNormal
 import com.hugg.feature.theme.White
+import com.hugg.feature.util.TimeFormatter
 
 @Composable
 fun DailyHuggListScreen(
@@ -55,21 +59,36 @@ fun DailyHuggListScreen(
 ) {
     val viewModel: DailyHuggListViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val listState = rememberLazyListState()
 
     LaunchedEffect(Unit) {
         viewModel.getDailyHuggList(uiState.currentPage)
     }
 
+    LaunchedEffect(listState) {
+        snapshotFlow { listState.layoutInfo.visibleItemsInfo }
+            .collect { visibleItems ->
+                val lastVisibleItem = visibleItems.lastOrNull()
+                if (lastVisibleItem != null && lastVisibleItem.index == uiState.dailyHuggList.size - 1) {
+                    if (uiState.currentPage < uiState.totalPages) {
+                        viewModel.getDailyHuggList(uiState.currentPage + 1)
+                    }
+                }
+            }
+    }
+
     DailyHuggListContent(
         uiState = uiState,
-        popScreen = popScreen
+        popScreen = popScreen,
+        listState = listState
     )
 }
 
 @Composable
 fun DailyHuggListContent(
     uiState: DailyHuggListPageState = DailyHuggListPageState(),
-    popScreen: () -> Unit = {}
+    popScreen: () -> Unit = {},
+    listState: LazyListState
 ) {
     Column(
         modifier = Modifier
@@ -93,7 +112,8 @@ fun DailyHuggListContent(
                 EmptyDailyHuggListItem()
             } else {
                 DailyHuggList(
-                    items = uiState.dailyHuggList
+                    items = uiState.dailyHuggList,
+                    listState = listState
                 )
             }
         }
@@ -143,9 +163,11 @@ fun EmptyDailyHuggListItem() {
 
 @Composable
 fun DailyHuggList(
-    items: List<DailyHuggListItemVo> = emptyList()
+    items: List<DailyHuggListItemVo> = emptyList(),
+    listState: LazyListState
 ) {
     LazyColumn(
+        state = listState,
         modifier = Modifier
             .fillMaxSize()
     ) {
@@ -174,7 +196,7 @@ fun DailyHuggListItem(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = item.date,
+                text = TimeFormatter.getMonthDayWithSlash(item.date),
                 style = HuggTypography.h4,
                 color = GsWhite,
                 modifier = Modifier
@@ -225,6 +247,7 @@ fun PreviewDailyHuggListContent() {
                     content = "askldjnbopqauwrhgo;iwahedrnfgwouejdwsaeidgruaslkjgaowerig"
                 )
             )
-        )
+        ),
+        listState = rememberLazyListState()
     )
 }
