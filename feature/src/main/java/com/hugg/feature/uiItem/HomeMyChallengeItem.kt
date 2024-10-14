@@ -23,15 +23,14 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.hugg.domain.model.response.challenge.MyChallengeListItemVo
 import com.hugg.feature.R
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.theme.Gs10
 import com.hugg.feature.theme.Gs50
 import com.hugg.feature.theme.Gs90
+import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.WORD_INCOMPLETE
 import com.hugg.feature.theme.White
-import com.hugg.feature.theme.h3
-import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.onThrottleClick
-import org.threeten.bp.LocalDate
 
 @Composable
 fun HomeMyChallengeItem(
@@ -61,9 +60,9 @@ fun HomeMyChallengeItem(
 
         Spacer(modifier = Modifier.size(4.dp))
 
-        Text(
+        HuggText(
             text = item.name,
-            style = h3(),
+            style = HuggTypography.h3,
             color = Gs90
         )
 
@@ -86,9 +85,9 @@ fun HomeMyChallengeItem(
                     ),
                 contentAlignment = Alignment.Center
             ){
-                Text(
+                HuggText(
                     text = WORD_INCOMPLETE,
-                    style = h3(),
+                    style = HuggTypography.h3,
                     color = Gs50
                 )
             }
