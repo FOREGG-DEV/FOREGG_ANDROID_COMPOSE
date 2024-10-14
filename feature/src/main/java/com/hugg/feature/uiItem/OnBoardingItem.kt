@@ -15,6 +15,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.hugg.feature.R
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.theme.Black
 import com.hugg.feature.theme.Gs80
 import com.hugg.feature.theme.HuggTypography
@@ -34,7 +35,7 @@ fun OnBoardingItem(
             contentDescription = null
         )
         Spacer(modifier = Modifier.height(12.dp))
-        Text(
+        HuggText(
             modifier = Modifier.padding(horizontal = 16.dp),
             textAlign = TextAlign.Center,
             text = title,
@@ -42,7 +43,7 @@ fun OnBoardingItem(
             color = Black
         )
         Spacer(modifier = Modifier.height(8.dp))
-        Text(
+        HuggText(
             modifier = Modifier.padding(horizontal = 16.dp),
             textAlign = TextAlign.Center,
             text = content,

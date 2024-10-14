@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.hugg.domain.model.enums.AccountColorType
 import com.hugg.domain.model.enums.CreateOrEditType
 import com.hugg.domain.model.response.account.SubsidyListResponseVo
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.theme.ACCOUNT_AVAILABLE_MONEY
 import com.hugg.feature.theme.ACCOUNT_EXPENDITURE
 import com.hugg.feature.theme.Background
@@ -35,7 +36,6 @@ import com.hugg.feature.theme.SubsidyColorBlue
 import com.hugg.feature.theme.SubsidyColorGreen
 import com.hugg.feature.theme.SubsidyColorYellow
 import com.hugg.feature.theme.White
-import com.hugg.feature.util.ForeggLog
 import com.hugg.feature.util.UnitFormatter
 
 @Composable
@@ -84,7 +84,7 @@ fun SubsidyDetailBox(
 
                 Spacer(modifier = Modifier.size(4.dp))
 
-                Text(
+                HuggText(
                     text = UnitFormatter.getSubsidyTitleFormat(item.nickname),
                     style = HuggTypography.h2,
                     color = Gs90
@@ -92,7 +92,7 @@ fun SubsidyDetailBox(
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                Text(
+                HuggText(
                     text = UnitFormatter.getMoneyFormatWithUnit(item.amount),
                     style = HuggTypography.h2,
                     color = Gs90
@@ -132,7 +132,7 @@ fun SubsidyDetailBox(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.End
                 ) {
-                    Text(
+                    HuggText(
                         text = UnitFormatter.getPercentFormat(item.percent),
                         style = HuggTypography.h3,
                         color = Gs70
@@ -154,7 +154,7 @@ fun DetailMoneyView(
     ) {
         Spacer(modifier = Modifier.size(16.dp))
 
-        Text(
+        HuggText(
             text = text,
             style = HuggTypography.h2,
             color = Gs70
@@ -162,7 +162,7 @@ fun DetailMoneyView(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        Text(
+        HuggText(
             text = UnitFormatter.getMoneyFormatWithUnit(money),
             style = HuggTypography.p1,
             color = Gs90

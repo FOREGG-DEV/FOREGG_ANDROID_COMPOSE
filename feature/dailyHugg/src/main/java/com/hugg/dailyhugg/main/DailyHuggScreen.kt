@@ -52,6 +52,7 @@ import com.hugg.domain.model.enums.TopBarRightType
 import com.hugg.domain.model.response.dailyHugg.DailyHuggItemVo
 import com.hugg.feature.R
 import com.hugg.feature.component.HuggDialog
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.component.PlusBtn
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.Background
@@ -297,7 +298,7 @@ fun DateNavigator(
             )
         }
 
-        Text(
+        HuggText(
             text = String.format(DAILY_HUGG_DATE, date, day),
             style = HuggTypography.h2,
             color = Gs90,
@@ -389,7 +390,7 @@ fun EmptyHuggItem(
                 tint = Color.Unspecified,
             )
 
-            Text(
+            HuggText(
                 text = msg,
                 textAlign = TextAlign.Center,
                 color = Gs60,
@@ -442,13 +443,13 @@ fun DailyHuggItem(
                         Column(
                             horizontalAlignment = Alignment.Start
                         ) {
-                            Text(
+                            HuggText(
                                 text = item.dailyConditionType,
                                 style = HuggTypography.p1,
                                 color = Gs90
                             )
 
-                            Text(
+                            HuggText(
                                 text = item.date.split(' ').last().substring(0, 5),
                                 style = HuggTypography.p3_l,
                                 color = Gs70
@@ -456,7 +457,7 @@ fun DailyHuggItem(
                         }
                     }
                     Spacer(modifier = Modifier.height(12.dp))
-                    Text(
+                    HuggText(
                         text = item.content,
                         style = HuggTypography.p2_l,
                         color = GsBlack
@@ -490,7 +491,7 @@ fun EmptyReplyItem() {
             .background(Gs10),
         contentAlignment = Alignment.CenterStart
     ) {
-        Text(
+        HuggText(
             text = EMPTY_REPLY,
             style = HuggTypography.p2,
             color = Gs70,
@@ -511,7 +512,7 @@ fun ReplyItem(
             .clip(RoundedCornerShape(8.dp))
             .background(White)
     ) {
-        Text(
+        HuggText(
             text = reply,
             style = HuggTypography.p2_l,
             color = GsBlack,
@@ -520,7 +521,7 @@ fun ReplyItem(
                 .padding(12.dp)
         )
 
-        Text(
+        HuggText(
             text = String.format(REPLY_COUNT, reply.length),
             style = HuggTypography.p3_l,
             color = Gs70,
@@ -570,7 +571,7 @@ fun BtnDeleteDailyHugg(
                 modifier = Modifier.size(24.dp)
             )
 
-            Text(
+            HuggText(
                 text = DELETE_DAILY_HUGG,
                 color = Gs60,
                 style = HuggTypography.p3

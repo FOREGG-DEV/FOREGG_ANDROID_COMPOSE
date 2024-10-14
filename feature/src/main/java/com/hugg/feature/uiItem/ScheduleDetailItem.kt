@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.hugg.domain.model.enums.RecordType
 import com.hugg.domain.model.vo.calendar.ScheduleDetailVo
 import com.hugg.feature.R
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.theme.CalendarEtc
 import com.hugg.feature.theme.CalendarHospital
 import com.hugg.feature.theme.CalendarInjection
@@ -50,7 +51,12 @@ fun ScheduleDetailItem(
             .fillMaxWidth()
             .background(color = White)
             .clickable(
-                onClick = { onClickEditScheduleBtn(scheduleDetailVo.id, scheduleDetailVo.recordType) },
+                onClick = {
+                    onClickEditScheduleBtn(
+                        scheduleDetailVo.id,
+                        scheduleDetailVo.recordType
+                    )
+                },
                 interactionSource = interactionSource,
                 indication = null
             )
@@ -90,7 +96,7 @@ fun ScheduleDetailItem(
             Column(
                 modifier = Modifier.weight(1f)
             ) {
-                Text(
+                HuggText(
                     text = scheduleDetailVo.name,
                     color = Gs90,
                     style = HuggTypography.h2
@@ -102,7 +108,7 @@ fun ScheduleDetailItem(
                     }
 
                     sortedTimeList.forEach {
-                        Text(
+                        HuggText(
                             text = TimeFormatter.formatTimeToKor(it.time),
                             color = Gs70,
                             style = HuggTypography.p2_l
@@ -114,7 +120,7 @@ fun ScheduleDetailItem(
 
                 Spacer(modifier = Modifier.size(2.dp))
 
-                Text(
+                HuggText(
                     text = scheduleDetailVo.memo,
                     color = Gs70,
                     style = HuggTypography.p3,

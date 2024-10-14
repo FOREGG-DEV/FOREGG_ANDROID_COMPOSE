@@ -28,6 +28,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -44,6 +45,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import com.hugg.domain.model.enums.CreateOrEditType
 import com.hugg.domain.model.enums.RecordType
@@ -51,6 +53,7 @@ import com.hugg.domain.model.enums.RepeatDayType
 import com.hugg.domain.model.vo.calendar.RepeatTimeVo
 import com.hugg.feature.R
 import com.hugg.feature.component.FilledBtn
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.theme.ACCOUNT_CREATE_CONTENT_HINT
 import com.hugg.feature.theme.ACCOUNT_CREATE_DATE_TITLE
 import com.hugg.feature.theme.ACCOUNT_ROUND_UNIT_WITHOUT_CAR
@@ -96,7 +99,6 @@ import com.hugg.feature.theme.WORD_REGISTRATION
 import com.hugg.feature.theme.WORD_START
 import com.hugg.feature.theme.White
 import com.hugg.feature.util.TimeFormatter
-import com.hugg.feature.util.UserInfo
 
 @Composable
 fun InjMedCreateOrEditScreen(
@@ -210,7 +212,7 @@ internal fun InputKindView(
     val hint = if(type == RecordType.INJECTION) CALENDAR_SCHEDULE_INJECTION_KIND_HINT else CALENDAR_SCHEDULE_MEDICINE_KIND_HINT
     var rowWidth by remember { mutableIntStateOf(0) }
 
-    Text(
+    HuggText(
         modifier = Modifier.padding(start = 16.dp),
         text = text,
         style = HuggTypography.h3,
@@ -242,7 +244,7 @@ internal fun InputKindView(
             ) {
 
                 if (kind.isEmpty()) {
-                    Text(
+                    HuggText(
                         text = hint,
                         style = HuggTypography.h3,
                         color = Gs50,
@@ -259,6 +261,11 @@ internal fun InputKindView(
                         textAlign = TextAlign.Start
                     ),
                     singleLine = true,
+                    decorationBox = { innerTextField ->
+                        CompositionLocalProvider(LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1f)) {
+                            innerTextField()
+                        }
+                    }
                 )
             }
 
@@ -285,7 +292,7 @@ internal fun InputKindView(
             kindList.forEach { kind ->
                 DropdownMenuItem(
                     text = {
-                        Text(
+                        HuggText(
                             style = HuggTypography.h3,
                             color = Gs70,
                             text = kind
@@ -312,7 +319,7 @@ internal fun InputDoseView(
     val title = if(type == RecordType.INJECTION) CALENDAR_SCHEDULE_INJECTION_DOSE else CALENDAR_SCHEDULE_MEDICINE_DOSE
     val doseUnit = if(type == RecordType.INJECTION) CALENDAR_INJECTION_UNIT else CALENDAR_MEDICINE_UNIT
 
-    Text(
+    HuggText(
         modifier = Modifier.padding(start = 16.dp),
         text = title,
         style = HuggTypography.h3,
@@ -332,7 +339,7 @@ internal fun InputDoseView(
                 .padding(horizontal = 12.dp, vertical = 13.dp)
         ) {
             if (dose.isEmpty()) {
-                Text(
+                HuggText(
                     text = CALENDAR_SCHEDULE_DOSE_HINT,
                     style = HuggTypography.h3,
                     color = Gs50,
@@ -352,13 +359,18 @@ internal fun InputDoseView(
                     keyboardType = KeyboardType.Number
                 ),
                 singleLine = true,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                decorationBox = { innerTextField ->
+                    CompositionLocalProvider(LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1f)) {
+                        innerTextField()
+                    }
+                }
             )
         }
 
         Spacer(modifier = Modifier.size(8.dp))
 
-        Text(
+        HuggText(
             text = doseUnit,
             style = HuggTypography.h3,
             color = Gs70
@@ -408,7 +420,7 @@ internal fun InjectionDoseChipView(
             ),
         contentAlignment = Alignment.Center
     ){
-        Text(
+        HuggText(
             text = basicDose,
             style = HuggTypography.h4,
             color = if(dose == basicDose) White else Gs80
@@ -430,7 +442,7 @@ internal fun SelectDailyTakeCount(
 ){
     val title = if(type == RecordType.INJECTION) CALENDAR_SCHEDULE_DAILY_ADMINISTER_COUNT else CALENDAR_SCHEDULE_DAILY_INTAKE_COUNT
 
-    Text(
+    HuggText(
         modifier = Modifier.padding(horizontal = 16.dp),
         color = Gs80,
         style = HuggTypography.h3,
@@ -477,7 +489,7 @@ internal fun SelectDailyTakeCount(
                 }
             }
 
-            Text(
+            HuggText(
                 color = Black,
                 style = HuggTypography.h3,
                 text = repeatCount.toString()
@@ -514,7 +526,7 @@ internal fun SelectDailyTakeCount(
 
         Spacer(modifier = Modifier.width(8.dp))
 
-        Text(
+        HuggText(
             style = HuggTypography.h3,
             color = Gs70,
             text = ACCOUNT_ROUND_UNIT_WITHOUT_CAR
@@ -582,7 +594,7 @@ internal fun TimePickerView(
 
         Spacer(modifier = Modifier.width(16.dp))
 
-        Text(
+        HuggText(
             color = Gs50,
             style = HuggTypography.h3,
             text = time
@@ -605,7 +617,7 @@ internal fun SelectAlarmOnAndOffView(
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
+            HuggText(
                 color = Gs80,
                 style = HuggTypography.h2,
                 text = WORD_ALARM
@@ -625,13 +637,14 @@ internal fun SelectAlarmOnAndOffView(
                     uncheckedThumbColor = White,
                     uncheckedTrackColor = Gs20,
                     uncheckedBorderColor = Gs20,
-                )
+                ),
+                thumbContent = {}
             )
         }
 
         Spacer(modifier = Modifier.size(4.dp))
 
-        Text(
+        HuggText(
             color = Gs60,
             style = HuggTypography.p3_l,
             text = CALENDAR_SCHEDULE_ALARM_HINT
@@ -649,7 +662,7 @@ internal fun SelectRepeatDateView(
     onRepeatBtnChanged : (Boolean) -> Unit = {},
     interactionSource: MutableInteractionSource,
 ){
-    Text(
+    HuggText(
         modifier = Modifier.padding(start = 16.dp),
         text = CALENDAR_SCHEDULE_DATE_PICK_AND_REPEAT,
         style = HuggTypography.h3,
@@ -731,7 +744,7 @@ internal fun DatePickerView(
             RepeatDayType.END -> CALENDAR_SCHEDULE_REPEAT_END_DAY_HINT
         }
 
-        Text(
+        HuggText(
             color = Gs50,
             style = HuggTypography.h3,
             text = if(date.isEmpty()) hintText else date + " ${TimeFormatter.getKoreanFullDayOfWeek(date)}"
@@ -745,7 +758,7 @@ internal fun DatePickerView(
             RepeatDayType.END -> WORD_END
         }
 
-        Text(
+        HuggText(
             color = Gs50,
             style = HuggTypography.h3,
             text = endText
@@ -770,7 +783,7 @@ internal fun SelectRepeatEveryDayView(
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
+            HuggText(
                 color = Gs80,
                 style = HuggTypography.h2,
                 text = CALENDAR_SCHEDULE_REPEAT_EVERYDAY
@@ -790,13 +803,14 @@ internal fun SelectRepeatEveryDayView(
                     uncheckedThumbColor = White,
                     uncheckedTrackColor = Gs20,
                     uncheckedBorderColor = Gs20,
-                )
+                ),
+                thumbContent = {}
             )
         }
 
         Spacer(modifier = Modifier.size(4.dp))
 
-        Text(
+        HuggText(
             color = Gs60,
             style = HuggTypography.p3_l,
             text = CALENDAR_SCHEDULE_REPEAT_EVERYDAY_HINT
@@ -809,7 +823,7 @@ fun InputMemoView(
     memo : String = "",
     onChangedMemo : (String) -> Unit = {},
 ){
-    Text(
+    HuggText(
         modifier = Modifier.padding(start = 16.dp),
         text = WORD_MEMO,
         style = HuggTypography.h3,
@@ -829,7 +843,7 @@ fun InputMemoView(
                 .padding(horizontal = 12.dp, vertical = 13.dp)
         ) {
             if (memo.isEmpty()) {
-                Text(
+                HuggText(
                     text = CALENDAR_SCHEDULE_MEMO_HINT,
                     style = HuggTypography.h3,
                     color = Gs50,
@@ -846,7 +860,12 @@ fun InputMemoView(
                     textAlign = TextAlign.Start
                 ),
                 singleLine = true,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                decorationBox = { innerTextField ->
+                    CompositionLocalProvider(LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1f)) {
+                        innerTextField()
+                    }
+                }
             )
         }
     }
@@ -855,5 +874,5 @@ fun InputMemoView(
 @Preview
 @Composable
 internal fun PrevainContainer() {
-    ScheduleCreateOrEditScreen()
+    SelectAlarmOnAndOffView()
 }

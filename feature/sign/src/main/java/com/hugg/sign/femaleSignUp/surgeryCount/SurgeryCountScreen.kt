@@ -35,6 +35,7 @@ import com.hugg.feature.component.SignUpIndicator
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
 import com.hugg.feature.R
+import com.hugg.feature.component.HuggText
 
 
 @Composable
@@ -99,7 +100,7 @@ fun SurgeryCountScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(
+            HuggText(
                 color = Gs80,
                 style = HuggTypography.h1,
                 text = SIGN_UP_SURGERY_COUNT
@@ -120,7 +121,7 @@ fun SurgeryCountScreen(
 
                 Spacer(modifier = Modifier.width(8.dp))
 
-                Text(
+                HuggText(
                     style = HuggTypography.h3,
                     color = Gs70,
                     text = WORD_ROUND
@@ -185,7 +186,7 @@ fun CountingView(
             }
         }
 
-        Text(
+        HuggText(
             color = Black,
             style = HuggTypography.h3,
             text = uiState.count.toString()

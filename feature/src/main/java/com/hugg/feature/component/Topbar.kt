@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -35,7 +37,6 @@ import com.hugg.feature.theme.Gs50
 import com.hugg.feature.theme.Gs60
 import com.hugg.feature.theme.HuggTheme
 import com.hugg.feature.theme.HuggTypography
-import com.hugg.feature.theme.WORD_DAILY_RECORD
 import com.hugg.feature.theme.WORD_SKIP
 
 @Composable
@@ -131,6 +132,7 @@ fun DrawRightItem(
         TopBarRightType.CHECK -> DrawCheckBtn(rightBtnClicked, interactionSource)
         TopBarRightType.DELETE -> DrawDeleteBtn(rightBtnClicked, interactionSource)
         TopBarRightType.DELETE_GS30 -> DrawDeleteGs30Btn(rightBtnClicked, interactionSource)
+        TopBarRightType.NOTIFICATION -> DrawNotificationBtn(rightBtnClicked, interactionSource)
         TopBarRightType.NONE -> {}
     }
 }
@@ -161,8 +163,7 @@ fun DrawLeftBackBtn(
 fun DrawLeftLogo(){
     Spacer(modifier = Modifier.width(22.dp))
     Image(
-        modifier = Modifier.padding(vertical = 15.dp),
-        imageVector = ImageVector.vectorResource(R.drawable.ic_logo),
+        painter = painterResource(R.drawable.ic_home_logo),
         contentDescription = null
     )
 }
@@ -204,7 +205,7 @@ fun DrawMiddleLogo(){
 fun DrawMiddleText(
     middleText : String = "",
 ){
-    Text(
+    HuggText(
         text = middleText,
         color = Black,
         style = HuggTypography.h3
@@ -219,7 +220,7 @@ fun DrawRightSkipBtn(
     rightBtnClicked : () -> Unit = {},
     interactionSource : MutableInteractionSource
 ){
-    Text(
+    HuggText(
         modifier = Modifier
             .padding(horizontal = 11.dp, vertical = 14.dp)
             .clickable(
@@ -337,6 +338,25 @@ fun DrawDeleteGs30Btn(
     Spacer(modifier = Modifier.width(16.dp))
 }
 
+
+@Composable
+fun DrawNotificationBtn(
+    rightBtnClicked : () -> Unit = {},
+    interactionSource : MutableInteractionSource
+){
+    Image(
+        modifier = Modifier
+            .size(48.dp)
+            .clickable(
+                onClick = rightBtnClicked,
+                interactionSource = interactionSource,
+                indication = null
+            ),
+        painter = painterResource(R.drawable.ic_notification_fill_gs_50),
+        contentDescription = null
+    )
+    Spacer(modifier = Modifier.width(16.dp))
+}
 // -------------------- //
 
 @Preview

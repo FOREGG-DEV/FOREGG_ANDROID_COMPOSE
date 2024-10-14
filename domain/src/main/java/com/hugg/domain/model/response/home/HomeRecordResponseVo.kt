@@ -5,13 +5,15 @@ import com.hugg.domain.model.enums.RecordType
 
 data class HomeRecordResponseVo(
     @SerializedName("id")
-    val id: Long,
+    val id: Long = -1,
     @SerializedName("recordType")
-    val recordType: RecordType,
+    val recordType: RecordType = RecordType.ETC,
     @SerializedName("times")
-    val times: List<String>,
+    val times: List<String> = emptyList(),
     @SerializedName("name")
-    val name: String,
+    val name: String = "",
     @SerializedName("memo")
-    val memo: String
+    val memo: String = "",
+    @SerializedName("todo")
+    val todo : Boolean = false
 )

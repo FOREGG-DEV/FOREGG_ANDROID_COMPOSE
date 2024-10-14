@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.hugg.domain.model.enums.AccountColorType
 import com.hugg.domain.model.response.account.AccountSubsidyAvailableItemVo
 import com.hugg.feature.R
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.theme.ACCOUNT_AVAILABLE_MONEY
 import com.hugg.feature.theme.CalendarEtc
 import com.hugg.feature.theme.CalendarHospital
@@ -63,7 +64,7 @@ fun SubsidyTotalBoxItem(
 
         Spacer(modifier = Modifier.size(4.dp))
 
-        Text(
+        HuggText(
             text = UnitFormatter.getSubsidyTitleFormat(item.nickname),
             style = HuggTypography.p1,
             color = Gs80
@@ -78,7 +79,7 @@ fun SubsidyTotalBoxItem(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        Text(
+        HuggText(
             text = ACCOUNT_AVAILABLE_MONEY,
             style = HuggTypography.p3,
             color = Gs60
@@ -86,7 +87,7 @@ fun SubsidyTotalBoxItem(
 
         Spacer(modifier = Modifier.size(8.dp))
 
-        Text(
+        HuggText(
             text = UnitFormatter.getMoneyFormatWithUnit(item.amount),
             style = HuggTypography.p1,
             color = Gs80

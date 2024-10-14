@@ -229,6 +229,12 @@ object TimeFormatter {
         return nextDate.format(formatter)
     }
 
+    fun getParseNormalDashDate(date : String) : String {
+        return date.split("-").let { parts ->
+            "%04d-%02d-%02d".format(parts[0].toInt(), parts[1].toInt(), parts[2].toInt())
+        }
+    }
+
     fun getMonthDayWithSlash(date: String): String {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         val dateTime = LocalDateTime.parse(date, formatter)
