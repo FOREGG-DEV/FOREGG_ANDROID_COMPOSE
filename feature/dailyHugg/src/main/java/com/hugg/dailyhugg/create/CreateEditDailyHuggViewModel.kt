@@ -63,7 +63,7 @@ class CreateEditDailyHuggViewModel @Inject constructor(
         val dtoRequestBody = dtoJson.toRequestBody("application/json".toMediaTypeOrNull())
         viewModelScope.launch {
             dailyHuggRepository.createDailyHugg(
-                image = image!!,
+                image = image,
                 dto = dtoRequestBody
             ).collect {
                 resultResponse(it, { handleCreateDailyHuggSuccess() }, ::handleCreateDailyHuggError)

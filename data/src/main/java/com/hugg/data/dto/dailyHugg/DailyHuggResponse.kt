@@ -15,7 +15,7 @@ data class DailyHuggResponse(
     @SerializedName("content")
     val content: String = "",
     @SerializedName("imageUrl")
-    val imageUrl: String = "",
+    val imageUrl: String? = null,
     @SerializedName("reply")
     val reply: String? = null
 )

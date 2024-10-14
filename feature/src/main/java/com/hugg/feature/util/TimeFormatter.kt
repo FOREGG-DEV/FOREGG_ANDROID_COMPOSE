@@ -3,10 +3,12 @@ package com.hugg.feature.util
 import com.hugg.domain.model.vo.calendar.ScheduleDetailVo
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDateTime
 import org.threeten.bp.LocalTime
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.DateTimeFormatterBuilder
 import org.threeten.bp.format.TextStyle
+import java.text.SimpleDateFormat
 import java.util.Locale
 
 object TimeFormatter {
@@ -231,5 +233,13 @@ object TimeFormatter {
         return date.split("-").let { parts ->
             "%04d-%02d-%02d".format(parts[0].toInt(), parts[1].toInt(), parts[2].toInt())
         }
+    }
+
+    fun getMonthDayWithSlash(date: String): String {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        val dateTime = LocalDateTime.parse(date, formatter)
+        val outputFormatter = DateTimeFormatter.ofPattern("MM/dd")
+
+        return dateTime.format(outputFormatter)
     }
 }
