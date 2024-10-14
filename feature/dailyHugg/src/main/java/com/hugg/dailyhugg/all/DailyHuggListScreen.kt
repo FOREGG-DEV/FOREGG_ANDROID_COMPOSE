@@ -3,6 +3,8 @@ package com.hugg.dailyhugg.all
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -55,11 +58,13 @@ import com.hugg.feature.util.TimeFormatter
 
 @Composable
 fun DailyHuggListScreen(
-    popScreen: () -> Unit
+    popScreen: () -> Unit,
+    goToDailyHuggDetail: (String) -> Unit = {}
 ) {
     val viewModel: DailyHuggListViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val listState = rememberLazyListState()
+    val interactionSource = remember { MutableInteractionSource() }
 
     LaunchedEffect(Unit) {
         viewModel.getDailyHuggList(uiState.currentPage)
@@ -80,7 +85,9 @@ fun DailyHuggListScreen(
     DailyHuggListContent(
         uiState = uiState,
         popScreen = popScreen,
-        listState = listState
+        listState = listState,
+        goToDailyHuggDetail = goToDailyHuggDetail,
+        interactionSource = interactionSource
     )
 }
 
@@ -88,7 +95,9 @@ fun DailyHuggListScreen(
 fun DailyHuggListContent(
     uiState: DailyHuggListPageState = DailyHuggListPageState(),
     popScreen: () -> Unit = {},
-    listState: LazyListState
+    listState: LazyListState,
+    goToDailyHuggDetail: (String) -> Unit = {},
+    interactionSource: MutableInteractionSource
 ) {
     Column(
         modifier = Modifier
@@ -113,7 +122,9 @@ fun DailyHuggListContent(
             } else {
                 DailyHuggList(
                     items = uiState.dailyHuggList,
-                    listState = listState
+                    listState = listState,
+                    goToDailyHuggDetail = goToDailyHuggDetail,
+                    interactionSource = interactionSource
                 )
             }
         }
@@ -164,7 +175,9 @@ fun EmptyDailyHuggListItem() {
 @Composable
 fun DailyHuggList(
     items: List<DailyHuggListItemVo> = emptyList(),
-    listState: LazyListState
+    listState: LazyListState,
+    goToDailyHuggDetail: (String) -> Unit = {},
+    interactionSource: MutableInteractionSource
 ) {
     LazyColumn(
         state = listState,
@@ -172,7 +185,11 @@ fun DailyHuggList(
             .fillMaxSize()
     ) {
         items(items) { item ->
-            DailyHuggListItem(item = item)
+            DailyHuggListItem(
+                item = item,
+                goToDailyHuggDetail = goToDailyHuggDetail,
+                interactionSource = interactionSource
+            )
             Spacer(modifier = Modifier.height(12.dp))
         }
     }
@@ -180,13 +197,22 @@ fun DailyHuggList(
 
 @Composable
 fun DailyHuggListItem(
-    item: DailyHuggListItemVo = DailyHuggListItemVo()
+    item: DailyHuggListItemVo = DailyHuggListItemVo(),
+    goToDailyHuggDetail: (String) -> Unit = {},
+    interactionSource: MutableInteractionSource
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(60.dp)
             .clip(RoundedCornerShape(8.dp))
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null,
+                onClick = {
+                    goToDailyHuggDetail(item.date)
+                }
+            )
     ) {
         Box(
             modifier = Modifier
@@ -248,6 +274,7 @@ fun PreviewDailyHuggListContent() {
                 )
             )
         ),
-        listState = rememberLazyListState()
+        listState = rememberLazyListState(),
+        interactionSource = remember { MutableInteractionSource() }
     )
 }
