@@ -46,6 +46,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.hugg.dailyhugg.create.CreateEditDailyHuggPageState
 import com.hugg.domain.model.enums.DailyConditionType
 import com.hugg.domain.model.enums.DialogType
+import com.hugg.domain.model.enums.TopBarLeftType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.domain.model.enums.TopBarRightType
 import com.hugg.domain.model.response.dailyHugg.DailyHuggItemVo
@@ -58,6 +59,7 @@ import com.hugg.feature.theme.Background
 import com.hugg.feature.theme.COMPLETE_DELETE_DAILY_HUGG
 import com.hugg.feature.theme.DAILY_HUGG
 import com.hugg.feature.theme.DAILY_HUGG_DATE
+import com.hugg.feature.theme.DAILY_HUGG_LIST_TITLE
 import com.hugg.feature.theme.DELETE_DAILY_HUGG
 import com.hugg.feature.theme.DELETE_DAILY_HUGG_TITLE
 import com.hugg.feature.theme.EDIT_DAILY_HUGG_DIALOG_TITLE
@@ -85,7 +87,10 @@ import com.hugg.feature.util.TimeFormatter
 @Composable
 fun DailyHuggScreen(
     onClickCreateDailyHugg: () -> Unit,
-    onClickDailyHuggItem: (CreateEditDailyHuggPageState, Long) -> Unit
+    onClickDailyHuggItem: (CreateEditDailyHuggPageState, Long) -> Unit,
+    goToDailyHuggList: () -> Unit,
+    popScreen: () -> Unit = {},
+    selectedDate: String = ""
 ) {
     val viewModel: DailyHuggViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -108,14 +113,22 @@ fun DailyHuggScreen(
     val dateText = TimeFormatter.getTodayYearMonthDayKor(uiState.date)
 
     LaunchedEffect(Unit) {
-        if (uiState.date.isEmpty()) {
-            val today = TimeFormatter.getToday()
+        if (selectedDate.isEmpty()) {
+            if (uiState.date.isEmpty()) {
+                val today = TimeFormatter.getToday()
+                viewModel.setDate(
+                    newDate = today,
+                    newDay = TimeFormatter.getKoreanFullDayOfWeek(today)
+                )
+            } else {
+                viewModel.getDailyHuggByDate(uiState.date)
+            }
+        } else {
+            val today = selectedDate.split(" ").first()
             viewModel.setDate(
                 newDate = today,
                 newDay = TimeFormatter.getKoreanFullDayOfWeek(today)
             )
-        } else {
-            viewModel.getDailyHuggByDate(uiState.date)
         }
     }
 
@@ -123,6 +136,7 @@ fun DailyHuggScreen(
         viewModel.eventFlow.collect { event ->
             when(event) {
                 DailyHuggEvent.CompleteDeleteDailyHugg -> HuggToast.createToast(context, COMPLETE_DELETE_DAILY_HUGG).show()
+                DailyHuggEvent.GoToDailyHuggList -> goToDailyHuggList()
             }
         }
     }
@@ -172,7 +186,10 @@ fun DailyHuggScreen(
         onClickDailyHuggItem = {
             viewModel.updateShowEditDialog(true)
         },
-        onClickBtnDeleteDailyHugg = { viewModel.updateShowDeleteDialog(true) }
+        onClickBtnDeleteDailyHugg = { viewModel.updateShowDeleteDialog(true) },
+        onClickBtnDailyHuggList = { viewModel.onClickBtnDailyHuggList() },
+        popScreen = popScreen,
+        selectedDate = selectedDate
     )
 }
 
@@ -185,7 +202,10 @@ fun DailyHuggContent(
     onClickBtnPreviousDay: () -> Unit = {},
     dateText: String = "",
     onClickDailyHuggItem: () -> Unit = {},
-    onClickBtnDeleteDailyHugg: () -> Unit = {}
+    onClickBtnDeleteDailyHugg: () -> Unit = {},
+    onClickBtnDailyHuggList: () -> Unit = {},
+    popScreen: () -> Unit = {},
+    selectedDate: String = ""
 ) {
     Box(
         modifier = Modifier.fillMaxSize()
@@ -196,9 +216,12 @@ fun DailyHuggContent(
                 .background(Background)
         ) {
             TopBar(
-                middleText = DAILY_HUGG,
+                middleText = if(selectedDate.isEmpty()) DAILY_HUGG else DAILY_HUGG_LIST_TITLE,
                 middleItemType = TopBarMiddleType.TEXT,
-                rightItemType = TopBarRightType.DAILY_RECORD
+                rightItemType = TopBarRightType.DAILY_RECORD,
+                rightBtnClicked = { onClickBtnDailyHuggList() },
+                leftItemType = if (selectedDate.isEmpty()) TopBarLeftType.NONE else TopBarLeftType.BACK,
+                leftBtnClicked = { popScreen() }
             )
 
             Column(
@@ -207,14 +230,15 @@ fun DailyHuggContent(
                     .padding(horizontal = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(26.dp))
 
                 DateNavigator(
                     date = dateText,
                     day = uiState.day,
                     interactionSource = interactionSource,
                     onClickBtnPreviousDay = { onClickBtnPreviousDay() },
-                    onClickBtnNextDay = { onClickBtnNextDay() }
+                    onClickBtnNextDay = { onClickBtnNextDay() },
+                    navigateEnabled = selectedDate.isEmpty()
                 )
 
                 Spacer(modifier = Modifier.height(22.dp))
@@ -257,19 +281,22 @@ fun DateNavigator(
     day: String = "목요일",
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     onClickBtnNextDay: () -> Unit = {},
-    onClickBtnPreviousDay: () -> Unit = {}
+    onClickBtnPreviousDay: () -> Unit = {},
+    navigateEnabled: Boolean = true
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        BtnArrow(
-            arrowIcon = R.drawable.ic_back_arrow_gs_20,
-            interactionSource = interactionSource,
-            onClick = { onClickBtnPreviousDay() },
-            tint = Gs60
-        )
+        if (navigateEnabled) {
+            BtnArrow(
+                arrowIcon = R.drawable.ic_back_arrow_gs_20,
+                interactionSource = interactionSource,
+                onClick = { onClickBtnPreviousDay() },
+                tint = Gs60
+            )
+        }
 
         HuggText(
             text = String.format(DAILY_HUGG_DATE, date, day),
@@ -279,11 +306,13 @@ fun DateNavigator(
             modifier = Modifier.weight(1f)
         )
 
-        BtnArrow(
-            interactionSource = interactionSource,
-            onClick = { onClickBtnNextDay() },
-            tint = if (date == TimeFormatter.getTodayYearMonthDayKor(TimeFormatter.getToday())) Gs20 else Gs60
-        )
+        if (navigateEnabled) {
+            BtnArrow(
+                interactionSource = interactionSource,
+                onClick = { onClickBtnNextDay() },
+                tint = if (date == TimeFormatter.getTodayYearMonthDayKor(TimeFormatter.getToday())) Gs20 else Gs60
+            )
+        }
     }
 }
 
@@ -434,7 +463,7 @@ fun DailyHuggItem(
                         color = GsBlack
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    UrlToImage(url = item.imageUrl)
+                    if(item.imageUrl != null) UrlToImage(url = item.imageUrl!!)
                 }
             }
         }

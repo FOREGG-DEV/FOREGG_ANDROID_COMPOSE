@@ -295,6 +295,10 @@ const val HOME_TODAY_SCHEDULE_MALE = "%s, %s님의\n%d월 %d일 일정이에요.
 const val HOME_RECORD_MEDICAL = "진료 내용 기록하기"
 
 
+// DailyHuggList
+const val DAILY_HUGG_LIST_TITLE = "데일리 허그 모아보기"
+const val DAILY_HUGG_LIST_EMPTY_BUBBLE = "아직 작성된\n데일리 허그가 없어요"
+
 // --------- 에러 Toast --------- //
 const val TOAST_ERROR_NOR_CORRECT_SPOUSE_CODE = "유효하지 않은 배우자코드입니다."
 const val TOAST_ERROR_FAILED_LOGOUT = "로그아웃에 실패했습니다."
