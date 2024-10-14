@@ -40,6 +40,7 @@ import com.hugg.feature.component.SignUpIndicator
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
 import com.hugg.feature.R
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.util.ForeggLog
 
 
@@ -116,18 +117,18 @@ fun AccessPermissionScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(
+            HuggText(
                 color = Gs80,
-                style = h1(),
+                style = HuggTypography.h1,
                 text = SIGN_UP_ACCESS_PERMISSION_TITLE
             )
 
             Spacer(modifier = Modifier.height(3.dp))
 
-            Text(
+            HuggText(
                 modifier = Modifier.padding(start = 4.dp),
                 color = Gs70,
-                style = h3(),
+                style = HuggTypography.h3,
                 text = SIGN_UP_ACCESS_PERMISSION_CONTENT
             )
 
@@ -139,19 +140,19 @@ fun AccessPermissionScreen(
                     .background(color = White, shape = RoundedCornerShape(8.dp))
                     .padding(12.dp)
             ) {
-                Text(
+                HuggText(
                     modifier = Modifier.fillMaxWidth(),
                     text = SIGN_UP_ACCESS_PERMISSION_DETAIL_EXPLAIN,
-                    style = p3_l(),
+                    style = HuggTypography.p3_l,
                     color = Gs80,
                     textAlign = TextAlign.Center
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Text(
+                HuggText(
                     text = SIGN_UP_ACCESS_PERMISSION_OPTIONAL_TITLE,
-                    style = p2(),
+                    style = HuggTypography.p2,
                     color = MainStrong,
                 )
 
@@ -172,17 +173,17 @@ fun AccessPermissionScreen(
                     Spacer(modifier = Modifier.size(4.dp))
 
                     Column {
-                        Text(
+                        HuggText(
                             text = WORD_NOTIFICATION,
-                            style = h3(),
+                            style = HuggTypography.h3,
                             color = Gs90
                         )
 
                         Spacer(modifier = Modifier.size(2.dp))
 
-                        Text(
+                        HuggText(
                             text = SIGN_UP_ACCESS_PERMISSION_NOTIFICATION,
-                            style = p2_l(),
+                            style = HuggTypography.p2_l,
                             color = Gs90
                         )
                     }
@@ -205,17 +206,17 @@ fun AccessPermissionScreen(
                     Spacer(modifier = Modifier.size(4.dp))
 
                     Column {
-                        Text(
+                        HuggText(
                             text = SIGN_UP_ACCESS_PERMISSION_PHOTO_CAMERA,
-                            style = h3(),
+                            style = HuggTypography.h3,
                             color = Gs90
                         )
 
                         Spacer(modifier = Modifier.size(2.dp))
 
-                        Text(
+                        HuggText(
                             text = DAILY_HUGG,
-                            style = p2_l(),
+                            style = HuggTypography.p2_l,
                             color = Gs90
                         )
                     }
@@ -223,17 +224,17 @@ fun AccessPermissionScreen(
 
                 Spacer(modifier = Modifier.height(22.dp))
 
-                Text(
+                HuggText(
                     text = SIGN_UP_ACCESS_PERMISSION_CHANGE_PERMISSION,
-                    style = p2(),
+                    style = HuggTypography.p2,
                     color = MainStrong,
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
 
-                Text(
+                HuggText(
                     text = SIGN_UP_ACCESS_PERMISSION_CHANGE_PERMISSION_EXPLAIN,
-                    style = h4(),
+                    style = HuggTypography.h4,
                     color = Gs90,
                 )
             }

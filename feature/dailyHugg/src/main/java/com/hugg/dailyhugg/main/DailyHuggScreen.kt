@@ -51,6 +51,7 @@ import com.hugg.domain.model.enums.TopBarRightType
 import com.hugg.domain.model.response.dailyHugg.DailyHuggItemVo
 import com.hugg.feature.R
 import com.hugg.feature.component.HuggDialog
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.component.PlusBtn
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.Background
@@ -71,18 +72,13 @@ import com.hugg.feature.theme.Gs60
 import com.hugg.feature.theme.Gs70
 import com.hugg.feature.theme.Gs90
 import com.hugg.feature.theme.GsBlack
+import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.MALE
 import com.hugg.feature.theme.MainNormal
 import com.hugg.feature.theme.REPLY_COUNT
 import com.hugg.feature.theme.Sunday
 import com.hugg.feature.theme.WORD_DELETE
 import com.hugg.feature.theme.White
-import com.hugg.feature.theme.h2
-import com.hugg.feature.theme.p1
-import com.hugg.feature.theme.p2
-import com.hugg.feature.theme.p2_l
-import com.hugg.feature.theme.p3
-import com.hugg.feature.theme.p3_l
 import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.TimeFormatter
 
@@ -275,9 +271,9 @@ fun DateNavigator(
             tint = Gs60
         )
 
-        Text(
+        HuggText(
             text = String.format(DAILY_HUGG_DATE, date, day),
-            style = h2(),
+            style = HuggTypography.h2,
             color = Gs90,
             textAlign = TextAlign.Center,
             modifier = Modifier.weight(1f)
@@ -365,11 +361,11 @@ fun EmptyHuggItem(
                 tint = Color.Unspecified,
             )
 
-            Text(
+            HuggText(
                 text = msg,
                 textAlign = TextAlign.Center,
                 color = Gs60,
-                style = h2(),
+                style = HuggTypography.h2,
                 modifier = Modifier
                     .align(Alignment.Center)
                     .padding(msgContentPadding)
@@ -418,23 +414,23 @@ fun DailyHuggItem(
                         Column(
                             horizontalAlignment = Alignment.Start
                         ) {
-                            Text(
+                            HuggText(
                                 text = item.dailyConditionType,
-                                style = p1(),
+                                style = HuggTypography.p1,
                                 color = Gs90
                             )
 
-                            Text(
+                            HuggText(
                                 text = item.date.split(' ').last().substring(0, 5),
-                                style = p3_l(),
+                                style = HuggTypography.p3_l,
                                 color = Gs70
                             )
                         }
                     }
                     Spacer(modifier = Modifier.height(12.dp))
-                    Text(
+                    HuggText(
                         text = item.content,
-                        style = p2_l(),
+                        style = HuggTypography.p2_l,
                         color = GsBlack
                     )
                     Spacer(modifier = Modifier.height(8.dp))
@@ -466,9 +462,9 @@ fun EmptyReplyItem() {
             .background(Gs10),
         contentAlignment = Alignment.CenterStart
     ) {
-        Text(
+        HuggText(
             text = EMPTY_REPLY,
-            style = p2(),
+            style = HuggTypography.p2,
             color = Gs70,
             modifier = Modifier.padding(12.dp)
         )
@@ -487,18 +483,18 @@ fun ReplyItem(
             .clip(RoundedCornerShape(8.dp))
             .background(White)
     ) {
-        Text(
+        HuggText(
             text = reply,
-            style = p2_l(),
+            style = HuggTypography.p2_l,
             color = GsBlack,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(12.dp)
         )
 
-        Text(
+        HuggText(
             text = String.format(REPLY_COUNT, reply.length),
-            style = p3_l(),
+            style = HuggTypography.p3_l,
             color = Gs70,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
@@ -546,10 +542,10 @@ fun BtnDeleteDailyHugg(
                 modifier = Modifier.size(24.dp)
             )
 
-            Text(
+            HuggText(
                 text = DELETE_DAILY_HUGG,
                 color = Gs60,
-                style = p3()
+                style = HuggTypography.p3
             )
         }
     }

@@ -19,8 +19,6 @@ import com.hugg.feature.component.HuggText
 import com.hugg.feature.theme.Black
 import com.hugg.feature.theme.Gs80
 import com.hugg.feature.theme.HuggTypography
-import com.hugg.feature.theme.h1
-import com.hugg.feature.theme.p1
 
 @Composable
 fun OnBoardingItem(

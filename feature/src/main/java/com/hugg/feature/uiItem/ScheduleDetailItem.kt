@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.hugg.domain.model.enums.RecordType
 import com.hugg.domain.model.vo.calendar.ScheduleDetailVo
 import com.hugg.feature.R
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.theme.CalendarEtc
 import com.hugg.feature.theme.CalendarHospital
 import com.hugg.feature.theme.CalendarInjection
@@ -32,10 +33,8 @@ import com.hugg.feature.theme.CalendarPill
 import com.hugg.feature.theme.Gs10
 import com.hugg.feature.theme.Gs70
 import com.hugg.feature.theme.Gs90
+import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.White
-import com.hugg.feature.theme.h2
-import com.hugg.feature.theme.p2_l
-import com.hugg.feature.theme.p3
 import com.hugg.feature.util.TimeFormatter
 import org.threeten.bp.LocalTime
 import org.threeten.bp.format.DateTimeFormatter
@@ -97,10 +96,10 @@ fun ScheduleDetailItem(
             Column(
                 modifier = Modifier.weight(1f)
             ) {
-                Text(
+                HuggText(
                     text = scheduleDetailVo.name,
                     color = Gs90,
-                    style = h2()
+                    style = HuggTypography.h2
                 )
 
                 Row {
@@ -109,10 +108,10 @@ fun ScheduleDetailItem(
                     }
 
                     sortedTimeList.forEach {
-                        Text(
+                        HuggText(
                             text = TimeFormatter.formatTimeToKor(it.time),
                             color = Gs70,
-                            style = p2_l()
+                            style = HuggTypography.p2_l
                         )
 
                         Spacer(modifier = Modifier.size(4.dp))
@@ -121,10 +120,10 @@ fun ScheduleDetailItem(
 
                 Spacer(modifier = Modifier.size(2.dp))
 
-                Text(
+                HuggText(
                     text = scheduleDetailVo.memo,
                     color = Gs70,
-                    style = p3(),
+                    style = HuggTypography.p3,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )

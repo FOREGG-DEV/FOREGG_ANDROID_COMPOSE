@@ -39,6 +39,7 @@ import com.hugg.domain.model.enums.TopBarLeftType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.feature.R
 import com.hugg.feature.component.HuggSnackBar
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
 import com.hugg.feature.util.onThrottleClick
@@ -87,10 +88,10 @@ fun MyPageCsScreen(
 
         Spacer(modifier = Modifier.size(24.dp))
 
-        Text(
+        HuggText(
             modifier = Modifier.padding(start = 16.dp),
             text = MY_PAGE_CS_HUGG_KAKAO_PLUS,
-            style = h3(),
+            style = HuggTypography.h3,
             color = Gs90
         )
 
@@ -111,10 +112,10 @@ fun MyPageCsScreen(
 
         Spacer(modifier = Modifier.size(24.dp))
 
-        Text(
+        HuggText(
             modifier = Modifier.padding(start = 16.dp),
             text = MY_PAGE_CS_HUGG_EMAIL,
-            style = h3(),
+            style = HuggTypography.h3,
             color = Gs90
         )
 
@@ -133,10 +134,10 @@ fun MyPageCsScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            Text(
+            HuggText(
                 modifier = Modifier.padding(start = 12.dp),
                 color = Black,
-                style = p2(),
+                style = HuggTypography.p2,
                 text = FOREGG_EMAIL
             )
 

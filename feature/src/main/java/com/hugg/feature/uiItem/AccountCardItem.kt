@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.hugg.domain.model.enums.AccountColorType
 import com.hugg.domain.model.vo.account.AccountCardVo
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.theme.ACCOUNT_ROUND_UNIT
 import com.hugg.feature.theme.Black
 import com.hugg.feature.theme.CalendarEtc
@@ -27,10 +28,9 @@ import com.hugg.feature.theme.CalendarInjection
 import com.hugg.feature.theme.CalendarPill
 import com.hugg.feature.theme.Gs70
 import com.hugg.feature.theme.Gs80
+import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.SelectedCardColor
 import com.hugg.feature.theme.White
-import com.hugg.feature.theme.p1
-import com.hugg.feature.theme.p3_l
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UnitFormatter
 import com.hugg.feature.util.UnitFormatter.getMoneyFormatWithUnit
@@ -77,17 +77,17 @@ fun AccountCardItem(
     ) {
 
         Row {
-            Text(
+            HuggText(
                 text = TimeFormatter.getDotsDate(item.date),
-                style = p3_l(),
+                style = HuggTypography.p3_l,
                 color = Gs70
             )
 
             Spacer(modifier = Modifier.size(4.dp))
 
-            Text(
+            HuggText(
                 text = "${item.round}$ACCOUNT_ROUND_UNIT",
-                style = p3_l(),
+                style = HuggTypography.p3_l,
                 color = Gs70
             )
         }
@@ -106,26 +106,26 @@ fun AccountCardItem(
                     .padding(vertical = 4.dp, horizontal = 9.dp),
                 contentAlignment = Alignment.Center
             ){
-                Text(
+                HuggText(
                     text = boxText,
-                    style = p3_l(),
+                    style = HuggTypography.p3_l,
                     color = Gs80
                 )
             }
 
             Spacer(modifier = Modifier.size(8.dp))
 
-            Text(
+            HuggText(
                 text = item.title,
-                style = p1(),
+                style = HuggTypography.p1,
                 color = Black
             )
 
             Spacer(modifier = Modifier.weight(1f))
 
-            Text(
+            HuggText(
                 text = getMoneyFormatWithUnit(item.money),
-                style = p1(),
+                style = HuggTypography.p1,
                 color = Black
             )
         }

@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import com.hugg.account.accountMain.AccountPageState
 import com.hugg.domain.model.enums.AccountBottomSheetType
 import com.hugg.feature.R
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.theme.ACCOUNT_CHOOSE_DATE
 import com.hugg.feature.theme.ACCOUNT_DIVIDE_DATE
 import com.hugg.feature.theme.Background
@@ -44,12 +45,9 @@ import com.hugg.feature.theme.Gs30
 import com.hugg.feature.theme.Gs60
 import com.hugg.feature.theme.Gs70
 import com.hugg.feature.theme.Gs80
+import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.WORD_CONFIRM
 import com.hugg.feature.theme.White
-import com.hugg.feature.theme.h2
-import com.hugg.feature.theme.h3
-import com.hugg.feature.theme.h4
-import com.hugg.feature.theme.p1_l
 import com.hugg.feature.util.TimeFormatter
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -125,10 +123,10 @@ fun DatePickBottomSheet(
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                Text(
+                HuggText(
                     modifier = Modifier.padding(top = 12.dp),
                     text = ACCOUNT_CHOOSE_DATE,
-                    style = h2(),
+                    style = HuggTypography.h2,
                     color = Black
                 )
 
@@ -157,9 +155,9 @@ fun DatePickBottomSheet(
                         ),
                     contentAlignment = Alignment.Center
                 ){
-                    Text(
+                    HuggText(
                         text = WORD_CONFIRM,
-                        style = h4(),
+                        style = HuggTypography.h4,
                         color = Gs60
                     )
                 }
@@ -206,7 +204,7 @@ fun DatePickBottomSheet(
                 ) {
                     Spacer(modifier = Modifier.weight(1f))
 
-                    Text(
+                    HuggText(
                         modifier = Modifier
                             .clickable(
                                 onClick = {
@@ -217,21 +215,21 @@ fun DatePickBottomSheet(
                                 indication = null
                             ),
                         text = TimeFormatter.getDotsDate(startDay),
-                        style = p1_l(),
+                        style = HuggTypography.p1_l,
                         color = Gs80
                     )
 
                     Spacer(modifier = Modifier.weight(1f))
 
-                    Text(
+                    HuggText(
                         text = ACCOUNT_DIVIDE_DATE,
-                        style = p1_l(),
+                        style = HuggTypography.p1_l,
                         color = Gs80
                     )
 
                     Spacer(modifier = Modifier.weight(1f))
 
-                    Text(
+                    HuggText(
                         modifier = Modifier
                             .clickable(
                                 onClick = {
@@ -242,7 +240,7 @@ fun DatePickBottomSheet(
                                 indication = null
                             ),
                         text = TimeFormatter.getDotsDate(endDay),
-                        style = p1_l(),
+                        style = HuggTypography.p1_l,
                         color = Gs80
                     )
 
@@ -281,9 +279,9 @@ fun RowScope.BottomSheetDatePickItem(
             ),
         contentAlignment = Alignment.Center
     ){
-        Text(
+        HuggText(
             text = itemType.text,
-            style = h3(),
+            style = HuggTypography.h3,
             color = if (activeType == itemType) White else Gs70
         )
     }

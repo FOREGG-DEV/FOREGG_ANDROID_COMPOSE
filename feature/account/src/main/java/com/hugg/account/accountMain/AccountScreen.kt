@@ -34,6 +34,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -49,11 +50,13 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -67,6 +70,7 @@ import com.hugg.domain.model.enums.TopBarRightType
 import com.hugg.feature.R
 import com.hugg.feature.component.HuggDialog
 import com.hugg.feature.component.HuggTabBar
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.component.PlusBtn
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.ACCOUNT_ALL
@@ -93,21 +97,16 @@ import com.hugg.feature.theme.Gs60
 import com.hugg.feature.theme.Gs70
 import com.hugg.feature.theme.Gs80
 import com.hugg.feature.theme.Gs90
+import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.MainNormal
 import com.hugg.feature.theme.Sunday
 import com.hugg.feature.theme.WORD_ACCOUNT
 import com.hugg.feature.theme.WORD_ADD
 import com.hugg.feature.theme.WORD_DELETE
 import com.hugg.feature.theme.White
-import com.hugg.feature.theme.h2
-import com.hugg.feature.theme.h3
-import com.hugg.feature.theme.h4
-import com.hugg.feature.theme.p1
-import com.hugg.feature.theme.p2
 import com.hugg.feature.uiItem.AccountCardItem
 import com.hugg.feature.uiItem.RemoteRound
 import com.hugg.feature.uiItem.SubsidyTotalBoxItem
-import com.hugg.feature.util.ForeggLog
 import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UnitFormatter
@@ -416,11 +415,11 @@ fun RemoteMonth(
 
         Spacer(modifier = Modifier.size(9.dp))
 
-        Text(
+        HuggText(
             modifier = Modifier.align(Alignment.CenterVertically),
             text = date,
             color = Gs90,
-            style = h2()
+            style = HuggTypography.h2
         )
 
         Spacer(modifier = Modifier.size(9.dp))
@@ -471,9 +470,9 @@ fun AccountTotalBox(
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
-                Text(
+                HuggText(
                     text = "${TimeFormatter.getDotsDate(uiState.startDay)} - ${TimeFormatter.getDotsDate(uiState.endDay)}",
-                    style = h4(),
+                    style = HuggTypography.h4,
                     color = Gs70
                 )
 
@@ -513,9 +512,9 @@ fun AccountTotalBox(
 
                         Spacer(modifier = Modifier.size(4.dp))
 
-                        Text(
+                        HuggText(
                             text = ACCOUNT_ROUND_MEMO,
-                            style = h4(),
+                            style = HuggTypography.h4,
                             color = Gs70
                         )
                     }
@@ -526,12 +525,17 @@ fun AccountTotalBox(
                     onValueChange = { value ->
                         onChangedMemo(value)
                     },
-                    textStyle = h4().copy(
+                    textStyle = HuggTypography.h4.copy(
                         color = Gs70,
                     ),
                     keyboardActions = KeyboardActions(onDone = {onKeyboardDone()}),
                     singleLine = true,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    decorationBox = { innerTextField ->
+                        CompositionLocalProvider(LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1f)) {
+                            innerTextField()
+                        }
+                    }
                 )
             }
         }
@@ -592,17 +596,17 @@ fun AccountTotalBox(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            Text(
+            HuggText(
                 text = ACCOUNT_ALL_EXPENSE,
-                style = h2(),
+                style = HuggTypography.h2,
                 color = Gs90
             )
 
             Spacer(modifier = Modifier.weight(1f))
 
-            Text(
+            HuggText(
                 text = uiState.totalExpense,
-                style = h2(),
+                style = HuggTypography.h2,
                 color = Gs90
             )
 
@@ -645,17 +649,17 @@ fun TotalBoxItem(
 
         Spacer(modifier = Modifier.size(4.dp))
 
-        Text(
+        HuggText(
             text = text,
-            style = p1(),
+            style = HuggTypography.p1,
             color = Gs80
         )
 
         Spacer(modifier = Modifier.weight(1f))
 
-        Text(
+        HuggText(
             text = if (colorType == AccountColorType.RED) uiState.personalExpense else uiState.subsidyExpense, // 아직 서버 미반영
-            style = p1(),
+            style = HuggTypography.p1,
             color = Gs80
         )
 
@@ -684,9 +688,9 @@ fun EmptySubsidyBox(
 
         Spacer(modifier = Modifier.size(7.dp))
 
-        Text(
+        HuggText(
             text = ACCOUNT_SUGGEST_ADD_SUBSIDY,
-            style = h3(),
+            style = HuggTypography.h3,
             color = Gs80
         )
 
@@ -751,10 +755,10 @@ fun FilterItem(
             ),
         contentAlignment = Alignment.Center
     ) {
-        Text(
+        HuggText(
             textAlign = TextAlign.Center,
             text = if(uiState.tabType == AccountTabType.ROUND && text != ACCOUNT_ALL && text != ACCOUNT_PERSONAL) UnitFormatter.getSubsidyTitleWithoutMoneyFormat(text) else text,
-            style = if(uiState.selectedFilterList.contains(text)) h4() else p2() ,
+            style = if(uiState.selectedFilterList.contains(text)) HuggTypography.h4 else HuggTypography.p2 ,
             color = if(uiState.selectedFilterList.contains(text)) White else Gs60
         )
     }

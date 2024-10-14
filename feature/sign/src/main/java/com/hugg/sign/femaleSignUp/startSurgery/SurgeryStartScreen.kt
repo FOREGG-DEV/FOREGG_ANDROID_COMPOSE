@@ -39,6 +39,7 @@ import com.hugg.feature.component.SignUpIndicator
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
 import com.hugg.feature.R
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.util.ForeggLog
 import com.hugg.feature.util.TimeFormatter
 import java.util.Calendar
@@ -119,9 +120,9 @@ fun SurgeryStartScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(
+            HuggText(
                 color = Gs80,
-                style = h1(),
+                style = HuggTypography.h1,
                 text = SIGN_UP_SURGERY_START
             )
 
@@ -188,10 +189,10 @@ fun DatePickerView(
 
         Spacer(modifier = Modifier.width(16.dp))
 
-        Text(
+        HuggText(
             modifier = Modifier.padding(end = 27.dp),
             color = Black,
-            style = h3(),
+            style = HuggTypography.h3,
             text = uiState.date
         )
     }

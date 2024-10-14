@@ -7,21 +7,48 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Density
-import androidx.compose.ui.unit.TextUnit
-import com.hugg.feature.theme.Black
 
 @Composable
 fun HuggText(
     text: String,
+    modifier: Modifier = Modifier,
+    color: Color = Color.Unspecified,
+    textDecoration: TextDecoration? = null,
+    textAlign: TextAlign? = null,
+    overflow: TextOverflow = TextOverflow.Clip,
+    softWrap: Boolean = true,
+    maxLines: Int = Int.MAX_VALUE,
+    minLines: Int = 1,
+    onTextLayout: ((TextLayoutResult) -> Unit)? = null,
+    style: TextStyle = LocalTextStyle.current
+) {
+    CompositionLocalProvider(LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1f)) {
+        Text(
+            text = text,
+            style = style,
+            color = color,
+            modifier = modifier,
+            textDecoration = textDecoration,
+            textAlign = textAlign,
+            overflow = overflow,
+            softWrap = softWrap,
+            maxLines = maxLines,
+            minLines = minLines,
+            onTextLayout = onTextLayout ?: {}
+        )
+    }
+}
+
+@Composable
+fun HuggText(
+    text: AnnotatedString,
     modifier: Modifier = Modifier,
     color: Color = Color.Unspecified,
     textDecoration: TextDecoration? = null,

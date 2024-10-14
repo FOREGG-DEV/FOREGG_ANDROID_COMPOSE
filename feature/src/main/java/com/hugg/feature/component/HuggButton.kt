@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,13 +28,13 @@ import androidx.compose.ui.unit.dp
 import com.hugg.feature.R
 import com.hugg.feature.theme.Gs30
 import com.hugg.feature.theme.Gs70
+import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.InActiveBlankBtn
 import com.hugg.feature.theme.InActiveMainLight
 import com.hugg.feature.theme.InActiveMainNormal
 import com.hugg.feature.theme.MainLight
 import com.hugg.feature.theme.MainNormal
 import com.hugg.feature.theme.White
-import com.hugg.feature.theme.btn
 
 @Composable
 fun BlankBtn(
@@ -43,7 +42,7 @@ fun BlankBtn(
     onClickBtn : () -> Unit = {},
     radius : Dp = 8.dp,
     text : String = "테스트",
-    textStyle: TextStyle = btn(),
+    textStyle: TextStyle = HuggTypography.btn,
     textColor : Color = Gs70,
     isActive : Boolean = true,
     contentPadding : PaddingValues = PaddingValues(horizontal = 0.dp, vertical = 16.dp),
@@ -62,7 +61,7 @@ fun BlankBtn(
                 disabledContainerColor = InActiveBlankBtn
             ),
     ) {
-        Text(
+        HuggText(
             text = text,
             color = if(isActive) textColor else Gs30,
             style = textStyle
@@ -76,7 +75,7 @@ fun BlankBtnWithIcon(
     onClickBtn : () -> Unit = {},
     radius : Dp = 8.dp,
     text : String = "테스트",
-    textStyle: TextStyle = btn(),
+    textStyle: TextStyle = HuggTypography.btn,
     textColor : Color = Gs70,
     icon : Int = R.drawable.ic_create_box_top_bar,
     contentPadding : PaddingValues = PaddingValues(horizontal = 0.dp, vertical = 16.dp)
@@ -93,7 +92,7 @@ fun BlankBtnWithIcon(
         Row {
             Image(painter = painterResource(id = icon), contentDescription = null)
             Spacer(modifier = Modifier.size(4.dp))
-            Text(
+            HuggText(
                 text = text,
                 color = textColor,
                 style = textStyle
@@ -108,7 +107,7 @@ fun FilledBtn(
     onClickBtn : () -> Unit = {},
     radius : Dp = 8.dp,
     text : String = "테스트",
-    textStyle: TextStyle = btn(),
+    textStyle: TextStyle = HuggTypography.btn,
     textColor : Color = White,
     isActive : Boolean = true,
     contentPadding : PaddingValues = PaddingValues(horizontal = 0.dp, vertical = 16.dp)
@@ -125,7 +124,7 @@ fun FilledBtn(
                 disabledContainerColor = InActiveMainNormal
             ),
     ) {
-        Text(
+        HuggText(
             text = text,
             color = if(isActive) textColor else Gs30,
             style = textStyle

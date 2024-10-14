@@ -19,6 +19,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -28,11 +29,13 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -42,6 +45,7 @@ import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.domain.model.enums.TopBarRightType
 import com.hugg.feature.component.FilledBtn
 import com.hugg.feature.component.HuggDialog
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.ACCOUNT_ADD_SUBSIDY
 import com.hugg.feature.theme.ACCOUNT_CONTENT_TEXT_FIELD_HINT
@@ -61,12 +65,11 @@ import com.hugg.feature.theme.Background
 import com.hugg.feature.theme.Gs50
 import com.hugg.feature.theme.Gs80
 import com.hugg.feature.theme.Gs90
+import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.Sunday
 import com.hugg.feature.theme.WORD_DELETE
 import com.hugg.feature.theme.WORD_MODIFY
 import com.hugg.feature.theme.WORD_REGISTRATION
-import com.hugg.feature.theme.h3
-import com.hugg.feature.theme.p3_l
 import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.UserInfo
 
@@ -209,17 +212,17 @@ fun InputNickName(
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
+            HuggText(
                 text = ACCOUNT_SUBSIDY_NICKNAME,
-                style = h3(),
+                style = HuggTypography.h3,
                 color = Gs80
             )
 
             Spacer(modifier = Modifier.weight(1f))
 
-            Text(
+            HuggText(
                 text = ACCOUNT_MAX_TWO_WORD,
-                style = p3_l(),
+                style = HuggTypography.p3_l,
                 color = Sunday
             )
         }
@@ -233,9 +236,9 @@ fun InputNickName(
                 .padding(horizontal = 12.dp, vertical = 13.dp)
         ) {
             if (nickname.isEmpty()) {
-                Text(
+                HuggText(
                     text = ACCOUNT_NICKNAME_TEXT_FIELD_HINT,
-                    style = h3(),
+                    style = HuggTypography.h3,
                     color = Gs50,
                 )
             }
@@ -245,19 +248,24 @@ fun InputNickName(
                 onValueChange = { value ->
                     onChangedNickname(value)
                 },
-                textStyle = h3().copy(
+                textStyle = HuggTypography.h3.copy(
                     color = Gs90,
                 ),
                 singleLine = true,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                decorationBox = { innerTextField ->
+                    CompositionLocalProvider(LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1f)) {
+                        innerTextField()
+                    }
+                }
             )
         }
 
         Spacer(modifier = Modifier.size(4.dp))
 
-        Text(
+        HuggText(
             text = ACCOUNT_NICKNAME_DETAIL_EXPLAIN,
-            style = p3_l(),
+            style = HuggTypography.p3_l,
             color = Gs50,
         )
     }
@@ -271,9 +279,9 @@ fun InputContent(
     interactionSource: MutableInteractionSource
 ){
     Column {
-        Text(
+        HuggText(
             text = ACCOUNT_SUBSIDY_CONTENT,
-            style = h3(),
+            style = HuggTypography.h3,
             color = Gs80
         )
 
@@ -292,9 +300,9 @@ fun InputContent(
                 )
         ) {
             if (content.isEmpty()) {
-                Text(
+                HuggText(
                     text = ACCOUNT_CONTENT_TEXT_FIELD_HINT,
-                    style = h3(),
+                    style = HuggTypography.h3,
                     color = Gs50,
                 )
             }
@@ -307,9 +315,14 @@ fun InputContent(
                 onValueChange = { value ->
                     onChangedContent(value)
                 },
-                textStyle = h3().copy(
+                textStyle = HuggTypography.h3.copy(
                     color = Gs90,
-                )
+                ),
+                decorationBox = { innerTextField ->
+                    CompositionLocalProvider(LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1f)) {
+                        innerTextField()
+                    }
+                }
             )
         }
     }
@@ -321,9 +334,9 @@ fun InputMoney(
     onChangedMoney : (String) -> Unit = {}
 ){
     Column {
-        Text(
+        HuggText(
             text = ACCOUNT_SUBSIDY_MONEY_TITLE,
-            style = h3(),
+            style = HuggTypography.h3,
             color = Gs80
         )
 
@@ -341,18 +354,18 @@ fun InputMoney(
                 horizontalArrangement = Arrangement.End
             ) {
                 if (money.isEmpty()) {
-                    Text(
+                    HuggText(
                         text = "0",
-                        style = h3(),
+                        style = HuggTypography.h3,
                         color = Gs50,
                     )
                 }
 
                 Spacer(modifier = Modifier.size(2.dp))
 
-                Text(
+                HuggText(
                     text = ACCOUNT_MONEY_UNIT,
-                    style = h3(),
+                    style = HuggTypography.h3,
                     color = Gs50,
                 )
             }
@@ -365,7 +378,7 @@ fun InputMoney(
                 onValueChange = { value ->
                     onChangedMoney(value.text)
                 },
-                textStyle = h3().copy(
+                textStyle = HuggTypography.h3.copy(
                     color = Gs90,
                     textAlign = TextAlign.End
                 ),
@@ -375,7 +388,12 @@ fun InputMoney(
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 18.dp)
+                    .padding(horizontal = 18.dp),
+                decorationBox = { innerTextField ->
+                    CompositionLocalProvider(LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1f)) {
+                        innerTextField()
+                    }
+                }
             )
         }
     }

@@ -147,7 +147,7 @@ fun MyMedInjItem(
 
         Text(
             text = if(item.date.isEmpty()) "${TimeFormatter.getDotsDate(item.startDate)} - ${TimeFormatter.getDotsDate(item.endDate)}" else TimeFormatter.getDotsDate(item.date),
-            style = h4(),
+            style = HuggTypography.h4,
             color = Gs70
         )
 
@@ -155,7 +155,7 @@ fun MyMedInjItem(
 
         Text(
             text = item.name,
-            style = h2(),
+            style = HuggTypography.h2,
             color = Black
         )
 

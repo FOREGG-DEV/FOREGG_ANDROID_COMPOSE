@@ -25,13 +25,12 @@ import com.hugg.domain.model.enums.DialogType
 import com.hugg.feature.theme.Black
 import com.hugg.feature.theme.Gs10
 import com.hugg.feature.theme.Gs80
+import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.MainNormal
 import com.hugg.feature.theme.Sunday
 import com.hugg.feature.theme.WORD_NO
 import com.hugg.feature.theme.WORD_YES
 import com.hugg.feature.theme.White
-import com.hugg.feature.theme.h2
-import com.hugg.feature.theme.p1_l
 
 @Composable
 fun HuggDialog(
@@ -60,13 +59,13 @@ fun HuggDialog(
         ) {
             Spacer(modifier = Modifier.size(if(hasWarningText) 24.dp else 40.dp))
 
-            Text(
+            HuggText(
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth(),
                 maxLines = 1,
                 text = title,
-                style = h2(),
+                style = HuggTypography.h2,
                 color = Black,
                 textAlign = TextAlign.Center
             )
@@ -74,13 +73,13 @@ fun HuggDialog(
             if(hasWarningText) {
                 Spacer(modifier = Modifier.size(2.dp))
 
-                Text(
+                HuggText(
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
                         .fillMaxWidth(),
                     maxLines = 1,
                     text = warningMessage,
-                    style = p1_l(),
+                    style = HuggTypography.p1_l,
                     color = Sunday,
                     textAlign = TextAlign.Center
                 )
@@ -102,9 +101,9 @@ fun HuggDialog(
                             ),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(
+                        HuggText(
                             text = negativeText,
-                            style = h2(),
+                            style = HuggTypography.h2,
                             color = Gs80
                         )
                     }
@@ -125,9 +124,9 @@ fun HuggDialog(
                         ),
                     contentAlignment = Alignment.Center
                 ){
-                    Text(
+                    HuggText(
                         text = positiveText,
-                        style = h2(),
+                        style = HuggTypography.h2,
                         color = White
                     )
                 }

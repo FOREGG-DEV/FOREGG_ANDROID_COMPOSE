@@ -40,6 +40,7 @@ import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.domain.model.enums.TopBarRightType
 import com.hugg.domain.model.response.home.HomeRecordResponseVo
 import com.hugg.domain.model.vo.home.HomeTodayScheduleCardVo
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
 import com.hugg.feature.uiItem.HomeTodayScheduleItem
@@ -150,13 +151,13 @@ fun TodayRecordHorizontalPager(
     val screenWidthDp = configuration.screenWidthDp.dp
     val itemWidth = 285.dp
     val today = TimeFormatter.getToday()
-    Text(
+    HuggText(
         modifier = Modifier.padding(start = 16.dp),
         text = if(UserInfo.info.genderType == GenderType.FEMALE)
                     String.format(HOME_TODAY_SCHEDULE_FEMALE, UserInfo.info.name, TimeFormatter.getMonth(today), TimeFormatter.getDay(today))
                 else String.format(HOME_TODAY_SCHEDULE_MALE, UserInfo.info.spouse, UserInfo.info.name, TimeFormatter.getMonth(today), TimeFormatter.getDay(today)),
         color = Black,
-        style = h2()
+        style = HuggTypography.h2
     )
 
     Spacer(modifier = Modifier.size(8.dp))

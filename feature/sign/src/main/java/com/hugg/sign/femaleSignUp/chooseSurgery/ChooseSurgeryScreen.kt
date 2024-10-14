@@ -38,6 +38,7 @@ import com.hugg.feature.component.SignUpIndicator
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
 import com.hugg.feature.R
+import com.hugg.feature.component.HuggText
 
 
 @Composable
@@ -106,9 +107,9 @@ fun ChooseSurgeryScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(
+            HuggText(
                 color = Gs80,
-                style = h1(),
+                style = HuggTypography.h1,
                 text = SIGN_UP_CHOOSE_SURGERY
             )
 
@@ -123,9 +124,9 @@ fun ChooseSurgeryScreen(
             ) {
 
                 Spacer(modifier = Modifier.width(12.dp))
-                Text(
+                HuggText(
                     color = Gs90,
-                    style = h3(),
+                    style = HuggTypography.h3,
                     text = uiState.surgeryType.type
                 )
 
@@ -201,9 +202,9 @@ fun SurgeryDropDown(
             ),
             contentAlignment = Alignment.CenterStart
         ){
-            Text(
+            HuggText(
                 modifier = Modifier.padding(start = 12.dp),
-                style = h3(),
+                style = HuggTypography.h3,
                 color = Gs70,
                 text = SurgeryType.THINK_SURGERY.type
             )
@@ -220,9 +221,9 @@ fun SurgeryDropDown(
             ),
             contentAlignment = Alignment.CenterStart
         ){
-            Text(
+            HuggText(
                 modifier = Modifier.padding(start = 12.dp),
-                style = h3(),
+                style = HuggTypography.h3,
                 color = Gs70,
                 text = SurgeryType.IUI.type
             )
@@ -239,9 +240,9 @@ fun SurgeryDropDown(
             ),
             contentAlignment = Alignment.CenterStart
         ){
-            Text(
+            HuggText(
                 modifier = Modifier.padding(start = 12.dp),
-                style = h3(),
+                style = HuggTypography.h3,
                 color = Gs70,
                 text = SurgeryType.EGG_FREEZING.type
             )
@@ -258,9 +259,9 @@ fun SurgeryDropDown(
             ),
             contentAlignment = Alignment.CenterStart
         ){
-            Text(
+            HuggText(
                 modifier = Modifier.padding(start = 12.dp),
-                style = h3(),
+                style = HuggTypography.h3,
                 color = Gs70,
                 text = SurgeryType.IN_VITRO_FERTILIZATION.type
             )

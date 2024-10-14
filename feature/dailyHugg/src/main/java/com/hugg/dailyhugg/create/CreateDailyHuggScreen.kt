@@ -27,6 +27,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -37,12 +38,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -52,6 +55,7 @@ import com.hugg.domain.model.enums.DailyHuggType
 import com.hugg.domain.model.enums.TopBarLeftType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.feature.component.FilledBtn
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.ALREADY_EXIST_DAILY_HUGG
 import com.hugg.feature.theme.Background
@@ -59,12 +63,11 @@ import com.hugg.feature.theme.DAILY_HUGG
 import com.hugg.feature.theme.DAILY_HUGG_CONTENT_HINT
 import com.hugg.feature.theme.Gs10
 import com.hugg.feature.theme.GsWhite
+import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.IMAGE_PERMISSION_TEXT
 import com.hugg.feature.theme.MainStrong
 import com.hugg.feature.theme.WORD_MODIFY
 import com.hugg.feature.theme.WORD_REGISTRATION
-import com.hugg.feature.theme.h1
-import com.hugg.feature.theme.p2
 import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UserInfo
@@ -189,7 +192,7 @@ fun CreateEditDailyHuggContent(
             ) {
                 Spacer(modifier = Modifier.height(24.dp))
 
-                Text(
+                HuggText(
                     text = buildAnnotatedString {
                         append(String.format("%s님\n", UserInfo.info.name))
                         withStyle(style = SpanStyle(color = MainStrong)) {
@@ -197,7 +200,7 @@ fun CreateEditDailyHuggContent(
                         }
                         append("\n오늘 하루 어떠셨나요?")
                     },
-                    style = h1(),
+                    style = HuggTypography.h1,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -337,17 +340,19 @@ fun DailyHuggInputField(
                 .fillMaxSize()
                 .padding(12.dp)
                 .align(Alignment.TopStart),
-            textStyle = p2(),
+            textStyle = HuggTypography.p2,
             decorationBox = { innerTextField ->
-                if (content.isEmpty()) {
-                    Text(
-                        text = DAILY_HUGG_CONTENT_HINT,
-                        color = Color.Gray,
-                        style = p2(),
-                        modifier = Modifier.align(Alignment.TopStart)
-                    )
+                CompositionLocalProvider(LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1f)){
+                    if (content.isEmpty()) {
+                        HuggText(
+                            text = DAILY_HUGG_CONTENT_HINT,
+                            color = Color.Gray,
+                            style = HuggTypography.p2,
+                            modifier = Modifier.align(Alignment.TopStart)
+                        )
+                    }
+                    innerTextField()
                 }
-                innerTextField()
             }
         )
     }
