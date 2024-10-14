@@ -28,7 +28,7 @@ interface DailyHuggApi {
     @Multipart
     @POST(Endpoints.DailyHugg.WRITE)
     suspend fun createDailyHugg(
-        @Part image: MultipartBody.Part,
+        @Part image: MultipartBody.Part?,
         @Part("dto") dto: RequestBody
     ): Response<ApiResponse<Unit>>
 

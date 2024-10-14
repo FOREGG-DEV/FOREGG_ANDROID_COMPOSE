@@ -438,7 +438,7 @@ fun DailyHuggItem(
                         color = GsBlack
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    UrlToImage(url = item.imageUrl)
+                    if(item.imageUrl != null) UrlToImage(url = item.imageUrl!!)
                 }
             }
         }

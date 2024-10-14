@@ -20,7 +20,7 @@ class DailyHuggRepositoryImpl @Inject constructor(
     private val dailyHuggApi: DailyHuggApi
 ): DailyHuggRepository, BaseRepository() {
     override suspend fun createDailyHugg(
-        image: MultipartBody.Part,
+        image: MultipartBody.Part?,
         dto: RequestBody
     ): Flow<ApiState<Unit>> {
         return apiLaunch(apiCall = { dailyHuggApi.createDailyHugg(image = image, dto = dto) }, UnitResponseMapper)
