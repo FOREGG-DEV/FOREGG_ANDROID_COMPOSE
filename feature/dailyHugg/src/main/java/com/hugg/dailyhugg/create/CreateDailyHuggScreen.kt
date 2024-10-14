@@ -311,7 +311,7 @@ fun BtnDailyConditionItem(
             .background(Color.LightGray),
         contentAlignment = Alignment.Center
     ) {
-        Text(
+        HuggText(
             text = dailyConditionType.value,
             textAlign = TextAlign.Center,
             modifier = Modifier
