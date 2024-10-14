@@ -4,5 +4,6 @@ import com.hugg.domain.model.response.dailyHugg.DailyHuggListItemVo
 import com.hugg.feature.base.PageState
 
 data class DailyHuggListPageState(
-    val dailyHuggList: List<DailyHuggListItemVo> = emptyList()
+    val dailyHuggList: List<DailyHuggListItemVo> = emptyList(),
+    val currentPage: Int = 1
 ): PageState
