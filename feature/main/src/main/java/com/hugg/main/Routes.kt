@@ -65,6 +65,7 @@ sealed class Routes(val route : String){
     data object EditDailyHuggScreen: Routes("edit_daily_hugg/{id}") {
         fun createRoute(id: Long) = "edit_daily_hugg/$id"
     }
+    data object DailyHuggListScreen: Routes("daily_hugg_list")
 
     //----------------MY_PAGE_GRAPH----------------//
     data object MyPageGraph : Routes("my_page_graph")

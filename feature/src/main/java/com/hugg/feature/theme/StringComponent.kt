@@ -290,6 +290,10 @@ const val MY_PAGE_UNREGISTER_DIALOG = "Hugg에서 탈퇴 하시겠습니까?"
 const val MY_PAGE_UNREGISTER_COMPLETE_DIALOG = "탈퇴가 완료되었습니다."
 
 
+// DailyHuggList
+const val DAILY_HUGG_LIST_TITLE = "데일리 허그 모아보기"
+const val DAILY_HUGG_LIST_EMPTY_BUBBLE = "아직 작성된\n데일리 허그가 없어요"
+
 // --------- 에러 Toast --------- //
 const val TOAST_ERROR_NOR_CORRECT_SPOUSE_CODE = "유효하지 않은 배우자코드입니다."
 const val TOAST_ERROR_FAILED_LOGOUT = "로그아웃에 실패했습니다."

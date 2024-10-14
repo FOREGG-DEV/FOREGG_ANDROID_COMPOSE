@@ -84,7 +84,8 @@ import com.hugg.feature.util.TimeFormatter
 @Composable
 fun DailyHuggScreen(
     onClickCreateDailyHugg: () -> Unit,
-    onClickDailyHuggItem: (CreateEditDailyHuggPageState, Long) -> Unit
+    onClickDailyHuggItem: (CreateEditDailyHuggPageState, Long) -> Unit,
+    goToDailyHuggList: () -> Unit
 ) {
     val viewModel: DailyHuggViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -122,6 +123,7 @@ fun DailyHuggScreen(
         viewModel.eventFlow.collect { event ->
             when(event) {
                 DailyHuggEvent.CompleteDeleteDailyHugg -> HuggToast.createToast(context, COMPLETE_DELETE_DAILY_HUGG).show()
+                DailyHuggEvent.GoToDailyHuggList -> goToDailyHuggList()
             }
         }
     }
@@ -171,7 +173,8 @@ fun DailyHuggScreen(
         onClickDailyHuggItem = {
             viewModel.updateShowEditDialog(true)
         },
-        onClickBtnDeleteDailyHugg = { viewModel.updateShowDeleteDialog(true) }
+        onClickBtnDeleteDailyHugg = { viewModel.updateShowDeleteDialog(true) },
+        onClickBtnDailyHuggList = { viewModel.onClickBtnDailyHuggList() }
     )
 }
 
@@ -184,7 +187,8 @@ fun DailyHuggContent(
     onClickBtnPreviousDay: () -> Unit = {},
     dateText: String = "",
     onClickDailyHuggItem: () -> Unit = {},
-    onClickBtnDeleteDailyHugg: () -> Unit = {}
+    onClickBtnDeleteDailyHugg: () -> Unit = {},
+    onClickBtnDailyHuggList: () -> Unit = {}
 ) {
     Box(
         modifier = Modifier.fillMaxSize()
@@ -197,7 +201,8 @@ fun DailyHuggContent(
             TopBar(
                 middleText = DAILY_HUGG,
                 middleItemType = TopBarMiddleType.TEXT,
-                rightItemType = TopBarRightType.DAILY_RECORD
+                rightItemType = TopBarRightType.DAILY_RECORD,
+                rightBtnClicked = { onClickBtnDailyHuggList() }
             )
 
             Column(
@@ -433,7 +438,7 @@ fun DailyHuggItem(
                         color = GsBlack
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    UrlToImage(url = item.imageUrl)
+                    if(item.imageUrl != null) UrlToImage(url = item.imageUrl!!)
                 }
             }
         }

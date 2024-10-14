@@ -17,6 +17,7 @@ import com.hugg.account.subsidyCreateOrEdit.SubsidyCreateOrEditContainer
 import com.hugg.account.subsidyList.SubsidyListContainer
 import com.hugg.calendar.calendarMain.CalendarContainer
 import com.hugg.calendar.scheduleCreateOrEdit.ScheduleCreateOrEditContainer
+import com.hugg.dailyhugg.all.DailyHuggListScreen
 import com.hugg.dailyhugg.create.CreateEditDailyHuggPageState
 import com.hugg.dailyhugg.edit.EditDailyHuggScreen
 import com.hugg.domain.model.enums.CreateOrEditType
@@ -296,7 +297,8 @@ fun NavGraphBuilder.dailyHuggGraph(navController: NavHostController) {
                     navController.navigate(Routes.EditDailyHuggScreen.createRoute(id)) {
                         navController.currentBackStackEntry?.savedStateHandle?.set("dailyHuggPageState", dailyHuggPageState)
                     }
-                }
+                },
+                goToDailyHuggList = { navController.navigate(Routes.DailyHuggListScreen.route) }
             )
         }
 
@@ -360,6 +362,12 @@ fun NavGraphBuilder.dailyHuggGraph(navController: NavHostController) {
                     }
                 },
                 id = id
+            )
+        }
+
+        composable(Routes.DailyHuggListScreen.route) {
+            DailyHuggListScreen(
+                popScreen = { navController.popBackStack() }
             )
         }
     }
