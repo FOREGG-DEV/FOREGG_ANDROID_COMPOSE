@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.hugg.feature.R
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.theme.Gs90
 import com.hugg.feature.theme.HuggTypography
 
@@ -50,7 +51,7 @@ fun RemoteYearMonth(
 
         Spacer(modifier = Modifier.size(9.dp))
 
-        Text(
+        HuggText(
             modifier = Modifier.align(Alignment.CenterVertically),
             text = date,
             color = Gs90,

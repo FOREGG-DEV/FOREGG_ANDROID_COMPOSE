@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.hugg.domain.model.enums.AccountColorType
 import com.hugg.domain.model.vo.account.AccountCardVo
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.theme.ACCOUNT_ROUND_UNIT
 import com.hugg.feature.theme.Black
 import com.hugg.feature.theme.CalendarEtc
@@ -62,7 +63,10 @@ fun AccountCardItem(
         modifier = Modifier
             .padding(bottom = 4.dp, start = 16.dp, end = 16.dp)
             .fillMaxWidth()
-            .background(color = if(item.isSelected) SelectedCardColor else White, shape = RoundedCornerShape(8.dp))
+            .background(
+                color = if (item.isSelected) SelectedCardColor else White,
+                shape = RoundedCornerShape(8.dp)
+            )
             .padding(top = 8.dp, bottom = 11.dp, start = 12.dp, end = 12.dp)
             .combinedClickable(
                 onLongClick = { onLongClickCard(item.expenditureId) },
@@ -73,7 +77,7 @@ fun AccountCardItem(
     ) {
 
         Row {
-            Text(
+            HuggText(
                 text = TimeFormatter.getDotsDate(item.date),
                 style = HuggTypography.p3_l,
                 color = Gs70
@@ -81,7 +85,7 @@ fun AccountCardItem(
 
             Spacer(modifier = Modifier.size(4.dp))
 
-            Text(
+            HuggText(
                 text = "${item.round}$ACCOUNT_ROUND_UNIT",
                 style = HuggTypography.p3_l,
                 color = Gs70
@@ -102,7 +106,7 @@ fun AccountCardItem(
                     .padding(vertical = 4.dp, horizontal = 9.dp),
                 contentAlignment = Alignment.Center
             ){
-                Text(
+                HuggText(
                     text = boxText,
                     style = HuggTypography.p3_l,
                     color = Gs80
@@ -111,7 +115,7 @@ fun AccountCardItem(
 
             Spacer(modifier = Modifier.size(8.dp))
 
-            Text(
+            HuggText(
                 text = item.title,
                 style = HuggTypography.p1,
                 color = Black
@@ -119,7 +123,7 @@ fun AccountCardItem(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            Text(
+            HuggText(
                 text = getMoneyFormatWithUnit(item.money),
                 style = HuggTypography.p1,
                 color = Black

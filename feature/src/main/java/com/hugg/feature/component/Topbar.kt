@@ -37,7 +37,6 @@ import com.hugg.feature.theme.Gs50
 import com.hugg.feature.theme.Gs60
 import com.hugg.feature.theme.HuggTheme
 import com.hugg.feature.theme.HuggTypography
-import com.hugg.feature.theme.WORD_DAILY_RECORD
 import com.hugg.feature.theme.WORD_SKIP
 
 @Composable
@@ -206,7 +205,7 @@ fun DrawMiddleLogo(){
 fun DrawMiddleText(
     middleText : String = "",
 ){
-    Text(
+    HuggText(
         text = middleText,
         color = Black,
         style = HuggTypography.h3
@@ -221,7 +220,7 @@ fun DrawRightSkipBtn(
     rightBtnClicked : () -> Unit = {},
     interactionSource : MutableInteractionSource
 ){
-    Text(
+    HuggText(
         modifier = Modifier
             .padding(horizontal = 11.dp, vertical = 14.dp)
             .clickable(

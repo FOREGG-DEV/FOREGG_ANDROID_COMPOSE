@@ -22,6 +22,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -34,12 +35,14 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import com.hugg.domain.model.enums.CreateOrEditType
 import com.hugg.domain.model.enums.RecordType
 import com.hugg.domain.model.enums.RepeatDayType
 import com.hugg.feature.R
 import com.hugg.feature.component.FilledBtn
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.theme.CALENDAR_SCHEDULE_DATE_AND_TIME_PICKER
 import com.hugg.feature.theme.CALENDAR_SCHEDULE_HOSPITAL_MEMO_HINT
 import com.hugg.feature.theme.CALENDAR_SCHEDULE_HOSPITAL_TREATMENT_CONTENT
@@ -123,7 +126,7 @@ internal fun InputTreatmentView(
 ){
     var rowWidth by remember { mutableIntStateOf(0) }
 
-    Text(
+    HuggText(
         text = CALENDAR_SCHEDULE_HOSPITAL_TREATMENT_CONTENT,
         style = HuggTypography.h3,
         color = Gs80
@@ -153,7 +156,7 @@ internal fun InputTreatmentView(
             ) {
 
                 if (kind.isEmpty()) {
-                    Text(
+                    HuggText(
                         text = CALENDAR_SCHEDULE_HOSPITAL_TREATMENT_CONTENT_HINT,
                         style = HuggTypography.h3,
                         color = Gs50,
@@ -170,6 +173,11 @@ internal fun InputTreatmentView(
                         textAlign = TextAlign.Start
                     ),
                     singleLine = true,
+                    decorationBox = { innerTextField ->
+                        CompositionLocalProvider(LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1f)) {
+                            innerTextField()
+                        }
+                    }
                 )
             }
 
@@ -195,7 +203,7 @@ internal fun InputTreatmentView(
             CALENDAR_SCHEDULE_HOSPITAL_TREATMENT_CONTENT_LIST.forEach { kind ->
                 DropdownMenuItem(
                     text = {
-                        Text(
+                        HuggText(
                             style = HuggTypography.h3,
                             color = Gs70,
                             text = kind
@@ -220,7 +228,7 @@ internal fun SelectDateAndTimeView(
     date : String = "",
     onClickDatePickerBtn : (RepeatDayType) -> Unit = {},
 ){
-    Text(
+    HuggText(
         text = CALENDAR_SCHEDULE_DATE_AND_TIME_PICKER,
         style = HuggTypography.h3,
         color = Gs80
@@ -353,7 +361,12 @@ fun InputHospitalMemoView(
                     textAlign = TextAlign.Start
                 ),
                 singleLine = true,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                decorationBox = { innerTextField ->
+                    CompositionLocalProvider(LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1f)) {
+                        innerTextField()
+                    }
+                }
             )
         }
     }

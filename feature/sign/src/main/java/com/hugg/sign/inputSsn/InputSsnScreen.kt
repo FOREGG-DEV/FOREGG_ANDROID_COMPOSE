@@ -17,6 +17,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -29,16 +30,19 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hugg.domain.model.enums.TopBarLeftType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.feature.component.BlankBtn
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.component.SignUpIndicator
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
@@ -117,7 +121,7 @@ fun InputSsnScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(
+            HuggText(
                 style = HuggTypography.h1,
                 text = SIGN_UP_INPUT_SSN
             )
@@ -162,7 +166,7 @@ fun SsnInputView(
     ) {
         repeat(7){ index ->
             if(index == 6) {
-                Text(
+                HuggText(
                     color = Gs50,
                     style = HuggTypography.h3,
                     text = SIGN_UP_DIVIDE_SSN
@@ -215,6 +219,11 @@ fun SsnItemView(
                 textAlign = TextAlign.Center
             ),
             singleLine = true,
+            decorationBox = { innerTextField ->
+                CompositionLocalProvider(LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1f)) {
+                    innerTextField()
+                }
+            }
         )
     }
 }

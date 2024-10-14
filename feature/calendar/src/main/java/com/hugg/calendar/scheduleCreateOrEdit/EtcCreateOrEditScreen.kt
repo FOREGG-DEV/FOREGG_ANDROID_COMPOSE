@@ -19,17 +19,21 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import com.hugg.domain.model.enums.CreateOrEditType
 import com.hugg.domain.model.enums.RepeatDayType
 import com.hugg.feature.R
 import com.hugg.feature.component.FilledBtn
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.theme.CALENDAR_SCHEDULE_ETC_CONTENT_HINT
 import com.hugg.feature.theme.CALENDAR_SCHEDULE_ETC_CONTENT_TITLE
 import com.hugg.feature.theme.CALENDAR_SCHEDULE_ETC_TIME_PICKER_TITLE
@@ -107,7 +111,7 @@ fun InputEtcContentView(
     content : String = "",
     onChangedName : (String) -> Unit = {},
 ){
-    Text(
+    HuggText(
         modifier = Modifier.padding(horizontal = 16.dp),
         text = CALENDAR_SCHEDULE_ETC_CONTENT_TITLE,
         style = HuggTypography.h3,
@@ -127,7 +131,7 @@ fun InputEtcContentView(
                 .padding(horizontal = 12.dp, vertical = 13.dp)
         ) {
             if (content.isEmpty()) {
-                Text(
+                HuggText(
                     text = CALENDAR_SCHEDULE_ETC_CONTENT_HINT,
                     style = HuggTypography.h3,
                     color = Gs50,
@@ -147,7 +151,12 @@ fun InputEtcContentView(
                     keyboardType = KeyboardType.Number
                 ),
                 singleLine = true,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                decorationBox = { innerTextField ->
+                    CompositionLocalProvider(LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1f)) {
+                        innerTextField()
+                    }
+                }
             )
         }
     }
@@ -159,7 +168,7 @@ internal fun SelectEtcTimePickerView(
     time : String = "",
     interactionSource: MutableInteractionSource,
 ){
-    Text(
+    HuggText(
         modifier = Modifier.padding(horizontal = 16.dp),
         text = CALENDAR_SCHEDULE_ETC_TIME_PICKER_TITLE,
         style = HuggTypography.h3,
@@ -203,7 +212,7 @@ internal fun SelectEtcTimePickerView(
 
         Spacer(modifier = Modifier.width(16.dp))
 
-        Text(
+        HuggText(
             color = Gs50,
             style = HuggTypography.h3,
             text = time

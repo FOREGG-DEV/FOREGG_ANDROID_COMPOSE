@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import com.hugg.account.accountMain.AccountPageState
 import com.hugg.domain.model.enums.AccountBottomSheetType
 import com.hugg.feature.R
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.theme.ACCOUNT_CHOOSE_DATE
 import com.hugg.feature.theme.ACCOUNT_DIVIDE_DATE
 import com.hugg.feature.theme.Background
@@ -122,7 +123,7 @@ fun DatePickBottomSheet(
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                Text(
+                HuggText(
                     modifier = Modifier.padding(top = 12.dp),
                     text = ACCOUNT_CHOOSE_DATE,
                     style = HuggTypography.h2,
@@ -154,7 +155,7 @@ fun DatePickBottomSheet(
                         ),
                     contentAlignment = Alignment.Center
                 ){
-                    Text(
+                    HuggText(
                         text = WORD_CONFIRM,
                         style = HuggTypography.h4,
                         color = Gs60
@@ -203,7 +204,7 @@ fun DatePickBottomSheet(
                 ) {
                     Spacer(modifier = Modifier.weight(1f))
 
-                    Text(
+                    HuggText(
                         modifier = Modifier
                             .clickable(
                                 onClick = {
@@ -220,7 +221,7 @@ fun DatePickBottomSheet(
 
                     Spacer(modifier = Modifier.weight(1f))
 
-                    Text(
+                    HuggText(
                         text = ACCOUNT_DIVIDE_DATE,
                         style = HuggTypography.p1_l,
                         color = Gs80
@@ -228,7 +229,7 @@ fun DatePickBottomSheet(
 
                     Spacer(modifier = Modifier.weight(1f))
 
-                    Text(
+                    HuggText(
                         modifier = Modifier
                             .clickable(
                                 onClick = {
@@ -278,7 +279,7 @@ fun RowScope.BottomSheetDatePickItem(
             ),
         contentAlignment = Alignment.Center
     ){
-        Text(
+        HuggText(
             text = itemType.text,
             style = HuggTypography.h3,
             color = if (activeType == itemType) White else Gs70

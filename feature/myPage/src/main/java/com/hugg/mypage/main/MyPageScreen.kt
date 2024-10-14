@@ -30,6 +30,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hugg.domain.model.enums.GenderType
 import com.hugg.domain.model.enums.TopBarMiddleType
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
 import com.hugg.feature.util.UserInfo
@@ -111,7 +112,7 @@ fun MyPageScreen(
                     ),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
+                HuggText(
                     text = MY_PAGE_SPOUSE,
                     style = HuggTypography.p2,
                     color = Black
@@ -119,7 +120,7 @@ fun MyPageScreen(
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                Text(
+                HuggText(
                     text = uiState.spouse.ifEmpty { MY_PAGE_REGISTER_SPOUSE },
                     style = HuggTypography.p3,
                     color = Gs50
@@ -136,7 +137,7 @@ fun MyPageScreen(
                     ),
                 contentAlignment = Alignment.CenterStart
             ) {
-                Text(
+                HuggText(
                     text = if(UserInfo.info.genderType == GenderType.FEMALE) MY_PAGE_MY_MEDICINE_INJECTION else MY_PAGE_SPOUSE_MEDICINE_INJECTION(UserInfo.info.spouse),
                     style = HuggTypography.p2,
                     color = Black,
@@ -163,7 +164,7 @@ fun MyPageScreen(
                     ),
                 contentAlignment = Alignment.CenterStart
             ) {
-                Text(
+                HuggText(
                     text = MY_PAGE_NOTICE,
                     style = HuggTypography.p2,
                     color = Black,
@@ -180,7 +181,7 @@ fun MyPageScreen(
                     ),
                 contentAlignment = Alignment.CenterStart
             ) {
-                Text(
+                HuggText(
                     text = MY_PAGE_FAQ,
                     style = HuggTypography.p2,
                     color = Black,
@@ -197,7 +198,7 @@ fun MyPageScreen(
                     ),
                 contentAlignment = Alignment.CenterStart
             ) {
-                Text(
+                HuggText(
                     text = MY_PAGE_CS_ASK,
                     style = HuggTypography.p2,
                     color = Black,
@@ -214,7 +215,7 @@ fun MyPageScreen(
                     ),
                 contentAlignment = Alignment.CenterStart
             ) {
-                Text(
+                HuggText(
                     text = MY_PAGE_TERMS_OF_SERVICE,
                     style = HuggTypography.p2,
                     color = Black,
@@ -237,7 +238,7 @@ fun MyPageScreen(
                 ),
             contentAlignment = Alignment.CenterStart
         ) {
-            Text(
+            HuggText(
                 text = MY_PAGE_PROFILE_MANAGEMENT,
                 style = HuggTypography.p2,
                 color = Black,

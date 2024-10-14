@@ -43,6 +43,7 @@ import com.hugg.domain.model.enums.TopBarLeftType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.domain.model.response.dailyHugg.DailyHuggListItemVo
 import com.hugg.feature.R
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.Background
 import com.hugg.feature.theme.DAILY_HUGG_LIST_EMPTY_BUBBLE
@@ -152,7 +153,7 @@ fun EmptyDailyHuggListItem() {
                 tint = Color.Unspecified,
             )
 
-            Text(
+            HuggText(
                 text = DAILY_HUGG_LIST_EMPTY_BUBBLE,
                 textAlign = TextAlign.Center,
                 color = Gs60,
@@ -221,7 +222,7 @@ fun DailyHuggListItem(
                 .background(MainNormal),
             contentAlignment = Alignment.Center
         ) {
-            Text(
+            HuggText(
                 text = TimeFormatter.getMonthDayWithSlash(item.date),
                 style = HuggTypography.h4,
                 color = GsWhite,
@@ -248,7 +249,7 @@ fun DailyHuggListItem(
 
             Spacer(modifier = Modifier.width(8.dp))
 
-            Text(
+            HuggText(
                 text = item.content,
                 style = HuggTypography.p3_l,
                 color = GsBlack,

@@ -14,19 +14,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hugg.domain.model.enums.RecordType
 import com.hugg.domain.model.vo.home.HomeTodayScheduleCardVo
 import com.hugg.feature.R
 import com.hugg.feature.component.FilledBtn
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.theme.CalendarEtc
 import com.hugg.feature.theme.CalendarHospital
 import com.hugg.feature.theme.CalendarInjection
@@ -93,7 +92,7 @@ fun HomeTodayScheduleItem(
                         .background(color = boxColor, shape = RoundedCornerShape(4.dp)),
                     contentAlignment = Alignment.Center
                 ){
-                    Text(
+                    HuggText(
                         text = boxText,
                         style = HuggTypography.p3,
                         color = Gs80
@@ -113,7 +112,7 @@ fun HomeTodayScheduleItem(
 
                     Spacer(modifier = Modifier.size(4.dp))
 
-                    Text(
+                    HuggText(
                         text = item.time,
                         style = HuggTypography.h1,
                         color = if(item.todo) Gs50 else Gs80,
@@ -121,7 +120,7 @@ fun HomeTodayScheduleItem(
                     )
                 }
 
-                Text(
+                HuggText(
                     text = item.name,
                     style = HuggTypography.p2,
                     color = if(item.todo) Gs50 else Gs80,
@@ -162,7 +161,7 @@ fun HomeTodayScheduleItem(
         else{
             Spacer(modifier = Modifier.size(3.dp))
 
-            Text(
+            HuggText(
                 modifier = Modifier.padding(end = 12.dp),
                 text = item.memo,
                 maxLines = 2,

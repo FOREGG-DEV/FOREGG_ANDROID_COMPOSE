@@ -104,7 +104,7 @@ fun RowScope.TabItem(
             ),
         contentAlignment = Alignment.Center
     ){
-        Text(
+        HuggText(
             text = text,
             style = HuggTypography.h2,
             color = if(type == clickedType) White else Gs50

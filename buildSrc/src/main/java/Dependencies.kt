@@ -51,7 +51,7 @@ object Libraries {
     const val OKHTTP_LOGGING_INTERCEPTOR =
         "com.squareup.okhttp3:logging-interceptor:${Versions.OKHTTP}"
     const val PAGER = "com.google.accompanist:accompanist-pager:${Versions.PAGER}"
-    const val LOTTIE = "com.airbnb.android:lottie:${Versions.LOTTIE}"
+    const val LOTTIE = "com.airbnb.android:lottie-compose:${Versions.LOTTIE}"
     const val COIL = "io.coil-kt:coil:${Versions.COIL}"
     const val COIL_COMPOSE = "io.coil-kt:coil-compose:${Versions.COIL}"
     const val COIL_SVG = "io.coil-kt:coil-svg:${Versions.COIL}"

@@ -22,6 +22,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -29,12 +30,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -49,6 +52,7 @@ import com.hugg.feature.theme.*
 import com.hugg.feature.R
 import com.hugg.feature.component.FilledBtn
 import com.hugg.feature.component.HuggDialog
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UnitFormatter
@@ -226,7 +230,7 @@ fun SelectDateView(
     onClickDatePickerBtn: () -> Unit,
     interactionSource : MutableInteractionSource
 ){
-    Text(
+    HuggText(
         text = ACCOUNT_CREATE_DATE_TITLE,
         style = HuggTypography.h3,
         color = Gs80
@@ -268,7 +272,7 @@ fun SelectDateView(
 
         Spacer(modifier = Modifier.width(16.dp))
 
-        Text(
+        HuggText(
             modifier = Modifier.padding(end = 27.dp),
             color = Gs50,
             style = HuggTypography.h3,
@@ -284,7 +288,7 @@ fun SelectRoundView(
     onClickPlusBtn: () -> Unit = {},
     interactionSource : MutableInteractionSource
 ){
-    Text(
+    HuggText(
         text = ACCOUNT_CREATE_ROUND_TITLE,
         style = HuggTypography.h3,
         color = Gs80
@@ -310,7 +314,7 @@ fun SelectRoundView(
                         .width(51.dp)
                         .height(48.dp)
                         .background(
-                            color = if(round == 0) Disabled else Gs10,
+                            color = if (round == 0) Disabled else Gs10,
                             shape = RoundedCornerShape(topStart = 8.dp, bottomStart = 8.dp)
                         )
                         .clickable(
@@ -327,7 +331,7 @@ fun SelectRoundView(
                 }
             }
 
-            Text(
+            HuggText(
                 color = Black,
                 style = HuggTypography.h3,
                 text = round.toString()
@@ -343,7 +347,7 @@ fun SelectRoundView(
                         .width(51.dp)
                         .height(48.dp)
                         .background(
-                            color = if(round == UserInfo.info.round) Disabled else Gs10,
+                            color = if (round == UserInfo.info.round) Disabled else Gs10,
                             shape = RoundedCornerShape(topEnd = 8.dp, bottomEnd = 8.dp)
                         )
                         .clickable(
@@ -364,7 +368,7 @@ fun SelectRoundView(
 
         Spacer(modifier = Modifier.width(8.dp))
 
-        Text(
+        HuggText(
             style = HuggTypography.h3,
             color = Gs70,
             text = ACCOUNT_ROUND_UNIT_WITHOUT_CAR
@@ -384,7 +388,7 @@ fun ContentAndAmountView(
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
+        HuggText(
             style = HuggTypography.h3,
             color = Gs80,
             text = ACCOUNT_CREATE_CONTENT_AMOUNT_TITLE
@@ -398,7 +402,7 @@ fun ContentAndAmountView(
                 .background(color = White, shape = RoundedCornerShape(4.dp)),
             contentAlignment = Alignment.Center
         ) {
-            Text(
+            HuggText(
                 modifier = Modifier
                     .padding(horizontal = 8.dp, vertical = 6.dp)
                     .clickable(
@@ -422,7 +426,7 @@ fun ContentAndAmountView(
             .padding(horizontal = 12.dp, vertical = 13.dp)
     ) {
         if (content.isEmpty()) {
-            Text(
+            HuggText(
                 text = ACCOUNT_CREATE_CONTENT_HINT,
                 style = HuggTypography.h3,
                 color = Gs50,
@@ -438,7 +442,12 @@ fun ContentAndAmountView(
                 color = Gs90,
             ),
             singleLine = true,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            decorationBox = { innerTextField ->
+                CompositionLocalProvider(LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1f)) {
+                    innerTextField()
+                }
+            }
         )
     }
 
@@ -479,7 +488,7 @@ fun ExpenditureItemView(
 
         Spacer(modifier = Modifier.size(4.dp))
 
-        Text(
+        HuggText(
             text = if(item.color != AccountColorType.RED) UnitFormatter.getSubsidyTitleFormat(item.nickname) else item.nickname,
             style = HuggTypography.p1,
             color = Gs80
@@ -499,7 +508,7 @@ fun ExpenditureItemView(
                 horizontalArrangement = Arrangement.End
             ) {
                 if (item.money.isEmpty()) {
-                    Text(
+                    HuggText(
                         text = "0",
                         style = HuggTypography.h3,
                         color = Gs50,
@@ -508,7 +517,7 @@ fun ExpenditureItemView(
 
                 Spacer(modifier = Modifier.size(2.dp))
 
-                Text(
+                HuggText(
                     text = ACCOUNT_MONEY_UNIT,
                     style = HuggTypography.h3,
                     color = Gs50,
@@ -533,7 +542,12 @@ fun ExpenditureItemView(
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 18.dp)
+                    .padding(horizontal = 18.dp),
+                decorationBox = { innerTextField ->
+                    CompositionLocalProvider(LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1f)) {
+                        innerTextField()
+                    }
+                }
             )
         }
     }
@@ -544,7 +558,7 @@ fun InputMemoView(
     memo : String = "",
     onChangedMemo : (String) -> Unit = {}
 ){
-    Text(
+    HuggText(
         style = HuggTypography.h3,
         color = Gs80,
         text = WORD_MEMO
@@ -559,7 +573,7 @@ fun InputMemoView(
             .padding(horizontal = 12.dp, vertical = 13.dp)
     ) {
         if (memo.isEmpty()) {
-            Text(
+            HuggText(
                 text = ACCOUNT_CREATE_MEMO_HINT,
                 style = HuggTypography.h3,
                 color = Gs50,
@@ -575,7 +589,12 @@ fun InputMemoView(
                 color = Gs90,
             ),
             singleLine = true,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            decorationBox = { innerTextField ->
+                CompositionLocalProvider(LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1f)) {
+                    innerTextField()
+                }
+            }
         )
     }
 }

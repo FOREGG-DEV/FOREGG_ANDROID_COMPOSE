@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -62,7 +61,7 @@ fun BlankBtn(
                 disabledContainerColor = InActiveBlankBtn
             ),
     ) {
-        Text(
+        HuggText(
             text = text,
             color = if(isActive) textColor else Gs30,
             style = textStyle
@@ -93,7 +92,7 @@ fun BlankBtnWithIcon(
         Row {
             Image(painter = painterResource(id = icon), contentDescription = null)
             Spacer(modifier = Modifier.size(4.dp))
-            Text(
+            HuggText(
                 text = text,
                 color = textColor,
                 style = textStyle
@@ -125,7 +124,7 @@ fun FilledBtn(
                 disabledContainerColor = InActiveMainNormal
             ),
     ) {
-        Text(
+        HuggText(
             text = text,
             color = if(isActive) textColor else Gs30,
             style = textStyle
