@@ -274,7 +274,7 @@ fun ChallengeCompleteDialog(
             HuggText(
                 text = CHALLENGE_COMPLETE,
                 color = White,
-                style = challenge()
+                style = HuggTypography.challenge
             )
 
             Spacer(modifier = Modifier.size(8.dp))
@@ -287,10 +287,10 @@ fun ChallengeCompleteDialog(
 
             Spacer(modifier = Modifier.size(8.dp))
 
-            Text(
+            HuggText(
                 text = CHALLENGE_GET_POINT(points),
                 color = White,
-                style = challenge()
+                style = HuggTypography.challenge
             )
         }
     }
