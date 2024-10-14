@@ -56,6 +56,7 @@ import com.hugg.domain.model.enums.TopBarLeftType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.feature.component.FilledBtn
 import com.hugg.feature.component.HuggText
+import com.hugg.feature.component.HuggTextField
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.ALREADY_EXIST_DAILY_HUGG
 import com.hugg.feature.theme.Background
@@ -332,7 +333,7 @@ fun DailyHuggInputField(
             .clip(RoundedCornerShape(8.dp))
             .background(GsWhite)
     ) {
-        BasicTextField(
+        HuggTextField(
             value = content,
             onValueChange = { onDailyHuggContentChanged(it) },
             modifier = Modifier
@@ -341,17 +342,15 @@ fun DailyHuggInputField(
                 .align(Alignment.TopStart),
             textStyle = HuggTypography.p2,
             decorationBox = { innerTextField ->
-                CompositionLocalProvider(LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1f)){
-                    if (content.isEmpty()) {
-                        HuggText(
-                            text = DAILY_HUGG_CONTENT_HINT,
-                            color = Color.Gray,
-                            style = HuggTypography.p2,
-                            modifier = Modifier.align(Alignment.TopStart)
-                        )
-                    }
-                    innerTextField()
+                if (content.isEmpty()) {
+                    HuggText(
+                        text = DAILY_HUGG_CONTENT_HINT,
+                        color = Color.Gray,
+                        style = HuggTypography.p2,
+                        modifier = Modifier.align(Alignment.TopStart)
+                    )
                 }
+                innerTextField()
             }
         )
     }

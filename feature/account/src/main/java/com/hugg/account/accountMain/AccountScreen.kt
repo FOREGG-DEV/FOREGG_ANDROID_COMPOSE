@@ -72,6 +72,7 @@ import com.hugg.feature.R
 import com.hugg.feature.component.HuggDialog
 import com.hugg.feature.component.HuggTabBar
 import com.hugg.feature.component.HuggText
+import com.hugg.feature.component.HuggTextField
 import com.hugg.feature.component.PlusBtn
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.ACCOUNT_ALL
@@ -523,7 +524,7 @@ fun AccountTotalBox(
                     }
                 }
 
-                BasicTextField(
+                HuggTextField(
                     value = uiState.memo,
                     onValueChange = { value ->
                         onChangedMemo(value)
@@ -534,11 +535,6 @@ fun AccountTotalBox(
                     keyboardActions = KeyboardActions(onDone = {onKeyboardDone()}),
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
-                    decorationBox = { innerTextField ->
-                        CompositionLocalProvider(LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1f)) {
-                            innerTextField()
-                        }
-                    }
                 )
             }
         }

@@ -43,6 +43,7 @@ import com.hugg.domain.model.enums.RepeatDayType
 import com.hugg.feature.R
 import com.hugg.feature.component.FilledBtn
 import com.hugg.feature.component.HuggText
+import com.hugg.feature.component.HuggTextField
 import com.hugg.feature.theme.CALENDAR_SCHEDULE_DATE_AND_TIME_PICKER
 import com.hugg.feature.theme.CALENDAR_SCHEDULE_HOSPITAL_MEMO_HINT
 import com.hugg.feature.theme.CALENDAR_SCHEDULE_HOSPITAL_TREATMENT_CONTENT
@@ -163,7 +164,7 @@ internal fun InputTreatmentView(
                     )
                 }
 
-                BasicTextField(
+                HuggTextField(
                     value = kind,
                     onValueChange = { value ->
                         onChangedKind(value)
@@ -173,11 +174,6 @@ internal fun InputTreatmentView(
                         textAlign = TextAlign.Start
                     ),
                     singleLine = true,
-                    decorationBox = { innerTextField ->
-                        CompositionLocalProvider(LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1f)) {
-                            innerTextField()
-                        }
-                    }
                 )
             }
 
@@ -270,7 +266,7 @@ internal fun SelectDateAndTimeView(
 
         Spacer(modifier = Modifier.width(16.dp))
 
-        Text(
+        HuggText(
             color = Gs50,
             style = HuggTypography.h3,
             text = date
@@ -313,7 +309,7 @@ internal fun SelectDateAndTimeView(
 
         Spacer(modifier = Modifier.width(16.dp))
 
-        Text(
+        HuggText(
             color = Gs50,
             style = HuggTypography.h3,
             text = time
@@ -326,7 +322,7 @@ fun InputHospitalMemoView(
     memo : String = "",
     onChangedMemo : (String) -> Unit = {},
 ){
-    Text(
+    HuggText(
         text = WORD_MEMO,
         style = HuggTypography.h3,
         color = Gs80,
@@ -344,14 +340,14 @@ fun InputHospitalMemoView(
                 .padding(horizontal = 12.dp, vertical = 13.dp)
         ) {
             if (memo.isEmpty()) {
-                Text(
+                HuggText(
                     text = CALENDAR_SCHEDULE_HOSPITAL_MEMO_HINT,
                     style = HuggTypography.h3,
                     color = Gs50,
                 )
             }
 
-            BasicTextField(
+            HuggTextField(
                 value = memo,
                 onValueChange = { value ->
                     onChangedMemo(value)
@@ -362,11 +358,6 @@ fun InputHospitalMemoView(
                 ),
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
-                decorationBox = { innerTextField ->
-                    CompositionLocalProvider(LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1f)) {
-                        innerTextField()
-                    }
-                }
             )
         }
     }

@@ -53,6 +53,7 @@ import com.hugg.feature.R
 import com.hugg.feature.component.FilledBtn
 import com.hugg.feature.component.HuggDialog
 import com.hugg.feature.component.HuggText
+import com.hugg.feature.component.HuggTextField
 import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UnitFormatter
@@ -433,7 +434,7 @@ fun ContentAndAmountView(
             )
         }
 
-        BasicTextField(
+        HuggTextField(
             value = content,
             onValueChange = { value ->
                 onChangedContent(value)
@@ -443,11 +444,6 @@ fun ContentAndAmountView(
             ),
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
-            decorationBox = { innerTextField ->
-                CompositionLocalProvider(LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1f)) {
-                    innerTextField()
-                }
-            }
         )
     }
 
@@ -524,7 +520,7 @@ fun ExpenditureItemView(
                 )
             }
 
-            BasicTextField(
+            HuggTextField(
                 value = TextFieldValue(
                     text = item.money,
                     selection = TextRange(item.money.length)
@@ -543,11 +539,6 @@ fun ExpenditureItemView(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 18.dp),
-                decorationBox = { innerTextField ->
-                    CompositionLocalProvider(LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1f)) {
-                        innerTextField()
-                    }
-                }
             )
         }
     }
@@ -580,7 +571,7 @@ fun InputMemoView(
             )
         }
 
-        BasicTextField(
+        HuggTextField(
             value = memo,
             onValueChange = { value ->
                 onChangedMemo(value)
@@ -590,11 +581,6 @@ fun InputMemoView(
             ),
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
-            decorationBox = { innerTextField ->
-                CompositionLocalProvider(LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1f)) {
-                    innerTextField()
-                }
-            }
         )
     }
 }
