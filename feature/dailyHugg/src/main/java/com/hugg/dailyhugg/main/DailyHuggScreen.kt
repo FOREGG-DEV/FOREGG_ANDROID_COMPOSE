@@ -83,6 +83,7 @@ import com.hugg.feature.theme.WORD_DELETE
 import com.hugg.feature.theme.White
 import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.TimeFormatter
+import com.hugg.feature.util.onThrottleClick
 
 @Composable
 fun DailyHuggScreen(
@@ -427,9 +428,8 @@ fun DailyHuggItem(
                     .border(BorderStroke(1.dp, FEMALE), shape = RoundedCornerShape(8.dp))
                     .clip(RoundedCornerShape(8.dp))
                     .background(White)
-                    .clickable(
+                    .onThrottleClick(
                         onClick = { onClickDailyHuggItem() },
-                        indication = null,
                         interactionSource = interactionSource
                     )
             ) {
