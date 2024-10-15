@@ -4,11 +4,13 @@ import androidx.lifecycle.viewModelScope
 import com.hugg.domain.model.enums.GenderType
 import com.hugg.domain.model.enums.HomeChallengeViewType
 import com.hugg.domain.model.response.challenge.MyChallengeListItemVo
+import com.hugg.domain.model.response.dailyHugg.DailyHuggListResponseVo
 import com.hugg.domain.model.response.home.HomeRecordResponseVo
 import com.hugg.domain.model.response.home.HomeResponseVo
 import com.hugg.domain.model.response.profile.ProfileDetailResponseVo
 import com.hugg.domain.model.vo.home.HomeTodayScheduleCardVo
 import com.hugg.domain.repository.ChallengeRepository
+import com.hugg.domain.repository.DailyHuggRepository
 import com.hugg.domain.repository.HomeRepository
 import com.hugg.domain.repository.ProfileRepository
 import com.hugg.domain.repository.ScheduleRepository
@@ -30,14 +32,15 @@ import kotlin.math.abs
 class HomeViewModel @Inject constructor(
     private val homeRepository: HomeRepository,
     private val scheduleRepository: ScheduleRepository,
-    private val challengeRepository: ChallengeRepository
+    private val challengeRepository: ChallengeRepository,
+    private val dailyHuggRepository: DailyHuggRepository
 ) : BaseViewModel<HomePageState>(
     HomePageState()
 ) {
     fun getHome(){
         getTodayRecord()
         when(UserInfo.info.genderType){
-            GenderType.MALE -> {}
+            GenderType.MALE -> getDailyHuggList()
             GenderType.FEMALE -> getMyChallengeList()
         }
     }
@@ -61,31 +64,22 @@ class HomeViewModel @Inject constructor(
     private fun handleInitScheduleStatesSuccess(result: HomeResponseVo) {
         updateState(
             uiState.value.copy(
-                todayScheduleList = splitTodayScheduleByRepeatedTime(result.homeRecordResponseVo)
+                todayScheduleList = splitListItem(result.homeRecordResponseVo)
             )
         )
     }
 
-    private fun splitTodayScheduleByRepeatedTime(currentList: List<HomeRecordResponseVo>): List<HomeTodayScheduleCardVo> {
-        val newList = mutableListOf<HomeTodayScheduleCardVo>()
-        for(list in currentList) {
-            val subList = splitListItem(list)
-            newList.addAll(subList)
-        }
-        return updateNearestTime(newList.sortedBy { it.time })
-    }
-
-    private fun splitListItem(list: HomeRecordResponseVo): List<HomeTodayScheduleCardVo> {
-        return list.times.map { repeatTime ->
+    private fun splitListItem(list: List<HomeRecordResponseVo>): List<HomeTodayScheduleCardVo> {
+        return updateNearestTime(list.map {
             HomeTodayScheduleCardVo(
-                id = list.id,
-                recordType = list.recordType,
-                time = repeatTime,
-                name = list.name,
-                memo = list.memo,
-                todo = list.todo
+                id = it.id,
+                recordType = it.recordType,
+                time = it.time,
+                name = it.name,
+                memo = it.memo,
+                todo = it.todo
             )
-        }
+        }.sortedBy { it.time })
     }
 
     private fun updateNearestTime(scheduleList: List<HomeTodayScheduleCardVo>): List<HomeTodayScheduleCardVo> {
@@ -131,12 +125,17 @@ class HomeViewModel @Inject constructor(
         return newList.sortedBy { it.isCompleteToday }
     }
 
-    fun onClickTodo(id : Long) {
+    fun onClickTodo(id : Long, time : String) {
+        updateClickTodoState(true)
         viewModelScope.launch {
-            scheduleRepository.checkTodoRecord(id).collect {
+            scheduleRepository.checkTodoRecord(id, time).collect {
                 resultResponse(it, { getHome() })
             }
         }
+    }
+
+    fun updateClickTodoState(isClick : Boolean){
+        updateState(uiState.value.copy(isClickTodo = isClick))
     }
 
     fun selectIncompleteChallenge(id: Long) {
@@ -159,5 +158,21 @@ class HomeViewModel @Inject constructor(
 
     fun updateShowChallengeCompleteDialog(isShow : Boolean){
         updateState(uiState.value.copy(showCompleteChallengeDialog = isShow))
+    }
+
+    private fun getDailyHuggList() {
+        viewModelScope.launch {
+            dailyHuggRepository.getDailyHuggList(0).collect {
+                resultResponse(it, ::onSuccessGetDailyHuggList)
+            }
+        }
+    }
+
+    private fun onSuccessGetDailyHuggList(response: DailyHuggListResponseVo) {
+        updateState(
+            uiState.value.copy(
+                dailyHuggList = response.dailyHuggList.take(3),
+            )
+        )
     }
 }

@@ -54,6 +54,7 @@ import com.hugg.domain.model.vo.calendar.RepeatTimeVo
 import com.hugg.feature.R
 import com.hugg.feature.component.FilledBtn
 import com.hugg.feature.component.HuggText
+import com.hugg.feature.component.HuggTextField
 import com.hugg.feature.theme.ACCOUNT_CREATE_CONTENT_HINT
 import com.hugg.feature.theme.ACCOUNT_CREATE_DATE_TITLE
 import com.hugg.feature.theme.ACCOUNT_ROUND_UNIT_WITHOUT_CAR
@@ -251,7 +252,7 @@ internal fun InputKindView(
                     )
                 }
 
-                BasicTextField(
+                HuggTextField(
                     value = kind,
                     onValueChange = { value ->
                         onChangedKind(value)
@@ -261,11 +262,6 @@ internal fun InputKindView(
                         textAlign = TextAlign.Start
                     ),
                     singleLine = true,
-                    decorationBox = { innerTextField ->
-                        CompositionLocalProvider(LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1f)) {
-                            innerTextField()
-                        }
-                    }
                 )
             }
 
@@ -346,7 +342,7 @@ internal fun InputDoseView(
                 )
             }
 
-            BasicTextField(
+            HuggTextField(
                 value = dose,
                 onValueChange = { value ->
                     onChangedDose(value)
@@ -360,11 +356,6 @@ internal fun InputDoseView(
                 ),
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
-                decorationBox = { innerTextField ->
-                    CompositionLocalProvider(LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1f)) {
-                        innerTextField()
-                    }
-                }
             )
         }
 
@@ -850,7 +841,7 @@ fun InputMemoView(
                 )
             }
 
-            BasicTextField(
+            HuggTextField(
                 value = memo,
                 onValueChange = { value ->
                     onChangedMemo(value)
@@ -861,11 +852,6 @@ fun InputMemoView(
                 ),
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
-                decorationBox = { innerTextField ->
-                    CompositionLocalProvider(LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1f)) {
-                        innerTextField()
-                    }
-                }
             )
         }
     }

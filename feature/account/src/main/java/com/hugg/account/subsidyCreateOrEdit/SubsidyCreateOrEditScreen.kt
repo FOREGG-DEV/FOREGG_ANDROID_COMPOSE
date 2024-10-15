@@ -46,6 +46,7 @@ import com.hugg.domain.model.enums.TopBarRightType
 import com.hugg.feature.component.FilledBtn
 import com.hugg.feature.component.HuggDialog
 import com.hugg.feature.component.HuggText
+import com.hugg.feature.component.HuggTextField
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.ACCOUNT_ADD_SUBSIDY
 import com.hugg.feature.theme.ACCOUNT_CONTENT_TEXT_FIELD_HINT
@@ -243,7 +244,7 @@ fun InputNickName(
                 )
             }
 
-            BasicTextField(
+            HuggTextField(
                 value = nickname,
                 onValueChange = { value ->
                     onChangedNickname(value)
@@ -253,11 +254,6 @@ fun InputNickName(
                 ),
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
-                decorationBox = { innerTextField ->
-                    CompositionLocalProvider(LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1f)) {
-                        innerTextField()
-                    }
-                }
             )
         }
 
@@ -307,7 +303,7 @@ fun InputContent(
                 )
             }
 
-            BasicTextField(
+            HuggTextField(
                 modifier = Modifier
                     .fillMaxWidth()
                     .focusRequester(focusRequester),
@@ -318,11 +314,6 @@ fun InputContent(
                 textStyle = HuggTypography.h3.copy(
                     color = Gs90,
                 ),
-                decorationBox = { innerTextField ->
-                    CompositionLocalProvider(LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1f)) {
-                        innerTextField()
-                    }
-                }
             )
         }
     }
@@ -370,7 +361,7 @@ fun InputMoney(
                 )
             }
 
-            BasicTextField(
+            HuggTextField(
                 value = TextFieldValue(
                     text = money,
                     selection = TextRange(money.length)
@@ -389,11 +380,6 @@ fun InputMoney(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 18.dp),
-                decorationBox = { innerTextField ->
-                    CompositionLocalProvider(LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1f)) {
-                        innerTextField()
-                    }
-                }
             )
         }
     }

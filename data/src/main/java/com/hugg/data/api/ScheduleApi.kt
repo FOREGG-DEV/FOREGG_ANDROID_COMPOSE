@@ -21,6 +21,7 @@ interface ScheduleApi {
     companion object{
         const val PATH_ID = "id"
         const val QUERY_YEAR_AND_MONTH = "yearmonth"
+        const val QUERY_TIME = "time"
     }
     @PUT(Endpoints.RECORD.MODIFY)
     suspend fun modify(
@@ -61,6 +62,7 @@ interface ScheduleApi {
 
     @PATCH(Endpoints.RECORD.CHECK_TODO)
     suspend fun checkTodoSchedule(
-        @Path(PATH_ID) id : Long
+        @Path(PATH_ID) id : Long,
+        @Query(QUERY_TIME) time : String,
     ) : Response<ApiResponse<Unit>>
 }

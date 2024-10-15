@@ -46,7 +46,7 @@ import com.hugg.feature.util.onThrottleClick
 @Composable
 fun HomeTodayScheduleItem(
     item : HomeTodayScheduleCardVo = HomeTodayScheduleCardVo(),
-    onClickTodo : (Long) -> Unit = {},
+    onClickTodo : (Long, String) -> Unit = {_, _ -> },
     onClickDetail : (Long) -> Unit = {},
     interactionSource: MutableInteractionSource
 ){
@@ -81,7 +81,7 @@ fun HomeTodayScheduleItem(
             Column(
                 modifier = Modifier
                     .onThrottleClick(
-                        onClick = { onClickTodo(item.id) },
+                        onClick = { onClickTodo(item.id, item.time) },
                         interactionSource = interactionSource
                     )
             ){

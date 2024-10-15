@@ -15,5 +15,5 @@ interface ScheduleRepository {
     suspend fun modifySchedule(id : Long, request : ScheduleDetailRequestVo) : Flow<ApiState<Unit>>
     suspend fun addMedicalRecord(id : Long, request : AddMedicalRecordRequest) : Flow<ApiState<Unit>>
     suspend fun getMedicalRecordAndSideEffect(id : Long) : Flow<ApiState<MedicalRecord>>
-    suspend fun checkTodoRecord(id : Long) : Flow<ApiState<Unit>>
+    suspend fun checkTodoRecord(id : Long, time : String) : Flow<ApiState<Unit>>
 }

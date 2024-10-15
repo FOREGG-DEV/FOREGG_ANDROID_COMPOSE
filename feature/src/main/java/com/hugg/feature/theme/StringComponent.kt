@@ -302,6 +302,7 @@ const val HOME_MY_CHALLENGE = "생활습관 챌린지"
 const val HOME_EMPTY_MY_CHALLENGE_TITLE = "챌린지에 참여해 보세요."
 const val HOME_EMPTY_MY_CHALLENGE_CONTENT = "어쩌구 저쩌구 다양한 생활 습관 챌린지를 같이 할 수 있어요"
 const val HOME_PARTICIPATE_CHALLENGE = "챌린지 참여"
+const val HOME_EMPTY_DAILY_HUGG = "아직 작성된 배우자의 데일리 허그가 없어요."
 
 // --------- 챌린지 --------- //
 const val CHALLENGE_DIALOG_INPUT_IMPRESSION_TITLE = "한 줄 소감을 입력해주세요"

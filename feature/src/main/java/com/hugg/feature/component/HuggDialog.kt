@@ -195,7 +195,7 @@ fun HuggInputDialog(
 
             Spacer(modifier = Modifier.size(8.dp))
 
-            BasicTextField(
+            HuggTextField(
                 value = inputContent,
                 onValueChange = { value ->
                     if (value.length <= maxLength) {
@@ -212,11 +212,6 @@ fun HuggInputDialog(
                     .fillMaxWidth()
                     .border(width = 1.dp, color = Gs30, shape = RoundedCornerShape(4.dp))
                     .padding(vertical = 12.dp),
-                decorationBox = { innerTextField ->
-                    CompositionLocalProvider(LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1f)) {
-                        innerTextField()
-                    }
-                }
             )
 
             Spacer(modifier = Modifier.size(5.dp))

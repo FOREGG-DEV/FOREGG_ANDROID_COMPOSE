@@ -43,6 +43,7 @@ import com.hugg.domain.model.enums.TopBarLeftType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.feature.component.BlankBtn
 import com.hugg.feature.component.HuggText
+import com.hugg.feature.component.HuggTextField
 import com.hugg.feature.component.SignUpIndicator
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
@@ -202,7 +203,7 @@ fun SsnItemView(
             .background(White),
         contentAlignment = Alignment.Center
     ){
-        BasicTextField(
+        HuggTextField(
             modifier = Modifier
                 .focusRequester(focusRequester)
                 .onPreviewKeyEvent { event ->
@@ -219,11 +220,6 @@ fun SsnItemView(
                 textAlign = TextAlign.Center
             ),
             singleLine = true,
-            decorationBox = { innerTextField ->
-                CompositionLocalProvider(LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1f)) {
-                    innerTextField()
-                }
-            }
         )
     }
 }

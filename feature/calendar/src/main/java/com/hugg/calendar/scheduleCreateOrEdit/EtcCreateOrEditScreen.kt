@@ -34,6 +34,7 @@ import com.hugg.domain.model.enums.RepeatDayType
 import com.hugg.feature.R
 import com.hugg.feature.component.FilledBtn
 import com.hugg.feature.component.HuggText
+import com.hugg.feature.component.HuggTextField
 import com.hugg.feature.theme.CALENDAR_SCHEDULE_ETC_CONTENT_HINT
 import com.hugg.feature.theme.CALENDAR_SCHEDULE_ETC_CONTENT_TITLE
 import com.hugg.feature.theme.CALENDAR_SCHEDULE_ETC_TIME_PICKER_TITLE
@@ -138,7 +139,7 @@ fun InputEtcContentView(
                 )
             }
 
-            BasicTextField(
+            HuggTextField(
                 value = content,
                 onValueChange = { value ->
                     onChangedName(value)
@@ -152,11 +153,6 @@ fun InputEtcContentView(
                 ),
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
-                decorationBox = { innerTextField ->
-                    CompositionLocalProvider(LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1f)) {
-                        innerTextField()
-                    }
-                }
             )
         }
     }

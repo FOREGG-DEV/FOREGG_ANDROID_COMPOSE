@@ -32,6 +32,7 @@ import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.domain.model.request.sign.SignUpMaleRequestVo
 import com.hugg.feature.component.FilledBtn
 import com.hugg.feature.component.HuggText
+import com.hugg.feature.component.HuggTextField
 import com.hugg.feature.component.SignUpIndicator
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
@@ -117,7 +118,7 @@ fun MaleSignUpScreen(
                 ),
                 contentAlignment = Alignment.Center
             ){
-                BasicTextField(
+                HuggTextField(
                     value = uiState.spouseCode,
                     onValueChange = { value ->
                         onChangedSpouseCode(value)
@@ -127,11 +128,6 @@ fun MaleSignUpScreen(
                         textAlign = TextAlign.Center
                     ),
                     singleLine = true,
-                    decorationBox = { innerTextField ->
-                        CompositionLocalProvider(LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1f)) {
-                            innerTextField()
-                        }
-                    }
                 )
             }
 

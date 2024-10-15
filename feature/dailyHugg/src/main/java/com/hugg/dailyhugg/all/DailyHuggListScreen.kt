@@ -55,6 +55,7 @@ import com.hugg.feature.theme.GsWhite
 import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.MainNormal
 import com.hugg.feature.theme.White
+import com.hugg.feature.uiItem.DailyHuggListItem
 import com.hugg.feature.util.TimeFormatter
 
 @Composable
@@ -192,69 +193,6 @@ fun DailyHuggList(
                 interactionSource = interactionSource
             )
             Spacer(modifier = Modifier.height(12.dp))
-        }
-    }
-}
-
-@Composable
-fun DailyHuggListItem(
-    item: DailyHuggListItemVo = DailyHuggListItemVo(),
-    goToDailyHuggDetail: (String) -> Unit = {},
-    interactionSource: MutableInteractionSource
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(60.dp)
-            .clip(RoundedCornerShape(8.dp))
-            .clickable(
-                interactionSource = interactionSource,
-                indication = null,
-                onClick = {
-                    goToDailyHuggDetail(item.date)
-                }
-            )
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxHeight()
-                .clip(RoundedCornerShape(topStart = 8.dp, bottomStart = 8.dp))
-                .background(MainNormal),
-            contentAlignment = Alignment.Center
-        ) {
-            HuggText(
-                text = TimeFormatter.getMonthDayWithSlash(item.date),
-                style = HuggTypography.h4,
-                color = GsWhite,
-                modifier = Modifier
-                    .padding(start = 7.dp, end = 6.dp)
-            )
-        }
-
-        Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(GsWhite),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Spacer(modifier = Modifier.width(8.dp))
-
-            Icon(
-                painter = painterResource(R.drawable.ic_hugging_female),
-                contentDescription = "",
-                modifier = Modifier
-                    .size(20.dp),
-                tint = Color.Unspecified
-            )
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            HuggText(
-                text = item.content,
-                style = HuggTypography.p3_l,
-                color = GsBlack,
-                maxLines = 2
-            )
         }
     }
 }
