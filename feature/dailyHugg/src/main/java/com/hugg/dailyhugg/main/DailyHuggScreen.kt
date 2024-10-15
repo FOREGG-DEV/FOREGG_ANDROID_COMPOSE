@@ -417,6 +417,8 @@ fun DailyHuggItem(
     onClickDailyHuggItem: () -> Unit = {},
     interactionSource: MutableInteractionSource
 ) {
+    val resourceId = getDailyHuggIcon(DailyConditionType.fromValue(item.dailyConditionType) ?: DailyConditionType.DEFAULT)
+
     LazyColumn {
         item {
             Box(
@@ -439,7 +441,7 @@ fun DailyHuggItem(
                         verticalAlignment = Alignment.Bottom
                     ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_worst),
+                            painter = painterResource(id = resourceId),
                             contentDescription = "",
                             tint = Color.Unspecified,
                         )
@@ -583,6 +585,19 @@ fun BtnDeleteDailyHugg(
                 style = HuggTypography.p3
             )
         }
+    }
+}
+
+fun getDailyHuggIcon(
+    dailyConditionType: DailyConditionType
+) : Int {
+    return when (dailyConditionType) {
+        DailyConditionType.WORST -> R.drawable.ic_daily_condition_worst_selected
+        DailyConditionType.BAD -> R.drawable.ic_daily_condition_bad_selected
+        DailyConditionType.SOSO -> R.drawable.ic_daily_condition_soso_selected
+        DailyConditionType.GOOD -> R.drawable.ic_daily_condition_good_selected
+        DailyConditionType.PERFECT -> R.drawable.ic_daily_condition_perfect_selected
+        DailyConditionType.DEFAULT -> -1
     }
 }
 
