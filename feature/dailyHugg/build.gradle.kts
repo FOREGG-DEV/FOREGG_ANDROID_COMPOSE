@@ -87,4 +87,6 @@ dependencies {
     implementation(Libraries.RETROFIT_CONVERTER_GSON)
 
     implementation(Kotlin.PARCELIZE)
+
+    implementation(Libraries.LOTTIE)
 }

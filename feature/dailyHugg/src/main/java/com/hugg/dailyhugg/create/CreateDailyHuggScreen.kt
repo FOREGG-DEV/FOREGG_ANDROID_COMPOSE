@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -50,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
+import com.hugg.feature.R
 import com.hugg.domain.model.enums.DailyConditionType
 import com.hugg.domain.model.enums.DailyHuggType
 import com.hugg.domain.model.enums.TopBarLeftType
@@ -209,7 +211,8 @@ fun CreateEditDailyHuggContent(
 
                 BtnDailyCondition(
                     onSelectedDailyConditionType = onSelectedDailyConditionType,
-                    interactionSource = interactionSource
+                    interactionSource = interactionSource,
+                    selectedConditionType = uiState.dailyConditionType
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
@@ -260,38 +263,24 @@ fun CreateEditDailyHuggContent(
 @Composable
 fun BtnDailyCondition(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    onSelectedDailyConditionType: (DailyConditionType) -> Unit = {}
+    onSelectedDailyConditionType: (DailyConditionType) -> Unit = {},
+    selectedConditionType: DailyConditionType
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        BtnDailyConditionItem(
-            dailyConditionType = DailyConditionType.WORST,
-            interactionSource = interactionSource,
-            onSelectedDailyConditionType = onSelectedDailyConditionType
-        )
-        BtnDailyConditionItem(
-            dailyConditionType = DailyConditionType.BAD,
-            interactionSource = interactionSource,
-            onSelectedDailyConditionType = onSelectedDailyConditionType
-        )
-        BtnDailyConditionItem(
-            dailyConditionType = DailyConditionType.SOSO,
-            interactionSource = interactionSource,
-            onSelectedDailyConditionType = onSelectedDailyConditionType
-        )
-        BtnDailyConditionItem(
-            dailyConditionType = DailyConditionType.GOOD,
-            interactionSource = interactionSource,
-            onSelectedDailyConditionType = onSelectedDailyConditionType
-        )
-        BtnDailyConditionItem(
-            dailyConditionType = DailyConditionType.PERFECT,
-            interactionSource = interactionSource,
-            onSelectedDailyConditionType = onSelectedDailyConditionType
-        )
+        DailyConditionType.entries.forEach {
+            if (it != DailyConditionType.DEFAULT) {
+                BtnDailyConditionItem(
+                    dailyConditionType = it,
+                    interactionSource = interactionSource,
+                    onSelectedDailyConditionType = onSelectedDailyConditionType,
+                    selectedConditionType = selectedConditionType
+                )
+            }
+        }
     }
 }
 
@@ -299,8 +288,14 @@ fun BtnDailyCondition(
 fun BtnDailyConditionItem(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     dailyConditionType: DailyConditionType = DailyConditionType.DEFAULT,
-    onSelectedDailyConditionType: (DailyConditionType) -> Unit = {}
+    onSelectedDailyConditionType: (DailyConditionType) -> Unit = {},
+    selectedConditionType: DailyConditionType
 ) {
+    val resourceId = getDailyConditionIcon(
+        dailyConditionType = dailyConditionType,
+        isSelected = selectedConditionType == dailyConditionType
+    )
+
     Box(
         modifier = Modifier
             .size(62.dp)
@@ -308,15 +303,13 @@ fun BtnDailyConditionItem(
                 interactionSource = interactionSource,
                 indication = null,
                 onClick = { onSelectedDailyConditionType(dailyConditionType) }
-            )
-            .background(Color.LightGray),
+            ),
         contentAlignment = Alignment.Center
     ) {
-        HuggText(
-            text = dailyConditionType.value,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
+        Icon(
+            painter = painterResource(id = resourceId),
+            contentDescription = "",
+            tint = Color.Unspecified
         )
     }
 }
@@ -380,7 +373,7 @@ fun BtnImageSelector(
         contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = painterResource(id = com.hugg.feature.R.drawable.ic_camera),
+            painter = painterResource(id = R.drawable.ic_camera),
             contentDescription = ""
         )
     }
@@ -417,10 +410,24 @@ fun SelectedImageItem(
                 )
         ) {
             Image(
-                painter = painterResource(id = com.hugg.feature.R.drawable.ic_circle_close),
+                painter = painterResource(id = R.drawable.ic_circle_close),
                 contentDescription = ""
             )
         }
+    }
+}
+
+fun getDailyConditionIcon(
+    dailyConditionType: DailyConditionType,
+    isSelected: Boolean
+): Int {
+    return when (dailyConditionType) {
+        DailyConditionType.WORST -> if (isSelected) R.drawable.ic_daily_condition_worst_selected else R.drawable.ic_daily_condition_worst_unselected
+        DailyConditionType.BAD -> if (isSelected) R.drawable.ic_daily_condition_bad_selected else R.drawable.ic_daily_condition_bad_unselected
+        DailyConditionType.SOSO -> if (isSelected) R.drawable.ic_daily_condition_soso_selected else R.drawable.ic_daily_condition_soso_unselected
+        DailyConditionType.GOOD -> if (isSelected) R.drawable.ic_daily_condition_good_selected else R.drawable.ic_daily_condition_good_unselected
+        DailyConditionType.PERFECT -> if (isSelected) R.drawable.ic_daily_condition_perfect_selected else R.drawable.ic_daily_condition_perfect_unselected
+        DailyConditionType.DEFAULT -> -1
     }
 }
 

@@ -83,6 +83,7 @@ import com.hugg.feature.theme.WORD_DELETE
 import com.hugg.feature.theme.White
 import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.TimeFormatter
+import com.hugg.feature.util.onThrottleClick
 
 @Composable
 fun DailyHuggScreen(
@@ -205,7 +206,7 @@ fun DailyHuggContent(
     onClickBtnDeleteDailyHugg: () -> Unit = {},
     onClickBtnDailyHuggList: () -> Unit = {},
     popScreen: () -> Unit = {},
-    selectedDate: String = ""
+    selectedDate: String = "",
 ) {
     Box(
         modifier = Modifier.fillMaxSize()
@@ -246,7 +247,8 @@ fun DailyHuggContent(
                 if (uiState.dailyHugg == null) EmptyDailyHuggContent()
                 else DailyHuggItem(
                     item = uiState.dailyHugg,
-                    onClickDailyHuggItem = onClickDailyHuggItem
+                    onClickDailyHuggItem = onClickDailyHuggItem,
+                    interactionSource = interactionSource
                 )
                 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -413,8 +415,11 @@ fun EmptyHuggItem(
 @Composable
 fun DailyHuggItem(
     item: DailyHuggItemVo = DailyHuggItemVo(),
-    onClickDailyHuggItem: () -> Unit = {}
+    onClickDailyHuggItem: () -> Unit = {},
+    interactionSource: MutableInteractionSource
 ) {
+    val resourceId = getDailyHuggIcon(DailyConditionType.fromValue(item.dailyConditionType) ?: DailyConditionType.DEFAULT)
+
     LazyColumn {
         item {
             Box(
@@ -423,7 +428,10 @@ fun DailyHuggItem(
                     .border(BorderStroke(1.dp, FEMALE), shape = RoundedCornerShape(8.dp))
                     .clip(RoundedCornerShape(8.dp))
                     .background(White)
-                    .clickable { onClickDailyHuggItem() }
+                    .onThrottleClick(
+                        onClick = { onClickDailyHuggItem() },
+                        interactionSource = interactionSource
+                    )
             ) {
                 Column(
                     modifier = Modifier
@@ -433,7 +441,7 @@ fun DailyHuggItem(
                         verticalAlignment = Alignment.Bottom
                     ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_worst),
+                            painter = painterResource(id = resourceId),
                             contentDescription = "",
                             tint = Color.Unspecified,
                         )
@@ -577,6 +585,19 @@ fun BtnDeleteDailyHugg(
                 style = HuggTypography.p3
             )
         }
+    }
+}
+
+fun getDailyHuggIcon(
+    dailyConditionType: DailyConditionType
+) : Int {
+    return when (dailyConditionType) {
+        DailyConditionType.WORST -> R.drawable.ic_daily_condition_worst_selected
+        DailyConditionType.BAD -> R.drawable.ic_daily_condition_bad_selected
+        DailyConditionType.SOSO -> R.drawable.ic_daily_condition_soso_selected
+        DailyConditionType.GOOD -> R.drawable.ic_daily_condition_good_selected
+        DailyConditionType.PERFECT -> R.drawable.ic_daily_condition_perfect_selected
+        DailyConditionType.DEFAULT -> -1
     }
 }
 

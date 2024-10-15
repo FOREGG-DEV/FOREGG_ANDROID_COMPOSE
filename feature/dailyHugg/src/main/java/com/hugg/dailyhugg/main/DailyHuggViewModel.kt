@@ -80,7 +80,7 @@ class DailyHuggViewModel @Inject constructor(
     }
 
     private fun onSuccessDeleteDailyHugg() {
-        getDailyHuggByDate(TimeFormatter.getToday())
+        getDailyHuggByDate(uiState.value.date)
         emitEventFlow(DailyHuggEvent.CompleteDeleteDailyHugg)
     }
 
