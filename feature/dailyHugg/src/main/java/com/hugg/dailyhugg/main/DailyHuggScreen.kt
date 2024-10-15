@@ -205,7 +205,7 @@ fun DailyHuggContent(
     onClickBtnDeleteDailyHugg: () -> Unit = {},
     onClickBtnDailyHuggList: () -> Unit = {},
     popScreen: () -> Unit = {},
-    selectedDate: String = ""
+    selectedDate: String = "",
 ) {
     Box(
         modifier = Modifier.fillMaxSize()
@@ -246,7 +246,8 @@ fun DailyHuggContent(
                 if (uiState.dailyHugg == null) EmptyDailyHuggContent()
                 else DailyHuggItem(
                     item = uiState.dailyHugg,
-                    onClickDailyHuggItem = onClickDailyHuggItem
+                    onClickDailyHuggItem = onClickDailyHuggItem,
+                    interactionSource = interactionSource
                 )
                 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -413,7 +414,8 @@ fun EmptyHuggItem(
 @Composable
 fun DailyHuggItem(
     item: DailyHuggItemVo = DailyHuggItemVo(),
-    onClickDailyHuggItem: () -> Unit = {}
+    onClickDailyHuggItem: () -> Unit = {},
+    interactionSource: MutableInteractionSource
 ) {
     LazyColumn {
         item {
@@ -423,7 +425,11 @@ fun DailyHuggItem(
                     .border(BorderStroke(1.dp, FEMALE), shape = RoundedCornerShape(8.dp))
                     .clip(RoundedCornerShape(8.dp))
                     .background(White)
-                    .clickable { onClickDailyHuggItem() }
+                    .clickable(
+                        onClick = { onClickDailyHuggItem() },
+                        indication = null,
+                        interactionSource = interactionSource
+                    )
             ) {
                 Column(
                     modifier = Modifier
