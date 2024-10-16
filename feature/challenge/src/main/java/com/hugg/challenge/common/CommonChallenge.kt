@@ -51,6 +51,7 @@ import com.hugg.feature.theme.CHALLENGE_PAGER_INDICATOR
 import com.hugg.feature.theme.CHALLENGE_PARTICIPANTS
 import com.hugg.feature.theme.CHALLENGE_PARTICIPATION
 import com.hugg.feature.theme.ChallengePoint
+import com.hugg.feature.theme.DimBg
 import com.hugg.feature.theme.Gs20
 import com.hugg.feature.theme.Gs30
 import com.hugg.feature.theme.Gs50
@@ -250,7 +251,7 @@ fun CommonChallengeItem(
                 Box(
                     modifier = Modifier
                         .matchParentSize()
-                        .background(GsBlack.copy(alpha = 0.7f))
+                        .background(DimBg)
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_lock),
