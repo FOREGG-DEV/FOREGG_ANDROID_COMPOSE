@@ -15,4 +15,7 @@ interface ChallengeRepository {
     suspend fun markVisit(id : Long, time : String) : Flow<Boolean>
     suspend fun getVisitWeek(id : Long) : Flow<String>
     suspend fun removeVisitId(id : Long) : Flow<Boolean>
+
+    // Hugg
+    suspend fun getNickname(): Flow<String?>
 }

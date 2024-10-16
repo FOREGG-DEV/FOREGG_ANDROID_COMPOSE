@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.hugg.data.api.ChallengeApi
 import com.hugg.data.base.BaseRepository
+import com.hugg.data.datastore.HuggDataStore
 import com.hugg.data.mapper.UnitResponseMapper
 import com.hugg.data.mapper.challenge.ChallengeResponseMapper
 import com.hugg.data.mapper.challenge.MyChallengeResponseMapper
@@ -22,7 +23,8 @@ import javax.inject.Inject
 
 class ChallengeRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val challengeApi: ChallengeApi
+    private val challengeApi: ChallengeApi,
+    private val dataStore: HuggDataStore
 ) : ChallengeRepository, BaseRepository() {
 
     companion object {
@@ -80,4 +82,10 @@ class ChallengeRepositoryImpl @Inject constructor(
             emit(true)
         }
     }.catch { emit(false) }
+
+
+    // Hugg
+    override suspend fun getNickname(): Flow<String?> {
+        return dataStore.challengeNickname
+    }
 }
