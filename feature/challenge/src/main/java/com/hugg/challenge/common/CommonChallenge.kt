@@ -31,6 +31,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -43,9 +46,11 @@ import com.hugg.feature.component.FilledBtn
 import com.hugg.feature.component.HuggText
 import com.hugg.feature.theme.CHALLENGE_LIST
 import com.hugg.feature.theme.CHALLENGE_MINE
+import com.hugg.feature.theme.CHALLENGE_OPEN
 import com.hugg.feature.theme.CHALLENGE_PAGER_INDICATOR
 import com.hugg.feature.theme.CHALLENGE_PARTICIPANTS
 import com.hugg.feature.theme.CHALLENGE_PARTICIPATION
+import com.hugg.feature.theme.ChallengePoint
 import com.hugg.feature.theme.Gs20
 import com.hugg.feature.theme.Gs30
 import com.hugg.feature.theme.Gs50
@@ -141,7 +146,17 @@ fun CommonChallenge(
             )
         } else {
             FilledBtn(
-                text = CHALLENGE_PARTICIPATION,
+                text =
+                if (uiState.commonChallengeList[pagerState.currentPage].isOpen)
+                    AnnotatedString(CHALLENGE_PARTICIPATION)
+                else buildAnnotatedString {
+                    append(CHALLENGE_OPEN)
+                    addStyle(
+                        style = SpanStyle(color = ChallengePoint),
+                        start = 0,
+                        end = 4
+                    )
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
@@ -162,70 +177,90 @@ fun CommonChallengeItem(
         modifier = modifier
             .fillMaxWidth()
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(GsWhite),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+        Box(
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Spacer(modifier = Modifier.height(32.dp))
-
-            Icon(
-                painter = painterResource(id = R.drawable.ic_daily_condition_bad_selected),
-                contentDescription = "",
-                modifier = Modifier.size(178.dp),
-                tint = Color.Unspecified
-            )
-
-            Spacer(modifier = Modifier.height(30.dp))
-
-            HuggText(
-                text = item.name,
-                style = HuggTypography.h1,
-                color = GsBlack,
-                textAlign = TextAlign.Center
-            )
-
-            Spacer(modifier = Modifier.height(18.dp))
-
-            HuggText(
-                text = item.description,
-                style = HuggTypography.p3_l,
-                color = Gs80,
-                textAlign = TextAlign.Center
-            )
-
-            Spacer(modifier = Modifier.height(17.dp))
-
-            Box(
+            Column(
                 modifier = Modifier
-                    .border(width = 1.dp, color = Gs30, shape = RoundedCornerShape(4.dp)),
-                contentAlignment = Alignment.Center
+                    .fillMaxWidth()
+                    .background(GsWhite),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
+                Spacer(modifier = Modifier.height(32.dp))
+
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_daily_condition_bad_selected),
+                    contentDescription = "",
+                    modifier = Modifier.size(178.dp),
+                    tint = Color.Unspecified
+                )
+
+                Spacer(modifier = Modifier.height(30.dp))
+
+                HuggText(
+                    text = item.name,
+                    style = HuggTypography.h1,
+                    color = GsBlack,
+                    textAlign = TextAlign.Center
+                )
+
+                Spacer(modifier = Modifier.height(18.dp))
+
+                HuggText(
+                    text = item.description,
+                    style = HuggTypography.p3_l,
+                    color = Gs80,
+                    textAlign = TextAlign.Center
+                )
+
+                Spacer(modifier = Modifier.height(17.dp))
+
+                Box(
+                    modifier = Modifier
+                        .border(width = 1.dp, color = Gs30, shape = RoundedCornerShape(4.dp)),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Spacer(modifier = Modifier.width(9.dp))
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Spacer(modifier = Modifier.width(9.dp))
 
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_people),
-                        contentDescription = ""
-                    )
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_people),
+                            contentDescription = ""
+                        )
 
-                    HuggText(
-                        text = String.format(CHALLENGE_PARTICIPANTS, item.participants),
-                        style = HuggTypography.p3_l,
-                        color = Gs80,
-                        modifier = Modifier.padding(vertical = 4.dp)
-                    )
+                        HuggText(
+                            text = String.format(CHALLENGE_PARTICIPANTS, item.participants),
+                            style = HuggTypography.p3_l,
+                            color = Gs80,
+                            modifier = Modifier.padding(vertical = 4.dp)
+                        )
 
-                    Spacer(modifier = Modifier.width(9.dp))
+                        Spacer(modifier = Modifier.width(9.dp))
+                    }
                 }
+
+                Spacer(modifier = Modifier.height(19.dp))
             }
 
-            Spacer(modifier = Modifier.height(19.dp))
+            if (!item.isOpen) {
+                Box(
+                    modifier = Modifier
+                        .matchParentSize()
+                        .background(GsBlack.copy(alpha = 0.7f))
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_lock),
+                        contentDescription = "",
+                        modifier = Modifier
+                            .align(Alignment.Center),
+                        tint = Color.Unspecified
+                    )
+                }
+            }
         }
     }
 }
