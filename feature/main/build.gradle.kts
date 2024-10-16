@@ -52,6 +52,7 @@ dependencies {
     implementation(project(":feature:account"))
     implementation(project(":feature:dailyHugg"))
     implementation(project(":feature:myPage"))
+    implementation(project(":feature:challenge"))
 
     implementation(AndroidX.CORE)
     implementation(AndroidX.APPCOMPAT)

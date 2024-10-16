@@ -17,6 +17,7 @@ import com.hugg.account.subsidyCreateOrEdit.SubsidyCreateOrEditContainer
 import com.hugg.account.subsidyList.SubsidyListContainer
 import com.hugg.calendar.calendarMain.CalendarContainer
 import com.hugg.calendar.scheduleCreateOrEdit.ScheduleCreateOrEditContainer
+import com.hugg.challenge.main.ChallengeMainScreen
 import com.hugg.dailyhugg.all.DailyHuggListScreen
 import com.hugg.dailyhugg.create.CreateEditDailyHuggPageState
 import com.hugg.dailyhugg.edit.EditDailyHuggScreen
@@ -386,6 +387,16 @@ fun NavGraphBuilder.dailyHuggGraph(navController: NavHostController) {
     }
 }
 
+fun NavGraphBuilder.challengeGraph(navController: NavHostController) {
+    navigation(startDestination = Routes.ChallengeScreen.route, route = Routes.ChallengeGraph.route) {
+        composable(Routes.ChallengeScreen.route) {
+            ChallengeMainScreen(
+                popScreen = { navController.popBackStack() }
+            )
+        }
+    }
+}
+
 fun NavGraphBuilder.myPageGraph(navController: NavHostController) {
     navigation(startDestination = Routes.MyPageScreen.route, route = Routes.MyPageGraph.route) {
 
@@ -435,7 +446,7 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController) {
 
         composable(Routes.HomeScreen.route) { HomeContainer(
             navigateGoToCalendarDetail = { id -> navController.navigate(Routes.CalendarScheduleCreateOrEdit.getRouteCalendarScheduleCreateOrEdit(CreateOrEditType.EDIT.type, RecordType.ETC.type, id, TimeFormatter.getToday()))},
-            navigateGoToChallenge = {},
+            navigateGoToChallenge = { navController.navigate(Routes.ChallengeGraph.route) },
             navigateGoToDailyHugg = { navController.navigate(Routes.DailyHuggGraph.route)},
             navigateGoToNotification = {},
             navigateGoToDailyHuggDetail = { date -> navController.navigate(Routes.DailyHuggScreen.createRoute(date)) }
