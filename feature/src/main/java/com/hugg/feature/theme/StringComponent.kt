@@ -39,6 +39,7 @@ const val WORD_UNREGISTER = "탈퇴"
 const val WORD_NOTIFICATION = "알림"
 const val WORD_COMPLETE = "완료"
 const val WORD_INCOMPLETE = "미완료"
+const val WORD_CHALLENGE = "챌린지"
 
 const val DIALOG_MAX_LENGTH = "최대 %d"
 
@@ -313,6 +314,7 @@ fun CHALLENGE_GET_POINT(points : Int) = buildAnnotatedString {
     }
     append(" 획득!")
 }
+const val MY_CHALLENGE = "나의 챌린지"
 
 
 

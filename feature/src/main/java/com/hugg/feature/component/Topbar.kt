@@ -47,7 +47,8 @@ fun TopBar(
     leftBtnClicked : () -> Unit = {},
     middleText : String = "",
     rightBtnClicked : () -> Unit = {},
-    interactionSource : MutableInteractionSource = remember { MutableInteractionSource() }
+    interactionSource : MutableInteractionSource = remember { MutableInteractionSource() },
+    rightItemContent: String = ""
 ) {
     Column(
         modifier = Modifier
@@ -79,7 +80,7 @@ fun TopBar(
                 horizontalArrangement = Arrangement.End
             ) {
                 DrawRightItem(
-                    rightItemType = rightItemType, rightBtnClicked = rightBtnClicked, interactionSource = interactionSource
+                    rightItemType = rightItemType, rightBtnClicked = rightBtnClicked, interactionSource = interactionSource, content = rightItemContent
                 )
             }
         }
@@ -123,7 +124,8 @@ fun DrawMiddleItem(
 fun DrawRightItem(
     rightItemType : TopBarRightType = TopBarRightType.NONE,
     rightBtnClicked : () -> Unit = {},
-    interactionSource : MutableInteractionSource
+    interactionSource : MutableInteractionSource,
+    content: String = ""
 ){
     when(rightItemType){
         TopBarRightType.SKIP -> DrawRightSkipBtn(rightBtnClicked, interactionSource)
@@ -133,6 +135,7 @@ fun DrawRightItem(
         TopBarRightType.DELETE -> DrawDeleteBtn(rightBtnClicked, interactionSource)
         TopBarRightType.DELETE_GS30 -> DrawDeleteGs30Btn(rightBtnClicked, interactionSource)
         TopBarRightType.NOTIFICATION -> DrawNotificationBtn(rightBtnClicked, interactionSource)
+        TopBarRightType.POINT -> DrawPointIndicator(content = content)
         TopBarRightType.NONE -> {}
     }
 }
@@ -252,6 +255,23 @@ fun DrawDailyRecordBtn(
         contentPadding = PaddingValues(vertical = 6.dp)
     )
     Spacer(modifier = Modifier.width(16.dp))
+}
+
+@Composable
+fun DrawPointIndicator(
+    content: String = ""
+) {
+    Box(
+        modifier = Modifier
+            .padding(vertical = 4.dp, horizontal = 24.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        HuggText(
+            text = content,
+            style = HuggTypography.p2,
+            color = Gs50
+        )
+    }
 }
 
 @Composable
