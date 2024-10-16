@@ -315,8 +315,12 @@ fun CHALLENGE_GET_POINT(points : Int) = buildAnnotatedString {
     append(" 획득!")
 }
 const val MY_CHALLENGE = "나의 챌린지"
-
-
+const val CHALLENGE_POINT = "%sP"
+const val CHALLENGE_PARTICIPANTS = "%s명이 함께하고 있어요"
+const val CHALLENGE_PAGER_INDICATOR = "%s / %s"
+const val CHALLENGE_LIST = "챌린지 목록"
+const val CHALLENGE_MINE = "참여중인 챌린지"
+const val CHALLENGE_PARTICIPATION = "챌린지 참여"
 
 // DailyHuggList
 const val DAILY_HUGG_LIST_TITLE = "데일리 허그 모아보기"
