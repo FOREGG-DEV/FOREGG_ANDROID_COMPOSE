@@ -148,9 +148,6 @@ fun InputEtcContentView(
                     color = Gs90,
                     textAlign = TextAlign.Start
                 ),
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Number
-                ),
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
             )
