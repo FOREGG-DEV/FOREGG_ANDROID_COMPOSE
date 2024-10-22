@@ -37,7 +37,7 @@ import com.hugg.feature.uiItem.OnBoardingItem
 import com.hugg.feature.component.KaKaoLoginBtn
 import com.kakao.sdk.user.UserApiClient
 
-const val PAGE_COUNT = 4
+const val PAGE_COUNT = 5
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -100,7 +100,7 @@ fun OnboardingScreen(
             interactionSource = interactionSource
         )
 
-        Spacer(modifier = Modifier.height(38.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         HorizontalPager(
             count = uiState.onboardingList.size,
@@ -109,7 +109,7 @@ fun OnboardingScreen(
             OnBoardingItem(uiState.onboardingList[page].img, uiState.onboardingList[page].title, uiState.onboardingList[page].content)
         }
 
-        Spacer(modifier = Modifier.height(53.dp))
+        Spacer(modifier = Modifier.height(37.dp))
 
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
             PageIndicator(
@@ -117,8 +117,9 @@ fun OnboardingScreen(
                 selectedPage = pagerState.currentPage,
             )
         }
+        
+        Spacer(modifier = Modifier.weight(1f))
 
-        Spacer(modifier = Modifier.height(39.dp))
         if(pagerState.currentPage != PAGE_COUNT - 1) BlankBtn(
             modifier = Modifier
                 .fillMaxWidth()
@@ -136,6 +137,8 @@ fun OnboardingScreen(
                     indication = null
                 ),
         )
+
+        Spacer(modifier = Modifier.height(80.dp))
     }
 }
 

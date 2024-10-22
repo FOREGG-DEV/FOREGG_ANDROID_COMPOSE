@@ -3,6 +3,7 @@ package com.hugg.feature.uiItem
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -31,10 +32,15 @@ fun OnBoardingItem(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(375f/375f),
             imageVector = ImageVector.vectorResource(image),
             contentDescription = null
         )
+
         Spacer(modifier = Modifier.height(12.dp))
+
         HuggText(
             modifier = Modifier.padding(horizontal = 16.dp),
             textAlign = TextAlign.Center,
@@ -42,7 +48,9 @@ fun OnBoardingItem(
             style = HuggTypography.h1,
             color = Black
         )
-        Spacer(modifier = Modifier.height(8.dp))
+
+        Spacer(modifier = Modifier.height(5.dp))
+
         HuggText(
             modifier = Modifier.padding(horizontal = 16.dp),
             textAlign = TextAlign.Center,
