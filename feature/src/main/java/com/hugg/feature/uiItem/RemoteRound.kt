@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import com.hugg.domain.model.enums.GenderType
 import com.hugg.feature.R
 import com.hugg.feature.component.HuggText
 import com.hugg.feature.theme.ACCOUNT_ADD_ROUND
@@ -94,7 +95,7 @@ fun RemoteRound(
                 )
             }
         }
-        Row(
+        if(UserInfo.info.genderType == GenderType.FEMALE) Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
