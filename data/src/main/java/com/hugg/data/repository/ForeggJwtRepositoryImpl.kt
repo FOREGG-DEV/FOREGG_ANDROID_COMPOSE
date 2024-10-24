@@ -51,6 +51,6 @@ class ForeggJwtRepositoryImpl @Inject constructor(
     }
 
     override suspend fun reIssueToken(request: String): Flow<ApiState<ForeggJwtResponseVo>> {
-        return apiLaunch(apiCall = { plubJwtTokenApi.reIssueToken(request) }, ForeggJwtResponseMapper)
+        return apiLaunch(apiCall = { plubJwtTokenApi.reIssueToken("Bearer $request") }, ForeggJwtResponseMapper)
     }
 }
