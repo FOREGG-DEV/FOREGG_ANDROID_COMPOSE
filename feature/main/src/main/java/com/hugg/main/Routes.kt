@@ -6,6 +6,7 @@ sealed class Routes(val route : String){
 
     //----------------SIGN_GRAPH----------------//
     data object SignGraph : Routes("sign_graph")
+    data object SplashScreen : Routes("splash")
     data object OnboardingScreen : Routes("onboarding")
     data object ServiceTermsScreen : Routes("service_terms/{accessToken}") {
         fun getRouteServiceTerms(accessToken : String) : String = "service_terms/$accessToken"

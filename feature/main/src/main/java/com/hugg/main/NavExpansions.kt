@@ -42,9 +42,15 @@ import com.hugg.sign.inputSsn.InputSsnContainer
 import com.hugg.sign.maleSignUp.MaleSignUpContainer
 import com.hugg.sign.onboarding.OnboardingContainer
 import com.hugg.sign.serviceTerms.ServiceTermsContainer
+import com.hugg.sign.splash.HuggSplashContainer
 
 fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
-    navigation(startDestination = Routes.OnboardingScreen.route, route = Routes.SignGraph.route) {
+    navigation(startDestination = Routes.SplashScreen.route, route = Routes.SignGraph.route) {
+
+        composable(Routes.SplashScreen.route) { HuggSplashContainer(
+            navigateToOnboarding = { navController.navigate(route = Routes.OnboardingScreen.route) },
+            navigateToHome = { navController.navigate(route = Routes.HomeGraph.route) }
+        ) }
 
         composable(Routes.OnboardingScreen.route) { OnboardingContainer(
             navigateServiceTerms = { accessToken : String -> navController.navigate(route = Routes.ServiceTermsScreen.getRouteServiceTerms(accessToken)) },
