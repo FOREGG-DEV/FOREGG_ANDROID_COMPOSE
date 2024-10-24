@@ -64,6 +64,7 @@ import com.hugg.feature.uiItem.RemoteYearMonth
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
 import com.hugg.feature.uiItem.ScheduleDetailItem
+import com.hugg.feature.util.ForeggLog
 import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UserInfo
@@ -265,7 +266,7 @@ fun CalendarDayItem(
                 RecordType.ETC -> CalendarEtc
             }
 
-            if(scheduleDetailVo.blankCount != index && (scheduleDetailVo.isStartContinueSchedule || scheduleDetailVo.isContinueSchedule)) {
+            if(scheduleDetailVo.blankCount != index && scheduleDetailVo.isContinueSchedule) {
                 val minusCount = if(index != 0) item.scheduleList[index - 1].blankCount + 1 else 0
                 repeat(scheduleDetailVo.blankCount - minusCount) {
                     Box(
@@ -294,7 +295,7 @@ fun CalendarDayItem(
                     .height(14.dp),
                 contentAlignment = Alignment.CenterStart
             ){
-                if(!scheduleDetailVo.isContinueSchedule) HuggText(
+                if(!scheduleDetailVo.isContinueSchedule || scheduleDetailVo.isStartContinueSchedule || TimeFormatter.getKoreanFullDayOfWeek(scheduleDetailVo.date.toString()) == "일요일") HuggText(
                     text = text,
                     color = Gs70,
                     maxLines = 1,
