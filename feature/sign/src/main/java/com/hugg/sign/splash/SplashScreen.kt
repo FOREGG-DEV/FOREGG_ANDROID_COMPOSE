@@ -1,4 +1,4 @@
-package com.hugg.main.splash
+package com.hugg.sign.splash
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,8 +21,8 @@ import com.hugg.feature.theme.Background
 @Composable
 fun HuggSplashContainer(
     viewModel: SplashViewModel = hiltViewModel(),
-    goToMain : () -> Unit = {},
-    goToSign : () -> Unit = {},
+    navigateToOnboarding : () -> Unit = {},
+    navigateToHome : () -> Unit = {},
 ){
     LaunchedEffect(Unit) {
         viewModel.checkLogin()
@@ -31,8 +31,8 @@ fun HuggSplashContainer(
     LaunchedEffect(Unit) {
         viewModel.eventFlow.collect { event ->
             when(event) {
-                SplashEvent.GoToMainEvent -> goToMain()
-                SplashEvent.GoToSignEvent -> goToSign()
+                SplashEvent.GoToMainEvent -> navigateToHome()
+                SplashEvent.GoToSignEvent -> navigateToOnboarding()
             }
         }
     }

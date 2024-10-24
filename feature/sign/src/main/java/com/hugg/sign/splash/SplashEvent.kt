@@ -1,4 +1,4 @@
-package com.hugg.main.splash
+package com.hugg.sign.splash
 
 import com.hugg.feature.base.Event
 

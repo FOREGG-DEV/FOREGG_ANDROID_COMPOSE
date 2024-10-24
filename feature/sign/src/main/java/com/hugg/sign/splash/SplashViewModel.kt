@@ -1,4 +1,4 @@
-package com.hugg.main.splash
+package com.hugg.sign.splash
 
 import androidx.lifecycle.viewModelScope
 import com.hugg.domain.model.response.profile.ProfileDetailResponseVo

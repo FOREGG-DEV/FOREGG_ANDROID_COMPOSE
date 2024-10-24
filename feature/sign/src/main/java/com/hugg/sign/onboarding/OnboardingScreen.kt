@@ -117,8 +117,8 @@ fun OnboardingScreen(
                 selectedPage = pagerState.currentPage,
             )
         }
-        
-        Spacer(modifier = Modifier.weight(1f))
+
+        Spacer(modifier = Modifier.height(39.dp))
 
         if(pagerState.currentPage != PAGE_COUNT - 1) BlankBtn(
             modifier = Modifier
@@ -137,8 +137,6 @@ fun OnboardingScreen(
                     indication = null
                 ),
         )
-
-        Spacer(modifier = Modifier.height(80.dp))
     }
 }
 
