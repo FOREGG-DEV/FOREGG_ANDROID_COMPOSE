@@ -23,6 +23,7 @@ data class ScheduleCreateOrEditPageState(
     val isRepeatDay : Boolean = false,
     val memo : String = "",
     val showDeleteDialog : Boolean = false,
+    val isMine : Boolean = true,
 ) : PageState {
     val isActiveBtn : Boolean = when(recordType){
         RecordType.MEDICINE,

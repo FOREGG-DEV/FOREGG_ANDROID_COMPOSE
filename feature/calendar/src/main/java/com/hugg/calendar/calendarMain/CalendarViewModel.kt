@@ -128,19 +128,23 @@ class CalendarViewModel @Inject constructor(
     private fun getBlankCount(list: List<CalendarDayVo>): List<CalendarDayVo> {
         val idToMaxBlankCountMap = mutableMapOf<Long, Int>()
 
-        list.forEach { calendarDayVo ->
+        list.asReversed().forEach { calendarDayVo ->
             val sortedScheduleList = calendarDayVo.scheduleList.sortedBy { it.id }
+
             sortedScheduleList.forEachIndexed { index, scheduleDetailVo ->
                 if (scheduleDetailVo.isContinueSchedule || scheduleDetailVo.isStartContinueSchedule) {
-                    var count = 0
+                    var maxBlankCount = 0
+
                     for (i in 0 until index) {
                         val otherScheduleDetailVo = sortedScheduleList[i]
-                        if (otherScheduleDetailVo.isContinueSchedule && isDateOverlap(scheduleDetailVo.startDate, scheduleDetailVo.endDate, otherScheduleDetailVo.startDate, otherScheduleDetailVo.endDate)) {
-                            count++
+                        if (otherScheduleDetailVo.isContinueSchedule &&
+                            isDateOverlap(scheduleDetailVo.startDate, scheduleDetailVo.endDate, otherScheduleDetailVo.startDate, otherScheduleDetailVo.endDate)
+                        ) {
+                            val otherBlankCount = idToMaxBlankCountMap.getOrDefault(otherScheduleDetailVo.id, 0)
+                            maxBlankCount = maxOf(maxBlankCount, otherBlankCount + 1)
+                            idToMaxBlankCountMap[scheduleDetailVo.id] = maxBlankCount
                         }
                     }
-
-                    idToMaxBlankCountMap[scheduleDetailVo.id] = maxOf(idToMaxBlankCountMap.getOrDefault(scheduleDetailVo.id, 0), count)
                 }
             }
         }

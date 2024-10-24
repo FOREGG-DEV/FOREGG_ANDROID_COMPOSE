@@ -173,7 +173,7 @@ fun ScheduleCreateOrEditScreen(
             leftBtnClicked = onClickTopBarLeftBtn,
             middleItemType = TopBarMiddleType.TEXT,
             middleText = topBarText,
-            rightItemType = if(pageType == CreateOrEditType.CREATE) TopBarRightType.NONE else TopBarRightType.DELETE_GS30,
+            rightItemType = if(uiState.isMine && pageType == CreateOrEditType.EDIT) TopBarRightType.DELETE_GS30 else TopBarRightType.NONE,
             rightBtnClicked = onClickTopBarRightBtn
         )
 

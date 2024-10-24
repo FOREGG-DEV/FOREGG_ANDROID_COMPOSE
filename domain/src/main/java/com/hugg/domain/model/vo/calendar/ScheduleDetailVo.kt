@@ -26,6 +26,8 @@ data class ScheduleDetailVo(
     val memo : String = "",
     @SerializedName("vibration")
     val vibration : Boolean = false,
+    @SerializedName("isMine")
+    val isMine : Boolean = false,
 
     val isStartContinueSchedule : Boolean = false,
     val isContinueSchedule : Boolean = false,

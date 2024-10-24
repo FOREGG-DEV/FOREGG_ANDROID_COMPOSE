@@ -94,7 +94,7 @@ fun EtcCreateOrEditScreen(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        FilledBtn(
+        if(uiState.isMine) FilledBtn(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
