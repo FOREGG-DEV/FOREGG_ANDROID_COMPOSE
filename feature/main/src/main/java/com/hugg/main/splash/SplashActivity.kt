@@ -48,6 +48,7 @@ class SplashActivity : ComponentActivity() {
             putExtra("start_key", "main")
         }.let { intent ->
             startActivity(intent)
+            finish()
         }
     }
 
@@ -57,6 +58,7 @@ class SplashActivity : ComponentActivity() {
             putExtra("start_key", "sign")
         }.let { intent ->
             startActivity(intent)
+            finish()
         }
     }
 }
