@@ -43,7 +43,8 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Composable
 fun MainScreen(
-    viewModel : MainViewModel = hiltViewModel()
+    viewModel : MainViewModel = hiltViewModel(),
+    isAutoLogin : Boolean = false,
 ) {
     val navController = rememberNavController()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -69,7 +70,7 @@ fun MainScreen(
                 Column(
                     modifier = Modifier.weight(1f)
                 ) {
-                    NavHost(navController = navController, startDestination = Routes.SignGraph.route) {
+                    NavHost(navController = navController, startDestination = if(isAutoLogin) Routes.HomeGraph.route else Routes.SignGraph.route) {
                         signNavGraph(navController)
                         homeGraph(navController)
                         calendarGraph(navController)

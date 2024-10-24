@@ -24,6 +24,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val startKey = intent.getStringExtra("start_key")
 
         setContent {
             LaunchedEffect(Unit){
@@ -31,7 +32,9 @@ class MainActivity : ComponentActivity() {
 
                 }
             }
-            MainScreen()
+            MainScreen(
+                isAutoLogin = startKey == "main"
+            )
         }
     }
 
