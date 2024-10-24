@@ -48,8 +48,14 @@ fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
     navigation(startDestination = Routes.SplashScreen.route, route = Routes.SignGraph.route) {
 
         composable(Routes.SplashScreen.route) { HuggSplashContainer(
-            navigateToOnboarding = { navController.navigate(route = Routes.OnboardingScreen.route) },
-            navigateToHome = { navController.navigate(route = Routes.HomeGraph.route) }
+            navigateToOnboarding = { navController.navigate(route = Routes.OnboardingScreen.route) {
+                popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                launchSingleTop = true
+            } },
+            navigateToHome = { navController.navigate(route = Routes.HomeGraph.route) {
+                popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                launchSingleTop = true
+            } }
         ) }
 
         composable(Routes.OnboardingScreen.route) { OnboardingContainer(
