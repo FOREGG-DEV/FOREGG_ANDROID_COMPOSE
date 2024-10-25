@@ -44,18 +44,27 @@ fun HomeMyChallengeItem(
             .padding(horizontal = 16.dp)
             .height(80.dp)
             .fillMaxWidth()
-            .background(color = if(item.isCompleteToday) Gs10 else White, shape = RoundedCornerShape(6.dp))
+            .background(
+                color = if (item.isCompleteToday) Gs10 else White,
+                shape = RoundedCornerShape(6.dp)
+            )
             .padding(horizontal = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        AsyncImage(
+//        AsyncImage(
+//            modifier = Modifier.size(56.dp),
+//            model = ImageRequest.Builder(context)
+//                .data(item.image)
+//                .crossfade(true)
+//                .build(),
+//            contentDescription = null,
+//            contentScale = ContentScale.Crop,
+//        )
+        Image(
             modifier = Modifier.size(56.dp),
-            model = ImageRequest.Builder(context)
-                .data(item.image)
-                .crossfade(true)
-                .build(),
             contentDescription = null,
             contentScale = ContentScale.Crop,
+            painter = painterResource(id = item.dummy)
         )
 
         Spacer(modifier = Modifier.size(4.dp))

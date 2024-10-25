@@ -14,6 +14,7 @@ import com.hugg.domain.repository.DailyHuggRepository
 import com.hugg.domain.repository.HomeRepository
 import com.hugg.domain.repository.ProfileRepository
 import com.hugg.domain.repository.ScheduleRepository
+import com.hugg.feature.R
 import com.hugg.feature.base.BaseViewModel
 import com.hugg.feature.util.ForeggLog
 import com.hugg.feature.util.TimeFormatter
@@ -54,11 +55,32 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getMyChallengeList(){
-        viewModelScope.launch {
-            challengeRepository.getMyChallenge().collect {
-                resultResponse(it, ::handleSuccessGetMyChallengeList)
-            }
-        }
+//        viewModelScope.launch {
+//            challengeRepository.getMyChallenge().collect {
+//                resultResponse(it, ::handleSuccessGetMyChallengeList)
+//            }
+//        }
+
+        val dummy = listOf(
+            MyChallengeListItemVo(
+                id = 1,
+                name = "물 3컵 이상 마시기",
+                dummy = R.drawable.challenge_dummy_1
+            ),
+            MyChallengeListItemVo(
+                id = 2,
+                name = "하루에 30분 이상 걷기",
+                successDays = listOf("월", "화", "수", "목", "금", "토", "일"),
+                dummy = R.drawable.challenge_dummy_2
+            ),
+            MyChallengeListItemVo(
+                id = 3,
+                name = "12시 이전에 취침하기",
+                successDays = listOf("월", "화", "수", "목", "금", "토", "일"),
+                dummy = R.drawable.challenge_dummy_3
+            )
+        )
+        handleSuccessGetMyChallengeList(dummy)
     }
 
     private fun handleInitScheduleStatesSuccess(result: HomeResponseVo) {

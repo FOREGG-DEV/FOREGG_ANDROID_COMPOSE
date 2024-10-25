@@ -10,4 +10,5 @@ data class MyChallengeListItemVo (
     val weekOfMonth: String = "",
     val lastSaturday : Boolean = false,
     val isCompleteToday : Boolean = false,
+    val dummy : Int = -1
 )
