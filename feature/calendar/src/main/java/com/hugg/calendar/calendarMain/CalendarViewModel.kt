@@ -126,6 +126,23 @@ class CalendarViewModel @Inject constructor(
     }
 
     private fun getBlankCount(list: List<CalendarDayVo>): List<CalendarDayVo> {
+        val originListMap = getBlankCountIdToMap(list)
+        val reversedListMap = getBlankCountIdToMap(list.asReversed())
+
+        val updatedCalendarDayVoList = list.map { calendarDayVo ->
+            val updatedScheduleList = calendarDayVo.scheduleList.map { scheduleDetailVo ->
+                scheduleDetailVo.copy(blankCount = maxOf( originListMap.getOrDefault(scheduleDetailVo.id, 0), reversedListMap.getOrDefault(scheduleDetailVo.id, 0)))
+            }.sortedWith(
+                compareByDescending<ScheduleDetailVo> { it.isContinueSchedule }.thenBy { it.id }
+            )
+
+            calendarDayVo.copy(scheduleList = updatedScheduleList)
+        }
+
+        return updatedCalendarDayVoList
+    }
+
+    private fun getBlankCountIdToMap(list: List<CalendarDayVo>) : Map<Long, Int>{
         val idToMaxBlankCountMap = mutableMapOf<Long, Int>()
 
         list.asReversed().forEach { calendarDayVo ->
@@ -149,17 +166,7 @@ class CalendarViewModel @Inject constructor(
             }
         }
 
-        val updatedCalendarDayVoList = list.map { calendarDayVo ->
-            val updatedScheduleList = calendarDayVo.scheduleList.map { scheduleDetailVo ->
-                scheduleDetailVo.copy(blankCount = idToMaxBlankCountMap.getOrDefault(scheduleDetailVo.id, 0))
-            }.sortedWith(
-                compareByDescending<ScheduleDetailVo> { it.isContinueSchedule }.thenBy { it.id }
-            )
-
-            calendarDayVo.copy(scheduleList = updatedScheduleList)
-        }
-
-        return updatedCalendarDayVoList
+        return idToMaxBlankCountMap
     }
 
     private fun isDateOverlap(startDate1: String?, endDate1: String?, startDate2: String?, endDate2: String?): Boolean {
