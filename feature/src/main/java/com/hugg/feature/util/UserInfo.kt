@@ -4,7 +4,7 @@ import com.hugg.domain.model.response.profile.ProfileDetailResponseVo
 import com.hugg.domain.model.vo.user.UserVo
 
 object UserInfo {
-
+    var challengeNickname: String = ""
     var info: UserVo = UserVo()
         private set
 
