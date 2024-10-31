@@ -322,6 +322,7 @@ const val CHALLENGE_LIST = "챌린지 목록"
 const val CHALLENGE_MINE = "참여중인 챌린지"
 const val CHALLENGE_PARTICIPATION = "챌린지 참여"
 const val CHALLENGE_OPEN = "700P로 오픈"
+const val CHALLENGE_INPUT_DIALOG_TITLE = "닉네임을 입력해주세요"
 
 // DailyHuggList
 const val DAILY_HUGG_LIST_TITLE = "데일리 허그 모아보기"
