@@ -50,8 +50,7 @@ object Endpoints {
     }
 
     object Challenge {
-        private const val CHALLENGE = "/challenge"
-        const val ALL = "$CHALLENGE/all"
+        const val CHALLENGE = "/challenge"
         const val PARTICIPATION = "$CHALLENGE/participation/{id}"
         const val QUIT = "$CHALLENGE/quit/{id}"
         const val COMPLETE = "$CHALLENGE/complete/{id}"

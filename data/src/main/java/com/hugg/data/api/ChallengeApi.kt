@@ -1,6 +1,7 @@
 package com.hugg.data.api
 
 import com.hugg.data.base.ApiResponse
+import com.hugg.data.dto.challenge.ChallengeListResponse
 import com.hugg.data.dto.challenge.ChallengeResponseListItem
 import com.hugg.data.dto.challenge.MyChallengeResponseListItem
 import retrofit2.Response
@@ -15,8 +16,8 @@ interface ChallengeApi {
         const val PATH_ID = "id"
     }
 
-    @GET(Endpoints.Challenge.ALL)
-    suspend fun getAllChallenge(): Response<ApiResponse<List<ChallengeResponseListItem>>>
+    @GET(Endpoints.Challenge.CHALLENGE)
+    suspend fun getAllChallenge(): Response<ApiResponse<ChallengeListResponse>>
 
     @POST(Endpoints.Challenge.PARTICIPATION)
     suspend fun participateChallenge(
