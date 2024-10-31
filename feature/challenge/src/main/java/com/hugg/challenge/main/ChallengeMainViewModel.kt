@@ -47,4 +47,16 @@ class ChallengeMainViewModel @Inject constructor(
             )
         )
     }
+
+    fun createNickname(nickname: String) {
+        updateShowDialog(true)
+    }
+
+    fun updateShowDialog(value: Boolean) {
+        updateState(
+            uiState.value.copy(
+                showChallengeCompleteDialog = value
+            )
+        )
+    }
 }
