@@ -138,7 +138,7 @@ fun CommonChallenge(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        if (uiState.commonChallengeList[pagerState.currentPage].ifMine) {
+        if (uiState.commonChallengeList[pagerState.currentPage].participating) {
             BlankBtn(
                 text = CHALLENGE_MINE,
                 modifier = Modifier
@@ -148,7 +148,7 @@ fun CommonChallenge(
         } else {
             FilledBtn(
                 text =
-                if (uiState.commonChallengeList[pagerState.currentPage].isOpen)
+                if (uiState.commonChallengeList[pagerState.currentPage].open)
                     AnnotatedString(CHALLENGE_PARTICIPATION)
                 else buildAnnotatedString {
                     append(CHALLENGE_OPEN)
@@ -247,7 +247,7 @@ fun CommonChallengeItem(
                 Spacer(modifier = Modifier.height(19.dp))
             }
 
-            if (!item.isOpen) {
+            if (!item.open) {
                 Box(
                     modifier = Modifier
                         .matchParentSize()
@@ -297,22 +297,22 @@ fun PreviewCommonChallenge() {
             commonChallengeList = listOf(
                 ChallengeCardVo(id = 1, name = "시술 직전부터는 금주", description = "시술 직전~도중에는 완전히 피하는 게 좋아요.\n" +
                         "전문가들은 시술 직전~도중엔  소주 50cc, 또는 맥주 200cc\n" +
-                        "이하의 알코올 섭취도 피하라고 말합니다.", participants = 19250, ifMine = false),
+                        "이하의 알코올 섭취도 피하라고 말합니다.", participants = 19250, participating = false),
                 ChallengeCardVo(id = 2, name = "시술 직전부터는 금주", description = "시술 직전~도중에는 완전히 피하는 게 좋아요.\n" +
                         "전문가들은 시술 직전~도중엔  소주 50cc, 또는 맥주 200cc\n" +
-                        "이하의 알코올 섭취도 피하라고 말합니다.", participants = 19250, ifMine = false),
+                        "이하의 알코올 섭취도 피하라고 말합니다.", participants = 19250, participating = false),
                 ChallengeCardVo(id = 3, name = "시술 직전부터는 금주", description = "시술 직전~도중에는 완전히 피하는 게 좋아요.\n" +
                         "전문가들은 시술 직전~도중엔  소주 50cc, 또는 맥주 200cc\n" +
-                        "이하의 알코올 섭취도 피하라고 말합니다.", participants = 19250, ifMine = false),
+                        "이하의 알코올 섭취도 피하라고 말합니다.", participants = 19250, participating = false),
                 ChallengeCardVo(id = 4, name = "시술 직전부터는 금주", description = "시술 직전~도중에는 완전히 피하는 게 좋아요.\n" +
                         "전문가들은 시술 직전~도중엔  소주 50cc, 또는 맥주 200cc\n" +
-                        "이하의 알코올 섭취도 피하라고 말합니다.", participants = 19250, ifMine = false),
+                        "이하의 알코올 섭취도 피하라고 말합니다.", participants = 19250, participating = false),
                 ChallengeCardVo(id = 5, name = "시술 직전부터는 금주", description = "시술 직전~도중에는 완전히 피하는 게 좋아요.\n" +
                         "전문가들은 시술 직전~도중엔  소주 50cc, 또는 맥주 200cc\n" +
-                        "이하의 알코올 섭취도 피하라고 말합니다.", participants = 19250, ifMine = false),
+                        "이하의 알코올 섭취도 피하라고 말합니다.", participants = 19250, participating = false),
                 ChallengeCardVo(id = 6, name = "시술 직전부터는 금주", description = "시술 직전~도중에는 완전히 피하는 게 좋아요.\n" +
                         "전문가들은 시술 직전~도중엔  소주 50cc, 또는 맥주 200cc\n" +
-                        "이하의 알코올 섭취도 피하라고 말합니다.", participants = 19250, ifMine = false)
+                        "이하의 알코올 섭취도 피하라고 말합니다.", participants = 19250, participating = false)
             )
         ),
         pagerState = rememberPagerState(pageCount = { 6 })

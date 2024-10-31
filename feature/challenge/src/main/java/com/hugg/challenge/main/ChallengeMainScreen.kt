@@ -53,7 +53,10 @@ fun ChallengeMainScreen(
             positiveText = WORD_CONFIRM,
             onClickCancel = { popScreen() },
             onClickPositive = { nickname ->
-                if (nickname.isNotEmpty()) viewModel.createNickname(nickname)
+                if (nickname.isNotEmpty()) {
+                    UserInfo.challengeNickname = nickname
+                    viewModel.createNickname(nickname)
+                }
             }
         )
     }
@@ -65,13 +68,15 @@ fun ChallengeMainScreen(
         )
     }
 
-    ChallengeMainContent(
-        popScreen = popScreen,
-        uiState = uiState,
-        interactionSource = interactionSource,
-        onClickBtnTab = { viewModel.updateTabType(it) },
-        pagerState = pagerState
-    )
+    if (uiState.commonChallengeList.isNotEmpty()) {
+        ChallengeMainContent(
+            popScreen = popScreen,
+            uiState = uiState,
+            interactionSource = interactionSource,
+            onClickBtnTab = { viewModel.updateTabType(it) },
+            pagerState = pagerState
+        )
+    }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
