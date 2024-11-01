@@ -16,10 +16,12 @@ import com.hugg.feature.theme.ONBOARDING_CONTENT_1
 import com.hugg.feature.theme.ONBOARDING_CONTENT_2
 import com.hugg.feature.theme.ONBOARDING_CONTENT_3
 import com.hugg.feature.theme.ONBOARDING_CONTENT_4
+import com.hugg.feature.theme.ONBOARDING_CONTENT_5
 import com.hugg.feature.theme.ONBOARDING_TITLE_1
 import com.hugg.feature.theme.ONBOARDING_TITLE_2
 import com.hugg.feature.theme.ONBOARDING_TITLE_3
 import com.hugg.feature.theme.ONBOARDING_TITLE_4
+import com.hugg.feature.theme.ONBOARDING_TITLE_5
 import com.hugg.feature.util.ForeggLog
 import com.hugg.feature.util.UserInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -70,12 +72,17 @@ class OnboardingViewModel @Inject constructor(
                 title = ONBOARDING_TITLE_4,
                 content = ONBOARDING_CONTENT_4,
                 img = com.hugg.feature.R.drawable.onboarding_fourth
+            ),
+            OnboardingTutorialVo(
+                title = ONBOARDING_TITLE_5,
+                content = ONBOARDING_CONTENT_5,
+                img = com.hugg.feature.R.drawable.onboarding_fifth
             )
         )
     }
 
     fun onClickMoveNextPage(nowPage : Int){
-        if(nowPage == 3) return
+        if(nowPage == 4) return
         emitEventFlow(OnboardingEvent.MoveNextPage)
     }
 
