@@ -11,6 +11,7 @@ import com.hugg.data.mapper.UnitResponseMapper
 import com.hugg.data.mapper.challenge.ChallengeResponseMapper
 import com.hugg.data.mapper.challenge.MyChallengeResponseMapper
 import com.hugg.domain.base.ApiState
+import com.hugg.domain.model.request.challenge.ChallengeNicknameVo
 import com.hugg.domain.model.response.challenge.ChallengeCardVo
 import com.hugg.domain.model.response.challenge.MyChallengeListItemVo
 import com.hugg.domain.repository.ChallengeRepository
@@ -87,5 +88,13 @@ class ChallengeRepositoryImpl @Inject constructor(
     // Hugg
     override suspend fun getNickname(): Flow<String?> {
         return dataStore.challengeNickname
+    }
+
+    override suspend fun saveNickname(nickname: String) {
+        return dataStore.saveNickname(nickname)
+    }
+
+    override suspend fun joinChallenge(request: ChallengeNicknameVo): Flow<ApiState<Unit>> {
+        return apiLaunch(apiCall = { challengeApi.joinChallenge(request = request) }, UnitResponseMapper)
     }
 }

@@ -26,4 +26,9 @@ object StatusCode {
     object DAILY_RECORD {
         const val EXIST_DAILY_RECORD = "DAILY4001"
     }
+
+    object CHALLENGE {
+        const val DUPLICATE_NICKNAME = "CHALLENGE4008"
+        const val EXIST_NICKNAME = "CHALLENGE4007"
+    }
 }

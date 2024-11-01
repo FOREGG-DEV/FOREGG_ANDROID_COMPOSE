@@ -1,6 +1,7 @@
 package com.hugg.domain.repository
 
 import com.hugg.domain.base.ApiState
+import com.hugg.domain.model.request.challenge.ChallengeNicknameVo
 import com.hugg.domain.model.response.challenge.ChallengeCardVo
 import com.hugg.domain.model.response.challenge.MyChallengeListItemVo
 import kotlinx.coroutines.flow.Flow
@@ -18,4 +19,6 @@ interface ChallengeRepository {
 
     // Hugg
     suspend fun getNickname(): Flow<String?>
+    suspend fun saveNickname(nickname: String)
+    suspend fun joinChallenge(request: ChallengeNicknameVo): Flow<ApiState<Unit>>
 }
