@@ -334,3 +334,5 @@ const val TOAST_ERROR_FAILED_LOGOUT = "로그아웃에 실패했습니다."
 const val TOAST_ERROR_FAILED_UNREGISTER = "회원탈에 실패했습니다."
 
 const val TOAST_EXCEED_SUBSIDY = "지원금의 한도가 초과되었습니다."
+const val EXIST_CHALLENGE_NICKNAME = "챌린지 닉네임이 이미 존재합니다"
+const val DUPLICATE_CHALLENGE_NICKNAME = "챌린지 닉네임이 중복됩니다"
