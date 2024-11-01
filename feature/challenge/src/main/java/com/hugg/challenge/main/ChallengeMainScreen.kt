@@ -14,6 +14,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
@@ -31,9 +32,12 @@ import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.Background
 import com.hugg.feature.theme.CHALLENGE_INPUT_DIALOG_TITLE
 import com.hugg.feature.theme.CHALLENGE_POINT
+import com.hugg.feature.theme.DUPLICATE_CHALLENGE_NICKNAME
+import com.hugg.feature.theme.EXIST_CHALLENGE_NICKNAME
 import com.hugg.feature.theme.MY_CHALLENGE
 import com.hugg.feature.theme.WORD_CHALLENGE
 import com.hugg.feature.theme.WORD_CONFIRM
+import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.UserInfo
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -42,9 +46,23 @@ fun ChallengeMainScreen(
     popScreen: () -> Unit
 ) {
     val viewModel: ChallengeMainViewModel = hiltViewModel()
+    val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val interactionSource = remember { MutableInteractionSource() }
     val pagerState = rememberPagerState(pageCount = { uiState.commonChallengeList.size })
+
+    LaunchedEffect(Unit) {
+        viewModel.eventFlow.collect { event ->
+            when(event) {
+                is ChallengeMainEvent.ExistNickname -> {
+                    HuggToast.createToast(context, EXIST_CHALLENGE_NICKNAME).show()
+                }
+                is ChallengeMainEvent.DuplicateNickname -> {
+                    HuggToast.createToast(context, DUPLICATE_CHALLENGE_NICKNAME).show()
+                }
+            }
+        }
+    }
 
     if (UserInfo.challengeNickname.isEmpty()) {
         HuggInputDialog(
@@ -54,7 +72,6 @@ fun ChallengeMainScreen(
             onClickCancel = { popScreen() },
             onClickPositive = { nickname ->
                 if (nickname.isNotEmpty()) {
-                    UserInfo.challengeNickname = nickname
                     viewModel.createNickname(nickname)
                 }
             }
