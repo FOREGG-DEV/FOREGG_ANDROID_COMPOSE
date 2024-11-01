@@ -146,23 +146,38 @@ fun CommonChallenge(
                     .padding(horizontal = 16.dp)
             )
         } else {
-            FilledBtn(
-                text =
-                if (uiState.commonChallengeList[pagerState.currentPage].open)
-                    AnnotatedString(CHALLENGE_PARTICIPATION)
-                else buildAnnotatedString {
-                    append(CHALLENGE_OPEN)
-                    addStyle(
-                        style = SpanStyle(color = ChallengePoint),
-                        start = 0,
-                        end = 4
+            Box(
+                modifier = Modifier.height(90.dp)
+            ) {
+                FilledBtn(
+                    text =
+                    if (uiState.commonChallengeList[pagerState.currentPage].open)
+                        AnnotatedString(CHALLENGE_PARTICIPATION)
+                    else buildAnnotatedString {
+                        append(CHALLENGE_OPEN)
+                        addStyle(
+                            style = SpanStyle(color = ChallengePoint),
+                            start = 0,
+                            end = 4
+                        )
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .align(Alignment.BottomCenter),
+                    onClickBtn = { onClickBtnParticipation() }
+                )
+
+                if (pagerState.currentPage == 0) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.msg_bubble_challenge_guide),
+                        contentDescription = null,
+                        tint = Color.Unspecified,
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
                     )
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                onClickBtn = { onClickBtnParticipation() }
-            )
+                }
+            }
         }
 
         Spacer(modifier = Modifier.height(80.dp))
