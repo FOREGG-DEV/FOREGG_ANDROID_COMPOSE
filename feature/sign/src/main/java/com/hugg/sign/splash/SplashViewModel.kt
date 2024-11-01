@@ -48,7 +48,7 @@ class SplashViewModel @Inject constructor(
         viewModelScope.launch {
             challengeRepository.getNickname().collect { nickname ->
                 if (nickname != null) {
-                    UserInfo.challengeNickname = nickname
+                    UserInfo.updateChallengeNickname(nickname)
                 } else {
 //                    getChallengeNicknameFromServer()
                 }

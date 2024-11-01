@@ -116,7 +116,7 @@ fun ChallengeMainContent(
             middleItemType = TopBarMiddleType.TEXT,
             middleText = WORD_CHALLENGE,
             rightItemType = TopBarRightType.POINT,
-            rightItemContent = String.format(CHALLENGE_POINT, uiState.challengePoint)
+            rightItemContent = String.format(CHALLENGE_POINT, UserInfo.challengePoint)
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -133,7 +133,13 @@ fun ChallengeMainContent(
         Spacer(modifier = Modifier.height(24.dp))
 
         when (uiState.currentTabType) {
-            ChallengeTabType.COMMON -> CommonChallenge(uiState = uiState, pagerState = pagerState)
+            ChallengeTabType.COMMON -> CommonChallenge(
+                uiState = uiState,
+                pagerState = pagerState,
+                onClickBtnOpen = {
+
+                }
+            )
             ChallengeTabType.MY -> {  } // TODO
         }
     }

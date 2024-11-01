@@ -31,6 +31,7 @@ class ChallengeMainViewModel @Inject constructor(
     }
 
     private fun onSuccessGetChallengeList(response: List<ChallengeCardVo>) {
+        UserInfo.updateChallengePoint(response[0].point)
         updateState(
             uiState.value.copy(
                 commonChallengeList = response
@@ -58,7 +59,7 @@ class ChallengeMainViewModel @Inject constructor(
 
     private fun onSuccessCreateChallenge(nickname: String) {
         updateShowDialog(true)
-        UserInfo.challengeNickname = nickname
+        UserInfo.updateChallengeNickname(nickname)
         saveChallengeNickname(nickname)
     }
 
