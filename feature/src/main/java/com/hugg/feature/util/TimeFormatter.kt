@@ -81,23 +81,13 @@ object TimeFormatter {
 
         val datesBetween = mutableListOf<ScheduleDetailVo>()
         var currentDate = startLocalDate
-        var prevDate = startLocalDate
 
         while (!currentDate.isAfter(endLocalDate)) {
-            if (isContainDayOfWeek(vo.repeatDate?.split(", ")?.map { it.trim() }, currentDate)) {
-                datesBetween.add(vo.copy(date = currentDate.toString(), isContinueSchedule = (currentDate != startLocalDate && prevDate == currentDate.minusDays(1)), isStartContinueSchedule = currentDate == startLocalDate))
-                prevDate = currentDate
-            }
+            datesBetween.add(vo.copy(date = currentDate.toString(), isContinueSchedule = !vo.repeatDate.isNullOrEmpty(), isStartContinueSchedule = currentDate == startLocalDate))
             currentDate = currentDate.plusDays(1)
         }
 
         return datesBetween
-    }
-
-    private fun isContainDayOfWeek(weekdays : List<String>?, day : LocalDate) : Boolean{
-        val dayOfWeekKorean = getKoreanDayOfWeek(day.dayOfWeek)
-        return weekdays?.contains("매일") == true ||
-                weekdays?.contains(dayOfWeekKorean) == true
     }
 
     fun getKoreanDayOfWeek(dayOfWeek: DayOfWeek): String {

@@ -184,7 +184,7 @@ fun InjMedCreateOrEditScreen(
         }
 
         item {
-            FilledBtn(
+            if(uiState.isMine) FilledBtn(
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth(),
@@ -855,10 +855,4 @@ fun InputMemoView(
             )
         }
     }
-}
-
-@Preview
-@Composable
-internal fun PrevainContainer() {
-    SelectAlarmOnAndOffView()
 }

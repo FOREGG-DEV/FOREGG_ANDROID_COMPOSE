@@ -48,13 +48,23 @@ fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
     navigation(startDestination = Routes.SplashScreen.route, route = Routes.SignGraph.route) {
 
         composable(Routes.SplashScreen.route) { HuggSplashContainer(
-            navigateToOnboarding = { navController.navigate(route = Routes.OnboardingScreen.route) },
-            navigateToHome = { navController.navigate(route = Routes.HomeGraph.route) }
+            navigateToOnboarding = { navController.navigate(route = Routes.OnboardingScreen.route) {
+                popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                launchSingleTop = true
+            } },
+            navigateToHome = { navController.navigate(route = Routes.HomeGraph.route) {
+                popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                launchSingleTop = true
+            } }
         ) }
 
         composable(Routes.OnboardingScreen.route) { OnboardingContainer(
             navigateServiceTerms = { accessToken : String -> navController.navigate(route = Routes.ServiceTermsScreen.getRouteServiceTerms(accessToken)) },
-            navigateHome = { navController.navigate(route = Routes.HomeGraph.route) }
+            navigateHome = { navController.navigate(route = Routes.HomeGraph.route) {
+                    popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                    launchSingleTop = true
+                }
+            }
         ) }
 
         composable(
@@ -165,7 +175,12 @@ fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
             val count = it.arguments?.getInt("count") ?: 0
             val date = it.arguments?.getString("date") ?: ""
             SpouseCodeFemaleContainer(
-                navigateGoToHome = { navController.navigate(route = Routes.HomeGraph.route) },
+                navigateGoToHome = {
+                    navController.navigate(route = Routes.HomeGraph.route) {
+                        popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                },
                 accessToken = accessToken,
                 signUpRequestVo = SignUpRequestVo(
                     surgeryType = type,
@@ -189,7 +204,11 @@ fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
             val accessToken = it.arguments?.getString("accessToken") ?: ""
             val ssn = it.arguments?.getString("ssn") ?: ""
             MaleSignUpContainer(
-                navigateGoToHome = { navController.navigate(route = Routes.HomeGraph.route) },
+                navigateGoToHome = { navController.navigate(route = Routes.HomeGraph.route) {
+                    popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                    launchSingleTop = true
+                    }
+                },
                 accessToken = accessToken,
                 signUpMaleRequestVo = SignUpMaleRequestVo(spouseCode = "", ssn = ssn, fcmToken = ""),
                 goToBack = { navController.popBackStack() }
@@ -426,8 +445,8 @@ fun NavGraphBuilder.myPageGraph(navController: NavHostController) {
         composable(Routes.MyPageProfileManagementScreen.route) {
             MyPageProfileManagementContainer(
                 goToBack = { navController.popBackStack() },
-                navigateToSignGraph = { navController.navigate(Routes.SignGraph.route){
-                        popUpTo(0) { inclusive = true }
+                navigateToSignGraph = { navController.navigate(route = Routes.SignGraph.route) {
+                        popUpTo(navController.graph.startDestinationId) { inclusive = true }
                         launchSingleTop = true
                     }
                 }
