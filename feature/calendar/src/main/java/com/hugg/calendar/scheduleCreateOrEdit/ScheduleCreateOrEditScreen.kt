@@ -97,6 +97,8 @@ fun ScheduleCreateOrEditContainer(
 
     ScheduleCreateOrEditScreen(
         uiState = uiState,
+        recordType = recordType,
+        pageType = pageType,
         onClickTopBarLeftBtn = goToBack,
         onClickTopBarRightBtn = { viewModel.showDeleteDialog(true) },
         interactionSource = interactionSource,
@@ -135,6 +137,8 @@ fun ScheduleCreateOrEditContainer(
 @Composable
 fun ScheduleCreateOrEditScreen(
     uiState : ScheduleCreateOrEditPageState = ScheduleCreateOrEditPageState(),
+    recordType: RecordType = RecordType.ETC,
+    pageType : CreateOrEditType = CreateOrEditType.CREATE,
     onClickTopBarLeftBtn : () -> Unit = {},
     onClickTopBarRightBtn : () -> Unit = {},
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
@@ -151,12 +155,12 @@ fun ScheduleCreateOrEditScreen(
     onChangedMemo : (String) -> Unit = {},
     onClickCreateOrChangeBtn : () -> Unit = {},
 ) {
-    val topBarText = when(uiState.recordType) {
+    val topBarText = when(recordType) {
         RecordType.MEDICINE -> CALENDAR_SCHEDULE_ABOUT_MEDICINE
         RecordType.INJECTION -> CALENDAR_SCHEDULE_ABOUT_INJECTION
         RecordType.HOSPITAL -> CALENDAR_SCHEDULE_ABOUT_HOSPITAL
         RecordType.ETC -> CALENDAR_SCHEDULE_ABOUT_ETC
-    } + if(uiState.pageType == CreateOrEditType.CREATE) " $WORD_ADD" else " $WORD_MODIFY"
+    } + if(pageType == CreateOrEditType.CREATE) " $WORD_ADD" else " $WORD_MODIFY"
 
     Column(
         modifier = Modifier
@@ -169,13 +173,13 @@ fun ScheduleCreateOrEditScreen(
             leftBtnClicked = onClickTopBarLeftBtn,
             middleItemType = TopBarMiddleType.TEXT,
             middleText = topBarText,
-            rightItemType = if(uiState.pageType == CreateOrEditType.CREATE) TopBarRightType.NONE else TopBarRightType.DELETE_GS30,
+            rightItemType = if(uiState.isMine && pageType == CreateOrEditType.EDIT) TopBarRightType.DELETE_GS30 else TopBarRightType.NONE,
             rightBtnClicked = onClickTopBarRightBtn
         )
 
         Spacer(modifier = Modifier.size(24.dp))
 
-        when(uiState.recordType) {
+        when(recordType) {
             RecordType.MEDICINE,
             RecordType.INJECTION ->{
                 InjMedCreateOrEditScreen(

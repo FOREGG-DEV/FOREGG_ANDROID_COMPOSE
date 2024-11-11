@@ -94,7 +94,7 @@ fun EtcCreateOrEditScreen(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        FilledBtn(
+        if(uiState.isMine) FilledBtn(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
@@ -147,9 +147,6 @@ fun InputEtcContentView(
                 textStyle = HuggTypography.h3.copy(
                     color = Gs90,
                     textAlign = TextAlign.Start
-                ),
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Number
                 ),
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),

@@ -7,6 +7,7 @@ import com.hugg.domain.model.vo.calendar.CalendarDayVo
 import com.hugg.domain.model.vo.calendar.ScheduleDetailVo
 import com.hugg.domain.repository.ScheduleRepository
 import com.hugg.feature.base.BaseViewModel
+import com.hugg.feature.util.ForeggLog
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.TimeFormatter.getWeekListKor
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -114,7 +115,7 @@ class CalendarViewModel @Inject constructor(
         while (currentDate.isBefore(endOfMonth) || currentDate.isEqual(endOfMonth)) {
             val dateString = currentDate.toString()
             val isToday = dateString == TimeFormatter.getToday()
-            val scheduleList = newScheduleList.filter { it.date == dateString }.sortedWith(compareBy({ it.recordType.priority }, { it.repeatTimes.first().time }))
+            val scheduleList = newScheduleList.filter { it.date == dateString }
             val isSunday = currentDate.dayOfWeek == DayOfWeek.SUNDAY
             dayList.add(CalendarDayVo(day = TimeFormatter.getDay(dateString).toString(), realDate = TimeFormatter.getDateFormattedMDWKor(dateString), scheduleList = scheduleList, isToday = isToday, isSunday = isSunday, dayType = DayType.NORMAL))
             currentDate = currentDate.plusDays(1)
@@ -125,24 +126,52 @@ class CalendarViewModel @Inject constructor(
     }
 
     private fun getBlankCount(list: List<CalendarDayVo>): List<CalendarDayVo> {
-        val idToMaxBlankCountMap = mutableMapOf<Long, Int>()
+        val originListMap = getBlankCountIdToMap(list)
+        val reversedListMap = getBlankCountIdToMap(list.asReversed())
 
-        list.forEach { calendarDayVo ->
-            calendarDayVo.scheduleList.forEachIndexed { index, scheduleDetailVo ->
-                if (scheduleDetailVo.isContinueSchedule || scheduleDetailVo.isStartContinueSchedule) {
-                    idToMaxBlankCountMap[scheduleDetailVo.id] = maxOf(idToMaxBlankCountMap.getOrDefault(scheduleDetailVo.id, 0), index)
-                }
-            }
-        }
         val updatedCalendarDayVoList = list.map { calendarDayVo ->
             val updatedScheduleList = calendarDayVo.scheduleList.map { scheduleDetailVo ->
-                scheduleDetailVo.copy(blankCount = idToMaxBlankCountMap.getOrDefault(scheduleDetailVo.id, 0))
-            }
+                scheduleDetailVo.copy(blankCount = maxOf( originListMap.getOrDefault(scheduleDetailVo.id, 0), reversedListMap.getOrDefault(scheduleDetailVo.id, 0)))
+            }.sortedWith(
+                compareByDescending<ScheduleDetailVo> { it.isContinueSchedule }.thenBy { it.id }
+            )
 
             calendarDayVo.copy(scheduleList = updatedScheduleList)
         }
 
         return updatedCalendarDayVoList
+    }
+
+    private fun getBlankCountIdToMap(list: List<CalendarDayVo>) : Map<Long, Int>{
+        val idToMaxBlankCountMap = mutableMapOf<Long, Int>()
+
+        list.asReversed().forEach { calendarDayVo ->
+            val sortedScheduleList = calendarDayVo.scheduleList.sortedBy { it.id }
+
+            sortedScheduleList.forEachIndexed { index, scheduleDetailVo ->
+                if (scheduleDetailVo.isContinueSchedule || scheduleDetailVo.isStartContinueSchedule) {
+                    var maxBlankCount = 0
+
+                    for (i in 0 until index) {
+                        val otherScheduleDetailVo = sortedScheduleList[i]
+                        if (otherScheduleDetailVo.isContinueSchedule &&
+                            isDateOverlap(scheduleDetailVo.startDate, scheduleDetailVo.endDate, otherScheduleDetailVo.startDate, otherScheduleDetailVo.endDate)
+                        ) {
+                            val otherBlankCount = idToMaxBlankCountMap.getOrDefault(otherScheduleDetailVo.id, 0)
+                            maxBlankCount = maxOf(maxBlankCount, otherBlankCount + 1)
+                            idToMaxBlankCountMap[scheduleDetailVo.id] = maxBlankCount
+                        }
+                    }
+                }
+            }
+        }
+
+        return idToMaxBlankCountMap
+    }
+
+    private fun isDateOverlap(startDate1: String?, endDate1: String?, startDate2: String?, endDate2: String?): Boolean {
+        if (startDate1 == null || endDate1 == null || startDate2 == null || endDate2 == null) return false
+        return startDate1 <= startDate2 || endDate2 <= endDate1
     }
 
     private fun getArrangeRepeatScheduleList(list : List<ScheduleDetailVo>) : List<ScheduleDetailVo>{
@@ -161,7 +190,7 @@ class CalendarViewModel @Inject constructor(
         val lastDayOfPreviousMonth = YearMonth.of(year, month).minusMonths(1).atEndOfMonth()
         (1 .. startDay).map { i ->
             val day = lastDayOfPreviousMonth.minusDays((startDay - i).toLong()).toString()
-            val scheduleListForDay = list.filter { it.date == day }.sortedWith(compareBy({ it.recordType.priority }, { it.repeatTimes.first().time }))
+            val scheduleListForDay = list.filter { it.date == day }
             val isSunday = lastDayOfPreviousMonth.minusDays((startDay - i).toLong()).dayOfWeek == DayOfWeek.SUNDAY
             dayList.add(CalendarDayVo(day = TimeFormatter.getDay(day).toString(), realDate = TimeFormatter.getDateFormattedMDWKor(day), scheduleList = scheduleListForDay, isSunday = isSunday, dayType = DayType.PREV_NEXT))
         }
@@ -174,7 +203,7 @@ class CalendarViewModel @Inject constructor(
         val dayList = mutableListOf<CalendarDayVo>()
         (0 until (6 - endDay)).map {i ->
             val day = firstDayOfNextMonth.plusDays(i.toLong()).toString()
-            val scheduleListForDay = list.filter { it.date == day }.sortedWith(compareBy({ it.recordType.priority }, { it.repeatTimes.first().time }))
+            val scheduleListForDay = list.filter { it.date == day }
             val isSunday = firstDayOfNextMonth.plusDays(i.toLong()).dayOfWeek == DayOfWeek.SUNDAY
             dayList.add(CalendarDayVo(day = TimeFormatter.getDay(day).toString(), realDate = TimeFormatter.getDateFormattedMDWKor(day), scheduleList = scheduleListForDay, isSunday = isSunday, dayType = DayType.PREV_NEXT))
         }
