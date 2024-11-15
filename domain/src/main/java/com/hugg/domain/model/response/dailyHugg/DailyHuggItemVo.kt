@@ -1,6 +1,6 @@
 package com.hugg.domain.model.response.dailyHugg
 
-import com.hugg.domain.model.enums.DailyConditionType
+import com.hugg.domain.model.enums.DailyHuggReplyType
 
 data class DailyHuggItemVo(
     val id: Long = -1,
@@ -9,5 +9,7 @@ data class DailyHuggItemVo(
     val dailyConditionType: String = "",
     val content: String = "",
     val imageUrl: String? = null,
-    val reply: String = ""
+    val reply: String = "",
+    val replyEmojiType: DailyHuggReplyType = DailyHuggReplyType.NOTHING,
+    val specialQuestion: String = "",
 )
