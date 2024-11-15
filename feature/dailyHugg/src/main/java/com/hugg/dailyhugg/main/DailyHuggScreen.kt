@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -45,7 +44,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
 import com.hugg.dailyhugg.create.CreateEditDailyHuggPageState
 import com.hugg.domain.model.enums.DailyConditionType
-import com.hugg.domain.model.enums.DialogType
 import com.hugg.domain.model.enums.TopBarLeftType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.domain.model.enums.TopBarRightType
@@ -155,7 +153,7 @@ fun DailyHuggScreen(
                     onClickDailyHuggItem(
                         CreateEditDailyHuggPageState(
                             dailyHuggContent = it.content,
-                            dailyConditionType = DailyConditionType.fromValue(it.dailyConditionType)!!,
+                            dailyConditionType = it.dailyConditionType,
                             selectedImageUri = Uri.parse(it.imageUrl)
                         ),
                         it.id
@@ -430,7 +428,7 @@ fun DailyHuggItem(
     onClickDailyHuggItem: () -> Unit = {},
     interactionSource: MutableInteractionSource
 ) {
-    val resourceId = getDailyHuggIcon(DailyConditionType.fromValue(item.dailyConditionType) ?: DailyConditionType.DEFAULT)
+    val resourceId = getDailyHuggIcon(item.dailyConditionType)
 
     LazyColumn {
         item {
@@ -464,7 +462,7 @@ fun DailyHuggItem(
                             horizontalAlignment = Alignment.Start
                         ) {
                             HuggText(
-                                text = item.dailyConditionType,
+                                text = item.dailyConditionType.value,
                                 style = HuggTypography.p1,
                                 color = Gs90
                             )
@@ -634,11 +632,11 @@ fun getDailyHuggIcon(
     dailyConditionType: DailyConditionType
 ) : Int {
     return when (dailyConditionType) {
-        DailyConditionType.WORST -> R.drawable.ic_daily_condition_worst_selected
-        DailyConditionType.BAD -> R.drawable.ic_daily_condition_bad_selected
-        DailyConditionType.SOSO -> R.drawable.ic_daily_condition_soso_selected
-        DailyConditionType.GOOD -> R.drawable.ic_daily_condition_good_selected
-        DailyConditionType.PERFECT -> R.drawable.ic_daily_condition_perfect_selected
+        DailyConditionType.MAD -> R.drawable.ic_daily_condition_worst_selected
+        DailyConditionType.SAD -> R.drawable.ic_daily_condition_bad_selected
+        DailyConditionType.ANXIOUS -> R.drawable.ic_daily_condition_soso_selected
+        DailyConditionType.HAPPY -> R.drawable.ic_daily_condition_good_selected
+        DailyConditionType.LOVE -> R.drawable.ic_daily_condition_perfect_selected
         DailyConditionType.DEFAULT -> -1
     }
 }

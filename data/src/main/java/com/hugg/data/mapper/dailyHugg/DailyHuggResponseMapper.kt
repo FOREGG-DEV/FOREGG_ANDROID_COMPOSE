@@ -18,14 +18,7 @@ object DailyHuggResponseMapper: Mapper.ResponseMapper<DailyHuggResponse, DailyHu
                 reply = it.replyContent ?: "",
                 replyEmojiType = it.replyEmojiType ?: DailyHuggReplyType.NOTHING,
                 specialQuestion = it.specialQuestion ?: "",
-                dailyConditionType = when(it.dailyConditionType) {
-                    "WORST" -> DailyConditionType.WORST.value
-                    "BAD" -> DailyConditionType.BAD.value
-                    "SOSO" -> DailyConditionType.SOSO.value
-                    "GOOD" -> DailyConditionType.GOOD.value
-                    "PERFECT" -> DailyConditionType.PERFECT.value
-                    else -> ""
-                }
+                dailyConditionType = it.dailyConditionType
             )
         } ?: DailyHuggItemVo()
     }

@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Context
 import android.net.Uri
 import android.os.Build
-import android.provider.ContactsContract.CommonDataKinds.Website.URL
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -24,11 +23,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -39,14 +35,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -430,11 +424,11 @@ fun getDailyConditionIcon(
     isSelected: Boolean
 ): Int {
     return when (dailyConditionType) {
-        DailyConditionType.WORST -> if (isSelected) R.drawable.ic_daily_condition_worst_selected else R.drawable.ic_daily_condition_worst_unselected
-        DailyConditionType.BAD -> if (isSelected) R.drawable.ic_daily_condition_bad_selected else R.drawable.ic_daily_condition_bad_unselected
-        DailyConditionType.SOSO -> if (isSelected) R.drawable.ic_daily_condition_soso_selected else R.drawable.ic_daily_condition_soso_unselected
-        DailyConditionType.GOOD -> if (isSelected) R.drawable.ic_daily_condition_good_selected else R.drawable.ic_daily_condition_good_unselected
-        DailyConditionType.PERFECT -> if (isSelected) R.drawable.ic_daily_condition_perfect_selected else R.drawable.ic_daily_condition_perfect_unselected
+        DailyConditionType.MAD -> if (isSelected) R.drawable.ic_daily_condition_worst_selected else R.drawable.ic_daily_condition_worst_unselected
+        DailyConditionType.SAD -> if (isSelected) R.drawable.ic_daily_condition_bad_selected else R.drawable.ic_daily_condition_bad_unselected
+        DailyConditionType.ANXIOUS -> if (isSelected) R.drawable.ic_daily_condition_soso_selected else R.drawable.ic_daily_condition_soso_unselected
+        DailyConditionType.HAPPY -> if (isSelected) R.drawable.ic_daily_condition_good_selected else R.drawable.ic_daily_condition_good_unselected
+        DailyConditionType.LOVE -> if (isSelected) R.drawable.ic_daily_condition_perfect_selected else R.drawable.ic_daily_condition_perfect_unselected
         DailyConditionType.DEFAULT -> -1
     }
 }

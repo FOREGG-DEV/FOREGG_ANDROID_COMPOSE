@@ -12,7 +12,7 @@ data class DailyHuggResponse(
     @SerializedName("day")
     val day: String = "",
     @SerializedName("dailyConditionType")
-    val dailyConditionType: String = "",
+    val dailyConditionType: DailyConditionType = DailyConditionType.DEFAULT,
     @SerializedName("content")
     val content: String = "",
     @SerializedName("imageUrl")
