@@ -249,6 +249,7 @@ const val EMPTY_REPLY = "아직 답장이 없어요."
 const val DELETE_DAILY_HUGG = "데일리 허그 삭제"
 const val DELETE_DAILY_HUGG_TITLE = "글을 삭제하시겠어요?"
 const val COMPLETE_DELETE_DAILY_HUGG = "데일리 허그가 삭제되었어요"
+const val THIS_WEEK_QUESTION = "이번주 질문"
 
 // CreateDailyHugg
 const val CREATE_TITLE = "%s님\n%s년 %s\n오늘 하루 어떠셨나요?"

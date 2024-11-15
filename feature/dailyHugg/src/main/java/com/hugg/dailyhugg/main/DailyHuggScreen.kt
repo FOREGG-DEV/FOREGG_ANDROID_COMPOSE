@@ -56,6 +56,7 @@ import com.hugg.feature.component.HuggText
 import com.hugg.feature.component.PlusBtn
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.Background
+import com.hugg.feature.theme.Black
 import com.hugg.feature.theme.COMPLETE_DELETE_DAILY_HUGG
 import com.hugg.feature.theme.DAILY_HUGG
 import com.hugg.feature.theme.DAILY_HUGG_DATE
@@ -79,6 +80,7 @@ import com.hugg.feature.theme.MALE
 import com.hugg.feature.theme.MainNormal
 import com.hugg.feature.theme.REPLY_COUNT
 import com.hugg.feature.theme.Sunday
+import com.hugg.feature.theme.THIS_WEEK_QUESTION
 import com.hugg.feature.theme.WORD_DELETE
 import com.hugg.feature.theme.White
 import com.hugg.feature.util.HuggToast
@@ -242,14 +244,24 @@ fun DailyHuggContent(
                     navigateEnabled = selectedDate.isEmpty()
                 )
 
+                if(uiState.dailyHugg != null && uiState.dailyHugg.specialQuestion.isNotEmpty()){
+                    Spacer(modifier = Modifier.height(8.dp))
+                    SpecialQuestion(uiState.dailyHugg.specialQuestion)
+                    Spacer(modifier = Modifier.height(4.dp))
+                }
+
                 Spacer(modifier = Modifier.height(22.dp))
 
-                if (uiState.dailyHugg == null) EmptyDailyHuggContent()
-                else DailyHuggItem(
-                    item = uiState.dailyHugg,
-                    onClickDailyHuggItem = onClickDailyHuggItem,
-                    interactionSource = interactionSource
-                )
+                if (uiState.dailyHugg == null) {
+                    EmptyDailyHuggContent()
+                }
+                else {
+                    DailyHuggItem(
+                        item = uiState.dailyHugg,
+                        onClickDailyHuggItem = onClickDailyHuggItem,
+                        interactionSource = interactionSource
+                    )
+                }
                 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -555,6 +567,36 @@ fun UrlToImage(
             .aspectRatio(ratio)
             .clip(RoundedCornerShape(radius))
     )
+}
+
+@Composable
+fun SpecialQuestion(
+    question : String = "",
+){
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(color = White, shape = RoundedCornerShape(8.dp))
+            .padding(horizontal = 12.dp)
+    ) {
+        Spacer(modifier = Modifier.size(12.dp))
+
+        HuggText(
+            text = THIS_WEEK_QUESTION,
+            color = Black,
+            style = HuggTypography.p2
+        )
+
+        Spacer(modifier = Modifier.size(4.dp))
+
+        HuggText(
+            text = question,
+            color = Black,
+            style = HuggTypography.p1_l
+        )
+
+        Spacer(modifier = Modifier.size(8.dp))
+    }
 }
 
 @Composable
