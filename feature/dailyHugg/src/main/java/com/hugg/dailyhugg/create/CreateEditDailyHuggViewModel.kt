@@ -22,6 +22,10 @@ class CreateEditDailyHuggViewModel @Inject constructor(
     private var dailyHuggId: Long? = null
     private val gson = Gson()
 
+    init {
+        getSpecialQuestion()
+    }
+
     fun setPageState(pageState: CreateEditDailyHuggPageState?, id: Long?) {
         dailyHuggId = id
         pageState?.let {
@@ -92,5 +96,21 @@ class CreateEditDailyHuggViewModel @Inject constructor(
                 resultResponse(it, { emitEventFlow(CreateEditDailyHuggEvent.CompleteEditDailyHugg) })
             }
         }
+    }
+
+    private fun getSpecialQuestion(){
+        viewModelScope.launch {
+            dailyHuggRepository.getDailyHuggSpecialQuestion().collect {
+                resultResponse(it, { updateSpecialQuestion(it) })
+            }
+        }
+    }
+
+    private fun updateSpecialQuestion(specialQuestion : String){
+        updateState(
+            uiState.value.copy(
+                specialQuestion = specialQuestion
+            )
+        )
     }
 }

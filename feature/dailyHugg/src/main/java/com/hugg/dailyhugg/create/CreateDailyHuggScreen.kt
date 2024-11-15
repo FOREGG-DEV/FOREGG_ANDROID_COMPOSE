@@ -62,6 +62,7 @@ import com.hugg.feature.component.HuggTextField
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.ALREADY_EXIST_DAILY_HUGG
 import com.hugg.feature.theme.Background
+import com.hugg.feature.theme.Black
 import com.hugg.feature.theme.DAILY_HUGG
 import com.hugg.feature.theme.DAILY_HUGG_CONTENT_HINT
 import com.hugg.feature.theme.Gs10
@@ -69,8 +70,10 @@ import com.hugg.feature.theme.GsWhite
 import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.IMAGE_PERMISSION_TEXT
 import com.hugg.feature.theme.MainStrong
+import com.hugg.feature.theme.THIS_WEEK_QUESTION
 import com.hugg.feature.theme.WORD_MODIFY
 import com.hugg.feature.theme.WORD_REGISTRATION
+import com.hugg.feature.theme.White
 import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UserInfo
@@ -208,6 +211,11 @@ fun CreateEditDailyHuggContent(
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
+
+                if(uiState.specialQuestion.isNotEmpty()) {
+                    SpecialQuestion(uiState.specialQuestion)
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
 
                 BtnDailyCondition(
                     onSelectedDailyConditionType = onSelectedDailyConditionType,
@@ -473,6 +481,36 @@ suspend fun downloadImageFromUrl(context: Context, urlString: String): File? {
     } catch (e: Exception) {
         e.printStackTrace()
         null
+    }
+}
+
+@Composable
+fun SpecialQuestion(
+    question : String = "",
+){
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(color = White, shape = RoundedCornerShape(8.dp))
+            .padding(horizontal = 12.dp)
+    ) {
+        Spacer(modifier = Modifier.size(12.dp))
+
+        HuggText(
+            text = THIS_WEEK_QUESTION,
+            color = Black,
+            style = HuggTypography.p2
+        )
+
+        Spacer(modifier = Modifier.size(4.dp))
+
+        HuggText(
+            text = question,
+            color = Black,
+            style = HuggTypography.p1_l
+        )
+
+        Spacer(modifier = Modifier.size(8.dp))
     }
 }
 

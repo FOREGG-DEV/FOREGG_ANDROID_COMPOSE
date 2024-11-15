@@ -5,6 +5,7 @@ import com.hugg.data.base.BaseRepository
 import com.hugg.data.mapper.UnitResponseMapper
 import com.hugg.data.mapper.dailyHugg.DailyHuggListResponseMapper
 import com.hugg.data.mapper.dailyHugg.DailyHuggResponseMapper
+import com.hugg.data.mapper.dailyHugg.DailyHuggSpecialQuestionResponseMapper
 import com.hugg.domain.base.ApiState
 import com.hugg.domain.model.request.dailyHugg.CreateDailyHuggVo
 import com.hugg.domain.model.response.dailyHugg.DailyHuggItemVo
@@ -44,5 +45,9 @@ class DailyHuggRepositoryImpl @Inject constructor(
 
     override suspend fun getDailyHuggList(page: Int): Flow<ApiState<DailyHuggListResponseVo>> {
         return apiLaunch(apiCall = { dailyHuggApi.getDailyHuggList(page = page) }, DailyHuggListResponseMapper)
+    }
+
+    override suspend fun getDailyHuggSpecialQuestion(): Flow<ApiState<String>> {
+        return apiLaunch(apiCall = { dailyHuggApi.getDailyHuggSpecialQuestion() }, DailyHuggSpecialQuestionResponseMapper)
     }
 }

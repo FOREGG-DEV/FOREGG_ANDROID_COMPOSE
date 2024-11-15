@@ -13,4 +13,5 @@ interface DailyHuggRepository {
     suspend fun editDailyHugg(id: Long, image: MultipartBody.Part, dto: RequestBody): Flow<ApiState<Unit>>
     suspend fun deleteDailyHugg(id: Long): Flow<ApiState<Unit>>
     suspend fun getDailyHuggList(page: Int): Flow<ApiState<DailyHuggListResponseVo>>
+    suspend fun getDailyHuggSpecialQuestion() : Flow<ApiState<String>>
 }

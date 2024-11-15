@@ -54,4 +54,7 @@ interface DailyHuggApi {
     suspend fun getDailyHuggList(
         @Query("page") page: Int
     ): Response<ApiResponse<DailyHuggListResponse>>
+
+    @GET(Endpoints.DailyHugg.SPECIAL_QUESTION)
+    suspend fun getDailyHuggSpecialQuestion(): Response<ApiResponse<String>>
 }

@@ -11,7 +11,8 @@ import kotlinx.parcelize.Parcelize
 data class CreateEditDailyHuggPageState(
     val dailyHuggContent: String = "",
     val dailyConditionType: DailyConditionType = DailyConditionType.DEFAULT,
-    val selectedImageUri: Uri? = null
+    val selectedImageUri: Uri? = null,
+    val specialQuestion : String = "",
 ): PageState, Parcelable {
     @IgnoredOnParcel
     val clickable: Boolean =
