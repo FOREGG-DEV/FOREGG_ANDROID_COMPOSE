@@ -332,6 +332,7 @@ fun NavGraphBuilder.dailyHuggGraph(navController: NavHostController) {
                     }
                 },
                 goToDailyHuggList = { navController.navigate(Routes.DailyHuggListScreen.route) },
+                goToReplyPage = { date -> },
                 popScreen = { navController.popBackStack() },
                 selectedDate = date
             )
