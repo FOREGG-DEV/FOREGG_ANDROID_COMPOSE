@@ -270,7 +270,7 @@ fun DailyHuggContent(
                 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                if (uiState.dailyHugg != null) BtnDeleteDailyHugg(onClickBtnDeleteDailyHugg = onClickBtnDeleteDailyHugg)
+                if (uiState.dailyHugg != null && UserInfo.info.genderType == GenderType.FEMALE) BtnDeleteDailyHugg(onClickBtnDeleteDailyHugg = onClickBtnDeleteDailyHugg)
             }
         }
 

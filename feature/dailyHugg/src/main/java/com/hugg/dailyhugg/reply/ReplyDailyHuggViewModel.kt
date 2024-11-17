@@ -3,6 +3,7 @@ package com.hugg.dailyhugg.reply
 import androidx.lifecycle.viewModelScope
 import com.hugg.domain.model.enums.DailyConditionType
 import com.hugg.domain.model.enums.DailyHuggReplyType
+import com.hugg.domain.model.request.dailyHugg.ReplyDailyHuggRequestVo
 import com.hugg.domain.model.response.dailyHugg.DailyHuggItemVo
 import com.hugg.domain.repository.DailyHuggRepository
 import com.hugg.feature.base.BaseViewModel
@@ -46,5 +47,18 @@ class ReplyDailyHuggViewModel @Inject constructor(
                 reply = reply
             )
         )
+    }
+
+    fun onClickReplyRegisterBtn(){
+        val request = ReplyDailyHuggRequestVo(
+            id = uiState.value.dailyHugg!!.id,
+            replyEmojiType = uiState.value.selectedReplyType,
+            content = uiState.value.reply
+        )
+        viewModelScope.launch {
+            dailyHuggRepository.replyDailyHugg(request).collect {
+                resultResponse(it, { emitEventFlow(ReplyDailyHuggEvent.CompleteReplyDailyHugg) } )
+            }
+        }
     }
 }

@@ -40,10 +40,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
 import com.hugg.domain.model.enums.DailyConditionType
 import com.hugg.domain.model.enums.DailyHuggReplyType
+import com.hugg.domain.model.enums.DailyHuggType
 import com.hugg.domain.model.enums.TopBarLeftType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.domain.model.response.dailyHugg.DailyHuggItemVo
 import com.hugg.feature.R
+import com.hugg.feature.component.FilledBtn
 import com.hugg.feature.component.HuggText
 import com.hugg.feature.component.HuggTextField
 import com.hugg.feature.component.TopBar
@@ -62,6 +64,8 @@ import com.hugg.feature.theme.REPLY_EMPTY_TEXT
 import com.hugg.feature.theme.REPLY_MAX_TEXT_COUNT
 import com.hugg.feature.theme.SPOUSE_DAILY_HUGG
 import com.hugg.feature.theme.THIS_WEEK_QUESTION
+import com.hugg.feature.theme.WORD_MODIFY
+import com.hugg.feature.theme.WORD_REGISTRATION
 import com.hugg.feature.theme.White
 import com.hugg.feature.util.UserInfo
 
@@ -92,7 +96,8 @@ fun ReplyDailyHuggScreen(
         interactionSource = interactionSource,
         popScreen = popScreen,
         onSelectedReplyType = { type -> viewModel.onSelectedReplyType(type) },
-        onChangedReply = { reply -> viewModel.onChangedReply(reply)}
+        onChangedReply = { reply -> viewModel.onChangedReply(reply) },
+        onClickRegister = { viewModel.onClickReplyRegisterBtn() }
     )
 }
 
@@ -103,6 +108,7 @@ fun ReplyDailyHuggContent(
     popScreen: () -> Unit = {},
     onSelectedReplyType : (DailyHuggReplyType) -> Unit = {},
     onChangedReply : (String) -> Unit = {},
+    onClickRegister : () -> Unit = {},
 ) {
     Box(
         modifier = Modifier.fillMaxSize()
@@ -231,6 +237,20 @@ fun ReplyDailyHuggContent(
                             }
                         }
                     }
+
+                    Spacer(modifier = Modifier.size(32.dp))
+                }
+
+                item {
+                    FilledBtn(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        isActive = uiState.clickable,
+                        onClickBtn = onClickRegister,
+                        text = WORD_REGISTRATION
+                    )
+
+                    Spacer(modifier = Modifier.size(24.dp))
                 }
 
             }
