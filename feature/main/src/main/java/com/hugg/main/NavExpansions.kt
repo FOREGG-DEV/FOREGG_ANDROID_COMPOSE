@@ -20,6 +20,7 @@ import com.hugg.calendar.scheduleCreateOrEdit.ScheduleCreateOrEditContainer
 import com.hugg.dailyhugg.all.DailyHuggListScreen
 import com.hugg.dailyhugg.create.CreateEditDailyHuggPageState
 import com.hugg.dailyhugg.edit.EditDailyHuggScreen
+import com.hugg.dailyhugg.reply.ReplyDailyHuggScreen
 import com.hugg.domain.model.enums.CreateOrEditType
 import com.hugg.domain.model.enums.RecordType
 import com.hugg.domain.model.enums.SurgeryType
@@ -332,7 +333,7 @@ fun NavGraphBuilder.dailyHuggGraph(navController: NavHostController) {
                     }
                 },
                 goToDailyHuggList = { navController.navigate(Routes.DailyHuggListScreen.route) },
-                goToReplyPage = { date -> },
+                goToReplyPage = { date -> navController.navigate(Routes.ReplyDailyHuggScreen.createRoute(date))},
                 popScreen = { navController.popBackStack() },
                 selectedDate = date
             )
@@ -348,6 +349,21 @@ fun NavGraphBuilder.dailyHuggGraph(navController: NavHostController) {
                 getSavedUri = { navController.currentBackStackEntry?.savedStateHandle?.get<Uri>("croppedUri") },
                 goToDailyHuggCreationSuccessScreen = { navController.navigate(Routes.DailyHuggCreationSuccessScreen.route) },
                 popScreen = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = Routes.ReplyDailyHuggScreen.route,
+            arguments = listOf(
+                navArgument("date") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val date = backStackEntry.arguments?.getString("date") ?: ""
+
+            ReplyDailyHuggScreen(
+                goToSuccessReplyPage = { },
+                popScreen = { navController.popBackStack() },
+                selectedDate = date
             )
         }
 
