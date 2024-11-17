@@ -39,4 +39,12 @@ class ReplyDailyHuggViewModel @Inject constructor(
             )
         )
     }
+
+    fun onChangedReply(reply : String){
+        updateState(
+            uiState.value.copy(
+                reply = reply
+            )
+        )
+    }
 }

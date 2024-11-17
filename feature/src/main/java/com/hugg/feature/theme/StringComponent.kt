@@ -253,6 +253,8 @@ const val DELETE_DAILY_HUGG_TITLE = "글을 삭제하시겠어요?"
 const val COMPLETE_DELETE_DAILY_HUGG = "데일리 허그가 삭제되었어요"
 const val THIS_WEEK_QUESTION = "이번주 질문"
 const val REPLY_ACTION = "반응 남기기"
+const val REPLY_EMPTY_TEXT = "50자 이내로 답장을 작성할 수 있어요."
+const val REPLY_MAX_TEXT_COUNT = "%d/50"
 
 // CreateDailyHugg
 const val CREATE_TITLE = "%s님\n%s년 %s\n오늘 하루 어떠셨나요?"

@@ -9,10 +9,10 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -29,59 +29,41 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
-import com.hugg.dailyhugg.create.BtnDailyConditionItem
-import com.hugg.dailyhugg.create.getDailyConditionIcon
 import com.hugg.domain.model.enums.DailyConditionType
 import com.hugg.domain.model.enums.DailyHuggReplyType
-import com.hugg.domain.model.enums.GenderType
 import com.hugg.domain.model.enums.TopBarLeftType
 import com.hugg.domain.model.enums.TopBarMiddleType
-import com.hugg.domain.model.enums.TopBarRightType
 import com.hugg.domain.model.response.dailyHugg.DailyHuggItemVo
 import com.hugg.feature.R
 import com.hugg.feature.component.HuggText
-import com.hugg.feature.component.PlusBtn
+import com.hugg.feature.component.HuggTextField
 import com.hugg.feature.component.TopBar
+import com.hugg.feature.theme.ACCOUNT_NICKNAME_TEXT_FIELD_HINT
 import com.hugg.feature.theme.Background
 import com.hugg.feature.theme.Black
 import com.hugg.feature.theme.DAILY_HUGG
-import com.hugg.feature.theme.DAILY_HUGG_DATE
-import com.hugg.feature.theme.DAILY_HUGG_GO_TO_REPLY
-import com.hugg.feature.theme.DAILY_HUGG_LIST_TITLE
-import com.hugg.feature.theme.DELETE_DAILY_HUGG
-import com.hugg.feature.theme.EMPTY_HUGG_FEMALE
-import com.hugg.feature.theme.EMPTY_HUGG_MALE
-import com.hugg.feature.theme.EMPTY_REPLY
 import com.hugg.feature.theme.FEMALE
-import com.hugg.feature.theme.Gs10
-import com.hugg.feature.theme.Gs20
-import com.hugg.feature.theme.Gs60
+import com.hugg.feature.theme.Gs50
 import com.hugg.feature.theme.Gs70
 import com.hugg.feature.theme.Gs90
 import com.hugg.feature.theme.GsBlack
 import com.hugg.feature.theme.HuggTypography
-import com.hugg.feature.theme.MALE
-import com.hugg.feature.theme.MainNormal
 import com.hugg.feature.theme.REPLY_ACTION
-import com.hugg.feature.theme.REPLY_COUNT
+import com.hugg.feature.theme.REPLY_EMPTY_TEXT
+import com.hugg.feature.theme.REPLY_MAX_TEXT_COUNT
 import com.hugg.feature.theme.SPOUSE_DAILY_HUGG
 import com.hugg.feature.theme.THIS_WEEK_QUESTION
 import com.hugg.feature.theme.White
-import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UserInfo
-import com.hugg.feature.util.onThrottleClick
 
 @Composable
 fun ReplyDailyHuggScreen(
@@ -109,7 +91,8 @@ fun ReplyDailyHuggScreen(
         uiState = uiState,
         interactionSource = interactionSource,
         popScreen = popScreen,
-        onSelectedReplyType = { type -> viewModel.onSelectedReplyType(type) }
+        onSelectedReplyType = { type -> viewModel.onSelectedReplyType(type) },
+        onChangedReply = { reply -> viewModel.onChangedReply(reply)}
     )
 }
 
@@ -119,6 +102,7 @@ fun ReplyDailyHuggContent(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     popScreen: () -> Unit = {},
     onSelectedReplyType : (DailyHuggReplyType) -> Unit = {},
+    onChangedReply : (String) -> Unit = {},
 ) {
     Box(
         modifier = Modifier.fillMaxSize()
@@ -199,7 +183,56 @@ fun ReplyDailyHuggContent(
                             }
                         }
                     }
+
+                    Spacer(modifier = Modifier.size(8.dp))
                 }
+
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(color = Color.White, shape = RoundedCornerShape(8.dp))
+                            .padding(horizontal = 12.dp, vertical = 6.dp)
+                            .padding(top = 6.dp)
+                    ) {
+                        if (uiState.reply.isEmpty()) {
+                            HuggText(
+                                text = REPLY_EMPTY_TEXT,
+                                style = HuggTypography.p2,
+                                color = Gs50,
+                            )
+                        }
+
+                        Column {
+                            HuggTextField(
+                                value = uiState.reply,
+                                onValueChange = { value ->
+                                    onChangedReply(value)
+                                },
+                                textStyle = HuggTypography.p2_l.copy(
+                                    color = Black,
+                                ),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .defaultMinSize(minHeight = 40.dp),
+                            )
+
+                            Spacer(modifier = Modifier.size(4.dp))
+
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.End
+                            ) {
+                                HuggText(
+                                    text = String.format(REPLY_MAX_TEXT_COUNT, uiState.reply.length),
+                                    style = HuggTypography.p3_l,
+                                    color = Gs70
+                                )
+                            }
+                        }
+                    }
+                }
+
             }
         }
     }

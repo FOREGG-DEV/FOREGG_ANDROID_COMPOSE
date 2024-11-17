@@ -7,4 +7,5 @@ import com.hugg.feature.base.PageState
 data class ReplyDailyHuggPageState(
     val dailyHugg: DailyHuggItemVo? = null,
     val selectedReplyType: DailyHuggReplyType = DailyHuggReplyType.NOTHING,
+    val reply : String = "",
 ): PageState
