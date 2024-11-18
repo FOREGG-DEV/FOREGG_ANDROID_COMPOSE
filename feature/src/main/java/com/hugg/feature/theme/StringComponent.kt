@@ -266,6 +266,9 @@ const val ALREADY_EXIST_DAILY_HUGG = "데일리 허그는 하루에 하나만 �
 const val CREATION_SUCCESS_TITLE = "데일리 허그가 전달되었어요!"
 const val CONFIRM_DAILY_HUGG = "작성한 글 확인"
 
+// DailyHuggReplySuccess
+const val REPLY_SUCCESS_TITLE = "데일리 허그 답장이 전달되었어요!"
+
 // EditDailyHugg
 const val COMPLETE_EDIT_DAILY_HUGG = "데일리 허그가 수정되었어요"
 const val EDIT_DAILY_HUGG_DIALOG_TITLE = "글을 수정하시겠어요?"

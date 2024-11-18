@@ -1,4 +1,4 @@
-package com.hugg.dailyhugg.create.complete
+package com.hugg.dailyhugg.reply.complete
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -28,21 +28,22 @@ import com.hugg.feature.theme.CREATION_SUCCESS_TITLE
 import com.hugg.feature.theme.DAILY_HUGG
 import com.hugg.feature.theme.GsBlack
 import com.hugg.feature.theme.HuggTypography
+import com.hugg.feature.theme.REPLY_SUCCESS_TITLE
 
 @Composable
-fun DailyHuggCreationSuccessScreen(
+fun DailyHuggReplySuccessScreen(
     goToDailyHuggMain: () -> Unit = {}
 ) {
-    DailyHuggCreationSuccessContent(
+    DailyHuggReplySuccessContent(
         goToDailyHuggMain = goToDailyHuggMain,
     )
 }
 
 @Composable
-fun DailyHuggCreationSuccessContent(
+fun DailyHuggReplySuccessContent(
     goToDailyHuggMain: () -> Unit = {}
 ) {
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(com.hugg.feature.R.raw.daily_hugg_female))
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(com.hugg.feature.R.raw.daily_hugg_male))
 
     Column(
         modifier = Modifier
@@ -58,7 +59,7 @@ fun DailyHuggCreationSuccessContent(
         Spacer(modifier = Modifier.height(122.dp))
 
         HuggText(
-            text = CREATION_SUCCESS_TITLE,
+            text = REPLY_SUCCESS_TITLE,
             style = HuggTypography.h1,
             color = GsBlack
         )
@@ -88,5 +89,5 @@ fun DailyHuggCreationSuccessContent(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun PreviewDailyHuggCreationSuccess() {
-    DailyHuggCreationSuccessContent()
+    DailyHuggReplySuccessContent()
 }

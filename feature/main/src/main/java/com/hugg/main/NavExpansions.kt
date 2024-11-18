@@ -361,9 +361,26 @@ fun NavGraphBuilder.dailyHuggGraph(navController: NavHostController) {
             val date = backStackEntry.arguments?.getString("date") ?: ""
 
             ReplyDailyHuggScreen(
-                goToSuccessReplyPage = { },
+                goToSuccessReplyPage = { navController.navigate(Routes.DailyHuggReplySuccessScreen.createRoute(date)) },
                 popScreen = { navController.popBackStack() },
                 selectedDate = date
+            )
+        }
+
+        composable(
+            route = Routes.DailyHuggReplySuccessScreen.route,
+            arguments = listOf(
+                navArgument("date") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val date = backStackEntry.arguments?.getString("date") ?: ""
+
+            DailyHuggCreationSuccessScreen(
+                goToDailyHuggMain = {
+                    navController.navigate(Routes.DailyHuggScreen.createRoute(date)) {
+                        popUpTo(Routes.DailyHuggGraph.route) { inclusive = true }
+                    }
+                }
             )
         }
 
