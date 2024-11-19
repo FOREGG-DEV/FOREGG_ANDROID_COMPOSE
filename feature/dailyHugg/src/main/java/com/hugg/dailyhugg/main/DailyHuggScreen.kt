@@ -278,7 +278,7 @@ fun DailyHuggContent(
             }
         }
 
-        PlusBtn(
+        if(UserInfo.info.genderType == GenderType.FEMALE) PlusBtn(
             interactionSource = interactionSource,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
