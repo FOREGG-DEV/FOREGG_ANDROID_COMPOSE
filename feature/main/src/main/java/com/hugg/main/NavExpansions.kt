@@ -21,6 +21,8 @@ import com.hugg.dailyhugg.all.DailyHuggListScreen
 import com.hugg.dailyhugg.create.CreateEditDailyHuggPageState
 import com.hugg.dailyhugg.edit.EditDailyHuggScreen
 import com.hugg.dailyhugg.reply.ReplyDailyHuggScreen
+import com.hugg.dailyhugg.reply.complete.DailyHuggReplySuccessContent
+import com.hugg.dailyhugg.reply.complete.DailyHuggReplySuccessScreen
 import com.hugg.domain.model.enums.CreateOrEditType
 import com.hugg.domain.model.enums.RecordType
 import com.hugg.domain.model.enums.SurgeryType
@@ -375,7 +377,7 @@ fun NavGraphBuilder.dailyHuggGraph(navController: NavHostController) {
         ) { backStackEntry ->
             val date = backStackEntry.arguments?.getString("date") ?: ""
 
-            DailyHuggCreationSuccessScreen(
+            DailyHuggReplySuccessScreen(
                 goToDailyHuggMain = {
                     navController.navigate(Routes.DailyHuggScreen.createRoute(date)) {
                         popUpTo(Routes.DailyHuggGraph.route) { inclusive = true }
