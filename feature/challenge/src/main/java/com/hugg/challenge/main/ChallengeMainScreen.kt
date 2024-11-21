@@ -47,7 +47,8 @@ import kotlinx.coroutines.flow.SharedFlow
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ChallengeMainScreen(
-    popScreen: () -> Unit
+    popScreen: () -> Unit,
+    goToChallengeList: () -> Unit
 ) {
     val viewModel: ChallengeMainViewModel = hiltViewModel()
     val context = LocalContext.current
@@ -104,7 +105,8 @@ fun ChallengeMainScreen(
             onClickBtnOpen = { viewModel.unlockChallenge(it) },
             onCLickBtnParticipate = { viewModel.participateChallenge(it) },
             pagerState = pagerState,
-            showAnimationFlow = viewModel.showUnlockAnimationFlow
+            showAnimationFlow = viewModel.showUnlockAnimationFlow,
+            goToChallengeList = goToChallengeList
         )
     }
 }
@@ -119,7 +121,8 @@ fun ChallengeMainContent(
     onClickBtnOpen: (Long) -> Unit = {},
     onCLickBtnParticipate: (Long) -> Unit = {},
     pagerState: PagerState,
-    showAnimationFlow: SharedFlow<Boolean> = MutableSharedFlow()
+    showAnimationFlow: SharedFlow<Boolean> = MutableSharedFlow(),
+    goToChallengeList: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -154,7 +157,8 @@ fun ChallengeMainContent(
                 pagerState = pagerState,
                 onClickBtnOpen = onClickBtnOpen,
                 onClickBtnParticipation = onCLickBtnParticipate,
-                showAnimationFlow = showAnimationFlow
+                showAnimationFlow = showAnimationFlow,
+                onClickBtnChallengeList = { goToChallengeList() }
             )
             ChallengeTabType.MY -> MyChallenge(
                 uiState = uiState

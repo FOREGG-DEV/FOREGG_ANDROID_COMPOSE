@@ -29,6 +29,7 @@ import com.hugg.domain.model.request.sign.SignUpRequestVo
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UserInfo
 import com.hugg.home.homeMain.HomeContainer
+import com.hugg.list.ChallengeListScreen
 import com.hugg.mypage.cs.MyPageCsContainer
 import com.hugg.mypage.main.MyPageContainer
 import com.hugg.mypage.myMedicineInjection.MyPageMedInjContainer
@@ -416,6 +417,13 @@ fun NavGraphBuilder.challengeGraph(navController: NavHostController) {
     navigation(startDestination = Routes.ChallengeScreen.route, route = Routes.ChallengeGraph.route) {
         composable(Routes.ChallengeScreen.route) {
             ChallengeMainScreen(
+                popScreen = { navController.popBackStack() },
+                goToChallengeList = { navController.navigate(Routes.ChallengeListScreen.route) }
+            )
+        }
+
+        composable(Routes.ChallengeListScreen.route) {
+            ChallengeListScreen(
                 popScreen = { navController.popBackStack() }
             )
         }

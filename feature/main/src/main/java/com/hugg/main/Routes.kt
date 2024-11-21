@@ -73,6 +73,7 @@ sealed class Routes(val route : String){
     // Challenge_Graph
     data object ChallengeGraph: Routes("challenge_graph")
     data object ChallengeScreen: Routes("challenge")
+    data object ChallengeListScreen: Routes("challenge_list")
 
     //----------------MY_PAGE_GRAPH----------------//
     data object MyPageGraph : Routes("my_page_graph")

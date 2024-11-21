@@ -30,7 +30,7 @@ class ChallengeMainViewModel @Inject constructor(
 
     private fun getChallengeList() {
         viewModelScope.launch {
-            challengeRepository.getAllChallenge().collect {
+            challengeRepository.getAllCommonChallenge().collect {
                 resultResponse(it, ::onSuccessGetChallengeList)
             }
         }
