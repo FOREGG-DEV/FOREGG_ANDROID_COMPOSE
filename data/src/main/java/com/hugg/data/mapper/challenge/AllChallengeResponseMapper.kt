@@ -2,16 +2,16 @@ package com.hugg.data.mapper.challenge
 
 import com.hugg.data.base.Mapper
 import com.hugg.data.dto.challenge.AllChallengeResponse
-import com.hugg.domain.model.response.challenge.AllChallengeItemVo
+import com.hugg.domain.model.response.challenge.ChallengeCardVo
 
-object AllChallengeResponseMapper: Mapper.ResponseMapper<AllChallengeResponse, List<AllChallengeItemVo>> {
-    override fun mapDtoToModel(type: AllChallengeResponse?): List<AllChallengeItemVo> {
+object AllChallengeResponseMapper: Mapper.ResponseMapper<AllChallengeResponse, List<ChallengeCardVo>> {
+    override fun mapDtoToModel(type: AllChallengeResponse?): List<ChallengeCardVo> {
         return type?.let {
             it.dtos.map { item ->
-                AllChallengeItemVo(
+                ChallengeCardVo(
                     id = item.id,
                     point = item.point,
-                    image = item.image,
+                    image = item.image ?: "",
                     name = item.name,
                     description = item.description,
                     participants = item.participants,

@@ -1,7 +1,7 @@
 package com.hugg.list
 
 import androidx.lifecycle.viewModelScope
-import com.hugg.domain.model.response.challenge.AllChallengeItemVo
+import com.hugg.domain.model.response.challenge.ChallengeCardVo
 import com.hugg.domain.repository.ChallengeRepository
 import com.hugg.feature.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,7 +29,7 @@ class ChallengeListViewModel @Inject constructor(
         }
     }
 
-    private fun onSuccessGetAllChallenge(response: List<AllChallengeItemVo>) {
+    private fun onSuccessGetAllChallenge(response: List<ChallengeCardVo>) {
         updateState(uiState.value.copy(challengeList = response))
     }
 }

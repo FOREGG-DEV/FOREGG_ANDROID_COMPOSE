@@ -45,7 +45,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
 import com.hugg.domain.model.enums.TopBarLeftType
 import com.hugg.domain.model.enums.TopBarMiddleType
-import com.hugg.domain.model.response.challenge.AllChallengeItemVo
+import com.hugg.domain.model.response.challenge.ChallengeCardVo
 import com.hugg.feature.R
 import com.hugg.feature.component.HuggText
 import com.hugg.feature.component.HuggTextField
@@ -218,7 +218,7 @@ fun SearchChallengeBar(
 
 @Composable
 fun ChallengeListLazyColumn(
-    challengeList: List<AllChallengeItemVo> = emptyList()
+    challengeList: List<ChallengeCardVo> = emptyList()
 ) {
     LazyColumn(
         modifier = Modifier
@@ -236,7 +236,7 @@ fun ChallengeListLazyColumn(
 
 @Composable
 fun ChallengeListItem(
-    item: AllChallengeItemVo = AllChallengeItemVo()
+    item: ChallengeCardVo = ChallengeCardVo()
 ) {
     Box(
         modifier = Modifier
