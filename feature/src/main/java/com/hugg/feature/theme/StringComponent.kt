@@ -330,6 +330,10 @@ const val CHALLENGE_INPUT_DIALOG_TITLE = "닉네임을 입력해주세요"
 const val CREATE_MY_CHALLENGE = "나만의 챌린지 만들기"
 const val CREATE_MY_CHALLENGE_DESCRIPTION = "나의 습관을 반영해서\n새로운 나만의 챌린지를 만들 수 있어요"
 
+// ChallengeList
+const val ALL_CHALLENGE_LIST = "전체 챌린지 목록"
+const val SEARCH_CHALLENGE = "챌린지 검색하기"
+
 // DailyHuggList
 const val DAILY_HUGG_LIST_TITLE = "데일리 허그 모아보기"
 const val DAILY_HUGG_LIST_EMPTY_BUBBLE = "아직 작성된\n데일리 허그가 없어요"
