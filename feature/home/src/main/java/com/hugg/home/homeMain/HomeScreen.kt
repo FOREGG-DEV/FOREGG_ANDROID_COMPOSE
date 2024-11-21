@@ -27,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -167,12 +168,13 @@ fun HomeScreen(
             item {
                 Spacer(modifier = Modifier.size(32.dp))
 
-                Box(
+                Image(
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
                         .aspectRatio(343f / 88f)
-                        .background(color = Gs80, shape = RoundedCornerShape(8.dp))
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
+                    painter = painterResource(id = com.hugg.feature.R.drawable.ic_daily_record_banner),
+                    contentDescription = null
                 )
             }
 

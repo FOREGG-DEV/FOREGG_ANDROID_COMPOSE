@@ -68,6 +68,12 @@ class ScheduleCreateOrEditViewModel @Inject constructor(
         )
     }
 
+    private fun updateIsMine(isMine : Boolean){
+        updateState(
+            uiState.value.copy(isMine = isMine)
+        )
+    }
+
     fun onClickMinusBtn(){
         if(uiState.value.repeatCount == 1) return
         updateRepeatCount(uiState.value.repeatCount - 1)
@@ -224,6 +230,7 @@ class ScheduleCreateOrEditViewModel @Inject constructor(
         result.endDate?.let { updateEndDate(it) }
         onChangedMemo(result.memo)
         result.repeatDate?.let { onRepeatChange(it.isNotEmpty()) }
+        updateIsMine(result.isMine)
     }
 
     fun showDeleteDialog(isShow : Boolean){
