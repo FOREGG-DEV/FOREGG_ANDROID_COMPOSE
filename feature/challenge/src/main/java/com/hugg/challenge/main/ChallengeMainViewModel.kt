@@ -7,9 +7,13 @@ import com.hugg.domain.model.request.challenge.ChallengeNicknameVo
 import com.hugg.domain.model.response.challenge.ChallengeCardVo
 import com.hugg.domain.repository.ChallengeRepository
 import com.hugg.feature.base.BaseViewModel
+import com.hugg.feature.theme.CREATE_MY_CHALLENGE
+import com.hugg.feature.theme.CREATE_MY_CHALLENGE_DESCRIPTION
 import com.hugg.feature.util.UserInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,6 +21,8 @@ import javax.inject.Inject
 class ChallengeMainViewModel @Inject constructor(
     private val challengeRepository: ChallengeRepository
 ) : BaseViewModel<ChallengeMainPageState>(ChallengeMainPageState()) {
+    private val _showUnlockAnimationFlow: MutableSharedFlow<Boolean> = MutableSharedFlow()
+    val showUnlockAnimationFlow = _showUnlockAnimationFlow.asSharedFlow()
 
     init {
         getChallengeList()
@@ -32,11 +38,41 @@ class ChallengeMainViewModel @Inject constructor(
 
     private fun onSuccessGetChallengeList(response: List<ChallengeCardVo>) {
         UserInfo.updateChallengePoint(response[0].point)
+        val updatedList = addCreateChallengeCard(response)
+
         updateState(
             uiState.value.copy(
-                commonChallengeList = response
+                commonChallengeList = updatedList
             )
         )
+    }
+
+    private fun addCreateChallengeCard(challengeList: List<ChallengeCardVo>): List<ChallengeCardVo> {
+        val newList = challengeList.filter { !it.isCreateChallenge }.toMutableList()
+        val insertIndex = newList.indexOfLast { it.open }
+
+        if (insertIndex == -1) {
+            newList.add(
+                ChallengeCardVo(
+                    name = CREATE_MY_CHALLENGE,
+                    description = CREATE_MY_CHALLENGE_DESCRIPTION,
+                    open = true,
+                    isCreateChallenge = true
+                )
+            )
+        } else {
+            newList.add(
+                insertIndex + 1,
+                ChallengeCardVo(
+                    name = CREATE_MY_CHALLENGE,
+                    description = CREATE_MY_CHALLENGE_DESCRIPTION,
+                    open = true,
+                    isCreateChallenge = true
+                )
+            )
+        }
+
+        return newList
     }
 
     fun updateTabType(type: ChallengeTabType) {
@@ -86,5 +122,45 @@ class ChallengeMainViewModel @Inject constructor(
                 showChallengeCompleteDialog = value
             )
         )
+    }
+
+    fun unlockChallenge(id: Long) {
+        viewModelScope.launch {
+            challengeRepository.unlockChallenge(id).collect {
+                resultResponse(it, { onSuccessUnlockChallenge() }, ::onFailedUnlockChallenge)
+            }
+        }
+    }
+
+    private fun onSuccessUnlockChallenge() {
+        viewModelScope.launch {
+            _showUnlockAnimationFlow.emit(true)
+        }
+        getChallengeList()
+    }
+
+    private fun onFailedUnlockChallenge(error: String) {
+        when (error) {
+            StatusCode.CHALLENGE.INSUFFICIENT_POINTS -> {
+                viewModelScope.launch {
+                    _showUnlockAnimationFlow.emit(false)
+                }
+                emitEventFlow(ChallengeMainEvent.InsufficientPoint)
+            }
+        }
+    }
+
+    fun participateChallenge(id: Long) {
+        viewModelScope.launch {
+            challengeRepository.participateChallenge(id).collect {
+                resultResponse(it, { getChallengeList() }, ::onFailedParticipateChallenge)
+            }
+        }
+    }
+
+    private fun onFailedParticipateChallenge(error: String) {
+        when (error) {
+            StatusCode.CHALLENGE.ALREADY_PARTICIPATED -> emitEventFlow(ChallengeMainEvent.ChallengeAlreadyParticipated)
+        }
     }
 }

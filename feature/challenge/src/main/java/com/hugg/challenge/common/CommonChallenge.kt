@@ -1,6 +1,7 @@
 package com.hugg.challenge.common
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,12 +26,18 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -38,6 +46,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
+import coil.compose.rememberAsyncImagePainter
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.hugg.challenge.main.ChallengeMainPageState
 import com.hugg.domain.model.response.challenge.ChallengeCardVo
 import com.hugg.feature.R
@@ -50,6 +64,7 @@ import com.hugg.feature.theme.CHALLENGE_OPEN
 import com.hugg.feature.theme.CHALLENGE_PAGER_INDICATOR
 import com.hugg.feature.theme.CHALLENGE_PARTICIPANTS
 import com.hugg.feature.theme.CHALLENGE_PARTICIPATION
+import com.hugg.feature.theme.CREATE_CHALLENGE
 import com.hugg.feature.theme.ChallengePoint
 import com.hugg.feature.theme.DimBg
 import com.hugg.feature.theme.Gs20
@@ -59,6 +74,10 @@ import com.hugg.feature.theme.Gs80
 import com.hugg.feature.theme.GsBlack
 import com.hugg.feature.theme.GsWhite
 import com.hugg.feature.theme.HuggTypography
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -66,40 +85,80 @@ import kotlin.math.absoluteValue
 fun CommonChallenge(
     uiState: ChallengeMainPageState,
     pagerState: PagerState,
-    onClickBtnParticipation: () -> Unit = {},
+    onClickBtnOpen: (Long) -> Unit = {},
+    onClickBtnParticipation: (Long) -> Unit = {},
     onClickBtnChallengeList: () -> Unit = {},
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    showAnimationFlow: SharedFlow<Boolean> = MutableSharedFlow()
 ) {
+    var showAnimation by remember { mutableStateOf(false) }
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.challenge_open))
+    val progress by animateLottieCompositionAsState(
+        composition = composition,
+        isPlaying = showAnimation,
+        iterations = 1,
+        restartOnPlay = true
+    )
+
+    LaunchedEffect(Unit) {
+        showAnimationFlow.collect {
+            showAnimation = it
+        }
+    }
+
+    LaunchedEffect(progress) {
+        if (progress == 1f && showAnimation) {
+            showAnimation = false
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        HorizontalPager(
-            state = pagerState,
-            modifier = Modifier
-                .fillMaxWidth(),
-            key = { uiState.commonChallengeList[it].id },
-            contentPadding = PaddingValues(horizontal = 32.dp),
-            pageSpacing = 8.dp
+        Box(
+            contentAlignment = Alignment.Center
         ) {
-            CommonChallengeItem(
+            HorizontalPager(
+                state = pagerState,
                 modifier = Modifier
-                    .graphicsLayer {
-                        val pageOffset =
-                            ((pagerState.currentPage - it) + pagerState.currentPageOffsetFraction)
-                        alpha = lerp(
-                            start = 0.7f,
-                            stop = 1f,
-                            fraction = 1f - pageOffset.absoluteValue.coerceIn(0f, 1f),
-                        )
-                        scaleY = lerp(
-                            start = 0.85f,
-                            stop = 1f,
-                            fraction = 1f - pageOffset.absoluteValue.coerceIn(0f, 1f)
-                        )
-                    },
-                item = uiState.commonChallengeList[it]
-            )
+                    .fillMaxWidth(),
+                key = { uiState.commonChallengeList[it].id },
+                contentPadding = PaddingValues(horizontal = 32.dp),
+                pageSpacing = 8.dp
+            ) {
+                CommonChallengeItem(
+                    modifier = Modifier
+                        .graphicsLayer {
+                            val pageOffset =
+                                ((pagerState.currentPage - it) + pagerState.currentPageOffsetFraction)
+                            alpha = lerp(
+                                start = 0.7f,
+                                stop = 1f,
+                                fraction = 1f - pageOffset.absoluteValue.coerceIn(0f, 1f),
+                            )
+                            scaleY = lerp(
+                                start = 0.85f,
+                                stop = 1f,
+                                fraction = 1f - pageOffset.absoluteValue.coerceIn(0f, 1f)
+                            )
+                        },
+                    item = uiState.commonChallengeList[it]
+                )
+            }
+
+            if (showAnimation) {
+                LottieAnimation(
+                    composition = composition,
+                    progress = { progress },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 32.dp)
+                        .aspectRatio(307f / 404f)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(DimBg)
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -151,8 +210,16 @@ fun CommonChallenge(
             ) {
                 FilledBtn(
                     text =
-                    if (uiState.commonChallengeList[pagerState.currentPage].open)
+                    if (uiState.commonChallengeList[pagerState.currentPage].open && !uiState.commonChallengeList[pagerState.currentPage].isCreateChallenge)
                         AnnotatedString(CHALLENGE_PARTICIPATION)
+                    else if (uiState.commonChallengeList[pagerState.currentPage].isCreateChallenge) buildAnnotatedString {
+                        append(CREATE_CHALLENGE)
+                        addStyle(
+                            style = SpanStyle(color = ChallengePoint),
+                            start = 0,
+                            end = 5
+                        )
+                    }
                     else buildAnnotatedString {
                         append(CHALLENGE_OPEN)
                         addStyle(
@@ -165,7 +232,12 @@ fun CommonChallenge(
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
                         .align(Alignment.BottomCenter),
-                    onClickBtn = { onClickBtnParticipation() }
+                    onClickBtn = {
+                        if (uiState.commonChallengeList[pagerState.currentPage].open) { onClickBtnParticipation(uiState.commonChallengeList[pagerState.currentPage].id) }
+                        else {
+                            onClickBtnOpen(uiState.commonChallengeList[pagerState.currentPage].id)
+                        }
+                    }
                 )
 
                 if (pagerState.currentPage == 0) {
@@ -175,6 +247,14 @@ fun CommonChallenge(
                         tint = Color.Unspecified,
                         modifier = Modifier
                             .align(Alignment.TopEnd)
+                    )
+                } else if (uiState.commonChallengeList[pagerState.currentPage].isCreateChallenge) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.msg_bubble_create_challenge_guide),
+                        contentDescription = null,
+                        tint = Color.Unspecified,
+                        modifier = Modifier
+                            .align(Alignment.TopStart)
                     )
                 }
             }
@@ -187,30 +267,55 @@ fun CommonChallenge(
 @Composable
 fun CommonChallengeItem(
     item: ChallengeCardVo,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
+            .aspectRatio(307f / 404f)
     ) {
         Box(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(307f / 404f)
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxSize()
                     .background(GsWhite),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
                 Spacer(modifier = Modifier.height(32.dp))
 
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_daily_condition_bad_selected),
-                    contentDescription = "",
-                    modifier = Modifier.size(178.dp),
-                    tint = Color.Unspecified
-                )
+                if (item.isCreateChallenge) {
+                    Box(
+                        modifier = Modifier
+                            .size(178.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_create_challenge),
+                            contentDescription = null,
+                            tint = Color.Unspecified,
+                            modifier = Modifier.size(130.dp)
+                        )
+                    }
+
+                } else {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_daily_condition_bad_selected),
+                        contentDescription = "",
+                        modifier = Modifier.size(178.dp),
+                        tint = Color.Unspecified
+                    )
+                }
+//                Image(
+//                    painter = rememberAsyncImagePainter(model = item.image),
+//                    contentDescription = "",
+//                    modifier = Modifier.size(178.dp),
+//                    contentScale = ContentScale.Crop
+//                )
 
                 Spacer(modifier = Modifier.height(30.dp))
 
@@ -232,30 +337,32 @@ fun CommonChallengeItem(
 
                 Spacer(modifier = Modifier.height(17.dp))
 
-                Box(
-                    modifier = Modifier
-                        .border(width = 1.dp, color = Gs30, shape = RoundedCornerShape(4.dp)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
+                if (!item.isCreateChallenge) {
+                    Box(
+                        modifier = Modifier
+                            .border(width = 1.dp, color = Gs30, shape = RoundedCornerShape(4.dp)),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Spacer(modifier = Modifier.width(9.dp))
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Spacer(modifier = Modifier.width(9.dp))
 
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_people),
-                            contentDescription = ""
-                        )
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_people),
+                                contentDescription = ""
+                            )
 
-                        HuggText(
-                            text = String.format(CHALLENGE_PARTICIPANTS, item.participants),
-                            style = HuggTypography.p3_l,
-                            color = Gs80,
-                            modifier = Modifier.padding(vertical = 4.dp)
-                        )
+                            HuggText(
+                                text = String.format(CHALLENGE_PARTICIPANTS, item.participants),
+                                style = HuggTypography.p3_l,
+                                color = Gs80,
+                                modifier = Modifier.padding(vertical = 4.dp)
+                            )
 
-                        Spacer(modifier = Modifier.width(9.dp))
+                            Spacer(modifier = Modifier.width(9.dp))
+                        }
                     }
                 }
 

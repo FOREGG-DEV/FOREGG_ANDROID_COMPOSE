@@ -8,5 +8,6 @@ data class ChallengeMainPageState(
     val challengePoint: Int = 0,
     val currentTabType: ChallengeTabType = ChallengeTabType.COMMON,
     val commonChallengeList: List<ChallengeCardVo> = emptyList(),
+    val myChallengeList: List<ChallengeCardVo> = emptyList(),
     val showChallengeCompleteDialog: Boolean = false
 ): PageState

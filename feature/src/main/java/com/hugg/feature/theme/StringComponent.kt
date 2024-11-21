@@ -317,6 +317,7 @@ fun CHALLENGE_GET_POINT(points : Int) = buildAnnotatedString {
     append(" 획득!")
 }
 const val MY_CHALLENGE = "나의 챌린지"
+const val MY_CHALLENGE_EMPTY = "참여 중인 챌린지가 없어요"
 const val CHALLENGE_POINT = "%sP"
 const val CHALLENGE_PARTICIPANTS = "%s명이 함께하고 있어요"
 const val CHALLENGE_PAGER_INDICATOR = "%s / %s"
@@ -324,7 +325,10 @@ const val CHALLENGE_LIST = "챌린지 목록"
 const val CHALLENGE_MINE = "참여중인 챌린지"
 const val CHALLENGE_PARTICIPATION = "챌린지 참여"
 const val CHALLENGE_OPEN = "700P로 오픈"
+const val CREATE_CHALLENGE = "3000P로 만들기"
 const val CHALLENGE_INPUT_DIALOG_TITLE = "닉네임을 입력해주세요"
+const val CREATE_MY_CHALLENGE = "나만의 챌린지 만들기"
+const val CREATE_MY_CHALLENGE_DESCRIPTION = "나의 습관을 반영해서\n새로운 나만의 챌린지를 만들 수 있어요"
 
 // DailyHuggList
 const val DAILY_HUGG_LIST_TITLE = "데일리 허그 모아보기"
@@ -338,3 +342,5 @@ const val TOAST_ERROR_FAILED_UNREGISTER = "회원탈에 실패했습니다."
 const val TOAST_EXCEED_SUBSIDY = "지원금의 한도가 초과되었습니다."
 const val EXIST_CHALLENGE_NICKNAME = "챌린지 닉네임이 이미 존재합니다"
 const val DUPLICATE_CHALLENGE_NICKNAME = "챌린지 닉네임이 중복됩니다"
+const val CHALLENGE_ALREADY_PARTICIPATED = "이미 참여하고 있는 챌린지입니다"
+const val INSUFFICIENT_POINT = "포인트가 부족합니다"

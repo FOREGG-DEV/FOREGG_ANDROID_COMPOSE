@@ -17,10 +17,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.max
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hugg.challenge.common.CommonChallenge
+import com.hugg.challenge.my.MyChallenge
 import com.hugg.domain.model.enums.ChallengeTabType
 import com.hugg.domain.model.enums.TopBarLeftType
 import com.hugg.domain.model.enums.TopBarMiddleType
@@ -30,15 +30,19 @@ import com.hugg.feature.component.HuggInputDialog
 import com.hugg.feature.component.HuggTabBar
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.Background
+import com.hugg.feature.theme.CHALLENGE_ALREADY_PARTICIPATED
 import com.hugg.feature.theme.CHALLENGE_INPUT_DIALOG_TITLE
 import com.hugg.feature.theme.CHALLENGE_POINT
 import com.hugg.feature.theme.DUPLICATE_CHALLENGE_NICKNAME
 import com.hugg.feature.theme.EXIST_CHALLENGE_NICKNAME
+import com.hugg.feature.theme.INSUFFICIENT_POINT
 import com.hugg.feature.theme.MY_CHALLENGE
 import com.hugg.feature.theme.WORD_CHALLENGE
 import com.hugg.feature.theme.WORD_CONFIRM
 import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.UserInfo
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -59,6 +63,12 @@ fun ChallengeMainScreen(
                 }
                 is ChallengeMainEvent.DuplicateNickname -> {
                     HuggToast.createToast(context, DUPLICATE_CHALLENGE_NICKNAME).show()
+                }
+                is ChallengeMainEvent.ChallengeAlreadyParticipated -> {
+                    HuggToast.createToast(context, CHALLENGE_ALREADY_PARTICIPATED).show()
+                }
+                is ChallengeMainEvent.InsufficientPoint -> {
+                    HuggToast.createToast(context, INSUFFICIENT_POINT).show()
                 }
             }
         }
@@ -91,7 +101,10 @@ fun ChallengeMainScreen(
             uiState = uiState,
             interactionSource = interactionSource,
             onClickBtnTab = { viewModel.updateTabType(it) },
-            pagerState = pagerState
+            onClickBtnOpen = { viewModel.unlockChallenge(it) },
+            onCLickBtnParticipate = { viewModel.participateChallenge(it) },
+            pagerState = pagerState,
+            showAnimationFlow = viewModel.showUnlockAnimationFlow
         )
     }
 }
@@ -103,7 +116,10 @@ fun ChallengeMainContent(
     uiState: ChallengeMainPageState = ChallengeMainPageState(),
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     onClickBtnTab: (ChallengeTabType) -> Unit = {},
-    pagerState: PagerState
+    onClickBtnOpen: (Long) -> Unit = {},
+    onCLickBtnParticipate: (Long) -> Unit = {},
+    pagerState: PagerState,
+    showAnimationFlow: SharedFlow<Boolean> = MutableSharedFlow()
 ) {
     Column(
         modifier = Modifier
@@ -136,11 +152,13 @@ fun ChallengeMainContent(
             ChallengeTabType.COMMON -> CommonChallenge(
                 uiState = uiState,
                 pagerState = pagerState,
-                onClickBtnOpen = {
-
-                }
+                onClickBtnOpen = onClickBtnOpen,
+                onClickBtnParticipation = onCLickBtnParticipate,
+                showAnimationFlow = showAnimationFlow
             )
-            ChallengeTabType.MY -> {  } // TODO
+            ChallengeTabType.MY -> MyChallenge(
+                uiState = uiState
+            )
         }
     }
 }
