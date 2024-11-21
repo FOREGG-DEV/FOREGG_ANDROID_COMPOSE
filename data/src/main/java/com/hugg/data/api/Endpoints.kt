@@ -52,8 +52,9 @@ object Endpoints {
     object Challenge {
         const val CHALLENGE = "/challenge"
         const val NICKNAME = "$CHALLENGE/nickname"
+        const val UNLOCK = "$CHALLENGE/unlock/{id}"
 
-        const val PARTICIPATION = "$CHALLENGE/participation/{id}"
+        const val PARTICIPATION = "$CHALLENGE/participate/{id}"
         const val QUIT = "$CHALLENGE/quit/{id}"
         const val COMPLETE = "$CHALLENGE/complete/{id}"
         const val DELETE_COMPLETE = "$CHALLENGE/deleteTodayComplete/{id}"

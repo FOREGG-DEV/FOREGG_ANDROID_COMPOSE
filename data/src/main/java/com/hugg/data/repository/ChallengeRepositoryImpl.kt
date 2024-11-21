@@ -37,55 +37,10 @@ class ChallengeRepositoryImpl @Inject constructor(
         return apiLaunch(apiCall = { challengeApi.getAllChallenge() }, ChallengeResponseMapper)
     }
 
-    override suspend fun participateChallenge(request: Long): Flow<ApiState<Unit>> {
-        return apiLaunch(apiCall = { challengeApi.participateChallenge(request)}, UnitResponseMapper)
-    }
-
     override suspend fun getMyChallenge(): Flow<ApiState<List<MyChallengeListItemVo>>> {
         return apiLaunch(apiCall = { challengeApi.getMyChallenge() }, MyChallengeResponseMapper)
     }
 
-    override suspend fun deleteChallenge(request: Long): Flow<ApiState<Unit>> {
-        return apiLaunch(apiCall = { challengeApi.quitChallenge(request) }, UnitResponseMapper)
-    }
-
-    override suspend fun completeChallenge(request: Long): Flow<ApiState<Unit>> {
-        return apiLaunch(apiCall = { challengeApi.completeChallenge(request) }, UnitResponseMapper)
-    }
-
-    override suspend fun deleteCompleteChallenge(request: Long): Flow<ApiState<Unit>> {
-        return apiLaunch(apiCall = { challengeApi.deleteCompleteChallenge(request) }, UnitResponseMapper)
-    }
-
-    override suspend fun markVisit(id : Long, time : String) = flow {
-        val key = stringPreferencesKey("$LAST_VIEWED$id")
-        run {
-            context.dataStore.edit { preferences ->
-                preferences[key] = time
-            }
-            emit(true)
-        }
-    }.catch { emit(false) }
-
-    override suspend fun getVisitWeek(id : Long): Flow<String> {
-        val key = stringPreferencesKey("$LAST_VIEWED$id")
-        return context.dataStore.data.map { prefs ->
-            prefs[key]?.toString() ?: ""
-        }
-    }
-
-    override suspend fun removeVisitId(id: Long) : Flow<Boolean> = flow {
-        val key = stringPreferencesKey("$LAST_VIEWED$id")
-        run {
-            context.dataStore.edit { preferences ->
-                preferences.remove(key)
-            }
-            emit(true)
-        }
-    }.catch { emit(false) }
-
-
-    // Hugg
     override suspend fun getNickname(): Flow<String?> {
         return dataStore.challengeNickname
     }
@@ -96,5 +51,13 @@ class ChallengeRepositoryImpl @Inject constructor(
 
     override suspend fun joinChallenge(request: ChallengeNicknameVo): Flow<ApiState<Unit>> {
         return apiLaunch(apiCall = { challengeApi.joinChallenge(request = request) }, UnitResponseMapper)
+    }
+
+    override suspend fun unlockChallenge(id: Long): Flow<ApiState<Unit>> {
+        return apiLaunch(apiCall = { challengeApi.unlockChallenge(id) }, UnitResponseMapper)
+    }
+
+    override suspend fun participateChallenge(id: Long): Flow<ApiState<Unit>> {
+        return apiLaunch(apiCall = { challengeApi.participateChallenge(id) }, UnitResponseMapper)
     }
 }

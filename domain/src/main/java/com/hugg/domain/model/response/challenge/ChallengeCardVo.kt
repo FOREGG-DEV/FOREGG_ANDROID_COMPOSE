@@ -9,5 +9,6 @@ data class ChallengeCardVo(
     val image: String = "",
     val participating: Boolean = false,
     val open: Boolean = false,
-    val point: Int = 0
+    val point: Int = 0,
+    val isCreateChallenge: Boolean = false
 )
