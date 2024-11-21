@@ -1,25 +1,22 @@
 package com.hugg.data.repository
 
 import android.content.Context
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.hugg.data.api.ChallengeApi
 import com.hugg.data.base.BaseRepository
 import com.hugg.data.datastore.HuggDataStore
 import com.hugg.data.mapper.UnitResponseMapper
+import com.hugg.data.mapper.challenge.AllChallengeResponseMapper
 import com.hugg.data.mapper.challenge.ChallengeResponseMapper
 import com.hugg.data.mapper.challenge.MyChallengeResponseMapper
 import com.hugg.domain.base.ApiState
 import com.hugg.domain.model.request.challenge.ChallengeNicknameVo
+import com.hugg.domain.model.response.challenge.AllChallengeItemVo
 import com.hugg.domain.model.response.challenge.ChallengeCardVo
 import com.hugg.domain.model.response.challenge.MyChallengeListItemVo
 import com.hugg.domain.repository.ChallengeRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class ChallengeRepositoryImpl @Inject constructor(
@@ -33,8 +30,8 @@ class ChallengeRepositoryImpl @Inject constructor(
     }
 
     private val Context.dataStore by preferencesDataStore(name = "foregg_challenge_data_store")
-    override suspend fun getAllChallenge(): Flow<ApiState<List<ChallengeCardVo>>> {
-        return apiLaunch(apiCall = { challengeApi.getAllChallenge() }, ChallengeResponseMapper)
+    override suspend fun getAllCommonChallenge(): Flow<ApiState<List<ChallengeCardVo>>> {
+        return apiLaunch(apiCall = { challengeApi.getAllCommonChallenge() }, ChallengeResponseMapper)
     }
 
     override suspend fun getMyChallenge(): Flow<ApiState<List<MyChallengeListItemVo>>> {
@@ -59,5 +56,9 @@ class ChallengeRepositoryImpl @Inject constructor(
 
     override suspend fun participateChallenge(id: Long): Flow<ApiState<Unit>> {
         return apiLaunch(apiCall = { challengeApi.participateChallenge(id) }, UnitResponseMapper)
+    }
+
+    override suspend fun getAllChallenge(): Flow<ApiState<List<AllChallengeItemVo>>> {
+        return apiLaunch(apiCall = { challengeApi.getAllChallenge() }, AllChallengeResponseMapper)
     }
 }
