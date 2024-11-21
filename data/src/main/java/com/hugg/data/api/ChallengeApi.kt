@@ -27,27 +27,14 @@ interface ChallengeApi {
         @Body request :ChallengeNicknameVo
     ): Response<ApiResponse<Unit>>
 
+    @PATCH(Endpoints.Challenge.UNLOCK)
+    suspend fun unlockChallenge(
+        @Path("id") id: Long
+    ): Response<ApiResponse<Unit>>
 
-
-
-    @POST(Endpoints.Challenge.PARTICIPATION)
+    @PATCH(Endpoints.Challenge.PARTICIPATION)
     suspend fun participateChallenge(
-        @Path(PATH_ID) id: Long
-    ): Response<ApiResponse<Unit>>
-
-    @DELETE(Endpoints.Challenge.QUIT)
-    suspend fun quitChallenge(
-        @Path(PATH_ID) id: Long
-    ): Response<ApiResponse<Unit>>
-
-    @POST(Endpoints.Challenge.COMPLETE)
-    suspend fun completeChallenge(
-        @Path(PATH_ID) id: Long
-    ): Response<ApiResponse<Unit>>
-
-    @DELETE(Endpoints.Challenge.DELETE_COMPLETE)
-    suspend fun deleteCompleteChallenge(
-        @Path(PATH_ID) id: Long
+        @Path("id") id: Long
     ): Response<ApiResponse<Unit>>
 
     @GET(Endpoints.Challenge.MY)
