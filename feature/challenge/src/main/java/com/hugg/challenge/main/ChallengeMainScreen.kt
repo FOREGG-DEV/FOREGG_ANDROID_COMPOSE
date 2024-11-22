@@ -75,6 +75,10 @@ fun ChallengeMainScreen(
         }
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.getChallengeList()
+    }
+
     if (UserInfo.challengeNickname.isEmpty()) {
         HuggInputDialog(
             title = CHALLENGE_INPUT_DIALOG_TITLE,

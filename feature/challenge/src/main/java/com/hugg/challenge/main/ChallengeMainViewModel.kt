@@ -24,11 +24,7 @@ class ChallengeMainViewModel @Inject constructor(
     private val _showUnlockAnimationFlow: MutableSharedFlow<Boolean> = MutableSharedFlow()
     val showUnlockAnimationFlow = _showUnlockAnimationFlow.asSharedFlow()
 
-    init {
-        getChallengeList()
-    }
-
-    private fun getChallengeList() {
+    fun getChallengeList() {
         viewModelScope.launch {
             challengeRepository.getAllCommonChallenge().collect {
                 resultResponse(it, ::onSuccessGetChallengeList)
@@ -97,6 +93,7 @@ class ChallengeMainViewModel @Inject constructor(
         updateShowDialog(true)
         UserInfo.updateChallengeNickname(nickname)
         saveChallengeNickname(nickname)
+        getChallengeList()
     }
 
     private fun onFailedCreateChallenge(e: String) {
