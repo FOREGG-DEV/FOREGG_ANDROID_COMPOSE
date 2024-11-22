@@ -11,6 +11,7 @@ interface ChallengeRepository {
     suspend fun getMyChallenge(): Flow<ApiState<List<MyChallengeListItemVo>>>
     suspend fun getNickname(): Flow<String?>
     suspend fun saveNickname(nickname: String)
+    suspend fun removeNickname()
     suspend fun joinChallenge(request: ChallengeNicknameVo): Flow<ApiState<Unit>>
     suspend fun unlockChallenge(id: Long): Flow<ApiState<Unit>>
     suspend fun participateChallenge(id: Long): Flow<ApiState<Unit>>

@@ -45,6 +45,10 @@ class ChallengeRepositoryImpl @Inject constructor(
         return dataStore.saveNickname(nickname)
     }
 
+    override suspend fun removeNickname() {
+        dataStore.removeNickname()
+    }
+
     override suspend fun joinChallenge(request: ChallengeNicknameVo): Flow<ApiState<Unit>> {
         return apiLaunch(apiCall = { challengeApi.joinChallenge(request = request) }, UnitResponseMapper)
     }
