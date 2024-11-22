@@ -77,6 +77,7 @@ fun MainScreen(
                         accountGraph(navController)
                         dailyHuggGraph(navController)
                         myPageGraph(navController)
+                        challengeGraph(navController)
                     }
                 }
 

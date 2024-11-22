@@ -70,6 +70,11 @@ sealed class Routes(val route : String){
     }
     data object DailyHuggListScreen: Routes("daily_hugg_list")
 
+    // Challenge_Graph
+    data object ChallengeGraph: Routes("challenge_graph")
+    data object ChallengeScreen: Routes("challenge")
+    data object ChallengeListScreen: Routes("challenge_list")
+
     //----------------MY_PAGE_GRAPH----------------//
     data object MyPageGraph : Routes("my_page_graph")
     data object MyPageScreen : Routes("my_page")

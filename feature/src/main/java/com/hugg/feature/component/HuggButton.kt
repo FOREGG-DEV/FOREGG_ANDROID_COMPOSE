@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -132,6 +133,36 @@ fun FilledBtn(
     }
 }
 
+@Composable
+fun FilledBtn(
+    modifier: Modifier = Modifier,
+    onClickBtn : () -> Unit = {},
+    radius : Dp = 8.dp,
+    text : AnnotatedString,
+    textStyle: TextStyle = HuggTypography.btn,
+    textColor : Color = White,
+    isActive : Boolean = true,
+    contentPadding : PaddingValues = PaddingValues(horizontal = 0.dp, vertical = 16.dp)
+) {
+    Button(
+        modifier = modifier,
+        onClick = onClickBtn,
+        shape = RoundedCornerShape(radius),
+        contentPadding = contentPadding,
+        enabled = isActive,
+        colors = ButtonDefaults
+            .buttonColors(
+                containerColor = MainNormal,
+                disabledContainerColor = InActiveMainNormal
+            ),
+    ) {
+        HuggText(
+            text = text,
+            color = if(isActive) textColor else Gs30,
+            style = textStyle
+        )
+    }
+}
 
 @Composable
 fun KaKaoLoginBtn(

@@ -13,6 +13,10 @@ data class ChallengeResponseListItem(
     val participants: Int = 0,
     @SerializedName("image")
     val image: String? = "",
-    @SerializedName("ifMine")
-    val ifMine: Boolean = false
+    @SerializedName("participating")
+    val participating: Boolean = false,
+    @SerializedName("point")
+    val point: Int = 0,
+    @SerializedName("open")
+    val open: Boolean = false
 )

@@ -17,6 +17,7 @@ import com.hugg.account.subsidyCreateOrEdit.SubsidyCreateOrEditContainer
 import com.hugg.account.subsidyList.SubsidyListContainer
 import com.hugg.calendar.calendarMain.CalendarContainer
 import com.hugg.calendar.scheduleCreateOrEdit.ScheduleCreateOrEditContainer
+import com.hugg.challenge.main.ChallengeMainScreen
 import com.hugg.dailyhugg.all.DailyHuggListScreen
 import com.hugg.dailyhugg.create.CreateEditDailyHuggPageState
 import com.hugg.dailyhugg.edit.EditDailyHuggScreen
@@ -28,6 +29,7 @@ import com.hugg.domain.model.request.sign.SignUpRequestVo
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UserInfo
 import com.hugg.home.homeMain.HomeContainer
+import com.hugg.list.ChallengeListScreen
 import com.hugg.mypage.cs.MyPageCsContainer
 import com.hugg.mypage.main.MyPageContainer
 import com.hugg.mypage.myMedicineInjection.MyPageMedInjContainer
@@ -411,6 +413,23 @@ fun NavGraphBuilder.dailyHuggGraph(navController: NavHostController) {
     }
 }
 
+fun NavGraphBuilder.challengeGraph(navController: NavHostController) {
+    navigation(startDestination = Routes.ChallengeScreen.route, route = Routes.ChallengeGraph.route) {
+        composable(Routes.ChallengeScreen.route) {
+            ChallengeMainScreen(
+                popScreen = { navController.popBackStack() },
+                goToChallengeList = { navController.navigate(Routes.ChallengeListScreen.route) }
+            )
+        }
+
+        composable(Routes.ChallengeListScreen.route) {
+            ChallengeListScreen(
+                popScreen = { navController.popBackStack() }
+            )
+        }
+    }
+}
+
 fun NavGraphBuilder.myPageGraph(navController: NavHostController) {
     navigation(startDestination = Routes.MyPageScreen.route, route = Routes.MyPageGraph.route) {
 
@@ -460,7 +479,7 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController) {
 
         composable(Routes.HomeScreen.route) { HomeContainer(
             navigateGoToCalendarDetail = { id -> navController.navigate(Routes.CalendarScheduleCreateOrEdit.getRouteCalendarScheduleCreateOrEdit(CreateOrEditType.EDIT.type, RecordType.ETC.type, id, TimeFormatter.getToday()))},
-            navigateGoToChallenge = {},
+            navigateGoToChallenge = { navController.navigate(Routes.ChallengeGraph.route) },
             navigateGoToDailyHugg = { navController.navigate(Routes.DailyHuggGraph.route)},
             navigateGoToNotification = {},
             navigateGoToDailyHuggDetail = { date -> navController.navigate(Routes.DailyHuggScreen.createRoute(date)) }
