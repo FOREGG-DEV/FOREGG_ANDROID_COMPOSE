@@ -332,6 +332,7 @@ const val CREATE_MY_CHALLENGE_DESCRIPTION = "나의 습관을 반영해서\n새�
 
 // ChallengeList
 const val ALL_CHALLENGE_LIST = "전체 챌린지 목록"
+const val ALL_CHALLENGE = "전체 챌린지"
 const val SEARCH_CHALLENGE = "챌린지 검색하기"
 
 // DailyHuggList
