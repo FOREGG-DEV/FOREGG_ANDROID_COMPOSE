@@ -133,7 +133,7 @@ fun ChallengeDetailScreen(
                     progress = { progress },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 32.dp)
+                        .padding(horizontal = 34.dp)
                         .aspectRatio(307f / 404f)
                         .clip(RoundedCornerShape(12.dp))
                         .background(DimBg)
