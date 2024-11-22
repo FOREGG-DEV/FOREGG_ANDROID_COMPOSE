@@ -2,6 +2,7 @@ package com.hugg.data.dto.dailyHugg
 
 import com.google.gson.annotations.SerializedName
 import com.hugg.domain.model.enums.DailyConditionType
+import com.hugg.domain.model.enums.DailyHuggReplyType
 
 data class DailyHuggResponse(
     @SerializedName("id")
@@ -11,11 +12,15 @@ data class DailyHuggResponse(
     @SerializedName("day")
     val day: String = "",
     @SerializedName("dailyConditionType")
-    val dailyConditionType: String = "",
+    val dailyConditionType: DailyConditionType = DailyConditionType.DEFAULT,
     @SerializedName("content")
     val content: String = "",
     @SerializedName("imageUrl")
     val imageUrl: String? = null,
-    @SerializedName("reply")
-    val reply: String? = null
+    @SerializedName("replyContent")
+    val replyContent: String? = null,
+    @SerializedName("replyEmojiType")
+    val replyEmojiType: DailyHuggReplyType? = DailyHuggReplyType.NOTHING,
+    @SerializedName("specialQuestion")
+    val specialQuestion: String? = null,
 )

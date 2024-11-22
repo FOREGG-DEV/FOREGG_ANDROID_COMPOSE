@@ -3,6 +3,7 @@ package com.hugg.dailyhugg.create
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
+import com.hugg.domain.base.StatusCode
 import com.hugg.domain.model.enums.DailyConditionType
 import com.hugg.domain.model.vo.dailyHugg.CreateDailyHuggDto
 import com.hugg.domain.repository.DailyHuggRepository
@@ -21,6 +22,10 @@ class CreateEditDailyHuggViewModel @Inject constructor(
 ) : BaseViewModel<CreateEditDailyHuggPageState>(CreateEditDailyHuggPageState()) {
     private var dailyHuggId: Long? = null
     private val gson = Gson()
+
+    init {
+        getSpecialQuestion()
+    }
 
     fun setPageState(pageState: CreateEditDailyHuggPageState?, id: Long?) {
         dailyHuggId = id
@@ -77,7 +82,7 @@ class CreateEditDailyHuggViewModel @Inject constructor(
 
     private fun handleCreateDailyHuggError(code: String) {
         when(code) {
-            "DAILY4001" -> emitEventFlow(CreateEditDailyHuggEvent.AlreadyExistEditDailyHugg)
+            StatusCode.DAILY_HUGG.ALREADY_EXIST_DAILY_HUGG -> emitEventFlow(CreateEditDailyHuggEvent.AlreadyExistEditDailyHugg)
         }
     }
 
@@ -92,5 +97,21 @@ class CreateEditDailyHuggViewModel @Inject constructor(
                 resultResponse(it, { emitEventFlow(CreateEditDailyHuggEvent.CompleteEditDailyHugg) })
             }
         }
+    }
+
+    private fun getSpecialQuestion(){
+        viewModelScope.launch {
+            dailyHuggRepository.getDailyHuggSpecialQuestion().collect {
+                resultResponse(it, { updateSpecialQuestion(it) })
+            }
+        }
+    }
+
+    private fun updateSpecialQuestion(specialQuestion : String){
+        updateState(
+            uiState.value.copy(
+                specialQuestion = specialQuestion
+            )
+        )
     }
 }

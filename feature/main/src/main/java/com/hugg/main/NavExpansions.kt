@@ -20,6 +20,9 @@ import com.hugg.calendar.scheduleCreateOrEdit.ScheduleCreateOrEditContainer
 import com.hugg.dailyhugg.all.DailyHuggListScreen
 import com.hugg.dailyhugg.create.CreateEditDailyHuggPageState
 import com.hugg.dailyhugg.edit.EditDailyHuggScreen
+import com.hugg.dailyhugg.reply.ReplyDailyHuggScreen
+import com.hugg.dailyhugg.reply.complete.DailyHuggReplySuccessContent
+import com.hugg.dailyhugg.reply.complete.DailyHuggReplySuccessScreen
 import com.hugg.domain.model.enums.CreateOrEditType
 import com.hugg.domain.model.enums.RecordType
 import com.hugg.domain.model.enums.SurgeryType
@@ -49,11 +52,11 @@ fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
 
         composable(Routes.SplashScreen.route) { HuggSplashContainer(
             navigateToOnboarding = { navController.navigate(route = Routes.OnboardingScreen.route) {
-                popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                popUpTo(navController.graph.id) { inclusive = true }
                 launchSingleTop = true
             } },
             navigateToHome = { navController.navigate(route = Routes.HomeGraph.route) {
-                popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                popUpTo(navController.graph.id) { inclusive = true }
                 launchSingleTop = true
             } }
         ) }
@@ -61,7 +64,7 @@ fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
         composable(Routes.OnboardingScreen.route) { OnboardingContainer(
             navigateServiceTerms = { accessToken : String -> navController.navigate(route = Routes.ServiceTermsScreen.getRouteServiceTerms(accessToken)) },
             navigateHome = { navController.navigate(route = Routes.HomeGraph.route) {
-                    popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                    popUpTo(navController.graph.id) { inclusive = true }
                     launchSingleTop = true
                 }
             }
@@ -177,7 +180,7 @@ fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
             SpouseCodeFemaleContainer(
                 navigateGoToHome = {
                     navController.navigate(route = Routes.HomeGraph.route) {
-                        popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                        popUpTo(navController.graph.id) { inclusive = true }
                         launchSingleTop = true
                     }
                 },
@@ -205,7 +208,7 @@ fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
             val ssn = it.arguments?.getString("ssn") ?: ""
             MaleSignUpContainer(
                 navigateGoToHome = { navController.navigate(route = Routes.HomeGraph.route) {
-                    popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                    popUpTo(navController.graph.id) { inclusive = true }
                     launchSingleTop = true
                     }
                 },
@@ -332,6 +335,7 @@ fun NavGraphBuilder.dailyHuggGraph(navController: NavHostController) {
                     }
                 },
                 goToDailyHuggList = { navController.navigate(Routes.DailyHuggListScreen.route) },
+                goToReplyPage = { date -> navController.navigate(Routes.ReplyDailyHuggScreen.createRoute(date))},
                 popScreen = { navController.popBackStack() },
                 selectedDate = date
             )
@@ -347,6 +351,38 @@ fun NavGraphBuilder.dailyHuggGraph(navController: NavHostController) {
                 getSavedUri = { navController.currentBackStackEntry?.savedStateHandle?.get<Uri>("croppedUri") },
                 goToDailyHuggCreationSuccessScreen = { navController.navigate(Routes.DailyHuggCreationSuccessScreen.route) },
                 popScreen = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = Routes.ReplyDailyHuggScreen.route,
+            arguments = listOf(
+                navArgument("date") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val date = backStackEntry.arguments?.getString("date") ?: ""
+
+            ReplyDailyHuggScreen(
+                goToSuccessReplyPage = { navController.navigate(Routes.DailyHuggReplySuccessScreen.createRoute(date)) },
+                popScreen = { navController.popBackStack() },
+                selectedDate = date
+            )
+        }
+
+        composable(
+            route = Routes.DailyHuggReplySuccessScreen.route,
+            arguments = listOf(
+                navArgument("date") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val date = backStackEntry.arguments?.getString("date") ?: ""
+
+            DailyHuggReplySuccessScreen(
+                goToDailyHuggMain = {
+                    navController.navigate(Routes.DailyHuggScreen.createRoute(date)) {
+                        popUpTo(Routes.DailyHuggGraph.route) { inclusive = true }
+                    }
+                }
             )
         }
 
@@ -446,7 +482,7 @@ fun NavGraphBuilder.myPageGraph(navController: NavHostController) {
             MyPageProfileManagementContainer(
                 goToBack = { navController.popBackStack() },
                 navigateToSignGraph = { navController.navigate(route = Routes.SignGraph.route) {
-                        popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                        popUpTo(navController.graph.id) { inclusive = true }
                         launchSingleTop = true
                     }
                 }

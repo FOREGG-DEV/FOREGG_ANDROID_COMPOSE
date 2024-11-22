@@ -17,13 +17,14 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -40,12 +41,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
 import com.hugg.dailyhugg.create.CreateEditDailyHuggPageState
 import com.hugg.domain.model.enums.DailyConditionType
-import com.hugg.domain.model.enums.DialogType
+import com.hugg.domain.model.enums.DailyHuggReplyType
+import com.hugg.domain.model.enums.GenderType
 import com.hugg.domain.model.enums.TopBarLeftType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.domain.model.enums.TopBarRightType
@@ -56,9 +59,11 @@ import com.hugg.feature.component.HuggText
 import com.hugg.feature.component.PlusBtn
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.Background
+import com.hugg.feature.theme.Black
 import com.hugg.feature.theme.COMPLETE_DELETE_DAILY_HUGG
 import com.hugg.feature.theme.DAILY_HUGG
 import com.hugg.feature.theme.DAILY_HUGG_DATE
+import com.hugg.feature.theme.DAILY_HUGG_GO_TO_REPLY
 import com.hugg.feature.theme.DAILY_HUGG_LIST_TITLE
 import com.hugg.feature.theme.DELETE_DAILY_HUGG
 import com.hugg.feature.theme.DELETE_DAILY_HUGG_TITLE
@@ -79,10 +84,12 @@ import com.hugg.feature.theme.MALE
 import com.hugg.feature.theme.MainNormal
 import com.hugg.feature.theme.REPLY_COUNT
 import com.hugg.feature.theme.Sunday
+import com.hugg.feature.theme.THIS_WEEK_QUESTION
 import com.hugg.feature.theme.WORD_DELETE
 import com.hugg.feature.theme.White
 import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.TimeFormatter
+import com.hugg.feature.util.UserInfo
 import com.hugg.feature.util.onThrottleClick
 
 @Composable
@@ -90,6 +97,7 @@ fun DailyHuggScreen(
     onClickCreateDailyHugg: () -> Unit,
     onClickDailyHuggItem: (CreateEditDailyHuggPageState, Long) -> Unit,
     goToDailyHuggList: () -> Unit,
+    goToReplyPage : (String) -> Unit,
     popScreen: () -> Unit = {},
     selectedDate: String = ""
 ) {
@@ -153,7 +161,7 @@ fun DailyHuggScreen(
                     onClickDailyHuggItem(
                         CreateEditDailyHuggPageState(
                             dailyHuggContent = it.content,
-                            dailyConditionType = DailyConditionType.fromValue(it.dailyConditionType)!!,
+                            dailyConditionType = it.dailyConditionType,
                             selectedImageUri = Uri.parse(it.imageUrl)
                         ),
                         it.id
@@ -187,6 +195,7 @@ fun DailyHuggScreen(
         onClickDailyHuggItem = {
             viewModel.updateShowEditDialog(true)
         },
+        onClickReplyBtn = { goToReplyPage(uiState.date) },
         onClickBtnDeleteDailyHugg = { viewModel.updateShowDeleteDialog(true) },
         onClickBtnDailyHuggList = { viewModel.onClickBtnDailyHuggList() },
         popScreen = popScreen,
@@ -203,6 +212,7 @@ fun DailyHuggContent(
     onClickBtnPreviousDay: () -> Unit = {},
     dateText: String = "",
     onClickDailyHuggItem: () -> Unit = {},
+    onClickReplyBtn: () -> Unit = {},
     onClickBtnDeleteDailyHugg: () -> Unit = {},
     onClickBtnDailyHuggList: () -> Unit = {},
     popScreen: () -> Unit = {},
@@ -242,22 +252,33 @@ fun DailyHuggContent(
                     navigateEnabled = selectedDate.isEmpty()
                 )
 
-                Spacer(modifier = Modifier.height(22.dp))
+                if(uiState.dailyHugg != null && uiState.dailyHugg.specialQuestion.isNotEmpty()){
+                    Spacer(modifier = Modifier.height(8.dp))
+                    SpecialQuestion(uiState.dailyHugg.specialQuestion)
+                    Spacer(modifier = Modifier.height(4.dp))
+                }
 
-                if (uiState.dailyHugg == null) EmptyDailyHuggContent()
-                else DailyHuggItem(
-                    item = uiState.dailyHugg,
-                    onClickDailyHuggItem = onClickDailyHuggItem,
-                    interactionSource = interactionSource
-                )
+                Spacer(modifier = Modifier.height(7.dp))
+
+                if (uiState.dailyHugg == null) {
+                    EmptyDailyHuggContent()
+                }
+                else {
+                    DailyHuggItem(
+                        item = uiState.dailyHugg,
+                        onClickDailyHuggItem = onClickDailyHuggItem,
+                        onClickReplyBtn = onClickReplyBtn,
+                        interactionSource = interactionSource
+                    )
+                }
                 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                if (uiState.dailyHugg != null) BtnDeleteDailyHugg(onClickBtnDeleteDailyHugg = onClickBtnDeleteDailyHugg)
+                if (uiState.dailyHugg != null && UserInfo.info.genderType == GenderType.FEMALE) BtnDeleteDailyHugg(onClickBtnDeleteDailyHugg = onClickBtnDeleteDailyHugg)
             }
         }
 
-        PlusBtn(
+        if(UserInfo.info.genderType == GenderType.FEMALE) PlusBtn(
             interactionSource = interactionSource,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
@@ -286,35 +307,39 @@ fun DateNavigator(
     onClickBtnPreviousDay: () -> Unit = {},
     navigateEnabled: Boolean = true
 ) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceEvenly
-    ) {
-        if (navigateEnabled) {
-            BtnArrow(
-                arrowIcon = R.drawable.ic_back_arrow_gs_20,
-                interactionSource = interactionSource,
-                onClick = { onClickBtnPreviousDay() },
-                tint = Gs60
+    Column {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            if (navigateEnabled) {
+                BtnArrow(
+                    arrowIcon = R.drawable.ic_back_arrow_gs_20,
+                    interactionSource = interactionSource,
+                    onClick = { onClickBtnPreviousDay() },
+                    tint = Gs60
+                )
+            }
+
+            HuggText(
+                text = String.format(DAILY_HUGG_DATE, date, day),
+                style = HuggTypography.h2,
+                color = Gs90,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.weight(1f)
             )
+
+            if (navigateEnabled) {
+                BtnArrow(
+                    interactionSource = interactionSource,
+                    onClick = { onClickBtnNextDay() },
+                    tint = if (date == TimeFormatter.getTodayYearMonthDayKor(TimeFormatter.getToday())) Gs20 else Gs60
+                )
+            }
         }
 
-        HuggText(
-            text = String.format(DAILY_HUGG_DATE, date, day),
-            style = HuggTypography.h2,
-            color = Gs90,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.weight(1f)
-        )
-
-        if (navigateEnabled) {
-            BtnArrow(
-                interactionSource = interactionSource,
-                onClick = { onClickBtnNextDay() },
-                tint = if (date == TimeFormatter.getTodayYearMonthDayKor(TimeFormatter.getToday())) Gs20 else Gs60
-            )
-        }
+        if(!navigateEnabled) Spacer(modifier = Modifier.size(10.dp))
     }
 }
 
@@ -416,67 +441,97 @@ fun EmptyHuggItem(
 fun DailyHuggItem(
     item: DailyHuggItemVo = DailyHuggItemVo(),
     onClickDailyHuggItem: () -> Unit = {},
+    onClickReplyBtn: () -> Unit = {},
     interactionSource: MutableInteractionSource
 ) {
-    val resourceId = getDailyHuggIcon(DailyConditionType.fromValue(item.dailyConditionType) ?: DailyConditionType.DEFAULT)
+    val resourceId = getDailyHuggIcon(item.dailyConditionType)
 
     LazyColumn {
         item {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .border(BorderStroke(1.dp, FEMALE), shape = RoundedCornerShape(8.dp))
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(White)
-                    .onThrottleClick(
-                        onClick = { onClickDailyHuggItem() },
-                        interactionSource = interactionSource
-                    )
-            ) {
-                Column(
+            Box {
+                Box(
                     modifier = Modifier
-                        .padding(12.dp)
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.Bottom
-                    ) {
-                        Icon(
-                            painter = painterResource(id = resourceId),
-                            contentDescription = "",
-                            tint = Color.Unspecified,
+                        .fillMaxWidth()
+                        .offset(y = 15.dp)
+                        .border(BorderStroke(1.dp, FEMALE), shape = RoundedCornerShape(8.dp))
+                        .background(White)
+                        .onThrottleClick(
+                            onClick = { onClickDailyHuggItem() },
+                            interactionSource = interactionSource
                         )
-
-                        Spacer(modifier = Modifier.width(8.dp))
-
-                        Column(
-                            horizontalAlignment = Alignment.Start
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .padding(12.dp)
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.Bottom
                         ) {
-                            HuggText(
-                                text = item.dailyConditionType,
-                                style = HuggTypography.p1,
-                                color = Gs90
+                            Icon(
+                                painter = painterResource(id = resourceId),
+                                contentDescription = "",
+                                tint = Color.Unspecified,
                             )
 
-                            HuggText(
-                                text = item.date.split(' ').last().substring(0, 5),
-                                style = HuggTypography.p3_l,
-                                color = Gs70
+                            Spacer(modifier = Modifier.width(8.dp))
+
+                            Column(
+                                horizontalAlignment = Alignment.Start
+                            ) {
+                                HuggText(
+                                    text = item.dailyConditionType.value,
+                                    style = HuggTypography.p1,
+                                    color = Gs90
+                                )
+
+                                HuggText(
+                                    text = item.date.split(' ').last().substring(0, 5),
+                                    style = HuggTypography.p3_l,
+                                    color = Gs70
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(12.dp))
+                        HuggText(
+                            text = item.content,
+                            style = HuggTypography.p2_l,
+                            color = GsBlack
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        if(item.imageUrl != null) UrlToImage(url = item.imageUrl!!)
+                    }
+                }
+
+                if(item.replyEmojiType != DailyHuggReplyType.NOTHING){
+                    val replyIcon = getReplyIcon(item.replyEmojiType)
+                    Row(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Spacer(modifier = Modifier.weight(1f))
+                        Box(
+                            modifier = Modifier
+                                .shadow(elevation = 6.dp, shape = CircleShape, clip = true)
+                                .clip(CircleShape)
+                                .border(width = 1.dp, color = Color(0xFF84D1BF), shape = CircleShape)
+                                .size(72.dp)
+                                .background(color = Color(0xFFFFFFFF), shape = CircleShape),
+                            contentAlignment = Alignment.Center
+                        ){
+                            Image(
+                                modifier = Modifier
+                                    .padding(end = if(item.replyEmojiType == DailyHuggReplyType.HUG) 2.dp else 0.dp)
+                                    .size(56.dp),
+                                painter = painterResource(id = replyIcon),
+                                contentDescription = null
                             )
                         }
+                        Spacer(modifier = Modifier.size(8.dp))
                     }
-                    Spacer(modifier = Modifier.height(12.dp))
-                    HuggText(
-                        text = item.content,
-                        style = HuggTypography.p2_l,
-                        color = GsBlack
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    if(item.imageUrl != null) UrlToImage(url = item.imageUrl!!)
                 }
             }
         }
 
-        item { Spacer(modifier = Modifier.height(8.dp)) }
+        item { Spacer(modifier = Modifier.height(23.dp)) }
 
         if (item.reply.isNotEmpty()) {
             item {
@@ -484,7 +539,7 @@ fun DailyHuggItem(
             }
         } else {
             item {
-                EmptyReplyItem()
+                if(UserInfo.info.genderType == GenderType.FEMALE) EmptyReplyItem() else ReplyDailyHuggBtn(onClickReplyBtn)
             }
         }
     }
@@ -504,6 +559,34 @@ fun EmptyReplyItem() {
             style = HuggTypography.p2,
             color = Gs70,
             modifier = Modifier.padding(12.dp)
+        )
+    }
+}
+
+@Composable
+fun ReplyDailyHuggBtn(
+    onClickReplyBtn : () -> Unit = {},
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(8.dp))
+            .background(MainNormal)
+            .padding(vertical = 10.dp, horizontal = 12.dp)
+            .onThrottleClick(onClickReplyBtn),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        HuggText(
+            text = DAILY_HUGG_GO_TO_REPLY,
+            style = HuggTypography.h4,
+            color = White,
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Image(
+            painter = painterResource(id = R.drawable.ic_right_arrow_white),
+            contentDescription = null
         )
     }
 }
@@ -558,6 +641,36 @@ fun UrlToImage(
 }
 
 @Composable
+fun SpecialQuestion(
+    question : String = "",
+){
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(color = White, shape = RoundedCornerShape(8.dp))
+            .padding(horizontal = 12.dp)
+    ) {
+        Spacer(modifier = Modifier.size(12.dp))
+
+        HuggText(
+            text = THIS_WEEK_QUESTION,
+            color = Black,
+            style = HuggTypography.p2
+        )
+
+        Spacer(modifier = Modifier.size(4.dp))
+
+        HuggText(
+            text = question,
+            color = Black,
+            style = HuggTypography.p1_l
+        )
+
+        Spacer(modifier = Modifier.size(8.dp))
+    }
+}
+
+@Composable
 fun BtnDeleteDailyHugg(
     onClickBtnDeleteDailyHugg: () -> Unit = {}
 ) {
@@ -592,12 +705,25 @@ fun getDailyHuggIcon(
     dailyConditionType: DailyConditionType
 ) : Int {
     return when (dailyConditionType) {
-        DailyConditionType.WORST -> R.drawable.ic_daily_condition_worst_selected
-        DailyConditionType.BAD -> R.drawable.ic_daily_condition_bad_selected
-        DailyConditionType.SOSO -> R.drawable.ic_daily_condition_soso_selected
-        DailyConditionType.GOOD -> R.drawable.ic_daily_condition_good_selected
-        DailyConditionType.PERFECT -> R.drawable.ic_daily_condition_perfect_selected
+        DailyConditionType.MAD -> R.drawable.ic_daily_condition_worst_selected
+        DailyConditionType.SAD -> R.drawable.ic_daily_condition_bad_selected
+        DailyConditionType.ANXIOUS -> R.drawable.ic_daily_condition_soso_selected
+        DailyConditionType.HAPPY -> R.drawable.ic_daily_condition_good_selected
+        DailyConditionType.LOVE -> R.drawable.ic_daily_condition_perfect_selected
         DailyConditionType.DEFAULT -> -1
+    }
+}
+
+fun getReplyIcon(
+    replyType: DailyHuggReplyType
+) : Int {
+    return when (replyType) {
+        DailyHuggReplyType.HUG -> R.drawable.ic_hug_active
+        DailyHuggReplyType.ARM -> R.drawable.ic_arm_active
+        DailyHuggReplyType.LETTER -> R.drawable.ic_letter_active
+        DailyHuggReplyType.CLAP -> R.drawable.ic_clap_active
+        DailyHuggReplyType.MEAL -> R.drawable.ic_meal_active
+        DailyHuggReplyType.NOTHING -> -1
     }
 }
 

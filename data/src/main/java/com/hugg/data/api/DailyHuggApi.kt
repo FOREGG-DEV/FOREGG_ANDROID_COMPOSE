@@ -5,6 +5,7 @@ import com.hugg.data.dto.dailyHugg.DailyHuggListResponse
 import com.hugg.data.dto.dailyHugg.DailyHuggResponse
 import com.hugg.domain.base.ApiState
 import com.hugg.domain.model.request.dailyHugg.CreateDailyHuggVo
+import com.hugg.domain.model.request.dailyHugg.ReplyDailyHuggRequestVo
 import com.hugg.domain.model.vo.dailyHugg.CreateDailyHuggDto
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -54,4 +55,12 @@ interface DailyHuggApi {
     suspend fun getDailyHuggList(
         @Query("page") page: Int
     ): Response<ApiResponse<DailyHuggListResponse>>
+
+    @GET(Endpoints.DailyHugg.SPECIAL_QUESTION)
+    suspend fun getDailyHuggSpecialQuestion(): Response<ApiResponse<String>>
+
+    @POST(Endpoints.DailyHugg.REPLY)
+    suspend fun replyDailyHugg(
+        @Body reqeust : ReplyDailyHuggRequestVo
+    ): Response<ApiResponse<Unit>>
 }

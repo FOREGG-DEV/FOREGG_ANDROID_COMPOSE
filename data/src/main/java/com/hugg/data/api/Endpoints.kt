@@ -47,6 +47,8 @@ object Endpoints {
         const val BYDATE = "$DAILY/byDate/{date}"
         const val EDIT = "$DAILY/{id}"
         const val DELETE = "$DAILY/{id}"
+        const val SPECIAL_QUESTION = "$DAILY/specialQuestion"
+        const val REPLY = "$DAILY/reply"
     }
 
     object Challenge {

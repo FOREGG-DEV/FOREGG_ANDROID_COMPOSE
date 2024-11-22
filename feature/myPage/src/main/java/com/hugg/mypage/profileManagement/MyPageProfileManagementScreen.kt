@@ -28,6 +28,7 @@ import com.hugg.domain.model.enums.DialogType
 import com.hugg.domain.model.enums.TopBarLeftType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.feature.component.HuggDialog
+import com.hugg.feature.component.HuggText
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
 import com.hugg.feature.util.HuggToast
@@ -163,7 +164,7 @@ fun MenuButtonBox(
             .padding(horizontal = 12.dp),
         contentAlignment = Alignment.CenterStart
     ){
-        Text(
+        HuggText(
             text = text,
             style = HuggTypography.p2,
             color = if(text == MY_PAGE_PROFILE_MANAGEMENT_LOGOUT) Black else Unregister

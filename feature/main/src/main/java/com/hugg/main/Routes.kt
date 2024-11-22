@@ -61,10 +61,16 @@ sealed class Routes(val route : String){
         fun createRoute(date: String) = "daily_hugg/$date"
     }
     data object CreateDailyHuggScreen : Routes("create_daily_hugg")
+    data object ReplyDailyHuggScreen : Routes("reply_daily_hugg/{date}"){
+        fun createRoute(date: String) = "reply_daily_hugg/$date"
+    }
     data object ImagePreviewScreen: Routes("image_preview/{uri}") {
         fun createRoute(uri: Uri) = "image_preview/${Uri.encode(uri.toString())}"
     }
     data object DailyHuggCreationSuccessScreen: Routes("daily_hugg_creation_success")
+    data object DailyHuggReplySuccessScreen: Routes("daily_hugg_reply_success/{date}"){
+        fun createRoute(date : String) = "daily_hugg_reply_success/$date"
+    }
     data object EditDailyHuggScreen: Routes("edit_daily_hugg/{id}") {
         fun createRoute(id: Long) = "edit_daily_hugg/$id"
     }

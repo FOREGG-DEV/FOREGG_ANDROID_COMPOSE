@@ -1,6 +1,7 @@
 package com.hugg.dailyhugg.main
 
 import androidx.lifecycle.viewModelScope
+import com.hugg.domain.base.StatusCode
 import com.hugg.domain.model.response.dailyHugg.DailyHuggItemVo
 import com.hugg.domain.repository.DailyHuggRepository
 import com.hugg.feature.base.BaseViewModel
@@ -33,7 +34,7 @@ class DailyHuggViewModel @Inject constructor(
 
     private fun onFailedGetDailyHuggByDate(code: String) {
         when(code) {
-            "DAILY4002" -> {
+            StatusCode.DAILY_HUGG.NO_EXIST_DAILY_HUGG -> {
                 updateState(
                     uiState.value.copy(
                         dailyHugg = null

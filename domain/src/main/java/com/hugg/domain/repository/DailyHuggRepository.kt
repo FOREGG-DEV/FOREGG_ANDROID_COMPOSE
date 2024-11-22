@@ -1,6 +1,7 @@
 package com.hugg.domain.repository
 
 import com.hugg.domain.base.ApiState
+import com.hugg.domain.model.request.dailyHugg.ReplyDailyHuggRequestVo
 import com.hugg.domain.model.response.dailyHugg.DailyHuggItemVo
 import com.hugg.domain.model.response.dailyHugg.DailyHuggListResponseVo
 import kotlinx.coroutines.flow.Flow
@@ -13,4 +14,6 @@ interface DailyHuggRepository {
     suspend fun editDailyHugg(id: Long, image: MultipartBody.Part, dto: RequestBody): Flow<ApiState<Unit>>
     suspend fun deleteDailyHugg(id: Long): Flow<ApiState<Unit>>
     suspend fun getDailyHuggList(page: Int): Flow<ApiState<DailyHuggListResponseVo>>
+    suspend fun getDailyHuggSpecialQuestion() : Flow<ApiState<String>>
+    suspend fun replyDailyHugg(request : ReplyDailyHuggRequestVo) : Flow<ApiState<Unit>>
 }

@@ -402,6 +402,8 @@ fun DailyHuggView(
     if(dailyHuggList.isEmpty()){
         Box(
             modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth()
                 .background(color = White, shape = RoundedCornerShape(6.dp))
                 .padding(vertical = 20.dp),
             contentAlignment = Alignment.Center

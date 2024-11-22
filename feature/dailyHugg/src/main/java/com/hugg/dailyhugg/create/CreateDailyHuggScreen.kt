@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Context
 import android.net.Uri
 import android.os.Build
-import android.provider.ContactsContract.CommonDataKinds.Website.URL
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -24,11 +23,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -39,14 +35,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -62,6 +56,7 @@ import com.hugg.feature.component.HuggTextField
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.ALREADY_EXIST_DAILY_HUGG
 import com.hugg.feature.theme.Background
+import com.hugg.feature.theme.Black
 import com.hugg.feature.theme.DAILY_HUGG
 import com.hugg.feature.theme.DAILY_HUGG_CONTENT_HINT
 import com.hugg.feature.theme.Gs10
@@ -69,8 +64,10 @@ import com.hugg.feature.theme.GsWhite
 import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.IMAGE_PERMISSION_TEXT
 import com.hugg.feature.theme.MainStrong
+import com.hugg.feature.theme.THIS_WEEK_QUESTION
 import com.hugg.feature.theme.WORD_MODIFY
 import com.hugg.feature.theme.WORD_REGISTRATION
+import com.hugg.feature.theme.White
 import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UserInfo
@@ -208,6 +205,11 @@ fun CreateEditDailyHuggContent(
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
+
+                if(uiState.specialQuestion.isNotEmpty()) {
+                    SpecialQuestion(uiState.specialQuestion)
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
 
                 BtnDailyCondition(
                     onSelectedDailyConditionType = onSelectedDailyConditionType,
@@ -422,11 +424,11 @@ fun getDailyConditionIcon(
     isSelected: Boolean
 ): Int {
     return when (dailyConditionType) {
-        DailyConditionType.WORST -> if (isSelected) R.drawable.ic_daily_condition_worst_selected else R.drawable.ic_daily_condition_worst_unselected
-        DailyConditionType.BAD -> if (isSelected) R.drawable.ic_daily_condition_bad_selected else R.drawable.ic_daily_condition_bad_unselected
-        DailyConditionType.SOSO -> if (isSelected) R.drawable.ic_daily_condition_soso_selected else R.drawable.ic_daily_condition_soso_unselected
-        DailyConditionType.GOOD -> if (isSelected) R.drawable.ic_daily_condition_good_selected else R.drawable.ic_daily_condition_good_unselected
-        DailyConditionType.PERFECT -> if (isSelected) R.drawable.ic_daily_condition_perfect_selected else R.drawable.ic_daily_condition_perfect_unselected
+        DailyConditionType.MAD -> if (isSelected) R.drawable.ic_daily_condition_worst_selected else R.drawable.ic_daily_condition_worst_unselected
+        DailyConditionType.SAD -> if (isSelected) R.drawable.ic_daily_condition_bad_selected else R.drawable.ic_daily_condition_bad_unselected
+        DailyConditionType.ANXIOUS -> if (isSelected) R.drawable.ic_daily_condition_soso_selected else R.drawable.ic_daily_condition_soso_unselected
+        DailyConditionType.HAPPY -> if (isSelected) R.drawable.ic_daily_condition_good_selected else R.drawable.ic_daily_condition_good_unselected
+        DailyConditionType.LOVE -> if (isSelected) R.drawable.ic_daily_condition_perfect_selected else R.drawable.ic_daily_condition_perfect_unselected
         DailyConditionType.DEFAULT -> -1
     }
 }
@@ -473,6 +475,36 @@ suspend fun downloadImageFromUrl(context: Context, urlString: String): File? {
     } catch (e: Exception) {
         e.printStackTrace()
         null
+    }
+}
+
+@Composable
+fun SpecialQuestion(
+    question : String = "",
+){
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(color = White, shape = RoundedCornerShape(8.dp))
+            .padding(horizontal = 12.dp)
+    ) {
+        Spacer(modifier = Modifier.size(12.dp))
+
+        HuggText(
+            text = THIS_WEEK_QUESTION,
+            color = Black,
+            style = HuggTypography.p2
+        )
+
+        Spacer(modifier = Modifier.size(4.dp))
+
+        HuggText(
+            text = question,
+            color = Black,
+            style = HuggTypography.p1_l
+        )
+
+        Spacer(modifier = Modifier.size(8.dp))
     }
 }
 

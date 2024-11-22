@@ -53,7 +53,7 @@ fun MaleSignUpContainer(
     LaunchedEffect(Unit) {
         viewModel.eventFlow.collect { event ->
             when(event) {
-                MaleSignUpEvent.GoToMainEvent -> navigateGoToHome
+                MaleSignUpEvent.GoToMainEvent -> navigateGoToHome()
                 MaleSignUpEvent.ShowErrorSpouseCodeEvent -> HuggToast.createToast(context, TOAST_ERROR_NOR_CORRECT_SPOUSE_CODE).show()
             }
         }
