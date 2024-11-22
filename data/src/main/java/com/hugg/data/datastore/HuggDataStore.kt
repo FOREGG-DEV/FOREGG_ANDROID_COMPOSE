@@ -25,4 +25,10 @@ class HuggDataStore(context: Context) {
             preferences[CH_NICKNAME_KEY] = nickname
         }
     }
+
+    suspend fun removeNickname() {
+        dataStore.edit { preferences ->
+            preferences.remove(CH_NICKNAME_KEY)
+        }
+    }
 }
