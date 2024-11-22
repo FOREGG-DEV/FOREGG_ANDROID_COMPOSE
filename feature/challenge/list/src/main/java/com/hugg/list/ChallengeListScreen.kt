@@ -277,10 +277,15 @@ fun ChallengeListItem(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(6.dp))
-            .border(
-                width = if (item.participating) 1.dp else 0.dp,
-                color = MainNormal,
-                shape = RoundedCornerShape(6.dp)
+            .background(GsWhite)
+            .then(
+                if (item.participating) {
+                    Modifier.border(
+                        width = 1.dp,
+                        color = MainNormal,
+                        shape = RoundedCornerShape(6.dp)
+                    )
+                } else Modifier
             )
             .clickable(
                 indication = null,
