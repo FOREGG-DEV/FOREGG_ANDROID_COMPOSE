@@ -54,7 +54,7 @@ class ChallengeListViewModel @Inject constructor(
     }
 
     private fun onSuccessUnlockChallenge() {
-        updateState(uiState.value.copy(selectedChallenge = uiState.value.selectedChallenge?.copy(open = true)))
+        updateState(uiState.value.copy(selectedChallenge = uiState.value.selectedChallenge?.copy(open = true,)))
         UserInfo.updateChallengePoint(UserInfo.challengePoint - 700)
         viewModelScope.launch {
             _showUnlockAnimationFlow.emit(true)
@@ -75,7 +75,16 @@ class ChallengeListViewModel @Inject constructor(
     fun participateChallenge(id: Long) {
         viewModelScope.launch {
             challengeRepository.participateChallenge(id).collect {
-                resultResponse(it, { updateState(uiState.value.copy(selectedChallenge = uiState.value.selectedChallenge?.copy(participating = true))) })
+                resultResponse(it, {
+                    updateState(
+                        uiState.value.copy(
+                            selectedChallenge = uiState.value.selectedChallenge?.copy(
+                                participating = true,
+                                participants = (uiState.value.selectedChallenge?.participants ?: 0) + 1
+                            )
+                        )
+                    )
+                })
             }
         }
     }
