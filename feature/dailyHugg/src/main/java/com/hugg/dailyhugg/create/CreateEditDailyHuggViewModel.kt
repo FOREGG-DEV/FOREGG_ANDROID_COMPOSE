@@ -3,6 +3,7 @@ package com.hugg.dailyhugg.create
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
+import com.hugg.domain.base.StatusCode
 import com.hugg.domain.model.enums.DailyConditionType
 import com.hugg.domain.model.vo.dailyHugg.CreateDailyHuggDto
 import com.hugg.domain.repository.DailyHuggRepository
@@ -81,7 +82,7 @@ class CreateEditDailyHuggViewModel @Inject constructor(
 
     private fun handleCreateDailyHuggError(code: String) {
         when(code) {
-            "DAILY4001" -> emitEventFlow(CreateEditDailyHuggEvent.AlreadyExistEditDailyHugg)
+            StatusCode.DAILY_HUGG.ALREADY_EXIST_DAILY_HUGG -> emitEventFlow(CreateEditDailyHuggEvent.AlreadyExistEditDailyHugg)
         }
     }
 

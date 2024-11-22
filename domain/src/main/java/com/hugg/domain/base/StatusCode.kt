@@ -23,6 +23,11 @@ object StatusCode {
         const val SPOUSE_NOT_FOUND = "USER4005"
     }
 
+    object DAILY_HUGG {
+        const val ALREADY_EXIST_DAILY_HUGG = "DAILY4001"
+        const val NO_EXIST_DAILY_HUGG = "DAILY4002"
+    }
+
     object DAILY_RECORD {
         const val EXIST_DAILY_RECORD = "DAILY4001"
     }
