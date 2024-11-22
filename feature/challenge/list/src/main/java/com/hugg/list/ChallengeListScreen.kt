@@ -60,6 +60,7 @@ import com.hugg.feature.theme.GsWhite
 import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.MainNormal
 import com.hugg.feature.theme.SEARCH_CHALLENGE
+import com.hugg.list.detail.ChallengeDetailScreen
 
 @Composable
 fun ChallengeListScreen(
@@ -68,20 +69,46 @@ fun ChallengeListScreen(
     val viewModel: ChallengeListViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val interactionSource = remember { MutableInteractionSource() }
+    var showChallengeDetail by remember { mutableStateOf(false) }
 
-    ChallengeListContent(
-        uiState = uiState,
-        popScreen = popScreen,
-        onValueChange = { viewModel.onInputValueChange(it) },
-        onClickBtnSearch = {  },
-        interactionSource = interactionSource
-    )
+    Box {
+        ChallengeListContent(
+            uiState = uiState,
+            popScreen = popScreen,
+            goToChallengeDetail = {
+                viewModel.updateSelectedChallenge(it)
+                showChallengeDetail = true
+            },
+            onValueChange = { viewModel.onInputValueChange(it) },
+            onClickBtnSearch = { },
+            interactionSource = interactionSource
+        )
+
+        if (showChallengeDetail) {
+            uiState.selectedChallenge?.let {
+                ChallengeDetailScreen(
+                    item = it,
+                    popScreen = {
+                        viewModel.getAllChallenge()
+                        viewModel.updateSelectedChallenge(null)
+                        showChallengeDetail = false
+                    },
+                    onClickBtnOpen = { id -> viewModel.unlockChallenge(id) },
+                    onClickBtnParticipation = { id -> viewModel.participateChallenge(id) },
+                    interactionSource = interactionSource,
+                    showAnimationFlow = viewModel.showUnlockAnimationFlow,
+                    eventFlow = viewModel.eventFlow
+                )
+            }
+        }
+    }
 }
 
 @Composable
 fun ChallengeListContent(
     uiState: ChallengeListPageState = ChallengeListPageState(),
     popScreen: () -> Unit = {},
+    goToChallengeDetail: (ChallengeCardVo) -> Unit = {},
     onValueChange: (String) -> Unit = {},
     onClickBtnSearch: () -> Unit = {},
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
@@ -108,7 +135,9 @@ fun ChallengeListContent(
         )
         Spacer(modifier = Modifier.height(8.dp))
         ChallengeListLazyColumn(
-            challengeList = uiState.challengeList
+            challengeList = uiState.challengeList,
+            goToChallengeDetail = goToChallengeDetail,
+            interactionSource = interactionSource
         )
     }
 }
@@ -218,7 +247,9 @@ fun SearchChallengeBar(
 
 @Composable
 fun ChallengeListLazyColumn(
-    challengeList: List<ChallengeCardVo> = emptyList()
+    challengeList: List<ChallengeCardVo> = emptyList(),
+    goToChallengeDetail: (ChallengeCardVo) -> Unit = {},
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
     LazyColumn(
         modifier = Modifier
@@ -227,7 +258,9 @@ fun ChallengeListLazyColumn(
     ) {
         items(challengeList, key = { it.id }) {
             ChallengeListItem(
-                item = it
+                item = it,
+                goToChallengeDetail = goToChallengeDetail,
+                interactionSource = interactionSource
             )
             Spacer(modifier = Modifier.height(8.dp))
         }
@@ -236,7 +269,9 @@ fun ChallengeListLazyColumn(
 
 @Composable
 fun ChallengeListItem(
-    item: ChallengeCardVo = ChallengeCardVo()
+    item: ChallengeCardVo = ChallengeCardVo(),
+    goToChallengeDetail: (ChallengeCardVo) -> Unit = {},
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
     Box(
         modifier = Modifier
@@ -246,6 +281,11 @@ fun ChallengeListItem(
                 width = if (item.participating) 1.dp else 0.dp,
                 color = MainNormal,
                 shape = RoundedCornerShape(6.dp)
+            )
+            .clickable(
+                indication = null,
+                interactionSource = interactionSource,
+                onClick = { goToChallengeDetail(item) }
             ),
         contentAlignment = Alignment.Center
     ) {

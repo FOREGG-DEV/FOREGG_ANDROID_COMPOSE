@@ -45,6 +45,7 @@ dependencies {
 
     implementation(project(":feature"))
     implementation(project(":domain"))
+    implementation(project(":feature:challenge"))
 
     implementation(AndroidX.CORE)
     implementation(AndroidX.APPCOMPAT)
