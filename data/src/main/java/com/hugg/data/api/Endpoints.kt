@@ -30,6 +30,11 @@ object Endpoints {
         const val HOME = "/home"
     }
 
+    object Notification {
+        private const val NOTIFICATION = "notification"
+        const val NOTIFICATION_HISTORY = "$NOTIFICATION/history"
+    }
+
     object DailyRecord {
         const val DAILY = "/daily"
         const val WRITE = "$DAILY/write"
