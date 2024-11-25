@@ -4,7 +4,7 @@ import com.hugg.domain.model.response.notification.NotificationHistoryItemRespon
 import com.hugg.feature.base.PageState
 
 data class NotificationPageState(
-    val itemList : List<NotificationHistoryItemResponseVo> = emptyList(),
+    val notificationList : List<NotificationHistoryItemResponseVo> = emptyList(),
     val currentPage : Int = -1,
     val totalPage : Int = -1
 ) : PageState

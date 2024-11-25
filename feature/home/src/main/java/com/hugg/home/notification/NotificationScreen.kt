@@ -1,134 +1,70 @@
 package com.hugg.home.notification
 
-import android.content.Context
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.PagerState
-import com.google.accompanist.pager.rememberPagerState
-import com.hugg.domain.model.enums.GenderType
+import com.hugg.domain.model.enums.NotificationType
 import com.hugg.domain.model.enums.TopBarLeftType
-import com.hugg.domain.model.enums.TopBarRightType
-import com.hugg.domain.model.response.challenge.MyChallengeListItemVo
-import com.hugg.domain.model.response.dailyHugg.DailyHuggListItemVo
-import com.hugg.domain.model.vo.home.HomeTodayScheduleCardVo
-import com.hugg.feature.component.ChallengeCompleteDialog
-import com.hugg.feature.component.HuggInputDialog
-import com.hugg.feature.component.HuggText
+import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
-import com.hugg.feature.uiItem.DailyHuggListItem
-import com.hugg.feature.uiItem.HomeMyChallengeItem
-import com.hugg.feature.uiItem.HomeTodayScheduleItem
-import com.hugg.feature.util.TimeFormatter
-import com.hugg.feature.util.UserInfo
-import com.hugg.feature.util.onThrottleClick
+import com.hugg.feature.uiItem.NotificationListItem
 
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
-fun HomeContainer(
-    navigateGoToCalendarDetail : (Long) -> Unit = {},
-    navigateGoToChallenge : () -> Unit = {},
-    navigateGoToNotification : () -> Unit = {},
-    navigateGoToDailyHugg : () -> Unit = {},
+fun NotificationContainer(
+    navigateGoToChallengeCheer : (Long) -> Unit = {},
     navigateGoToDailyHuggDetail: (String) -> Unit = {},
+    goToBack : () -> Unit = {},
     viewModel: NotificationViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val pagerState = rememberPagerState()
     val interactionSource = remember { MutableInteractionSource() }
-    val context = LocalContext.current
+    val listState = rememberLazyListState()
 
-    LaunchedEffect(Unit){
-        viewModel.getHome()
+    LaunchedEffect(listState) {
+        snapshotFlow { listState.layoutInfo.visibleItemsInfo }
+            .collect { visibleItems ->
+                val lastVisibleItem = visibleItems.lastOrNull()
+                if (lastVisibleItem != null && lastVisibleItem.index == uiState.notificationList.size - 1) {
+                    viewModel.getNextPageNotificationList()
+                }
+            }
     }
 
-    LaunchedEffect(uiState.todayScheduleList) {
-        if(uiState.isClickTodo){
-            viewModel.updateClickTodoState(false)
-            return@LaunchedEffect
-        }
-        val initialPage = uiState.todayScheduleList.indexOfFirst { it.isNearlyNowTime }
-        if (initialPage != -1) {
-            pagerState.scrollToPage(initialPage)
-        }
-    }
 
-    HomeScreen(
+    NotificationScreen(
         uiState = uiState,
-        pagerState = pagerState,
         interactionSource = interactionSource,
-        navigateGoToCalendarDetail = navigateGoToCalendarDetail,
-        navigateGoToChallenge = navigateGoToChallenge,
-        navigateGoToNotification = navigateGoToNotification,
-        navigateGoToDailyHugg = navigateGoToDailyHugg,
-        onClickTodo = { id, time -> viewModel.onClickTodo(id, time) },
-        context = context,
-        onClickCompleteChallenge = { id -> viewModel.selectIncompleteChallenge(id)},
-        navigateGoToDailyHuggDetail = navigateGoToDailyHuggDetail
+        navigateGoToChallengeCheer = navigateGoToChallengeCheer,
+        navigateGoToDailyHuggDetail = navigateGoToDailyHuggDetail,
+        goToBack = goToBack
     )
-
-    if(uiState.showInputImpressionDialog){
-        HuggInputDialog(
-            title = CHALLENGE_DIALOG_INPUT_IMPRESSION_TITLE,
-            maxLength = 15,
-            positiveText = WORD_CONFIRM,
-            onClickCancel = { viewModel.updateShowInputImpressionDialog(false) },
-            onClickPositive = { content -> viewModel.completeChallenge(content)}
-        )
-    }
-
-    if(uiState.showCompleteChallengeDialog){
-        ChallengeCompleteDialog(
-            onClickCancel = { viewModel.updateShowChallengeCompleteDialog(false) },
-            points = 500 // 임시
-        )
-    }
 }
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
-fun HomeScreen(
+fun NotificationScreen(
     uiState : NotificationPageState = NotificationPageState(),
-    pagerState : PagerState = rememberPagerState(),
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    navigateGoToCalendarDetail : (Long) -> Unit = {},
-    onClickTodo: (Long, String) -> Unit = {_, _ -> },
-    navigateGoToChallenge : () -> Unit = {},
-    navigateGoToNotification : () -> Unit = {},
-    navigateGoToDailyHugg : () -> Unit = {},
+    navigateGoToChallengeCheer : (Long) -> Unit = {},
     navigateGoToDailyHuggDetail : (String) -> Unit = {},
-    context : Context,
-    onClickCompleteChallenge : (Long) -> Unit = {},
+    goToBack : () -> Unit = {},
 ) {
     Column(
         modifier = Modifier
@@ -137,291 +73,38 @@ fun HomeScreen(
     ) {
 
         TopBar(
-            leftItemType = TopBarLeftType.LOGO,
-            rightItemType = TopBarRightType.NOTIFICATION,
-            rightBtnClicked = navigateGoToNotification
+            leftItemType = TopBarLeftType.BACK,
+            leftBtnClicked = goToBack,
+            middleText = WORD_NOTIFICATION,
+            middleItemType = TopBarMiddleType.TEXT
         )
 
-        LazyColumn{
+        LazyColumn(
+            modifier = Modifier.padding(horizontal = 16.dp)
+        ){
             item {
-                Spacer(modifier = Modifier.size(25.dp))
-
-                TodayRecordHorizontalPager(
-                    itemList = uiState.todayScheduleList,
-                    pagerState = pagerState,
-                    interactionSource = interactionSource,
-                    onClickTodo = onClickTodo,
-                    onClickDetail = navigateGoToCalendarDetail
-                )
+                Spacer(modifier = Modifier.size(24.dp))
             }
 
-            item {
-                Spacer(modifier = Modifier.size(32.dp))
-
-                Image(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .aspectRatio(343f / 88f)
-                        .fillMaxWidth(),
-                    painter = painterResource(id = com.hugg.feature.R.drawable.ic_daily_record_banner),
-                    contentDescription = null
-                )
-            }
-
-            item {
-                Spacer(modifier = Modifier.size(32.dp))
-
-                if(UserInfo.info.genderType == GenderType.FEMALE){
-                    MyChallengeView(
-                        challengeList = uiState.challengeList,
-                        navigateGoToChallenge = navigateGoToChallenge,
-                        interactionSource = interactionSource,
-                        context = context,
-                        onClickCompleteChallenge = onClickCompleteChallenge
-                    )
+            itemsIndexed(
+                items = uiState.notificationList,
+                key = { _, notificationVo ->
+                    notificationVo.id
                 }
-                else{
-                    DailyHuggView(
-                        navigateGoToDailyHugg = navigateGoToDailyHugg,
-                        navigateGoToDailyHuggDetail = navigateGoToDailyHuggDetail,
-                        dailyHuggList = uiState.dailyHuggList,
-                        interactionSource = interactionSource
-                    )
-                }
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalPagerApi::class)
-@Composable
-fun TodayRecordHorizontalPager(
-    itemList : List<HomeTodayScheduleCardVo>,
-    pagerState: PagerState,
-    interactionSource: MutableInteractionSource,
-    onClickTodo : (Long, String) -> Unit = {_, _ -> },
-    onClickDetail : (Long) -> Unit = {},
-){
-    val configuration = LocalConfiguration.current
-    val screenWidthDp = configuration.screenWidthDp.dp
-    val itemWidth = 285.dp
-    val today = TimeFormatter.getToday()
-    HuggText(
-        modifier = Modifier.padding(start = 16.dp),
-        text = if(UserInfo.info.genderType == GenderType.FEMALE) String.format(HOME_TODAY_SCHEDULE_FEMALE_NAME, UserInfo.info.name)
-        else String.format(HOME_TODAY_SCHEDULE_MALE_NAME, UserInfo.info.spouse, UserInfo.info.name),
-        color = Black,
-        style = HuggTypography.h2
-    )
-
-    HuggText(
-        modifier = Modifier
-            .padding(start = 16.dp)
-            .offset(y = (-2).dp),
-        text = String.format(HOME_TODAY_RECORD, TimeFormatter.getMonth(today), TimeFormatter.getDay(today)),
-        color = Black,
-        style = HuggTypography.h2
-    )
-
-    Spacer(modifier = Modifier.size(8.dp))
-
-    if(itemList.isEmpty()) {
-        Image(
-            modifier = Modifier.padding(start = 16.dp),
-            painter = painterResource(id = com.hugg.feature.R.drawable.ic_empty_today_schedule),
-            contentDescription = null
-        )
-    }
-    else{
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.CenterStart
-        ){
-            HorizontalPager(
-                count = itemList.size,
-                state = pagerState,
-                contentPadding = PaddingValues(start = 16.dp, end = screenWidthDp - itemWidth),
-                modifier = Modifier.fillMaxWidth(),
-                itemSpacing = 8.dp,
-                key = { page -> page }
-            ) { page ->
-                HomeTodayScheduleItem(
-                    item = itemList[page],
+            ) { _, notificationVo ->
+                NotificationListItem(
+                    item = notificationVo,
                     interactionSource = interactionSource,
-                    onClickDetail = onClickDetail,
-                    onClickTodo = onClickTodo,
+                    onCLickNotification = { type ->
+                        when(type){
+                            NotificationType.CLAP,
+                            NotificationType.SUPPORT -> { navigateGoToChallengeCheer(notificationVo.targetKey.toLong()) }
+                            NotificationType.REPLY -> { navigateGoToDailyHuggDetail(notificationVo.targetKey) }
+                        }
+                    }
                 )
             }
         }
-    }
-}
 
-@Composable
-fun MyChallengeView(
-    challengeList : List<MyChallengeListItemVo> = emptyList(),
-    navigateGoToChallenge: () -> Unit = {},
-    interactionSource: MutableInteractionSource,
-    context : Context,
-    onClickCompleteChallenge : (Long) -> Unit = {},
-){
-    Row(
-        modifier = Modifier.padding(horizontal = 16.dp)
-    ) {
-        HuggText(
-            text = HOME_MY_CHALLENGE,
-            style = HuggTypography.h2,
-            color = Gs90
-        )
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        Image(
-            modifier = Modifier
-                .padding(top = 1.dp)
-                .onThrottleClick(
-                    onClick = navigateGoToChallenge,
-                    interactionSource = interactionSource
-                ),
-            painter = painterResource(id = com.hugg.feature.R.drawable.ic_right_arrow_navigate_gs_50),
-            contentDescription = null,
-        )
-    }
-
-    Spacer(modifier = Modifier.size(8.dp))
-
-    if(challengeList.isEmpty()) {
-        EmptyChallengeView(
-            navigateGoToChallenge = navigateGoToChallenge,
-            interactionSource = interactionSource
-        )
-    }
-    else{
-        repeat(challengeList.size) { index ->
-            HomeMyChallengeItem(
-                item = challengeList[index],
-                context = context,
-                onClickCompleteChallenge = onClickCompleteChallenge,
-                interactionSource = interactionSource
-            )
-
-            Spacer(modifier = Modifier.size(8.dp))
-        }
-    }
-}
-
-@Composable
-fun EmptyChallengeView(
-    navigateGoToChallenge: () -> Unit = {},
-    interactionSource: MutableInteractionSource
-){
-    Column(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .fillMaxWidth()
-            .background(color = White, shape = RoundedCornerShape(6.dp))
-            .padding(top = 22.dp, bottom = 18.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        HuggText(
-            text = HOME_EMPTY_MY_CHALLENGE_TITLE,
-            style = HuggTypography.h4,
-            color = Gs70
-        )
-
-        Spacer(modifier = Modifier.size(4.dp))
-
-        HuggText(
-            text = HOME_EMPTY_MY_CHALLENGE_CONTENT,
-            style = HuggTypography.p3,
-            color = Gs50
-        )
-
-        Spacer(modifier = Modifier.size(16.dp))
-
-        Box(
-            modifier = Modifier
-                .border(width = 1.dp, color = Gs10, shape = RoundedCornerShape(6.dp))
-                .padding(horizontal = 24.dp, vertical = 5.dp)
-                .onThrottleClick(
-                    onClick = navigateGoToChallenge,
-                    interactionSource = interactionSource
-                )
-        ){
-            HuggText(
-                text = HOME_PARTICIPATE_CHALLENGE,
-                style = HuggTypography.h4,
-                color = Gs70
-            )
-        }
-    }
-}
-
-@Composable
-fun DailyHuggView(
-    navigateGoToDailyHugg: () -> Unit = {},
-    navigateGoToDailyHuggDetail : (String) -> Unit = {},
-    dailyHuggList : List<DailyHuggListItemVo> = emptyList(),
-    interactionSource : MutableInteractionSource
-){
-    Row(
-        modifier = Modifier.padding(horizontal = 16.dp)
-    ) {
-        HuggText(
-            text = DAILY_HUGG,
-            style = HuggTypography.h2,
-            color = Gs90
-        )
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        Image(
-            modifier = Modifier
-                .padding(top = 1.dp)
-                .onThrottleClick(
-                    onClick = navigateGoToDailyHugg,
-                    interactionSource = interactionSource
-                ),
-            painter = painterResource(id = com.hugg.feature.R.drawable.ic_right_arrow_navigate_gs_50),
-            contentDescription = null,
-        )
-    }
-
-    Spacer(modifier = Modifier.size(8.dp))
-
-    if(dailyHuggList.isEmpty()){
-        Box(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth()
-                .background(color = White, shape = RoundedCornerShape(6.dp))
-                .padding(vertical = 20.dp),
-            contentAlignment = Alignment.Center
-        ){
-            HuggText(
-                text = HOME_EMPTY_DAILY_HUGG,
-                style = HuggTypography.h4,
-                color = Gs70
-            )
-        }
-    }
-    else{
-        Column(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth()
-        ) {
-            repeat(dailyHuggList.size){
-                DailyHuggListItem(
-                    item = dailyHuggList[it],
-                    goToDailyHuggDetail = navigateGoToDailyHuggDetail,
-                    interactionSource = interactionSource,
-                    dateColor = if(dailyHuggList[it].date.split(" ")[0] == TimeFormatter.getToday()) MainNormal else Gs40,
-                    borderColor = if(TimeFormatter.getKoreanFullDayOfWeek(dailyHuggList[it].date.split(" ")[0]) == "토요일") Sub else White
-                )
-
-                Spacer(modifier = Modifier.size(8.dp))
-            }
-        }
     }
 }

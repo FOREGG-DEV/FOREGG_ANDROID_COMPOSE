@@ -315,6 +315,11 @@ const val HOME_EMPTY_MY_CHALLENGE_CONTENT = "어쩌구 저쩌구 다양한 생�
 const val HOME_PARTICIPATE_CHALLENGE = "챌린지 참여"
 const val HOME_EMPTY_DAILY_HUGG = "아직 작성된 배우자의 데일리 허그가 없어요."
 
+// --------- 알림 --------- //
+const val NOTIFICATION_REPLY = "님으로부터 답장이 도착했어요."
+const val NOTIFICATION_CHEER = "님으로부터 응원이 도착했어요."
+const val NOTIFICATION_CLAP = "님으로부터 박수이 도착했어요."
+
 // --------- 챌린지 --------- //
 const val CHALLENGE_DIALOG_INPUT_IMPRESSION_TITLE = "한 줄 소감을 입력해주세요"
 const val CHALLENGE_COMPLETE = "챌린지 성공"

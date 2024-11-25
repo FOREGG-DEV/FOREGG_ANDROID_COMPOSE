@@ -6,6 +6,7 @@ import com.hugg.domain.model.response.challenge.MyChallengeListItemVo
 import com.hugg.domain.model.response.dailyHugg.DailyHuggListResponseVo
 import com.hugg.domain.model.response.home.HomeRecordResponseVo
 import com.hugg.domain.model.response.home.HomeResponseVo
+import com.hugg.domain.model.response.notification.NotificationHistoryResponseVo
 import com.hugg.domain.model.vo.home.HomeTodayScheduleCardVo
 import com.hugg.domain.repository.ChallengeRepository
 import com.hugg.domain.repository.DailyHuggRepository
@@ -26,148 +27,38 @@ import kotlin.math.abs
 @HiltViewModel
 class NotificationViewModel @Inject constructor(
     private val homeRepository: HomeRepository,
-    private val scheduleRepository: ScheduleRepository,
-    private val challengeRepository: ChallengeRepository,
-    private val dailyHuggRepository: DailyHuggRepository
 ) : BaseViewModel<NotificationPageState>(
     NotificationPageState()
 ) {
-    fun getHome(){
-        getTodayRecord()
-        when(UserInfo.info.genderType){
-            GenderType.MALE -> getDailyHuggList()
-            GenderType.FEMALE -> getMyChallengeList()
-        }
+
+    companion object{
+        const val INITIAL_PAGE = 0
     }
 
-    private fun getTodayRecord(){
+    init {
+        getNotificationHistory(INITIAL_PAGE)
+    }
+
+    private fun getNotificationHistory(page : Int){
         viewModelScope.launch {
-            homeRepository.getHome().collect {
-                resultResponse(it, ::handleInitScheduleStatesSuccess)
+            homeRepository.getNotificationHistory(page.toLong()).collect {
+                resultResponse(it, ::handleSuccessGetNotificationList)
             }
         }
     }
 
-    private fun getMyChallengeList(){
-        viewModelScope.launch {
-            challengeRepository.getMyChallenge().collect {
-                resultResponse(it, ::handleSuccessGetMyChallengeList)
-            }
-        }
-    }
-
-    private fun handleInitScheduleStatesSuccess(result: HomeResponseVo) {
+    private fun handleSuccessGetNotificationList(result : NotificationHistoryResponseVo){
         updateState(
             uiState.value.copy(
-                todayScheduleList = splitListItem(result.homeRecordResponseVo)
+                notificationList = uiState.value.notificationList + result.itemList,
+                currentPage = result.currentPage,
+                totalPage = result.totalPage
             )
         )
     }
 
-    private fun splitListItem(list: List<HomeRecordResponseVo>): List<HomeTodayScheduleCardVo> {
-        return updateNearestTime(list.map {
-            HomeTodayScheduleCardVo(
-                id = it.id,
-                recordType = it.recordType,
-                time = it.time,
-                name = it.name,
-                memo = it.memo,
-                todo = it.todo
-            )
-        }.sortedBy { it.time })
-    }
-
-    private fun updateNearestTime(scheduleList: List<HomeTodayScheduleCardVo>): List<HomeTodayScheduleCardVo> {
-        val timeFormat = SimpleDateFormat("HH:mm", Locale.KOREA)
-        val currentTimeString = timeFormat.format(Date())
-        val currentTime = timeFormat.parse(currentTimeString)
-
-        var nearestSchedule: HomeTodayScheduleCardVo? = null
-        var minimumDifference = Long.MAX_VALUE
-
-        for (schedule in scheduleList) {
-            val scheduleTime = timeFormat.parse(schedule.time)
-            val timeDifference = abs(currentTime.time - scheduleTime.time)
-
-            if (timeDifference < minimumDifference) {
-                minimumDifference = timeDifference
-                nearestSchedule = schedule
-            }
-        }
-
-        return scheduleList.map { schedule ->
-            if (schedule == nearestSchedule) {
-                schedule.copy(isNearlyNowTime = true)
-            } else {
-                schedule
-            }
-        }
-    }
-
-    private fun handleSuccessGetMyChallengeList(list: List<MyChallengeListItemVo>) {
-        updateState(
-            uiState.value.copy(challengeList = getSortedByCompleteChallenge(list))
-        )
-    }
-
-    private fun getSortedByCompleteChallenge(list: List<MyChallengeListItemVo>) : List<MyChallengeListItemVo>{
-        val newList = list.map {
-            it.copy(
-                isCompleteToday = it.successDays?.any { it == TimeFormatter.getKoreanDayOfWeek(LocalDate.now().dayOfWeek) } == true
-            )
-        }
-
-        return newList.sortedBy { it.isCompleteToday }
-    }
-
-    fun onClickTodo(id : Long, time : String) {
-        updateClickTodoState(true)
-        viewModelScope.launch {
-            scheduleRepository.checkTodoRecord(id, time).collect {
-                resultResponse(it, { getHome() })
-            }
-        }
-    }
-
-    fun updateClickTodoState(isClick : Boolean){
-        updateState(uiState.value.copy(isClickTodo = isClick))
-    }
-
-    fun selectIncompleteChallenge(id: Long) {
-        updateState(uiState.value.copy(selectedChallengeId = id))
-        updateShowInputImpressionDialog(true)
-    }
-
-    fun completeChallenge(content : String){
-        updateShowChallengeCompleteDialog(true)
-        //        viewModelScope.launch {
-//            challengeRepository.completeChallenge(id).collect {
-//                resultResponse(it, { updateShowInputImpressionDialog(true) })
-//            }
-//        }
-    }
-
-    fun updateShowInputImpressionDialog(isShow : Boolean){
-        updateState(uiState.value.copy(showInputImpressionDialog = isShow))
-    }
-
-    fun updateShowChallengeCompleteDialog(isShow : Boolean){
-        updateState(uiState.value.copy(showCompleteChallengeDialog = isShow))
-    }
-
-    private fun getDailyHuggList() {
-        viewModelScope.launch {
-            dailyHuggRepository.getDailyHuggList(0).collect {
-                resultResponse(it, ::onSuccessGetDailyHuggList)
-            }
-        }
-    }
-
-    private fun onSuccessGetDailyHuggList(response: DailyHuggListResponseVo) {
-        updateState(
-            uiState.value.copy(
-                dailyHuggList = response.dailyHuggList.take(3),
-            )
-        )
+    fun getNextPageNotificationList(){
+        if(uiState.value.currentPage >= uiState.value.totalPage) return
+        getNotificationHistory(uiState.value.currentPage + 1)
     }
 }
