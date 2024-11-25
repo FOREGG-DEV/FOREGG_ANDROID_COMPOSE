@@ -31,6 +31,7 @@ import com.hugg.domain.model.request.sign.SignUpRequestVo
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UserInfo
 import com.hugg.home.homeMain.HomeContainer
+import com.hugg.home.notification.NotificationContainer
 import com.hugg.mypage.cs.MyPageCsContainer
 import com.hugg.mypage.main.MyPageContainer
 import com.hugg.mypage.myMedicineInjection.MyPageMedInjContainer
@@ -494,12 +495,22 @@ fun NavGraphBuilder.myPageGraph(navController: NavHostController) {
 fun NavGraphBuilder.homeGraph(navController: NavHostController) {
     navigation(startDestination = Routes.HomeScreen.route, route = Routes.HomeGraph.route) {
 
-        composable(Routes.HomeScreen.route) { HomeContainer(
-            navigateGoToCalendarDetail = { id -> navController.navigate(Routes.CalendarScheduleCreateOrEdit.getRouteCalendarScheduleCreateOrEdit(CreateOrEditType.EDIT.type, RecordType.ETC.type, id, TimeFormatter.getToday()))},
-            navigateGoToChallenge = {},
-            navigateGoToDailyHugg = { navController.navigate(Routes.DailyHuggGraph.route)},
-            navigateGoToNotification = {},
-            navigateGoToDailyHuggDetail = { date -> navController.navigate(Routes.DailyHuggScreen.createRoute(date)) }
-        ) }
+        composable(Routes.HomeScreen.route) {
+            HomeContainer(
+                navigateGoToCalendarDetail = { id -> navController.navigate(Routes.CalendarScheduleCreateOrEdit.getRouteCalendarScheduleCreateOrEdit(CreateOrEditType.EDIT.type, RecordType.ETC.type, id, TimeFormatter.getToday()))},
+                navigateGoToChallenge = {},
+                navigateGoToDailyHugg = { navController.navigate(Routes.DailyHuggGraph.route)},
+                navigateGoToNotification = { navController.navigate(Routes.NotificationScreen.route) },
+                navigateGoToDailyHuggDetail = { date -> navController.navigate(Routes.DailyHuggScreen.createRoute(date)) }
+            )
+        }
+
+        composable(Routes.NotificationScreen.route) {
+            NotificationContainer(
+                navigateGoToChallengeCheer = { id -> },
+                navigateGoToDailyHuggDetail = { date -> navController.navigate(Routes.DailyHuggScreen.createRoute(date)) },
+                goToBack = { navController.popBackStack() }
+            )
+        }
     }
 }

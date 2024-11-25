@@ -87,4 +87,5 @@ sealed class Routes(val route : String){
     //----------------HOME_GRAPH----------------//
     data object HomeGraph : Routes("home_graph")
     data object HomeScreen : Routes("home")
+    data object NotificationScreen : Routes("notification_history")
 }
