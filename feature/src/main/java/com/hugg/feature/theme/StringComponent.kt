@@ -335,6 +335,13 @@ const val ALL_CHALLENGE_LIST = "전체 챌린지 목록"
 const val ALL_CHALLENGE = "전체 챌린지"
 const val SEARCH_CHALLENGE = "챌린지 검색하기"
 
+// CreateChallenge
+const val CREATE_CHALLENGE_TOP_BAR = "나만의 챌린지"
+const val CREATE_CHALLENGE_GUIDE = "아래 내용을 채워주세요"
+const val CREATE_CHALLENGE_NAME_HINT = "제목을 작성해주세요"
+const val CREATE_CHALLENGE_DESCRIPTION_HINT = "설명을 작성해주세요"
+const val CREATE_CHALLENGE_COMPLETED = "첼린지가 생성되었습니다"
+
 // DailyHuggList
 const val DAILY_HUGG_LIST_TITLE = "데일리 허그 모아보기"
 const val DAILY_HUGG_LIST_EMPTY_BUBBLE = "아직 작성된\n데일리 허그가 없어요"
