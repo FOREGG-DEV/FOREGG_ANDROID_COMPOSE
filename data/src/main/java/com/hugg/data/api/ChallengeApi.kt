@@ -5,10 +5,12 @@ import com.hugg.data.dto.challenge.AllChallengeResponse
 import com.hugg.data.dto.challenge.ChallengeListResponse
 import com.hugg.data.dto.challenge.MyChallengeResponseListItem
 import com.hugg.domain.model.request.challenge.ChallengeNicknameVo
+import com.hugg.domain.model.request.challenge.CreateChallengeRequestVo
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
+import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface ChallengeApi {
@@ -40,4 +42,9 @@ interface ChallengeApi {
 
     @GET(Endpoints.Challenge.ALL)
     suspend fun getAllChallenge(): Response<ApiResponse<AllChallengeResponse>>
+
+    @POST(Endpoints.Challenge.CREATE)
+    suspend fun createChallenge(
+        @Body request: CreateChallengeRequestVo
+    ): Response<ApiResponse<Unit>>
 }

@@ -11,6 +11,7 @@ import com.hugg.data.mapper.challenge.ChallengeResponseMapper
 import com.hugg.data.mapper.challenge.MyChallengeResponseMapper
 import com.hugg.domain.base.ApiState
 import com.hugg.domain.model.request.challenge.ChallengeNicknameVo
+import com.hugg.domain.model.request.challenge.CreateChallengeRequestVo
 import com.hugg.domain.model.response.challenge.ChallengeCardVo
 import com.hugg.domain.model.response.challenge.MyChallengeListItemVo
 import com.hugg.domain.repository.ChallengeRepository
@@ -63,5 +64,9 @@ class ChallengeRepositoryImpl @Inject constructor(
 
     override suspend fun getAllChallenge(): Flow<ApiState<List<ChallengeCardVo>>> {
         return apiLaunch(apiCall = { challengeApi.getAllChallenge() }, AllChallengeResponseMapper)
+    }
+
+    override suspend fun createChallenge(request: CreateChallengeRequestVo): Flow<ApiState<Unit>> {
+        return apiLaunch(apiCall = { challengeApi.createChallenge(request = request) }, UnitResponseMapper)
     }
 }
