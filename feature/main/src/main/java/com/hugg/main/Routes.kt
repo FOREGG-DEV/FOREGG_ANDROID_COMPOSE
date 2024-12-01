@@ -1,6 +1,7 @@
 package com.hugg.main
 
 import android.net.Uri
+import okhttp3.Route
 
 sealed class Routes(val route : String){
 
@@ -74,6 +75,7 @@ sealed class Routes(val route : String){
     data object ChallengeGraph: Routes("challenge_graph")
     data object ChallengeScreen: Routes("challenge")
     data object ChallengeListScreen: Routes("challenge_list")
+    data object CreateChallengeScreen: Routes("create_challenge")
 
     //----------------MY_PAGE_GRAPH----------------//
     data object MyPageGraph : Routes("my_page_graph")

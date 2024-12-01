@@ -64,7 +64,8 @@ import com.hugg.list.detail.ChallengeDetailScreen
 
 @Composable
 fun ChallengeListScreen(
-    popScreen: () -> Unit
+    popScreen: () -> Unit,
+    goToCreateChallenge: () -> Unit
 ) {
     val viewModel: ChallengeListViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -81,7 +82,8 @@ fun ChallengeListScreen(
             },
             onValueChange = { viewModel.onInputValueChange(it) },
             onClickBtnSearch = { },
-            interactionSource = interactionSource
+            interactionSource = interactionSource,
+            goToCreateChallenge = goToCreateChallenge
         )
 
         if (showChallengeDetail) {
@@ -111,7 +113,8 @@ fun ChallengeListContent(
     goToChallengeDetail: (ChallengeCardVo) -> Unit = {},
     onValueChange: (String) -> Unit = {},
     onClickBtnSearch: () -> Unit = {},
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    goToCreateChallenge: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -125,7 +128,10 @@ fun ChallengeListContent(
             middleText = ALL_CHALLENGE_LIST
         )
         Spacer(modifier = Modifier.height(16.dp))
-        CreateChallengeBox()
+        CreateChallengeBox(
+            goToCreateChallenge = goToCreateChallenge,
+            interactionSource = interactionSource
+        )
         Spacer(modifier = Modifier.height(16.dp))
         SearchChallengeBar(
             searchKeyword = uiState.searchKeyword,
@@ -143,13 +149,21 @@ fun ChallengeListContent(
 }
 
 @Composable
-fun CreateChallengeBox() {
+fun CreateChallengeBox(
+    goToCreateChallenge: () -> Unit,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(6.dp))
             .background(MainNormal)
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null,
+                onClick = { goToCreateChallenge() }
+            )
     ) {
         Row(
             modifier = Modifier
@@ -325,10 +339,4 @@ fun ChallengeListItem(
             }
         }
     }
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun PreviewChallengeList() {
-    ChallengeListContent()
 }

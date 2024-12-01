@@ -54,6 +54,7 @@ dependencies {
     implementation(project(":feature:myPage"))
     implementation(project(":feature:challenge"))
     implementation(project(":feature:challenge:list"))
+    implementation(project(":feature:challenge:create"))
 
     implementation(AndroidX.CORE)
     implementation(AndroidX.APPCOMPAT)

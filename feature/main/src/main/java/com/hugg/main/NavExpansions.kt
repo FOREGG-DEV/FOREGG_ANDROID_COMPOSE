@@ -18,6 +18,7 @@ import com.hugg.account.subsidyList.SubsidyListContainer
 import com.hugg.calendar.calendarMain.CalendarContainer
 import com.hugg.calendar.scheduleCreateOrEdit.ScheduleCreateOrEditContainer
 import com.hugg.challenge.main.ChallengeMainScreen
+import com.hugg.create.CreateChallengeScreen
 import com.hugg.dailyhugg.all.DailyHuggListScreen
 import com.hugg.dailyhugg.create.CreateEditDailyHuggPageState
 import com.hugg.dailyhugg.edit.EditDailyHuggScreen
@@ -424,6 +425,13 @@ fun NavGraphBuilder.challengeGraph(navController: NavHostController) {
 
         composable(Routes.ChallengeListScreen.route) {
             ChallengeListScreen(
+                popScreen = { navController.popBackStack() },
+                goToCreateChallenge = { navController.navigate(Routes.CreateChallengeScreen.route) }
+            )
+        }
+
+        composable(Routes.CreateChallengeScreen.route) {
+            CreateChallengeScreen (
                 popScreen = { navController.popBackStack() }
             )
         }
