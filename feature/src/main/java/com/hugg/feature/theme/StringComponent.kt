@@ -40,6 +40,7 @@ const val WORD_NOTIFICATION = "알림"
 const val WORD_COMPLETE = "완료"
 const val WORD_INCOMPLETE = "미완료"
 const val WORD_CHALLENGE = "챌린지"
+const val WORD_SHOW_MORE = "더보기"
 
 const val DIALOG_MAX_LENGTH = "최대 %d"
 
@@ -341,6 +342,10 @@ const val CREATE_CHALLENGE_GUIDE = "아래 내용을 채워주세요"
 const val CREATE_CHALLENGE_NAME_HINT = "제목을 작성해주세요"
 const val CREATE_CHALLENGE_DESCRIPTION_HINT = "설명을 작성해주세요"
 const val CREATE_CHALLENGE_COMPLETED = "첼린지가 생성되었습니다"
+
+// ChallengeSupport
+const val CHALLENGE_SUPPORT_TOP_BAR = "챌린지 현황"
+const val CHALLENGE_SUPPORT_GUIDE = "다른 챌린저에게\n응원의 박수 보내기"
 
 // DailyHuggList
 const val DAILY_HUGG_LIST_TITLE = "데일리 허그 모아보기"
