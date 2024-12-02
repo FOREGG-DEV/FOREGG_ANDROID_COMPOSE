@@ -55,6 +55,8 @@ object Endpoints {
         const val UNLOCK = "$CHALLENGE/unlock/{id}"
         const val ALL = "$CHALLENGE/all"
         const val CREATE = "$CHALLENGE/create"
+        const val SUPPORT = "$CHALLENGE/{id}/participantsList"
+        const val ACTION = "$CHALLENGE/{challengeId}"
 
         const val PARTICIPATION = "$CHALLENGE/participate/{id}"
         const val QUIT = "$CHALLENGE/quit/{id}"

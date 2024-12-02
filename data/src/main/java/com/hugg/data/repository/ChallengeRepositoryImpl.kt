@@ -8,11 +8,13 @@ import com.hugg.data.datastore.HuggDataStore
 import com.hugg.data.mapper.UnitResponseMapper
 import com.hugg.data.mapper.challenge.AllChallengeResponseMapper
 import com.hugg.data.mapper.challenge.ChallengeResponseMapper
+import com.hugg.data.mapper.challenge.ChallengeSupportResponseMapper
 import com.hugg.data.mapper.challenge.MyChallengeResponseMapper
 import com.hugg.domain.base.ApiState
 import com.hugg.domain.model.request.challenge.ChallengeNicknameVo
 import com.hugg.domain.model.request.challenge.CreateChallengeRequestVo
 import com.hugg.domain.model.response.challenge.ChallengeCardVo
+import com.hugg.domain.model.response.challenge.ChallengeSupportItemVo
 import com.hugg.domain.model.response.challenge.MyChallengeListItemVo
 import com.hugg.domain.repository.ChallengeRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -68,5 +70,17 @@ class ChallengeRepositoryImpl @Inject constructor(
 
     override suspend fun createChallenge(request: CreateChallengeRequestVo): Flow<ApiState<Unit>> {
         return apiLaunch(apiCall = { challengeApi.createChallenge(request = request) }, UnitResponseMapper)
+    }
+
+    override suspend fun getChallengeSupportList(id: Long): Flow<ApiState<List<ChallengeSupportItemVo>>> {
+        return apiLaunch(apiCall = { challengeApi.getChallengeSupportList(id) }, ChallengeSupportResponseMapper)
+    }
+
+    override suspend fun sendChallengeAction(
+        challengeId: Long,
+        cheerType: String,
+        receiverId: Long
+    ): Flow<ApiState<Unit>> {
+        return apiLaunch(apiCall = { challengeApi.sendChallengeAction(id = challengeId, cheerType = cheerType, receiverId = receiverId) }, UnitResponseMapper)
     }
 }

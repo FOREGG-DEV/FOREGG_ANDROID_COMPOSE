@@ -4,6 +4,7 @@ import com.hugg.domain.base.ApiState
 import com.hugg.domain.model.request.challenge.ChallengeNicknameVo
 import com.hugg.domain.model.request.challenge.CreateChallengeRequestVo
 import com.hugg.domain.model.response.challenge.ChallengeCardVo
+import com.hugg.domain.model.response.challenge.ChallengeSupportItemVo
 import com.hugg.domain.model.response.challenge.MyChallengeListItemVo
 import kotlinx.coroutines.flow.Flow
 
@@ -18,4 +19,6 @@ interface ChallengeRepository {
     suspend fun participateChallenge(id: Long): Flow<ApiState<Unit>>
     suspend fun getAllChallenge(): Flow<ApiState<List<ChallengeCardVo>>>
     suspend fun createChallenge(request: CreateChallengeRequestVo): Flow<ApiState<Unit>>
+    suspend fun getChallengeSupportList(id: Long): Flow<ApiState<List<ChallengeSupportItemVo>>>
+    suspend fun sendChallengeAction(challengeId: Long, cheerType: String, receiverId: Long): Flow<ApiState<Unit>>
 }
