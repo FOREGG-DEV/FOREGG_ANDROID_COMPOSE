@@ -46,6 +46,7 @@ import com.hugg.sign.maleSignUp.MaleSignUpContainer
 import com.hugg.sign.onboarding.OnboardingContainer
 import com.hugg.sign.serviceTerms.ServiceTermsContainer
 import com.hugg.sign.splash.HuggSplashContainer
+import com.hugg.support.ChallengeSupportScreen
 
 fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
     navigation(startDestination = Routes.SplashScreen.route, route = Routes.SignGraph.route) {
@@ -419,7 +420,8 @@ fun NavGraphBuilder.challengeGraph(navController: NavHostController) {
         composable(Routes.ChallengeScreen.route) {
             ChallengeMainScreen(
                 popScreen = { navController.popBackStack() },
-                goToChallengeList = { navController.navigate(Routes.ChallengeListScreen.route) }
+                goToChallengeList = { navController.navigate(Routes.ChallengeListScreen.route) },
+                goToChallengeSupport = { navController.navigate(Routes.ChallengeSupportScreen.route) }
             )
         }
 
@@ -432,6 +434,12 @@ fun NavGraphBuilder.challengeGraph(navController: NavHostController) {
 
         composable(Routes.CreateChallengeScreen.route) {
             CreateChallengeScreen (
+                popScreen = { navController.popBackStack() }
+            )
+        }
+
+        composable(Routes.ChallengeSupportScreen.route) {
+            ChallengeSupportScreen(
                 popScreen = { navController.popBackStack() }
             )
         }
