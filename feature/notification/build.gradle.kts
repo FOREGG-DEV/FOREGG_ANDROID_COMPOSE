@@ -72,4 +72,7 @@ dependencies {
     implementation(AndroidX.ACTIVITY_COMPOSE)
 
     kapt(Google.HILT_COMPILER)
+
+    implementation(Libraries.COIL_COMPOSE)
+    implementation(KAKAO.SHARE)
 }
