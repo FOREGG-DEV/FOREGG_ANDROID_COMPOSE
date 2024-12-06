@@ -37,6 +37,7 @@ import com.hugg.mypage.main.MyPageContainer
 import com.hugg.mypage.myMedicineInjection.MyPageMedInjContainer
 import com.hugg.mypage.profileManagement.MyPageProfileManagementContainer
 import com.hugg.mypage.spouse.MyPageSpouseContainer
+import com.hugg.notification.InjMedDetailContainer
 import com.hugg.sign.accessPermission.AccessPermissionContainer
 import com.hugg.sign.femaleSignUp.chooseSurgery.ChooseSurgeryContainer
 import com.hugg.sign.femaleSignUp.spouseCodeFemale.SpouseCodeFemaleContainer
@@ -510,6 +511,26 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController) {
                 navigateGoToChallengeCheer = { id -> },
                 navigateGoToDailyHuggDetail = { date -> navController.navigate(Routes.DailyHuggScreen.createRoute(date)) },
                 goToBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = Routes.InjMedInfoScreen.route,
+            arguments = listOf(
+                navArgument("type") { type = NavType.StringType},
+                navArgument("id") { type = NavType.LongType },
+                navArgument("time") { type = NavType.StringType}
+            )
+        ) {
+            val id = it.arguments?.getLong("id") ?: -1
+            val type = RecordType.getEnumTypeByString(it.arguments?.getString("type") ?: "")
+            val time = it.arguments?.getString("time") ?: ""
+
+            InjMedDetailContainer(
+                goToBack = { navController.popBackStack() },
+                type = type,
+                id = id,
+                time = time
             )
         }
     }
