@@ -8,7 +8,22 @@
     <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <application>
+
+        <service
+            android:name="com.hugg.main.fcm.FcmNotification"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <receiver android:name="com.hugg.main.fcm.AlarmReceiver" android:exported="true" />
+        <service android:name="com.hugg.main.fcm.AlarmService" android:exported="true"
+            android:foregroundServiceType="mediaPlayback" />
+
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
