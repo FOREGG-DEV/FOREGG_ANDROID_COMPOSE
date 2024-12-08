@@ -100,4 +100,9 @@ dependencies {
     implementation(Libraries.LOTTIE)
     implementation(Libraries.COIL_SVG)
     implementation(Libraries.COIL)
+
+    implementation(Google.FCM)
+    implementation(Google.FCM_KTX)
+    implementation(Google.FIREBASE_ANALYTICS)
+    implementation(platform(Google.FIREBASE_BOM))
 }

@@ -68,6 +68,12 @@ object ApiModule {
 
     @Singleton
     @Provides
+    fun provideDailyRecordApi(@AuthRetrofit retrofit: Retrofit): DailyRecordApi {
+        return retrofit.create(DailyRecordApi::class.java)
+    }
+
+    @Singleton
+    @Provides
     fun provideInformationApi(@AuthRetrofit retrofit: Retrofit): InformationApi {
         return retrofit.create(InformationApi::class.java)
     }
