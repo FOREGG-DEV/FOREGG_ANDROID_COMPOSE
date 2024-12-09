@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
             MainScreen(
-                isAutoLogin = startKey == "main"
+                initialNavigation = navigation
             )
         }
     }

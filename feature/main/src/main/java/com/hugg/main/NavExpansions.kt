@@ -49,7 +49,7 @@ import com.hugg.sign.onboarding.OnboardingContainer
 import com.hugg.sign.serviceTerms.ServiceTermsContainer
 import com.hugg.sign.splash.HuggSplashContainer
 
-fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
+fun NavGraphBuilder.signNavGraph(navController: NavHostController, initialNavigation : String) {
     navigation(startDestination = Routes.SplashScreen.route, route = Routes.SignGraph.route) {
 
         composable(Routes.SplashScreen.route) { HuggSplashContainer(
@@ -59,16 +59,17 @@ fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
             } },
             navigateToHome = { navController.navigate(route = Routes.HomeGraph.route) {
                 popUpTo(navController.graph.id) { inclusive = true }
-                launchSingleTop = true
-            } }
+                launchSingleTop = true }
+                if(initialNavigation.isNotEmpty()) navController.navigate(initialNavigation)
+            }
         ) }
 
         composable(Routes.OnboardingScreen.route) { OnboardingContainer(
             navigateServiceTerms = { accessToken : String -> navController.navigate(route = Routes.ServiceTermsScreen.getRouteServiceTerms(accessToken)) },
             navigateHome = { navController.navigate(route = Routes.HomeGraph.route) {
                     popUpTo(navController.graph.id) { inclusive = true }
-                    launchSingleTop = true
-                }
+                    launchSingleTop = true }
+                if(initialNavigation.isNotEmpty()) navController.navigate(initialNavigation)
             }
         ) }
 
@@ -185,6 +186,7 @@ fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
                         popUpTo(navController.graph.id) { inclusive = true }
                         launchSingleTop = true
                     }
+                    if(initialNavigation.isNotEmpty()) navController.navigate(initialNavigation)
                 },
                 accessToken = accessToken,
                 signUpRequestVo = SignUpRequestVo(
@@ -211,8 +213,8 @@ fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
             MaleSignUpContainer(
                 navigateGoToHome = { navController.navigate(route = Routes.HomeGraph.route) {
                     popUpTo(navController.graph.id) { inclusive = true }
-                    launchSingleTop = true
-                    }
+                    launchSingleTop = true }
+                    if(initialNavigation.isNotEmpty()) navController.navigate(initialNavigation)
                 },
                 accessToken = accessToken,
                 signUpMaleRequestVo = SignUpMaleRequestVo(spouseCode = "", ssn = ssn, fcmToken = ""),

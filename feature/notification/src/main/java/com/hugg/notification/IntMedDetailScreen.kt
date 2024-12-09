@@ -135,8 +135,8 @@ fun InjMedDetailScreen(
 
         val guideText = when{
             (UserInfo.info.genderType == GenderType.FEMALE) -> NOTIFICATION_GUIDE_FEMALE
-            (UserInfo.info.genderType == GenderType.MALE && uiState.pageType == RecordType.INJECTION) -> NOTIFICATION_GUIDE_MALE_INJECTION
-            (UserInfo.info.genderType == GenderType.MALE && uiState.pageType == RecordType.MEDICINE) -> NOTIFICATION_GUIDE_MALE_MEDICINE
+            (UserInfo.info.genderType == GenderType.MALE && uiState.pageType == RecordType.INJECTION) -> String.format(NOTIFICATION_GUIDE_MALE_INJECTION, UserInfo.info.spouse)
+            (UserInfo.info.genderType == GenderType.MALE && uiState.pageType == RecordType.MEDICINE) -> String.format(NOTIFICATION_GUIDE_MALE_MEDICINE, UserInfo.info.spouse)
             else -> ""
         }
         HuggText(
