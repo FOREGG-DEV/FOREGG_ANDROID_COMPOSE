@@ -3,6 +3,7 @@ package com.hugg.notification
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -147,20 +148,33 @@ fun InjMedDetailScreen(
 
         Spacer(modifier = Modifier.size(10.dp))
 
-        AsyncImage(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .fillMaxWidth()
-                .aspectRatio(343f / 200f),
-            model = ImageRequest.Builder(context)
-                .data(uiState.image)
-                .crossfade(true)
-                .build(),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            placeholder = painterResource(id = if(uiState.pageType == RecordType.MEDICINE) R.drawable.ic_empty_medicine else R.drawable.ic_empty_injection)
-        )
+        if(uiState.image.isEmpty()){
+            Image(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .fillMaxWidth()
+                    .aspectRatio(343f / 200f),
+                painter = painterResource(id = if(uiState.pageType == RecordType.MEDICINE) R.drawable.ic_empty_medicine else R.drawable.ic_empty_injection),
+                contentDescription = null
+            )
+        }
+        else{
+            AsyncImage(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .fillMaxWidth()
+                    .aspectRatio(343f / 200f),
+                model = ImageRequest.Builder(context)
+                    .data(uiState.image)
+                    .crossfade(true)
+                    .build(),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                placeholder = painterResource(id = if(uiState.pageType == RecordType.MEDICINE) R.drawable.ic_empty_medicine else R.drawable.ic_empty_injection)
+            )
+        }
 
         Spacer(modifier = Modifier.size(8.dp))
 
