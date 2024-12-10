@@ -55,12 +55,14 @@ object Endpoints {
         const val UNLOCK = "$CHALLENGE/unlock/{id}"
         const val ALL = "$CHALLENGE/all"
         const val CREATE = "$CHALLENGE/create"
-        const val SUPPORT = "$CHALLENGE/{id}/participantsList"
+        const val SUPPORT = "$CHALLENGE/{challengeId}/{isSuccess}/participants"
         const val ACTION = "$CHALLENGE/{challengeId}"
+        const val NAME = "$CHALLENGE/getChallengeName"
+        const val DELETE = "$CHALLENGE/quit/{id}"
+        const val COMPLETE = "$CHALLENGE/complete/{id}"
 
         const val PARTICIPATION = "$CHALLENGE/participate/{id}"
         const val QUIT = "$CHALLENGE/quit/{id}"
-        const val COMPLETE = "$CHALLENGE/complete/{id}"
         const val DELETE_COMPLETE = "$CHALLENGE/deleteTodayComplete/{id}"
         const val MY = "$CHALLENGE/my"
     }

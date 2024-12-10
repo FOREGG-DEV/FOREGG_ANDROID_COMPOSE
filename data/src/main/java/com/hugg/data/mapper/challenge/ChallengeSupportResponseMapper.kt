@@ -8,12 +8,10 @@ object ChallengeSupportResponseMapper: Mapper.ResponseMapper<List<ChallengeSuppo
     override fun mapDtoToModel(type: List<ChallengeSupportResponseItem>?): List<ChallengeSupportItemVo> {
         return type?.map {
             ChallengeSupportItemVo(
-                id = it.id,
-                challengeNickname = it.challengeNickname,
+                userId = it.id,
+                nickname = it.nickname,
                 thought = it.thought,
-                success = it.success,
-                clap = it.clap,
-                support = it.support
+                supported = it.supported
             )
         } ?: emptyList()
     }
