@@ -338,32 +338,7 @@ fun CommonChallengeItem(
                 Spacer(modifier = Modifier.height(17.dp))
 
                 if (!item.isCreateChallenge) {
-                    Box(
-                        modifier = Modifier
-                            .border(width = 1.dp, color = Gs30, shape = RoundedCornerShape(4.dp)),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            Spacer(modifier = Modifier.width(9.dp))
-
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_people),
-                                contentDescription = ""
-                            )
-
-                            HuggText(
-                                text = String.format(CHALLENGE_PARTICIPANTS, item.participants),
-                                style = HuggTypography.p3_l,
-                                color = Gs80,
-                                modifier = Modifier.padding(vertical = 4.dp)
-                            )
-
-                            Spacer(modifier = Modifier.width(9.dp))
-                        }
-                    }
+                    ChallengeParticipantsBox(participants = item.participants)
                 }
 
                 Spacer(modifier = Modifier.height(19.dp))
@@ -388,11 +363,43 @@ fun CommonChallengeItem(
     }
 }
 
+@Composable
+fun ChallengeParticipantsBox(
+    participants: Int
+) {
+    Box(
+        modifier = Modifier
+            .border(width = 1.dp, color = Gs30, shape = RoundedCornerShape(4.dp)),
+        contentAlignment = Alignment.Center
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Spacer(modifier = Modifier.width(9.dp))
+
+            Icon(
+                painter = painterResource(id = R.drawable.ic_people),
+                contentDescription = ""
+            )
+
+            HuggText(
+                text = String.format(CHALLENGE_PARTICIPANTS, participants),
+                style = HuggTypography.p3_l,
+                color = Gs80,
+                modifier = Modifier.padding(vertical = 4.dp)
+            )
+
+            Spacer(modifier = Modifier.width(9.dp))
+        }
+    }
+}
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PagerIndicator(
     pagerState: PagerState,
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ) {
     Box(
         modifier = modifier

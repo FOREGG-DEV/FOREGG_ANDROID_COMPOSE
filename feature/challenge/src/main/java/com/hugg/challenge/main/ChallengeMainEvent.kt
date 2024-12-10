@@ -8,4 +8,5 @@ sealed class ChallengeMainEvent: Event {
     data object OnSuccessOpenChallenge: ChallengeMainEvent()
     data object ChallengeAlreadyParticipated: ChallengeMainEvent()
     data object InsufficientPoint: ChallengeMainEvent()
+    data object GetMyChallengeSuccess: ChallengeMainEvent()
 }

@@ -3,12 +3,16 @@ package com.hugg.challenge.main
 import androidx.lifecycle.viewModelScope
 import com.hugg.domain.base.StatusCode
 import com.hugg.domain.model.enums.ChallengeTabType
+import com.hugg.domain.model.enums.MyChallengeState
 import com.hugg.domain.model.request.challenge.ChallengeNicknameVo
+import com.hugg.domain.model.request.challenge.ChallengeThoughtsVo
 import com.hugg.domain.model.response.challenge.ChallengeCardVo
+import com.hugg.domain.model.response.challenge.MyChallengeVo
 import com.hugg.domain.repository.ChallengeRepository
 import com.hugg.feature.base.BaseViewModel
 import com.hugg.feature.theme.CREATE_MY_CHALLENGE
 import com.hugg.feature.theme.CREATE_MY_CHALLENGE_DESCRIPTION
+import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UserInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -28,6 +32,9 @@ class ChallengeMainViewModel @Inject constructor(
         viewModelScope.launch {
             challengeRepository.getAllCommonChallenge().collect {
                 resultResponse(it, ::onSuccessGetChallengeList)
+            }
+            challengeRepository.getMyChallenge().collect {
+                resultResponse(it, ::onSuccessGetMyChallenge)
             }
         }
     }
@@ -159,5 +166,104 @@ class ChallengeMainViewModel @Inject constructor(
         when (error) {
             StatusCode.CHALLENGE.ALREADY_PARTICIPATED -> emitEventFlow(ChallengeMainEvent.ChallengeAlreadyParticipated)
         }
+    }
+
+    fun getMyChallenge() {
+        viewModelScope.launch {
+            challengeRepository.getMyChallenge().collect {
+                resultResponse(it, ::onSuccessGetMyChallenge)
+            }
+        }
+    }
+
+    private fun onSuccessGetMyChallenge(response: MyChallengeVo) {
+        updateState(
+            uiState.value.copy(
+                myChallengeList = response.dtos,
+                firstDateOfWeek = response.firstDateOfWeek
+            )
+        )
+        emitEventFlow(ChallengeMainEvent.GetMyChallengeSuccess)
+    }
+
+    fun initializeChallengeState(currentPage: Int) {
+        if (uiState.value.myChallengeList.isEmpty() || currentPage >= uiState.value.myChallengeList.size) return
+        val challenge = uiState.value.myChallengeList[currentPage]
+        val dayOfWeek = mapOf(
+            "Sun" to 0,
+            "Mon" to 1,
+            "Tue" to 2,
+            "Wed" to 3,
+            "Thu" to 4,
+            "Fri" to 5,
+            "Sat" to 6
+        )
+        val today = TimeFormatter.getTodayDayOfWeek()
+        val todayIndex = dayOfWeek.getOrDefault(today, -1)
+
+        if (todayIndex == -1) return
+
+        val successDays = challenge.successDays
+        val weekState = (0 until 7).map { dayIndex ->
+            when {
+                dayIndex < todayIndex -> {
+                    if (dayOfWeek.entries.firstOrNull { it.value == dayIndex }?.key in successDays) {
+                        MyChallengeState.SUCCESS
+                    } else if (dayIndex == todayIndex - 1) {
+                        MyChallengeState.YESTERDAY
+                    } else {
+                        MyChallengeState.FAIL
+                    }
+                }
+                dayIndex == todayIndex -> {
+                    if (dayOfWeek.entries.firstOrNull { it.value == dayIndex }?.key in successDays) {
+                        MyChallengeState.SUCCESS
+                    } else {
+                        MyChallengeState.TODAY
+                    }
+                }
+                else -> MyChallengeState.NOT_YET
+            }
+        }
+
+        updateState(
+            uiState.value.copy(
+                currentChallengeState = weekState,
+                currentChallengeDayOfWeek = todayIndex + 1
+            )
+        )
+    }
+
+    fun updateCommentDialogVisibility(newValue: Boolean) {
+        updateState(uiState.value.copy(showCommentDialog = newValue))
+    }
+
+    fun updateShowChallengeSuccessAnimation(newValue: Boolean) {
+        updateState(uiState.value.copy(showChallengeSuccessAnimation = newValue))
+    }
+
+    fun updateDeleteDialogVisibility(newValue: Boolean) {
+        updateState(uiState.value.copy(showDeleteDialog = newValue))
+    }
+
+    fun deleteChallenge(id: Long) {
+        viewModelScope.launch {
+            challengeRepository.deleteChallenge(id).collect {
+                resultResponse(it, { getMyChallenge() })
+            }
+        }
+    }
+
+    fun completeChallenge(id: Long, state: MyChallengeState, thoughts: String) {
+        viewModelScope.launch {
+            challengeRepository.completeChallenge(id = id, day = state.name, thoughts = ChallengeThoughtsVo(thoughts)).collect {
+                resultResponse(it, { onSuccessCompleteChallenge() })
+            }
+        }
+    }
+
+    private fun onSuccessCompleteChallenge() {
+        updateShowChallengeSuccessAnimation(true)
+        getMyChallenge()
     }
 }
