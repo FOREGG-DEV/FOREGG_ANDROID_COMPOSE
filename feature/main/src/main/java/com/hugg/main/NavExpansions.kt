@@ -421,7 +421,7 @@ fun NavGraphBuilder.challengeGraph(navController: NavHostController) {
             ChallengeMainScreen(
                 popScreen = { navController.popBackStack() },
                 goToChallengeList = { navController.navigate(Routes.ChallengeListScreen.route) },
-                goToChallengeSupport = { navController.navigate(Routes.ChallengeSupportScreen.route) }
+                goToChallengeSupport = { navController.navigate(Routes.ChallengeSupportScreen.createRoute(it)) }
             )
         }
 
@@ -438,9 +438,16 @@ fun NavGraphBuilder.challengeGraph(navController: NavHostController) {
             )
         }
 
-        composable(Routes.ChallengeSupportScreen.route) {
+        composable(
+            route = Routes.ChallengeSupportScreen.route,
+            arguments = listOf(
+                navArgument("challengeId") { type = NavType.LongType }
+            )
+        ) { backstackEntry ->
+            val id = backstackEntry.arguments?.getLong("challengeId")
             ChallengeSupportScreen(
-                popScreen = { navController.popBackStack() }
+                popScreen = { navController.popBackStack() },
+                challengeId = id
             )
         }
     }
