@@ -12,7 +12,7 @@ object UserInfo {
         private set
 
     fun updateInfo(info: ProfileDetailResponseVo) {
-        this.info = UserVo(name = info.nickName, ssn = info.ssn, genderType = info.genderType, spouse = info.spouse, round = info.round)
+        this.info = UserVo(id = info.id,name = info.nickName, ssn = info.ssn, genderType = info.genderType, spouse = info.spouse, round = info.round)
     }
 
     fun updateChallengeNickname(nickname: String) {
