@@ -27,6 +27,8 @@ class AlarmService : Service() {
     companion object{
         const val STOP_ALARM = "STOP_ALARM"
         const val CHANNEL_ID = "alarm_service_channel"
+        const val REPEAT_TIME = 10
+        const val DELAY_TIME = 1000L //ms
         var ringtone: Ringtone? = null
         var vibrator: Vibrator? = null
 
@@ -86,7 +88,8 @@ class AlarmService : Service() {
 
     private fun startAlarm(){
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        val pattern = longArrayOf(0, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000) // 5번 반복
+        val singlePattern = longArrayOf(DELAY_TIME, DELAY_TIME)
+        val pattern = longArrayOf(0) + singlePattern.repeat(REPEAT_TIME)
         vibrator?.vibrate(pattern, -1)
 
         val alarmUri: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
@@ -114,5 +117,9 @@ class AlarmService : Service() {
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
+    }
+
+    private fun LongArray.repeat(times: Int): LongArray {
+        return LongArray(this.size * times) { this[it % this.size] }
     }
 }

@@ -503,10 +503,7 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController) {
                 navigateGoToCalendarDetail = { id -> navController.navigate(Routes.CalendarScheduleCreateOrEdit.getRouteCalendarScheduleCreateOrEdit(CreateOrEditType.EDIT.type, RecordType.ETC.type, id, TimeFormatter.getToday()))},
                 navigateGoToChallenge = {},
                 navigateGoToDailyHugg = { navController.navigate(Routes.DailyHuggGraph.route)},
-                navigateGoToNotification = {
-                                           navController.navigate(Routes.InjMedInfoScreen.createRoute("INJECTION", 121, "22:13"))
-                    //navController.navigate(Routes.NotificationScreen.route)
-                                           },
+                navigateGoToNotification = { navController.navigate(Routes.NotificationScreen.route) },
                 navigateGoToDailyHuggDetail = { date -> navController.navigate(Routes.DailyHuggScreen.createRoute(date)) }
             )
         }
