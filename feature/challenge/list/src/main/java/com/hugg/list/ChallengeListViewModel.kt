@@ -75,17 +75,19 @@ class ChallengeListViewModel @Inject constructor(
     fun participateChallenge(id: Long) {
         viewModelScope.launch {
             challengeRepository.participateChallenge(id).collect {
-                resultResponse(it, {
-                    updateState(
-                        uiState.value.copy(
-                            selectedChallenge = uiState.value.selectedChallenge?.copy(
-                                participating = true,
-                                participants = (uiState.value.selectedChallenge?.participants ?: 0) + 1
-                            )
-                        )
-                    )
-                })
+                resultResponse(it, { onSuccessParticipateChallenge() })
             }
         }
+    }
+
+    private fun onSuccessParticipateChallenge() {
+        updateState(
+            uiState.value.copy(
+                selectedChallenge = uiState.value.selectedChallenge?.copy(
+                    participating = true,
+                    participants = (uiState.value.selectedChallenge?.participants ?: 0) + 1
+                )
+            )
+        )
     }
 }
