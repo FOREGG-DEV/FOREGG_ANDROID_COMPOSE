@@ -7,8 +7,8 @@ data class ChallengeSupportResponseItem(
     val id: Long = -1,
     @SerializedName("nickname")
     val nickname: String = "",
-    @SerializedName("thought")
-    val thought: String = "",
+    @SerializedName("thoughts")
+    val thoughts: String = "",
     @SerializedName("supported")
     val supported: Boolean = false
 )

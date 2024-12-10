@@ -1,6 +1,5 @@
 package com.hugg.support
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -30,7 +29,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -224,7 +222,7 @@ fun ChallengeItem(
             )
             Spacer(modifier = Modifier.height(4.dp))
             HuggText(
-                text = item.thought,
+                text = item.thoughts,
                 style = HuggTypography.p4,
                 color = Gs80
             )

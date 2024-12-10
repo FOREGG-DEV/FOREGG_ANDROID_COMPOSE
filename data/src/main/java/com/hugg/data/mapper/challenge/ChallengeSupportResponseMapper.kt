@@ -10,7 +10,7 @@ object ChallengeSupportResponseMapper: Mapper.ResponseMapper<List<ChallengeSuppo
             ChallengeSupportItemVo(
                 userId = it.id,
                 nickname = it.nickname,
-                thought = it.thought,
+                thoughts = it.thoughts,
                 supported = it.supported
             )
         } ?: emptyList()
