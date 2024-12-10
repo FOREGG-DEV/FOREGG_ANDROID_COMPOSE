@@ -1,7 +1,6 @@
 package com.hugg.data.api
 
 import com.hugg.data.base.ApiResponse
-import com.hugg.data.dto.challenge.AllChallengeResponse
 import com.hugg.data.dto.challenge.ChallengeListResponse
 import com.hugg.data.dto.challenge.ChallengeSupportResponseItem
 import com.hugg.data.dto.challenge.MyChallengeResponse
@@ -46,7 +45,7 @@ interface ChallengeApi {
     suspend fun getMyChallenge(): Response<ApiResponse<MyChallengeResponse>>
 
     @GET(Endpoints.Challenge.ALL)
-    suspend fun getAllChallenge(): Response<ApiResponse<AllChallengeResponse>>
+    suspend fun getAllChallenge(): Response<ApiResponse<ChallengeListResponse>>
 
     @POST(Endpoints.Challenge.CREATE)
     suspend fun createChallenge(
