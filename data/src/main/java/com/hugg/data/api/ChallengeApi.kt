@@ -5,7 +5,6 @@ import com.hugg.data.dto.challenge.AllChallengeResponse
 import com.hugg.data.dto.challenge.ChallengeListResponse
 import com.hugg.data.dto.challenge.ChallengeSupportResponseItem
 import com.hugg.data.dto.challenge.MyChallengeResponse
-import com.hugg.data.dto.challenge.MyChallengeResponseListItem
 import com.hugg.domain.model.enums.CheerType
 import com.hugg.domain.model.request.challenge.ChallengeNicknameVo
 import com.hugg.domain.model.request.challenge.ChallengeThoughtsVo
@@ -54,7 +53,7 @@ interface ChallengeApi {
         @Body request: CreateChallengeRequestVo
     ): Response<ApiResponse<Unit>>
 
-    @GET(Endpoints.Challenge.SUPPORT)
+    @GET(Endpoints.Challenge.GET_SUPPORT)
     suspend fun getChallengeSupportList(
         @Path("challengeId") challengeId: Long,
         @Path("isSuccess") isSuccess: Boolean
@@ -80,5 +79,12 @@ interface ChallengeApi {
         @Path("id") id: Long,
         @Query("day") day: String,
         @Body request: ChallengeThoughtsVo
+    ): Response<ApiResponse<Unit>>
+
+    @POST(Endpoints.Challenge.SUPPORT)
+    suspend fun supportChallenge(
+        @Path("challengeId") challengeId: Long,
+        @Query("cheerType") cheerType: CheerType,
+        @Query("receiverId") receiverId: Long
     ): Response<ApiResponse<Unit>>
 }

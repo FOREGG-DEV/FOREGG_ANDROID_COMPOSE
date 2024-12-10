@@ -3,7 +3,7 @@ package com.hugg.data.dto.challenge
 import com.google.gson.annotations.SerializedName
 
 data class ChallengeSupportResponseItem(
-    @SerializedName("id")
+    @SerializedName("userId")
     val id: Long = -1,
     @SerializedName("nickname")
     val nickname: String = "",

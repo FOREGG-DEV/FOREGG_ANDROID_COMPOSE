@@ -32,5 +32,6 @@ object StatusCode {
         const val EXIST_NICKNAME = "CHALLENGE4007"
         const val ALREADY_PARTICIPATED = "CHALLENGE4004"
         const val INSUFFICIENT_POINTS = "POINT4001"
+        const val SUPPORT_LIMIT = "CHALLENGE4013"
     }
 }

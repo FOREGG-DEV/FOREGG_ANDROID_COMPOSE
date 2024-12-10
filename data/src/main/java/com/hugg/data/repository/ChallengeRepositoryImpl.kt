@@ -12,6 +12,7 @@ import com.hugg.data.mapper.challenge.ChallengeResponseMapper
 import com.hugg.data.mapper.challenge.ChallengeSupportResponseMapper
 import com.hugg.data.mapper.challenge.MyChallengeResponseMapper
 import com.hugg.domain.base.ApiState
+import com.hugg.domain.model.enums.CheerType
 import com.hugg.domain.model.request.challenge.ChallengeNicknameVo
 import com.hugg.domain.model.request.challenge.ChallengeThoughtsVo
 import com.hugg.domain.model.request.challenge.CreateChallengeRequestVo
@@ -97,5 +98,13 @@ class ChallengeRepositoryImpl @Inject constructor(
 
     override suspend fun completeChallenge(id: Long, day: String, thoughts: ChallengeThoughtsVo): Flow<ApiState<Unit>> {
         return apiLaunch(apiCall = { challengeApi.completeChallenge(id, day, request = thoughts) }, UnitResponseMapper)
+    }
+
+    override suspend fun supportChallenge(
+        challengeId: Long,
+        userId: Long,
+        cheerType: CheerType
+    ): Flow<ApiState<Unit>> {
+        return apiLaunch(apiCall = { challengeApi.supportChallenge(challengeId = challengeId, receiverId = userId, cheerType = cheerType) }, UnitResponseMapper)
     }
 }
