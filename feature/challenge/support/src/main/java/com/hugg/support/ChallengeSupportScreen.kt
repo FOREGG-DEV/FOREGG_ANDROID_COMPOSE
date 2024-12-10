@@ -1,10 +1,14 @@
 package com.hugg.support
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -14,6 +18,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,24 +46,37 @@ import com.hugg.feature.theme.GsWhite
 import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.WORD_SHOW_MORE
 import com.hugg.feature.util.UserInfo
+import com.hugg.feature.util.onThrottleClick
 
 @Composable
 fun ChallengeSupportScreen(
-    popScreen: () -> Unit
+    popScreen: () -> Unit,
+    challengeId: Long?
 ) {
     val viewModel: ChallengeSupportViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    LaunchedEffect(Unit) {
+        challengeId?.let {
+            viewModel.getChallengeSupportList(challengeId, isSuccess = true)
+            viewModel.getChallengeSupportList(challengeId, isSuccess = false)
+        }
+    }
+
     ChallengeSupportContent(
         uiState = uiState,
-        popScreen = popScreen
+        popScreen = popScreen,
+        onLoadMoreCompleted = {  },
+        onLoadMoreIncomplete = {  }
     )
 }
 
 @Composable
 fun ChallengeSupportContent(
     uiState: ChallengeSupportPageState = ChallengeSupportPageState(),
-    popScreen: () -> Unit = {}
+    popScreen: () -> Unit = {},
+    onLoadMoreCompleted: () -> Unit = {},
+    onLoadMoreIncomplete: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -73,49 +91,64 @@ fun ChallengeSupportContent(
             rightItemType = TopBarRightType.POINT,
             rightItemContent = String.format(CHALLENGE_POINT, UserInfo.challengePoint)
         )
+        
+        Spacer(modifier = Modifier.height(24.dp))
 
-        ChallengeList(items = uiState.completedList, cheerType = CheerType.CLAP)
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize(),
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            if (uiState.completedList.isNotEmpty()) {
+                items(uiState.completedList) { item ->
+                    ChallengeItem(item = item, cheerType = CheerType.CLAP)
+                }
+                item {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    LoadMoreButton(onClick = onLoadMoreCompleted)
+                }
+            }
 
-        Spacer(modifier = Modifier.height(16.dp))
+            item {
+                Spacer(modifier = Modifier.height(8 .dp))
+            }
 
-        ChallengeList(items = uiState.incompleteList, cheerType = CheerType.SUPPORT)
+            if (uiState.incompleteList.isNotEmpty()) {
+                items(uiState.incompleteList) { item ->
+                    ChallengeItem(item = item, cheerType = CheerType.SUPPORT)
+                }
+                item {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    LoadMoreButton(onClick = onLoadMoreIncomplete)
+                }
+            }
+        }
     }
 }
 
 @Composable
-fun ChallengeList(
-    items: List<ChallengeSupportItemVo>,
-    cheerType: CheerType
+fun LoadMoreButton(
+    onClick: () -> Unit
 ) {
-    Column(
+    Row(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .onThrottleClick(onClick = onClick),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        items.forEachIndexed { index, item ->
-            ChallengeItem(item = item, cheerType = cheerType)
-            if(index != items.size - 1) Spacer(modifier = Modifier.height(8.dp))
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-        
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            HuggText(
-                text = WORD_SHOW_MORE,
-                style = HuggTypography.p2,
-                color = Gs80
-            )
-            Spacer(modifier = Modifier.width(4.dp))
-            Icon(
-                painter = painterResource(id = R.drawable.ic_bottom_arrow_gs_80),
-                contentDescription = null,
-                tint = Color.Unspecified,
-                modifier = Modifier.size(14.dp)
-            )
-        }
+        HuggText(
+            text = WORD_SHOW_MORE,
+            style = HuggTypography.p2,
+            color = Gs80
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        Icon(
+            painter = painterResource(id = R.drawable.ic_bottom_arrow_gs_80),
+            contentDescription = null,
+            tint = Color.Unspecified,
+            modifier = Modifier.size(14.dp)
+        )
     }
 }
 
@@ -126,16 +159,15 @@ fun ChallengeItem(
 ) {
     Row(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .clip(RoundedCornerShape(6.dp))
             .background(GsWhite),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Spacer(modifier = Modifier.width(12.dp))
-        Icon(
-            painter = painterResource(id = if(item.success) R.drawable.ic_check_circle_main else R.drawable.ic_check_circle_gs_30),
+        Image(
+            painter = painterResource(id = if(cheerType == CheerType.CLAP) R.drawable.ic_check_circle_main_normal else R.drawable.ic_check_circle_gs_30),
             contentDescription = null,
-            tint = Color.Unspecified,
             modifier = Modifier.size(32.dp)
         )
         Spacer(modifier = Modifier.width(8.dp))
@@ -145,7 +177,7 @@ fun ChallengeItem(
             horizontalAlignment = Alignment.Start
         ) {
             HuggText(
-                text = item.challengeNickname,
+                text = item.nickname,
                 style = HuggTypography.h3,
                 color = Gs90
             )
@@ -159,14 +191,14 @@ fun ChallengeItem(
         Spacer(modifier = Modifier.weight(1f))
         if (cheerType == CheerType.CLAP) {
             Icon(
-                painter = painterResource(id = if (item.clap) R.drawable.ic_clap_enable else R.drawable.ic_clap_disable),
+                painter = painterResource(id = if (!item.supported) R.drawable.ic_clap_enable else R.drawable.ic_clap_disable),
                 contentDescription = null,
                 tint = Color.Unspecified,
                 modifier = Modifier.size(36.dp)
             )
         } else if (cheerType == CheerType.SUPPORT) {
             Icon(
-                painter = painterResource(id = if (item.support) R.drawable.ic_support_enable else R.drawable.ic_support_disable),
+                painter = painterResource(id = if (!item.supported) R.drawable.ic_support_enable else R.drawable.ic_support_disable),
                 contentDescription = null,
                 tint = Color.Unspecified,
                 modifier = Modifier.size(36.dp)
@@ -174,20 +206,4 @@ fun ChallengeItem(
         }
         Spacer(modifier = Modifier.width(16.dp))
     }
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun PreviewChallengeItem() {
-    ChallengeItem(
-        item = ChallengeSupportItemVo(
-            id = 1,
-            challengeNickname = "askl;jrgnopqairhgo",
-            thought = "ad;lkjgnoqpwaiue",
-            success = true,
-            clap = true,
-            support = true
-        ),
-        cheerType = CheerType.CLAP
-    )
 }
