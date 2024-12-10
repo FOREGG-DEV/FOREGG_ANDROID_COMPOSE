@@ -1,7 +1,10 @@
 package com.hugg.support
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -20,10 +23,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -38,13 +43,17 @@ import com.hugg.feature.R
 import com.hugg.feature.component.HuggText
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.Background
+import com.hugg.feature.theme.CHALLENGE_CLAP_SUCCESS
 import com.hugg.feature.theme.CHALLENGE_POINT
+import com.hugg.feature.theme.CHALLENGE_SUPPORT_SUCCESS
 import com.hugg.feature.theme.CHALLENGE_SUPPORT_TOP_BAR
 import com.hugg.feature.theme.Gs80
 import com.hugg.feature.theme.Gs90
 import com.hugg.feature.theme.GsWhite
 import com.hugg.feature.theme.HuggTypography
+import com.hugg.feature.theme.SUPPORT_LIMIT_MESSAGE
 import com.hugg.feature.theme.WORD_SHOW_MORE
+import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.UserInfo
 import com.hugg.feature.util.onThrottleClick
 
@@ -55,6 +64,12 @@ fun ChallengeSupportScreen(
 ) {
     val viewModel: ChallengeSupportViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val interactionSource = remember { MutableInteractionSource() }
+
+    LaunchedEffect(Unit) {
+        challengeId?.let { viewModel.setChallengeId(it) }
+    }
 
     LaunchedEffect(Unit) {
         challengeId?.let {
@@ -63,11 +78,33 @@ fun ChallengeSupportScreen(
         }
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.eventFlow.collect { event ->
+            when(event) {
+                is ChallengeSupportEvent.ClapSuccess -> {
+                    HuggToast.createToast(context, CHALLENGE_CLAP_SUCCESS).show()
+                }
+                is ChallengeSupportEvent.SupportSuccess -> {
+                    HuggToast.createToast(context, CHALLENGE_SUPPORT_SUCCESS).show()
+                }
+                is ChallengeSupportEvent.ExceedSupportLimit -> {
+                    HuggToast.createToast(context, SUPPORT_LIMIT_MESSAGE).show()
+                }
+            }
+        }
+    }
+
     ChallengeSupportContent(
         uiState = uiState,
         popScreen = popScreen,
         onLoadMoreCompleted = {  },
-        onLoadMoreIncomplete = {  }
+        onLoadMoreIncomplete = {  },
+        supportChallenge = { userId: Long, cheerType: CheerType ->
+            challengeId?.let {
+                viewModel.supportChallenge(challengeId = challengeId, userId = userId, cheerType = cheerType)
+            }
+        },
+        interactionSource = interactionSource
     )
 }
 
@@ -76,7 +113,9 @@ fun ChallengeSupportContent(
     uiState: ChallengeSupportPageState = ChallengeSupportPageState(),
     popScreen: () -> Unit = {},
     onLoadMoreCompleted: () -> Unit = {},
-    onLoadMoreIncomplete: () -> Unit = {}
+    onLoadMoreIncomplete: () -> Unit = {},
+    supportChallenge: (Long, CheerType) -> Unit = {_,_ ->},
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
     Column(
         modifier = Modifier
@@ -103,7 +142,7 @@ fun ChallengeSupportContent(
         ) {
             if (uiState.completedList.isNotEmpty()) {
                 items(uiState.completedList) { item ->
-                    ChallengeItem(item = item, cheerType = CheerType.CLAP)
+                    ChallengeItem(item = item, cheerType = CheerType.CLAP, supportChallenge = supportChallenge, interactionSource)
                 }
                 item {
                     Spacer(modifier = Modifier.height(8.dp))
@@ -117,7 +156,7 @@ fun ChallengeSupportContent(
 
             if (uiState.incompleteList.isNotEmpty()) {
                 items(uiState.incompleteList) { item ->
-                    ChallengeItem(item = item, cheerType = CheerType.SUPPORT)
+                    ChallengeItem(item = item, cheerType = CheerType.SUPPORT, supportChallenge = supportChallenge, interactionSource)
                 }
                 item {
                     Spacer(modifier = Modifier.height(8.dp))
@@ -155,7 +194,9 @@ fun LoadMoreButton(
 @Composable
 fun ChallengeItem(
     item: ChallengeSupportItemVo,
-    cheerType: CheerType
+    cheerType: CheerType,
+    supportChallenge: (Long, CheerType) -> Unit,
+    interactionSource: MutableInteractionSource
 ) {
     Row(
         modifier = Modifier
@@ -194,14 +235,26 @@ fun ChallengeItem(
                 painter = painterResource(id = if (!item.supported) R.drawable.ic_clap_enable else R.drawable.ic_clap_disable),
                 contentDescription = null,
                 tint = Color.Unspecified,
-                modifier = Modifier.size(36.dp)
+                modifier = Modifier
+                    .size(36.dp)
+                    .clickable(
+                        interactionSource = interactionSource,
+                        indication = null,
+                        onClick = { if (!item.supported) supportChallenge(item.userId, cheerType) }
+                    )
             )
         } else if (cheerType == CheerType.SUPPORT) {
             Icon(
                 painter = painterResource(id = if (!item.supported) R.drawable.ic_support_enable else R.drawable.ic_support_disable),
                 contentDescription = null,
                 tint = Color.Unspecified,
-                modifier = Modifier.size(36.dp)
+                modifier = Modifier
+                    .size(36.dp)
+                    .clickable(
+                        interactionSource = interactionSource,
+                        indication = null,
+                        onClick = { if (!item.supported) supportChallenge(item.userId, cheerType) }
+                    )
             )
         }
         Spacer(modifier = Modifier.width(16.dp))

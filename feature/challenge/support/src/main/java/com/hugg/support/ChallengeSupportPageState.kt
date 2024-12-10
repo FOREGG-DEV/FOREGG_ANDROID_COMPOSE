@@ -5,5 +5,6 @@ import com.hugg.feature.base.PageState
 
 data class ChallengeSupportPageState(
     val completedList: List<ChallengeSupportItemVo> = emptyList(),
-    val incompleteList: List<ChallengeSupportItemVo> = emptyList()
+    val incompleteList: List<ChallengeSupportItemVo> = emptyList(),
+    val challengeId: Long = -1
 ): PageState
