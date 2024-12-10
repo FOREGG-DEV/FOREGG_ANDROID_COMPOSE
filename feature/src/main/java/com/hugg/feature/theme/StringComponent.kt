@@ -347,6 +347,8 @@ const val CREATE_CHALLENGE_COMPLETED = "첼린지가 생성되었습니다"
 // ChallengeSupport
 const val CHALLENGE_SUPPORT_TOP_BAR = "챌린지 현황"
 const val CHALLENGE_SUPPORT_GUIDE = "다른 챌린저에게\n응원의 박수 보내기"
+const val CHALLENGE_CLAP_SUCCESS = "박수를 보냈어요"
+const val CHALLENGE_SUPPORT_SUCCESS = "응원을 보냈어요"
 
 // DailyHuggList
 const val DAILY_HUGG_LIST_TITLE = "데일리 허그 모아보기"
@@ -366,3 +368,4 @@ const val EXIST_CHALLENGE_NICKNAME = "챌린지 닉네임이 이미 존재합니
 const val DUPLICATE_CHALLENGE_NICKNAME = "챌린지 닉네임이 중복됩니다"
 const val CHALLENGE_ALREADY_PARTICIPATED = "이미 참여하고 있는 챌린지입니다"
 const val INSUFFICIENT_POINT = "포인트가 부족합니다"
+const val SUPPORT_LIMIT_MESSAGE = "응원과 박수는 각각 하루 세번만 가능해요"
