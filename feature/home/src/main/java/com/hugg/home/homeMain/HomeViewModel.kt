@@ -3,6 +3,8 @@ package com.hugg.home.homeMain
 import androidx.lifecycle.viewModelScope
 import com.hugg.domain.model.enums.GenderType
 import com.hugg.domain.model.enums.HomeChallengeViewType
+import com.hugg.domain.model.enums.MyChallengeState
+import com.hugg.domain.model.request.challenge.ChallengeThoughtsVo
 import com.hugg.domain.model.response.challenge.MyChallengeListItemVo
 import com.hugg.domain.model.response.challenge.MyChallengeVo
 import com.hugg.domain.model.response.dailyHugg.DailyHuggListResponseVo
@@ -149,12 +151,12 @@ class HomeViewModel @Inject constructor(
     }
 
     fun completeChallenge(content : String){
-        updateShowChallengeCompleteDialog(true)
-        //        viewModelScope.launch {
-//            challengeRepository.completeChallenge(id).collect {
-//                resultResponse(it, { updateShowInputImpressionDialog(true) })
-//            }
-//        }
+        updateShowInputImpressionDialog(false)
+        viewModelScope.launch {
+            challengeRepository.completeChallenge(id = uiState.value.selectedChallengeId, day = MyChallengeState.TODAY.name, thoughts = ChallengeThoughtsVo(content)).collect {
+                resultResponse(it, { updateShowChallengeCompleteDialog(true) })
+            }
+        }
     }
 
     fun updateShowInputImpressionDialog(isShow : Boolean){
