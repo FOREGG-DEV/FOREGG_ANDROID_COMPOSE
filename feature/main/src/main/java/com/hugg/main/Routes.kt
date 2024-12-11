@@ -74,6 +74,7 @@ sealed class Routes(val route : String){
     // Challenge_Graph
     data object ChallengeGraph: Routes("challenge_graph")
     data object ChallengeScreen: Routes("challenge")
+    data object MyChallengeScreen: Routes("myChallenge")
     data object ChallengeListScreen: Routes("challenge_list")
     data object CreateChallengeScreen: Routes("create_challenge")
     data object ChallengeSupportScreen: Routes("challenge_support/{challengeId}") {

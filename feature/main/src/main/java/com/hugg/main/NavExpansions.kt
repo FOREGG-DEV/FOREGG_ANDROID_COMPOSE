@@ -22,6 +22,7 @@ import com.hugg.create.CreateChallengeScreen
 import com.hugg.dailyhugg.all.DailyHuggListScreen
 import com.hugg.dailyhugg.create.CreateEditDailyHuggPageState
 import com.hugg.dailyhugg.edit.EditDailyHuggScreen
+import com.hugg.domain.model.enums.ChallengeTabType
 import com.hugg.domain.model.enums.CreateOrEditType
 import com.hugg.domain.model.enums.RecordType
 import com.hugg.domain.model.enums.SurgeryType
@@ -420,6 +421,16 @@ fun NavGraphBuilder.challengeGraph(navController: NavHostController) {
         composable(Routes.ChallengeScreen.route) {
             ChallengeMainScreen(
                 popScreen = { navController.popBackStack() },
+                challengeTabType = ChallengeTabType.COMMON,
+                goToChallengeList = { navController.navigate(Routes.ChallengeListScreen.route) },
+                goToChallengeSupport = { navController.navigate(Routes.ChallengeSupportScreen.createRoute(it)) }
+            )
+        }
+
+        composable(Routes.MyChallengeScreen.route) {
+            ChallengeMainScreen(
+                popScreen = { navController.popBackStack() },
+                challengeTabType = ChallengeTabType.MY,
                 goToChallengeList = { navController.navigate(Routes.ChallengeListScreen.route) },
                 goToChallengeSupport = { navController.navigate(Routes.ChallengeSupportScreen.createRoute(it)) }
             )

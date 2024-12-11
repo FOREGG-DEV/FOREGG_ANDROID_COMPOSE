@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -61,6 +62,7 @@ import kotlinx.coroutines.flow.SharedFlow
 @Composable
 fun ChallengeMainScreen(
     popScreen: () -> Unit,
+    challengeTabType: ChallengeTabType,
     goToChallengeList: () -> Unit,
     goToChallengeSupport: (Long) -> Unit
 ) {
@@ -77,6 +79,10 @@ fun ChallengeMainScreen(
         iterations = 1,
         restartOnPlay = true
     )
+
+    LaunchedEffect(Unit) {
+        viewModel.updateTabType(challengeTabType)
+    }
 
     LaunchedEffect(Unit) {
         viewModel.eventFlow.collect { event ->
