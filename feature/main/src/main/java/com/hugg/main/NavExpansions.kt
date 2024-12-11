@@ -35,11 +35,13 @@ import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UserInfo
 import com.hugg.home.homeMain.HomeContainer
 import com.hugg.list.ChallengeListScreen
+import com.hugg.home.notification.NotificationContainer
 import com.hugg.mypage.cs.MyPageCsContainer
 import com.hugg.mypage.main.MyPageContainer
 import com.hugg.mypage.myMedicineInjection.MyPageMedInjContainer
 import com.hugg.mypage.profileManagement.MyPageProfileManagementContainer
 import com.hugg.mypage.spouse.MyPageSpouseContainer
+import com.hugg.notification.InjMedDetailContainer
 import com.hugg.sign.accessPermission.AccessPermissionContainer
 import com.hugg.sign.femaleSignUp.chooseSurgery.ChooseSurgeryContainer
 import com.hugg.sign.femaleSignUp.spouseCodeFemale.SpouseCodeFemaleContainer
@@ -52,7 +54,7 @@ import com.hugg.sign.serviceTerms.ServiceTermsContainer
 import com.hugg.sign.splash.HuggSplashContainer
 import com.hugg.support.ChallengeSupportScreen
 
-fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
+fun NavGraphBuilder.signNavGraph(navController: NavHostController, initialNavigation : String) {
     navigation(startDestination = Routes.SplashScreen.route, route = Routes.SignGraph.route) {
 
         composable(Routes.SplashScreen.route) { HuggSplashContainer(
@@ -62,16 +64,17 @@ fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
             } },
             navigateToHome = { navController.navigate(route = Routes.HomeGraph.route) {
                 popUpTo(navController.graph.id) { inclusive = true }
-                launchSingleTop = true
-            } }
+                launchSingleTop = true }
+                if(initialNavigation.isNotEmpty()) navController.navigate(initialNavigation)
+            }
         ) }
 
         composable(Routes.OnboardingScreen.route) { OnboardingContainer(
             navigateServiceTerms = { accessToken : String -> navController.navigate(route = Routes.ServiceTermsScreen.getRouteServiceTerms(accessToken)) },
             navigateHome = { navController.navigate(route = Routes.HomeGraph.route) {
                     popUpTo(navController.graph.id) { inclusive = true }
-                    launchSingleTop = true
-                }
+                    launchSingleTop = true }
+                if(initialNavigation.isNotEmpty()) navController.navigate(initialNavigation)
             }
         ) }
 
@@ -188,6 +191,7 @@ fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
                         popUpTo(navController.graph.id) { inclusive = true }
                         launchSingleTop = true
                     }
+                    if(initialNavigation.isNotEmpty()) navController.navigate(initialNavigation)
                 },
                 accessToken = accessToken,
                 signUpRequestVo = SignUpRequestVo(
@@ -214,8 +218,8 @@ fun NavGraphBuilder.signNavGraph(navController: NavHostController) {
             MaleSignUpContainer(
                 navigateGoToHome = { navController.navigate(route = Routes.HomeGraph.route) {
                     popUpTo(navController.graph.id) { inclusive = true }
-                    launchSingleTop = true
-                    }
+                    launchSingleTop = true }
+                    if(initialNavigation.isNotEmpty()) navController.navigate(initialNavigation)
                 },
                 accessToken = accessToken,
                 signUpMaleRequestVo = SignUpMaleRequestVo(spouseCode = "", ssn = ssn, fcmToken = ""),
@@ -547,12 +551,42 @@ fun NavGraphBuilder.myPageGraph(navController: NavHostController) {
 fun NavGraphBuilder.homeGraph(navController: NavHostController) {
     navigation(startDestination = Routes.HomeScreen.route, route = Routes.HomeGraph.route) {
 
-        composable(Routes.HomeScreen.route) { HomeContainer(
-            navigateGoToCalendarDetail = { id -> navController.navigate(Routes.CalendarScheduleCreateOrEdit.getRouteCalendarScheduleCreateOrEdit(CreateOrEditType.EDIT.type, RecordType.ETC.type, id, TimeFormatter.getToday()))},
-            navigateGoToChallenge = { navController.navigate(Routes.ChallengeGraph.route) },
-            navigateGoToDailyHugg = { navController.navigate(Routes.DailyHuggGraph.route)},
-            navigateGoToNotification = {},
-            navigateGoToDailyHuggDetail = { date -> navController.navigate(Routes.DailyHuggScreen.createRoute(date)) }
-        ) }
+        composable(Routes.HomeScreen.route) {
+            HomeContainer(
+                navigateGoToCalendarDetail = { id -> navController.navigate(Routes.CalendarScheduleCreateOrEdit.getRouteCalendarScheduleCreateOrEdit(CreateOrEditType.EDIT.type, RecordType.ETC.type, id, TimeFormatter.getToday()))},
+                navigateGoToChallenge = { navController.navigate(Routes.ChallengeGraph.route) },
+                navigateGoToDailyHugg = { navController.navigate(Routes.DailyHuggGraph.route)},
+                navigateGoToNotification = { navController.navigate(Routes.NotificationScreen.route) },
+                navigateGoToDailyHuggDetail = { date -> navController.navigate(Routes.DailyHuggScreen.createRoute(date)) }
+            )
+        }
+
+        composable(Routes.NotificationScreen.route) {
+            NotificationContainer(
+                navigateGoToChallengeCheer = { id -> },
+                navigateGoToDailyHuggDetail = { date -> navController.navigate(Routes.DailyHuggScreen.createRoute(date)) },
+                goToBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = Routes.InjMedInfoScreen.route,
+            arguments = listOf(
+                navArgument("type") { type = NavType.StringType},
+                navArgument("id") { type = NavType.LongType },
+                navArgument("time") { type = NavType.StringType}
+            )
+        ) {
+            val id = it.arguments?.getLong("id") ?: -1
+            val type = RecordType.getEnumTypeByString(it.arguments?.getString("type") ?: "")
+            val time = it.arguments?.getString("time") ?: ""
+
+            InjMedDetailContainer(
+                goToBack = { navController.popBackStack() },
+                type = type,
+                id = id,
+                time = time
+            )
+        }
     }
 }

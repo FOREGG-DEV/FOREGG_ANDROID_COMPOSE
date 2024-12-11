@@ -148,7 +148,7 @@ fun HomeScreen(
 
         TopBar(
             leftItemType = TopBarLeftType.LOGO,
-            rightItemType = TopBarRightType.NOTIFICATION,
+            rightItemType = if(UserInfo.info.genderType == GenderType.FEMALE) TopBarRightType.NOTIFICATION else TopBarRightType.NONE,
             rightBtnClicked = navigateGoToNotification
         )
 

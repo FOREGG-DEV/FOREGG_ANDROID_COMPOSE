@@ -22,41 +22,11 @@ import javax.inject.Inject
 class DailyRecordRepositoryImpl @Inject constructor(
     private val dailyRecordApi: DailyRecordApi
 ): DailyRecordRepository, BaseRepository() {
-    override suspend fun getDailyRecord(): Flow<ApiState<DailyRecordResponseVo>> {
-        return apiLaunch(apiCall =  { dailyRecordApi.getDailyRecord() }, DailyRecordResponseMapper)
-    }
-
-    override suspend fun createDailyRecord(request: CreateDailyRecordRequestVo): Flow<ApiState<Unit>> {
-        return apiLaunch(apiCall = { dailyRecordApi.createDailyRecord(request) }, UnitResponseMapper)
-    }
-
-    override suspend fun createSideEffect(request: CreateSideEffectRequestVo): Flow<ApiState<Unit>> {
-        return apiLaunch(apiCall = { dailyRecordApi.createSideEffect(request) }, UnitResponseMapper)
-    }
-
-    override suspend fun getSideEffect(): Flow<ApiState<List<SideEffectListItemVo>>> {
-        return apiLaunch(apiCall = { dailyRecordApi.getSideEffect() }, SideEffectResponseMapper)
-    }
-
-    override suspend fun putEmotion(request: PutEmotionVo): Flow<ApiState<Unit>> {
-        return apiLaunch(
-            apiCall = { dailyRecordApi.putEmotion(request.id, request.request) },
-            UnitResponseMapper
-        )
-    }
     override suspend fun postShareInjection(request : InjectionAlarmRequestVo): Flow<ApiState<Unit>> {
         return apiLaunch(apiCall = { dailyRecordApi.shareInjection(request.id, request.time) }, UnitResponseMapper)
     }
 
     override suspend fun getInjectionInfo(request: InjectionAlarmRequestVo): Flow<ApiState<InjectionInfoResponseVo>> {
         return apiLaunch(apiCall = { dailyRecordApi.getInjectionInfo(request.id, request.time) }, InjectionInfoResponseMapper)
-    }
-
-    override suspend fun deleteDailyRecord(id: Long): Flow<ApiState<Unit>> {
-        return apiLaunch(apiCall = { dailyRecordApi.deleteDailyRecord(id) }, UnitResponseMapper)
-    }
-
-    override suspend fun editDailyRecord(request: EditDailyRecordRequestVo): Flow<ApiState<Unit>> {
-        return apiLaunch(apiCall = { dailyRecordApi.editDailyRecord(id = request.id, request = request.request) }, UnitResponseMapper)
     }
 }

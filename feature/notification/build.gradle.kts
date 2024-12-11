@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.hugg.main"
+    namespace = "com.hugg.notification"
     compileSdk = 34
 
     defaultConfig {
@@ -43,21 +43,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":domain"))
-
     implementation(project(":feature"))
-    implementation(project(":feature:sign"))
-    implementation(project(":feature:home"))
-    implementation(project(":feature:calendar"))
-    implementation(project(":feature:account"))
-    implementation(project(":feature:dailyHugg"))
-    implementation(project(":feature:myPage"))
-    implementation(project(":feature:challenge"))
-    implementation(project(":feature:challenge:list"))
-    implementation(project(":feature:challenge:create"))
-    implementation(project(":feature:challenge:support"))
-    implementation(project(":feature:notification"))
-
+    implementation(project(":domain"))
     implementation(AndroidX.CORE)
     implementation(AndroidX.APPCOMPAT)
     implementation(Google.MATERIAL)
@@ -65,11 +52,6 @@ dependencies {
     implementation(AndroidX.LIFECYCLE_VIEW_MODEL_KTX)
     implementation(AndroidX.LIFECYCLE_RUNTIME_KTX)
     implementation(AndroidX.LIFECYCLE_RUNTIME_COMPOSE)
-    implementation(AndroidX.SPLASH)
-    implementation(AndroidX.THREE_TEN)
-    implementation(AndroidX.SWIPE_REFRESH)
-    implementation(AndroidX.DATA_STORE_PREFERENCES)
-    implementation(AndroidX.FRAGMENT_KTX)
 
     //코루틴
     implementation(Kotlin.COROUTINES_CORE)
@@ -79,8 +61,6 @@ dependencies {
     implementation(Google.HILT_ANDROID)
     implementation(Google.HILT_CORE)
     implementation(Google.HILT_COMPOSE)
-    implementation(Google.FCM)
-    implementation(Google.FCM_KTX)
     implementation(Google.FIREBASE_ANALYTICS)
     implementation(platform(Google.FIREBASE_BOM))
 
@@ -91,22 +71,8 @@ dependencies {
     implementation(AndroidX.COMPOSE_PREVIEW)
     implementation(AndroidX.ACTIVITY_COMPOSE)
 
-
-
     kapt(Google.HILT_COMPILER)
 
-    implementation(KAKAO.AUTH)
+    implementation(Libraries.COIL_COMPOSE)
     implementation(KAKAO.SHARE)
-    implementation(Google.GLIDE)
-
-
-    //Lottie
-    implementation(Libraries.LOTTIE)
-    implementation(Libraries.COIL_SVG)
-    implementation(Libraries.COIL)
-
-    implementation(Google.FCM)
-    implementation(Google.FCM_KTX)
-    implementation(Google.FIREBASE_ANALYTICS)
-    implementation(platform(Google.FIREBASE_BOM))
 }
