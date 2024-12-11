@@ -1,22 +1,19 @@
 package com.hugg.data.mapper.challenge
 
+import android.util.Log
 import com.hugg.data.base.Mapper
+import com.hugg.data.dto.challenge.MyChallengeResponse
 import com.hugg.data.dto.challenge.MyChallengeResponseListItem
 import com.hugg.domain.model.response.challenge.MyChallengeListItemVo
+import com.hugg.domain.model.response.challenge.MyChallengeVo
 
-object MyChallengeResponseMapper: Mapper.ResponseMapper<List<MyChallengeResponseListItem>, List<MyChallengeListItemVo>> {
-    override fun mapDtoToModel(type: List<MyChallengeResponseListItem>?): List<MyChallengeListItemVo> {
-        return type?.map {  it ->
-            MyChallengeListItemVo(
-                description = it.description,
-                image = it.image ?: "",
-                id = it.id,
-                name = it.name,
-                participants = it.participants,
-                successDays = it.successDays,
-                weekOfMonth = it.weekOfMonth,
-                lastSaturday = it.lastSaturday
+object MyChallengeResponseMapper: Mapper.ResponseMapper<MyChallengeResponse, MyChallengeVo> {
+    override fun mapDtoToModel(type: MyChallengeResponse?): MyChallengeVo {
+        return type?.let {
+            MyChallengeVo(
+                firstDateOfWeek = it.firstDateOfWeek,
+                dtos = it.dtos
             )
-        } ?: emptyList()
+        } ?: MyChallengeVo()
     }
 }

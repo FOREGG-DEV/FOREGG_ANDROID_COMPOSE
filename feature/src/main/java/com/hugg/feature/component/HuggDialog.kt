@@ -166,7 +166,7 @@ fun HuggInputDialog(
     maxLength : Int = 1,
     positiveText: String = "",
     onClickPositive: (String) -> Unit = {},
-    onClickCancel : () -> Unit = {},
+    onClickCancel : () -> Unit = {}
 ){
     var inputContent by remember { mutableStateOf("") }
 
@@ -232,7 +232,6 @@ fun HuggInputDialog(
                 isActive = inputContent.isNotEmpty(),
                 text = positiveText,
                 onClickBtn = {
-                    onClickCancel()
                     onClickPositive(inputContent)
                 }
             )

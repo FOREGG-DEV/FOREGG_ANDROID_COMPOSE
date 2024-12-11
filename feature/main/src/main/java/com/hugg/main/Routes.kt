@@ -1,6 +1,7 @@
 package com.hugg.main
 
 import android.net.Uri
+import okhttp3.Route
 
 sealed class Routes(val route : String){
 
@@ -69,6 +70,16 @@ sealed class Routes(val route : String){
         fun createRoute(id: Long) = "edit_daily_hugg/$id"
     }
     data object DailyHuggListScreen: Routes("daily_hugg_list")
+
+    // Challenge_Graph
+    data object ChallengeGraph: Routes("challenge_graph")
+    data object ChallengeScreen: Routes("challenge")
+    data object MyChallengeScreen: Routes("myChallenge")
+    data object ChallengeListScreen: Routes("challenge_list")
+    data object CreateChallengeScreen: Routes("create_challenge")
+    data object ChallengeSupportScreen: Routes("challenge_support/{challengeId}") {
+        fun createRoute(id: Long) = "challenge_support/$id"
+    }
 
     //----------------MY_PAGE_GRAPH----------------//
     data object MyPageGraph : Routes("my_page_graph")

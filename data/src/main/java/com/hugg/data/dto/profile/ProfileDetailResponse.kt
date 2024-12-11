@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName
 import com.hugg.domain.model.enums.SurgeryType
 
 data class ProfileDetailResponse(
+    @SerializedName("id")
+    val id: Long = -1,
     @SerializedName("nickname")
     val nickname : String = "",
     @SerializedName("surgeryType")
