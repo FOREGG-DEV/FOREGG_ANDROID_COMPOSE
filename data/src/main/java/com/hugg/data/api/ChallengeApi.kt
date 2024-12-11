@@ -33,12 +33,12 @@ interface ChallengeApi {
 
     @PATCH(Endpoints.Challenge.UNLOCK)
     suspend fun unlockChallenge(
-        @Path("id") id: Long
+        @Path(PATH_ID) id: Long
     ): Response<ApiResponse<Unit>>
 
     @PATCH(Endpoints.Challenge.PARTICIPATION)
     suspend fun participateChallenge(
-        @Path("id") id: Long
+        @Path(PATH_ID) id: Long
     ): Response<ApiResponse<Unit>>
 
     @GET(Endpoints.Challenge.MY)
@@ -70,12 +70,12 @@ interface ChallengeApi {
 
     @DELETE(Endpoints.Challenge.DELETE)
     suspend fun deleteChallenge(
-        @Path("id") id: Long
+        @Path(PATH_ID) id: Long
     ): Response<ApiResponse<Unit>>
 
     @PATCH(Endpoints.Challenge.COMPLETE)
     suspend fun completeChallenge(
-        @Path("id") id: Long,
+        @Path(PATH_ID) id: Long,
         @Query("day") day: String,
         @Body request: ChallengeThoughtsVo
     ): Response<ApiResponse<Unit>>
