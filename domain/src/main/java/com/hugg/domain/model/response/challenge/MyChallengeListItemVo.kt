@@ -6,8 +6,8 @@ data class MyChallengeListItemVo (
     val image: String = "",
     val name: String = "",
     val participants: Int = 0,
-    val successDays: List<String>? = emptyList(),
+    val successDays: List<String> = emptyList(),
     val weekOfMonth: String = "",
     val lastSaturday : Boolean = false,
-    val isCompleteToday : Boolean = false,
+    val isCompleteToday : Boolean = false
 )

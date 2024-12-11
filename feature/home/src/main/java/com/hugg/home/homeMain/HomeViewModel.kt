@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.hugg.domain.model.enums.GenderType
 import com.hugg.domain.model.enums.HomeChallengeViewType
 import com.hugg.domain.model.response.challenge.MyChallengeListItemVo
+import com.hugg.domain.model.response.challenge.MyChallengeVo
 import com.hugg.domain.model.response.dailyHugg.DailyHuggListResponseVo
 import com.hugg.domain.model.response.home.HomeRecordResponseVo
 import com.hugg.domain.model.response.home.HomeResponseVo
@@ -37,6 +38,10 @@ class HomeViewModel @Inject constructor(
 ) : BaseViewModel<HomePageState>(
     HomePageState()
 ) {
+    init {
+        getChallengeNicknameFromLocal()
+    }
+
     fun getHome(){
         getTodayRecord()
         when(UserInfo.info.genderType){
@@ -56,9 +61,15 @@ class HomeViewModel @Inject constructor(
     private fun getMyChallengeList(){
         viewModelScope.launch {
             challengeRepository.getMyChallenge().collect {
-                resultResponse(it, ::handleSuccessGetMyChallengeList)
+                resultResponse(it, ::onSuccessGetMyChallengeList)
             }
         }
+    }
+
+    private fun onSuccessGetMyChallengeList(response: MyChallengeVo) {
+        updateState(
+            uiState.value.copy(challengeList = getSortedByCompleteChallenge(response.dtos))
+        )
     }
 
     private fun handleInitScheduleStatesSuccess(result: HomeResponseVo) {
@@ -107,12 +118,6 @@ class HomeViewModel @Inject constructor(
                 schedule
             }
         }
-    }
-
-    private fun handleSuccessGetMyChallengeList(list: List<MyChallengeListItemVo>) {
-        updateState(
-            uiState.value.copy(challengeList = getSortedByCompleteChallenge(list))
-        )
     }
 
     private fun getSortedByCompleteChallenge(list: List<MyChallengeListItemVo>) : List<MyChallengeListItemVo>{
@@ -174,5 +179,25 @@ class HomeViewModel @Inject constructor(
                 dailyHuggList = response.dailyHuggList.take(3),
             )
         )
+    }
+
+    private fun getChallengeNicknameFromLocal() {
+        viewModelScope.launch {
+            challengeRepository.getNickname().collect { nickname ->
+                if (nickname != null) {
+                    UserInfo.updateChallengeNickname(nickname)
+                } else {
+                    getChallengeNicknameFromServer()
+                }
+            }
+        }
+    }
+
+    private fun getChallengeNicknameFromServer() {
+        viewModelScope.launch {
+            challengeRepository.getChallengeName().collect {
+                resultResponse(it, { UserInfo.updateChallengeNickname(it) })
+            }
+        }
     }
 }

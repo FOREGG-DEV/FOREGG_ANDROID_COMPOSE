@@ -1,6 +1,7 @@
 package com.hugg.mypage.profileManagement
 
 import androidx.lifecycle.viewModelScope
+import com.hugg.domain.repository.ChallengeRepository
 import com.hugg.domain.repository.ProfileRepository
 import com.hugg.feature.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -9,7 +10,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyPageProfileManagementViewModel @Inject constructor(
-    private val profileRepository: ProfileRepository
+    private val profileRepository: ProfileRepository,
+    private val challengeRepository: ChallengeRepository
 ) : BaseViewModel<MyPageProfileManagementPageState>(
     MyPageProfileManagementPageState()
 ) {
@@ -48,8 +50,13 @@ class MyPageProfileManagementViewModel @Inject constructor(
     fun unregister(){
         viewModelScope.launch {
             profileRepository.unRegister().collect{
-                resultResponse(it, { emitEventFlow(MyPageProfileManagementEvent.SuccessUnregisterEvent) })
+                resultResponse(it, { onSuccessUnregister() })
             }
         }
+    }
+
+    private fun onSuccessUnregister() {
+        viewModelScope.launch { challengeRepository.removeNickname() }
+        emitEventFlow(MyPageProfileManagementEvent.SuccessUnregisterEvent)
     }
 }
