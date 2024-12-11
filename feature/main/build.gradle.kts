@@ -56,6 +56,7 @@ dependencies {
     implementation(project(":feature:challenge:list"))
     implementation(project(":feature:challenge:create"))
     implementation(project(":feature:challenge:support"))
+    implementation(project(":feature:notification"))
 
     implementation(AndroidX.CORE)
     implementation(AndroidX.APPCOMPAT)
@@ -103,4 +104,9 @@ dependencies {
     implementation(Libraries.LOTTIE)
     implementation(Libraries.COIL_SVG)
     implementation(Libraries.COIL)
+
+    implementation(Google.FCM)
+    implementation(Google.FCM_KTX)
+    implementation(Google.FIREBASE_ANALYTICS)
+    implementation(platform(Google.FIREBASE_BOM))
 }

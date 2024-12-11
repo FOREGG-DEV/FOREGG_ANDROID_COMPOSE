@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.feature.component.BlankBtn
@@ -64,6 +65,7 @@ fun DailyHuggCreationSuccessContent(
 
         LottieAnimation(
             composition = composition,
+            iterations = LottieConstants.IterateForever,
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(1f / 1f)
@@ -79,7 +81,7 @@ fun DailyHuggCreationSuccessContent(
             onClickBtn = { goToDailyHuggMain() }
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(80.dp))
     }
 }
 

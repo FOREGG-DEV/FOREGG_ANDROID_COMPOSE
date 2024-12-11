@@ -227,14 +227,8 @@ object TimeFormatter {
     }
 
     fun getMonthDayWithSlash(date: String): String {
-        val formatter = DateTimeFormatterBuilder()
-            .appendPattern("yyyy-MM-dd HH:mm:ss")
-            .optionalStart()
-            .appendFraction(ChronoField.NANO_OF_SECOND, 1, 9, true)
-            .optionalEnd()
-            .toFormatter()
-
-        val dateTime = LocalDateTime.parse(date, formatter)
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val dateTime = LocalDate.parse(date, formatter)
         val outputFormatter = DateTimeFormatter.ofPattern("MM/dd")
 
         return dateTime.format(outputFormatter)

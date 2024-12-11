@@ -243,15 +243,21 @@ const val ACCOUNT_LIST_TOAST_SUCCESS_DELETE = "지출 내역이 삭제되었어�
 // DailyHugg
 const val ROUND_TEXT = "%s회차"
 const val DAILY_HUGG = "데일리 허그"
+const val SPOUSE_DAILY_HUGG = "%s님의 하루예요"
 const val DAILY_HUGG_BTN_TEXT = "기록 모아보기"
 const val EMPTY_HUGG_FEMALE = "오늘의 일상을\n 남편과 공유해봐요"
 const val EMPTY_HUGG_MALE = "남편이 답장을\n할 수 있어요"
 const val REPLY_COUNT = "%s/50"
 const val DAILY_HUGG_DATE = "%s %s"
 const val EMPTY_REPLY = "아직 답장이 없어요."
+const val DAILY_HUGG_GO_TO_REPLY = "답장 하러가기"
 const val DELETE_DAILY_HUGG = "데일리 허그 삭제"
 const val DELETE_DAILY_HUGG_TITLE = "글을 삭제하시겠어요?"
 const val COMPLETE_DELETE_DAILY_HUGG = "데일리 허그가 삭제되었어요"
+const val THIS_WEEK_QUESTION = "이번주 질문"
+const val REPLY_ACTION = "반응 남기기"
+const val REPLY_EMPTY_TEXT = "50자 이내로 답장을 작성할 수 있어요."
+const val REPLY_MAX_TEXT_COUNT = "%d/50"
 
 // CreateDailyHugg
 const val CREATE_TITLE = "%s님\n%s년 %s\n오늘 하루 어떠셨나요?"
@@ -262,6 +268,9 @@ const val ALREADY_EXIST_DAILY_HUGG = "데일리 허그는 하루에 하나만 �
 // DailyHuggCreationSuccess
 const val CREATION_SUCCESS_TITLE = "데일리 허그가 전달되었어요!"
 const val CONFIRM_DAILY_HUGG = "작성한 글 확인"
+
+// DailyHuggReplySuccess
+const val REPLY_SUCCESS_TITLE = "데일리 허그 답장이 전달되었어요!"
 
 // EditDailyHugg
 const val COMPLETE_EDIT_DAILY_HUGG = "데일리 허그가 수정되었어요"
@@ -308,6 +317,41 @@ const val HOME_EMPTY_MY_CHALLENGE_TITLE = "챌린지에 참여해 보세요."
 const val HOME_EMPTY_MY_CHALLENGE_CONTENT = "어쩌구 저쩌구 다양한 생활 습관 챌린지를 같이 할 수 있어요"
 const val HOME_PARTICIPATE_CHALLENGE = "챌린지 참여"
 const val HOME_EMPTY_DAILY_HUGG = "아직 작성된 배우자의 데일리 허그가 없어요."
+
+// --------- 알림 --------- //
+const val NOTIFICATION_REPLY = "님으로부터 답장이 도착했어요."
+const val NOTIFICATION_CHEER = "님으로부터 응원이 도착했어요."
+const val NOTIFICATION_CLAP = "님으로부터 박수이 도착했어요."
+
+const val NOTIFICATION_GUIDE_FEMALE = "안내받은 가이드에 따라 투여해주세요"
+const val NOTIFICATION_GUIDE_MALE_INJECTION = "오늘 %s님이 투여한 주사예요"
+const val NOTIFICATION_GUIDE_MALE_MEDICINE = "오늘 %s님이 복용한 약이예요"
+
+const val NOTIFICATION_INJECTION_DATE = "주사 투여 날짜"
+const val NOTIFICATION_INJECTION_TIME = "주사 투여 시간"
+const val NOTIFICATION_INJECTION_NAME = "주사 이름"
+const val NOTIFICATION_INJECTION_EXPLAIN = "주사 설명"
+
+const val NOTIFICATION_MEDICINE_DATE = "약 복용 날짜"
+const val NOTIFICATION_MEDICINE_TIME = "약 복용 시간"
+const val NOTIFICATION_MEDICINE_NAME = "약 이름"
+const val NOTIFICATION_MEDICINE_EXPLAIN = "약 설명"
+
+const val NOTIFICATION_INJECTION_SHARE = "주사 기록을 남편에게 공유할 수 있어요"
+const val NOTIFICATION_MEDICINE_SHARE = "약 기록을 남편에게 공유할 수 있어요"
+
+const val NOTIFICATION_SHARE_BTN = "남편에게 공유"
+const val SUCCESS_SHARE_COMMENT = "성공적으로 알림을 전송했어요!"
+
+// --------- 카카오 공유 --------- //
+const val KAKAO_SHARE_TITLE = "여보, 오늘 주사 잘 맞았어?"
+const val KAKAO_SHARE_CONTENT = "진료 내용, 복약 스케줄, 하루 동안 느낀 감정까지, 허그에서 서로 공유해보세요!"
+const val KAKAO_SHARE_BUTTON = "허그 다운로드 하기"
+const val KAKAO_SHARE_URL = "https://play.google.com/store/apps/details?id=com.foregg.presentation"
+const val KAKAO_SHARE_IMAGE = "https://drive.google.com/uc?export=download&amp;id=1gOKA4dUyoZPayh5re4Gx9gISK0PyJUTj"
+
+const val ERROR_KAKAO_SHARE = "공유에 실패했습니다."
+const val ERROR_NEED_WEB = "웹 브라우저를 설치해주세요."
 
 // --------- 챌린지 --------- //
 const val CHALLENGE_DIALOG_INPUT_IMPRESSION_TITLE = "한 줄 소감을 입력해주세요"

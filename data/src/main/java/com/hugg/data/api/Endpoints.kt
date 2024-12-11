@@ -30,6 +30,11 @@ object Endpoints {
         const val HOME = "/home"
     }
 
+    object Notification {
+        private const val NOTIFICATION = "notification"
+        const val NOTIFICATION_HISTORY = "$NOTIFICATION/history"
+    }
+
     object DailyRecord {
         const val DAILY = "/daily"
         const val WRITE = "$DAILY/write"
@@ -47,6 +52,8 @@ object Endpoints {
         const val BYDATE = "$DAILY/byDate/{date}"
         const val EDIT = "$DAILY/{id}"
         const val DELETE = "$DAILY/{id}"
+        const val SPECIAL_QUESTION = "$DAILY/specialQuestion"
+        const val REPLY = "$DAILY/reply"
     }
 
     object Challenge {

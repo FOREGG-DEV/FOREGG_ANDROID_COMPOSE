@@ -14,7 +14,7 @@ object DailyHuggListResponseMapper: Mapper.ResponseMapper<DailyHuggListResponse,
                     DailyHuggListItemVo(
                         id = item.id,
                         date = item.date,
-                        dailyConditionType = DailyConditionType.fromValue(item.dailyConditionType) ?: DailyConditionType.DEFAULT,
+                        dailyConditionType = item.dailyConditionType,
                         content = item.content
                     )
                 },
