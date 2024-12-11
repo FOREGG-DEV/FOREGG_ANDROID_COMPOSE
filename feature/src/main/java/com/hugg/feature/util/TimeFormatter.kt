@@ -233,4 +233,9 @@ object TimeFormatter {
 
         return dateTime.format(outputFormatter)
     }
+
+    fun getTodayDayOfWeek(): String {
+        val today = LocalDate.now()
+        return today.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.ENGLISH)
+    }
 }

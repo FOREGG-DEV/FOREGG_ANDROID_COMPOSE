@@ -4,6 +4,7 @@ import com.hugg.domain.model.enums.GenderType
 import com.hugg.domain.model.enums.SurgeryType
 
 data class ProfileDetailResponseVo(
+    val id: Long = -1,
     val nickName : String = "",
     val surgeryType: SurgeryType = SurgeryType.THINK_SURGERY,
     val round : Int = 0,

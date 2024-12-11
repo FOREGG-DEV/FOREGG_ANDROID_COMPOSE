@@ -10,6 +10,7 @@ object ProfileDetailResponseMapper: Mapper.ResponseMapper<ProfileDetailResponse,
     override fun mapDtoToModel(type: ProfileDetailResponse?): ProfileDetailResponseVo {
         return type?.run {
             ProfileDetailResponseVo(
+                id = id,
                 nickName = nickname,
                 surgeryType = surgeryType,
                 round = count ?: 0,

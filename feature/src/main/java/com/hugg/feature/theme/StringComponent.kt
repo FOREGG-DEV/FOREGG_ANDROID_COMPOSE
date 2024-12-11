@@ -39,6 +39,9 @@ const val WORD_UNREGISTER = "탈퇴"
 const val WORD_NOTIFICATION = "알림"
 const val WORD_COMPLETE = "완료"
 const val WORD_INCOMPLETE = "미완료"
+const val WORD_CHALLENGE = "챌린지"
+const val WORD_SHOW_MORE = "더보기"
+const val WORD_SUCCESS = "성공"
 
 const val DIALOG_MAX_LENGTH = "최대 %d"
 
@@ -359,12 +362,45 @@ fun CHALLENGE_GET_POINT(points : Int) = buildAnnotatedString {
     }
     append(" 획득!")
 }
+const val MY_CHALLENGE = "나의 챌린지"
+const val MY_CHALLENGE_EMPTY = "참여 중인 챌린지가 없어요"
+const val CHALLENGE_POINT = "%sP"
+const val CHALLENGE_PARTICIPANTS = "%s명이 함께하고 있어요"
+const val CHALLENGE_PAGER_INDICATOR = "%s / %s"
+const val CHALLENGE_LIST = "챌린지 목록"
+const val CHALLENGE_MINE = "참여중인 챌린지"
+const val CHALLENGE_PARTICIPATION = "챌린지 참여"
+const val CHALLENGE_OPEN = "700P로 오픈"
+const val CREATE_CHALLENGE = "3000P로 만들기"
+const val CHALLENGE_INPUT_DIALOG_TITLE = "닉네임을 입력해주세요"
+const val CREATE_MY_CHALLENGE = "나만의 챌린지 만들기"
+const val CREATE_MY_CHALLENGE_DESCRIPTION = "나의 습관을 반영해서\n새로운 나만의 챌린지를 만들 수 있어요"
 
+// ChallengeList
+const val ALL_CHALLENGE_LIST = "전체 챌린지 목록"
+const val ALL_CHALLENGE = "전체 챌린지"
+const val SEARCH_CHALLENGE = "챌린지 검색하기"
 
+// CreateChallenge
+const val CREATE_CHALLENGE_TOP_BAR = "나만의 챌린지"
+const val CREATE_CHALLENGE_GUIDE = "아래 내용을 채워주세요"
+const val CREATE_CHALLENGE_NAME_HINT = "제목을 작성해주세요"
+const val CREATE_CHALLENGE_DESCRIPTION_HINT = "설명을 작성해주세요"
+const val CREATE_CHALLENGE_COMPLETED = "첼린지가 생성되었습니다"
+
+// ChallengeSupport
+const val CHALLENGE_SUPPORT_TOP_BAR = "챌린지 현황"
+const val CHALLENGE_SUPPORT_GUIDE = "다른 챌린저에게\n응원의 박수 보내기"
+const val CHALLENGE_CLAP_SUCCESS = "박수를 보냈어요"
+const val CHALLENGE_SUPPORT_SUCCESS = "응원을 보냈어요"
 
 // DailyHuggList
 const val DAILY_HUGG_LIST_TITLE = "데일리 허그 모아보기"
 const val DAILY_HUGG_LIST_EMPTY_BUBBLE = "아직 작성된\n데일리 허그가 없어요"
+
+// MyChallenge
+const val COMMENT_DIALOG_TITLE = "한 줄 소감을 입력해주세요"
+const val CHALLENGE_DELETE = "챌린지를 삭제하시겠어요?"
 
 // --------- 에러 Toast --------- //
 const val TOAST_ERROR_NOR_CORRECT_SPOUSE_CODE = "유효하지 않은 배우자코드입니다."
@@ -372,3 +408,8 @@ const val TOAST_ERROR_FAILED_LOGOUT = "로그아웃에 실패했습니다."
 const val TOAST_ERROR_FAILED_UNREGISTER = "회원탈에 실패했습니다."
 
 const val TOAST_EXCEED_SUBSIDY = "지원금의 한도가 초과되었습니다."
+const val EXIST_CHALLENGE_NICKNAME = "챌린지 닉네임이 이미 존재합니다"
+const val DUPLICATE_CHALLENGE_NICKNAME = "챌린지 닉네임이 중복됩니다"
+const val CHALLENGE_ALREADY_PARTICIPATED = "이미 참여하고 있는 챌린지입니다"
+const val INSUFFICIENT_POINT = "포인트가 부족합니다"
+const val SUPPORT_LIMIT_MESSAGE = "응원과 박수는 각각 하루 세번만 가능해요"
