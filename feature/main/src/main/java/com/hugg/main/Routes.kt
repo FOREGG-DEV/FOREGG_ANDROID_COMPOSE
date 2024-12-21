@@ -86,6 +86,9 @@ sealed class Routes(val route : String){
     data object ChallengeSupportScreen: Routes("challenge_support/{challengeId}") {
         fun createRoute(id: Long) = "challenge_support/$id"
     }
+    data object ChallengeDetailScreen: Routes("challenge_detail/{challengeId}") {
+        fun createRoute(id: Long) = "challenge_detail/$id"
+    }
 
     //----------------MY_PAGE_GRAPH----------------//
     data object MyPageGraph : Routes("my_page_graph")

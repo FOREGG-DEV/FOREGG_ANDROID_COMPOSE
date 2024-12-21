@@ -28,6 +28,8 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
@@ -57,19 +59,18 @@ import com.hugg.feature.theme.DimBg
 import com.hugg.feature.theme.INSUFFICIENT_POINT
 import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.UserInfo
+import com.hugg.list.ChallengeListViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 
 @Composable
 fun ChallengeDetailScreen(
-    item: ChallengeCardVo,
     popScreen: () -> Unit,
-    onClickBtnOpen: (Long) -> Unit,
-    onClickBtnParticipation: (Long) -> Unit,
-    interactionSource: MutableInteractionSource,
-    showAnimationFlow: SharedFlow<Boolean> = MutableSharedFlow(),
-    eventFlow: EventFlow<Event> = MutableEventFlow()
+    challengeId: Long
 ) {
+    val viewModel: ChallengeListViewModel = hiltViewModel()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val interactionSource = remember { MutableInteractionSource() }
     var showAnimation by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.challenge_open))
@@ -80,16 +81,15 @@ fun ChallengeDetailScreen(
         restartOnPlay = true
     )
 
-    BackHandler(enabled = true) { popScreen() }
-
     LaunchedEffect(Unit) {
-        showAnimationFlow.collect {
+        viewModel.getChallengeDetail(challengeId)
+        viewModel.showUnlockAnimationFlow.collect {
             showAnimation = it
         }
     }
 
     LaunchedEffect(Unit) {
-        eventFlow.collect { event ->
+        viewModel.eventFlow.collect { event ->
             when (event) {
                 ChallengeMainEvent.InsufficientPoint -> HuggToast.createToast(context, INSUFFICIENT_POINT).show()
             }
@@ -123,7 +123,7 @@ fun ChallengeDetailScreen(
         Spacer(modifier = Modifier.height(88.dp))
         Box {
             CommonChallengeItem(
-                item = item,
+                item = uiState.challengeDetailItem,
                 modifier = Modifier
                     .padding(horizontal = 34.dp)
             )
@@ -141,7 +141,7 @@ fun ChallengeDetailScreen(
             }
         }
         Spacer(modifier = Modifier.weight(1f))
-        if (item.participating) {
+        if (uiState.challengeDetailItem.participating) {
             BlankBtn(
                 text = CHALLENGE_MINE,
                 modifier = Modifier
@@ -151,9 +151,9 @@ fun ChallengeDetailScreen(
         } else {
             FilledBtn(
                 text =
-                if (item.open)
+                if (uiState.challengeDetailItem.open)
                     AnnotatedString(CHALLENGE_PARTICIPATION)
-                else if (item.isCreateChallenge) buildAnnotatedString {
+                else if (uiState.challengeDetailItem.isCreateChallenge) buildAnnotatedString {
                     append(CREATE_CHALLENGE)
                     addStyle(
                         style = SpanStyle(color = ChallengePoint),
@@ -173,9 +173,9 @@ fun ChallengeDetailScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 onClickBtn = {
-                    if (item.open) { onClickBtnParticipation(item.id) }
+                    if (uiState.challengeDetailItem.open) { viewModel.participateChallenge(uiState.challengeDetailItem.id) }
                     else {
-                        onClickBtnOpen(item.id)
+                        viewModel.unlockChallenge(uiState.challengeDetailItem.id)
                     }
                 }
             )

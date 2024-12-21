@@ -28,4 +28,6 @@ interface ChallengeRepository {
     suspend fun deleteChallenge(id: Long): Flow<ApiState<Unit>>
     suspend fun completeChallenge(id: Long, day: String, thoughts: ChallengeThoughtsVo): Flow<ApiState<Unit>>
     suspend fun supportChallenge(challengeId: Long, userId: Long, cheerType: CheerType): Flow<ApiState<Unit>>
+    suspend fun searchChallenge(keyword: String): Flow<ApiState<List<ChallengeCardVo>>>
+    suspend fun getChallengeDetail(challengeId: Long): Flow<ApiState<ChallengeCardVo>>
 }
