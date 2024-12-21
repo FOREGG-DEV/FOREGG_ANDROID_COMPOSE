@@ -37,6 +37,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -53,13 +54,16 @@ import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.ALL_CHALLENGE_LIST
 import com.hugg.feature.theme.Background
 import com.hugg.feature.theme.CREATE_MY_CHALLENGE
+import com.hugg.feature.theme.EMPTY_SEARCH_RESULT
 import com.hugg.feature.theme.Gs60
 import com.hugg.feature.theme.Gs80
 import com.hugg.feature.theme.Gs90
 import com.hugg.feature.theme.GsWhite
 import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.MainNormal
+import com.hugg.feature.theme.MainStrong
 import com.hugg.feature.theme.SEARCH_CHALLENGE
+import com.hugg.feature.theme.SEARCH_KEYWORD
 import com.hugg.list.detail.ChallengeDetailScreen
 
 @Composable
@@ -81,7 +85,7 @@ fun ChallengeListScreen(
                 showChallengeDetail = true
             },
             onValueChange = { viewModel.onInputValueChange(it) },
-            onClickBtnSearch = { },
+            onClickBtnSearch = { if(uiState.searchKeyword.isNotEmpty()) viewModel.searchChallenge() },
             interactionSource = interactionSource,
             goToCreateChallenge = goToCreateChallenge
         )
@@ -119,7 +123,8 @@ fun ChallengeListContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Background)
+            .background(Background),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         TopBar(
             leftItemType = TopBarLeftType.BACK,
@@ -140,11 +145,27 @@ fun ChallengeListContent(
             interactionSource = interactionSource
         )
         Spacer(modifier = Modifier.height(8.dp))
-        ChallengeListLazyColumn(
-            challengeList = uiState.challengeList,
-            goToChallengeDetail = goToChallengeDetail,
-            interactionSource = interactionSource
-        )
+        if (uiState.searchKeyword.isNotEmpty() && uiState.challengeList.isEmpty()) {
+            Spacer(modifier = Modifier.height(8.dp))
+            HuggText(
+                text = String.format(SEARCH_KEYWORD, uiState.searchKeyword),
+                style = HuggTypography.h1,
+                color = MainStrong
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            HuggText(
+                text = EMPTY_SEARCH_RESULT,
+                style = HuggTypography.h2,
+                color = Gs90,
+                textAlign = TextAlign.Center
+            )
+        } else {
+            ChallengeListLazyColumn(
+                challengeList = uiState.challengeList,
+                goToChallengeDetail = goToChallengeDetail,
+                interactionSource = interactionSource
+            )
+        }
     }
 }
 
@@ -178,7 +199,7 @@ fun CreateChallengeBox(
                 modifier = Modifier.size(40.dp)
             )
             Spacer(modifier = Modifier.width(12.dp))
-            Text(
+            HuggText(
                 text = CREATE_MY_CHALLENGE,
                 style = HuggTypography.h3,
                 color = GsWhite

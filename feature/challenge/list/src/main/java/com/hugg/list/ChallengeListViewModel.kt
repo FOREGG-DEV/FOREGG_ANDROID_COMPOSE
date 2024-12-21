@@ -90,4 +90,16 @@ class ChallengeListViewModel @Inject constructor(
             )
         )
     }
+
+    fun searchChallenge() {
+        viewModelScope.launch {
+            challengeRepository.searchChallenge(uiState.value.searchKeyword).collect {
+                resultResponse(it, ::onSuccessSearchChallenge)
+            }
+        }
+    }
+
+    private fun onSuccessSearchChallenge(response: List<ChallengeCardVo>) {
+        updateState(uiState.value.copy(challengeList = response))
+    }
 }
