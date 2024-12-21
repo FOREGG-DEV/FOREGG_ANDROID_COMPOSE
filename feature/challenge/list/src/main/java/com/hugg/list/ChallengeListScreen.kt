@@ -69,44 +69,25 @@ import com.hugg.list.detail.ChallengeDetailScreen
 @Composable
 fun ChallengeListScreen(
     popScreen: () -> Unit,
-    goToCreateChallenge: () -> Unit
+    goToCreateChallenge: () -> Unit,
+    goToChallengeDetail: (Long) -> Unit
 ) {
     val viewModel: ChallengeListViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val interactionSource = remember { MutableInteractionSource() }
-    var showChallengeDetail by remember { mutableStateOf(false) }
 
     Box {
         ChallengeListContent(
             uiState = uiState,
             popScreen = popScreen,
             goToChallengeDetail = {
-                viewModel.updateSelectedChallenge(it)
-                showChallengeDetail = true
+                goToChallengeDetail(it.id)
             },
             onValueChange = { viewModel.onInputValueChange(it) },
             onClickBtnSearch = { if(uiState.searchKeyword.isNotEmpty()) viewModel.searchChallenge() },
             interactionSource = interactionSource,
             goToCreateChallenge = goToCreateChallenge
         )
-
-        if (showChallengeDetail) {
-            uiState.selectedChallenge?.let {
-                ChallengeDetailScreen(
-                    item = it,
-                    popScreen = {
-                        viewModel.getAllChallenge()
-                        viewModel.updateSelectedChallenge(null)
-                        showChallengeDetail = false
-                    },
-                    onClickBtnOpen = { id -> viewModel.unlockChallenge(id) },
-                    onClickBtnParticipation = { id -> viewModel.participateChallenge(id) },
-                    interactionSource = interactionSource,
-                    showAnimationFlow = viewModel.showUnlockAnimationFlow,
-                    eventFlow = viewModel.eventFlow
-                )
-            }
-        }
     }
 }
 

@@ -41,10 +41,6 @@ class ChallengeListViewModel @Inject constructor(
         UserInfo.updateChallengePoint(response[0].point)
     }
 
-    fun updateSelectedChallenge(item: ChallengeCardVo?) {
-        updateState(uiState.value.copy(selectedChallenge = item))
-    }
-
     fun unlockChallenge(id: Long) {
         viewModelScope.launch {
             challengeRepository.unlockChallenge(id).collect {
@@ -54,11 +50,11 @@ class ChallengeListViewModel @Inject constructor(
     }
 
     private fun onSuccessUnlockChallenge() {
-        updateState(uiState.value.copy(selectedChallenge = uiState.value.selectedChallenge?.copy(open = true,)))
         UserInfo.updateChallengePoint(UserInfo.challengePoint - 700)
         viewModelScope.launch {
             _showUnlockAnimationFlow.emit(true)
         }
+        getChallengeDetail(uiState.value.challengeDetailItem.id)
     }
 
     private fun onFailedUnlockChallenge(error: String) {
@@ -81,14 +77,7 @@ class ChallengeListViewModel @Inject constructor(
     }
 
     private fun onSuccessParticipateChallenge() {
-        updateState(
-            uiState.value.copy(
-                selectedChallenge = uiState.value.selectedChallenge?.copy(
-                    participating = true,
-                    participants = (uiState.value.selectedChallenge?.participants ?: 0) + 1
-                )
-            )
-        )
+        getChallengeDetail(uiState.value.challengeDetailItem.id)
     }
 
     fun searchChallenge() {
@@ -102,5 +91,17 @@ class ChallengeListViewModel @Inject constructor(
     private fun onSuccessSearchChallenge(response: List<ChallengeCardVo>) {
         if (response.isEmpty()) updateState(uiState.value.copy(emptyKeyword = uiState.value.searchKeyword))
         updateState(uiState.value.copy(challengeList = response))
+    }
+
+    fun getChallengeDetail(challengeId: Long) {
+        viewModelScope.launch {
+            challengeRepository.getChallengeDetail(challengeId).collect {
+                resultResponse(it, ::onSuccessGetChallengeDetail)
+            }
+        }
+    }
+
+    private fun onSuccessGetChallengeDetail(response: ChallengeCardVo) {
+        updateState(uiState.value.copy(challengeDetailItem = response))
     }
 }
