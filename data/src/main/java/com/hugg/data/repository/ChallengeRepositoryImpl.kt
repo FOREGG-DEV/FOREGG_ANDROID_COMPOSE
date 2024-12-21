@@ -8,6 +8,7 @@ import com.hugg.data.datastore.HuggDataStore
 import com.hugg.data.mapper.StringMapper
 import com.hugg.data.mapper.UnitResponseMapper
 import com.hugg.data.mapper.challenge.AllChallengeResponseMapper
+import com.hugg.data.mapper.challenge.ChallengeDetailResponseMapper
 import com.hugg.data.mapper.challenge.ChallengeResponseMapper
 import com.hugg.data.mapper.challenge.ChallengeSupportResponseMapper
 import com.hugg.data.mapper.challenge.MyChallengeResponseMapper
@@ -110,5 +111,9 @@ class ChallengeRepositoryImpl @Inject constructor(
 
     override suspend fun searchChallenge(keyword: String): Flow<ApiState<List<ChallengeCardVo>>> {
         return apiLaunch(apiCall = { challengeApi.searchChallenge(keyword) }, AllChallengeResponseMapper)
+    }
+
+    override suspend fun getChallengeDetail(challengeId: Long): Flow<ApiState<ChallengeCardVo>> {
+        return apiLaunch(apiCall = { challengeApi.getChallengeDetail(challengeId) }, ChallengeDetailResponseMapper)
     }
 }

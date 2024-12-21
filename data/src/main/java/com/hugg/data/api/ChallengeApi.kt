@@ -92,4 +92,9 @@ interface ChallengeApi {
     suspend fun searchChallenge(
         @Query("keyword") keyword: String
     ): Response<ApiResponse<ChallengeListResponse>>
+
+    @GET(Endpoints.Challenge.DETAIL)
+    suspend fun getChallengeDetail(
+        @Path("challengeId") challengeId: Long
+    ): Response<ApiResponse<ChallengeResponseListItem>>
 }
