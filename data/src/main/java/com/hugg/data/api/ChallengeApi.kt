@@ -2,6 +2,7 @@ package com.hugg.data.api
 
 import com.hugg.data.base.ApiResponse
 import com.hugg.data.dto.challenge.ChallengeListResponse
+import com.hugg.data.dto.challenge.ChallengeResponseListItem
 import com.hugg.data.dto.challenge.ChallengeSupportResponseItem
 import com.hugg.data.dto.challenge.MyChallengeResponse
 import com.hugg.domain.model.enums.CheerType
@@ -86,4 +87,9 @@ interface ChallengeApi {
         @Query("cheerType") cheerType: CheerType,
         @Query("receiverId") receiverId: Long
     ): Response<ApiResponse<Unit>>
+
+    @GET(Endpoints.Challenge.SEARCH)
+    suspend fun searchChallenge(
+        @Query("keyword") keyword: String
+    ): Response<ApiResponse<ChallengeListResponse>>
 }

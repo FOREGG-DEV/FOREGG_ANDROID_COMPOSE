@@ -107,4 +107,8 @@ class ChallengeRepositoryImpl @Inject constructor(
     ): Flow<ApiState<Unit>> {
         return apiLaunch(apiCall = { challengeApi.supportChallenge(challengeId = challengeId, receiverId = userId, cheerType = cheerType) }, UnitResponseMapper)
     }
+
+    override suspend fun searchChallenge(keyword: String): Flow<ApiState<List<ChallengeCardVo>>> {
+        return apiLaunch(apiCall = { challengeApi.searchChallenge(keyword) }, AllChallengeResponseMapper)
+    }
 }
