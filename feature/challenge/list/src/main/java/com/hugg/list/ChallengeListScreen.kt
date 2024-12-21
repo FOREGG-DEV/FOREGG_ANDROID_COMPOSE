@@ -145,10 +145,10 @@ fun ChallengeListContent(
             interactionSource = interactionSource
         )
         Spacer(modifier = Modifier.height(8.dp))
-        if (uiState.searchKeyword.isNotEmpty() && uiState.challengeList.isEmpty()) {
+        if (uiState.emptyKeyword.isNotEmpty() && uiState.challengeList.isEmpty()) {
             Spacer(modifier = Modifier.height(8.dp))
             HuggText(
-                text = String.format(SEARCH_KEYWORD, uiState.searchKeyword),
+                text = String.format(SEARCH_KEYWORD, uiState.emptyKeyword),
                 style = HuggTypography.h1,
                 color = MainStrong
             )

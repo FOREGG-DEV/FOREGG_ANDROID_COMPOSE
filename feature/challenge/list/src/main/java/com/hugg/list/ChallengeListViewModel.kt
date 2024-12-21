@@ -100,6 +100,7 @@ class ChallengeListViewModel @Inject constructor(
     }
 
     private fun onSuccessSearchChallenge(response: List<ChallengeCardVo>) {
+        if (response.isEmpty()) updateState(uiState.value.copy(emptyKeyword = uiState.value.searchKeyword))
         updateState(uiState.value.copy(challengeList = response))
     }
 }
