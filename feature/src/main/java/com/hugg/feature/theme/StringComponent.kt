@@ -380,6 +380,8 @@ const val CREATE_MY_CHALLENGE_DESCRIPTION = "나의 습관을 반영해서\n새�
 const val ALL_CHALLENGE_LIST = "전체 챌린지 목록"
 const val ALL_CHALLENGE = "전체 챌린지"
 const val SEARCH_CHALLENGE = "챌린지 검색하기"
+const val SEARCH_KEYWORD = "\'%s\'"
+const val EMPTY_SEARCH_RESULT = "검색어에 해당하는 챌린지는 아직 없어요.\n직접 만들어서 함께 실천해보세요!"
 
 // CreateChallenge
 const val CREATE_CHALLENGE_TOP_BAR = "나만의 챌린지"

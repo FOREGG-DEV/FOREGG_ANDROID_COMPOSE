@@ -36,6 +36,7 @@ import com.hugg.feature.util.UserInfo
 import com.hugg.home.homeMain.HomeContainer
 import com.hugg.list.ChallengeListScreen
 import com.hugg.home.notification.NotificationContainer
+import com.hugg.list.detail.ChallengeDetailScreen
 import com.hugg.mypage.cs.MyPageCsContainer
 import com.hugg.mypage.main.MyPageContainer
 import com.hugg.mypage.myMedicineInjection.MyPageMedInjContainer
@@ -479,7 +480,8 @@ fun NavGraphBuilder.challengeGraph(navController: NavHostController) {
         composable(Routes.ChallengeListScreen.route) {
             ChallengeListScreen(
                 popScreen = { navController.popBackStack() },
-                goToCreateChallenge = { navController.navigate(Routes.CreateChallengeScreen.route) }
+                goToCreateChallenge = { navController.navigate(Routes.CreateChallengeScreen.route) },
+                goToChallengeDetail = { navController.navigate(Routes.ChallengeDetailScreen.createRoute(it)) }
             )
         }
 
@@ -500,6 +502,22 @@ fun NavGraphBuilder.challengeGraph(navController: NavHostController) {
                 popScreen = { navController.popBackStack() },
                 challengeId = id
             )
+        }
+
+        composable(
+            route = Routes.ChallengeDetailScreen.route,
+            arguments = listOf(
+                navArgument("challengeId") { type = NavType.LongType }
+            )
+        ) { backStackEntry ->
+            val id = backStackEntry.arguments?.getLong("challengeId")
+
+            id?.let {
+                ChallengeDetailScreen(
+                    popScreen = { navController.popBackStack() },
+                    challengeId = it
+                )
+            }
         }
     }
 }

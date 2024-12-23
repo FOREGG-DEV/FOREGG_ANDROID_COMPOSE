@@ -68,10 +68,10 @@ object Endpoints {
         const val DELETE = "$CHALLENGE/quit/{id}"
         const val COMPLETE = "$CHALLENGE/complete/{id}"
         const val SUPPORT = "$CHALLENGE/{challengeId}"
+        const val SEARCH = "$CHALLENGE/search"
+        const val DETAIL = "$CHALLENGE/{challengeId}"
 
         const val PARTICIPATION = "$CHALLENGE/participate/{id}"
-        const val QUIT = "$CHALLENGE/quit/{id}"
-        const val DELETE_COMPLETE = "$CHALLENGE/deleteTodayComplete/{id}"
         const val MY = "$CHALLENGE/my"
     }
 
