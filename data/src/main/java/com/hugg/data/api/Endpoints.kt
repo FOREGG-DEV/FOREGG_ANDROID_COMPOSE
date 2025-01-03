@@ -41,7 +41,7 @@ object Endpoints {
         const val SIDEEFFECT = "$DAILY/sideEffect"
         const val SIDEEFFECTLIST = "$DAILY/sideEffectList"
         const val EMOTION = "$DAILY/{id}/emotion"
-        const val SHARE_INJECTION = "$DAILY/shareInjection/{id}"
+        const val SHARE_INJECTION = "$DAILY/shareMedical/{id}"
         const val GET_INJECTION_INFO = "$DAILY/injectionInfo/{id}"
         const val ID = "$DAILY/{id}"
     }

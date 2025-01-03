@@ -27,6 +27,6 @@ class DailyRecordRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getInjectionInfo(request: InjectionAlarmRequestVo): Flow<ApiState<InjectionInfoResponseVo>> {
-        return apiLaunch(apiCall = { dailyRecordApi.getInjectionInfo(request.id, request.time) }, InjectionInfoResponseMapper)
+        return apiLaunch(apiCall = { dailyRecordApi.getInjectionInfo(request.id, request.type, request.date, request.time) }, InjectionInfoResponseMapper)
     }
 }

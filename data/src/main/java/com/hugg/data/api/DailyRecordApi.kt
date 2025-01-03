@@ -21,6 +21,8 @@ interface DailyRecordApi {
     companion object{
         const val PATH_ID = "id"
         const val QUERY_TIME = "time"
+        const val QUERY_DATE = "date"
+        const val QUERY_TYPE = "type"
     }
 
     @POST(Endpoints.DailyRecord.SHARE_INJECTION)
@@ -31,6 +33,8 @@ interface DailyRecordApi {
     @GET(Endpoints.DailyRecord.GET_INJECTION_INFO)
     suspend fun getInjectionInfo(
         @Path(PATH_ID) id : Long,
+        @Query(QUERY_TYPE) type : String,
+        @Query(QUERY_DATE) date : String,
         @Query(QUERY_TIME) time : String,
     ): Response<ApiResponse<InjectionInfoResponse>>
 }

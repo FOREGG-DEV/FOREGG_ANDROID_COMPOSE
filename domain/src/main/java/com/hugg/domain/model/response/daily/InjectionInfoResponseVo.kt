@@ -5,4 +5,5 @@ data class InjectionInfoResponseVo(
     val description : String = "",
     val image : String = "",
     val time : String = "",
+    val date : String = "",
 )

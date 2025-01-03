@@ -27,6 +27,7 @@ import com.hugg.dailyhugg.reply.complete.DailyHuggReplySuccessContent
 import com.hugg.dailyhugg.reply.complete.DailyHuggReplySuccessScreen
 import com.hugg.domain.model.enums.ChallengeTabType
 import com.hugg.domain.model.enums.CreateOrEditType
+import com.hugg.domain.model.enums.NotificationType
 import com.hugg.domain.model.enums.RecordType
 import com.hugg.domain.model.enums.SurgeryType
 import com.hugg.domain.model.request.sign.SignUpMaleRequestVo
@@ -574,18 +575,21 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController) {
             arguments = listOf(
                 navArgument("type") { type = NavType.StringType},
                 navArgument("id") { type = NavType.LongType },
+                navArgument("date") { type = NavType.StringType },
                 navArgument("time") { type = NavType.StringType}
             )
         ) {
             val id = it.arguments?.getLong("id") ?: -1
             val type = RecordType.getEnumTypeByString(it.arguments?.getString("type") ?: "")
             val time = it.arguments?.getString("time") ?: ""
+            val date = it.arguments?.getString("date") ?: ""
 
             InjMedDetailContainer(
                 goToBack = { navController.popBackStack() },
                 type = type,
                 id = id,
-                time = time
+                time = time,
+                date = date
             )
         }
     }

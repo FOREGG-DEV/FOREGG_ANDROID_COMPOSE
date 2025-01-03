@@ -20,17 +20,19 @@ class InjMedDetailViewModel @Inject constructor(
 ) : BaseViewModel<InjMedDetailPageState>(
     InjMedDetailPageState()
 ) {
-    fun initView(time : String, id : Long, type : RecordType){
+    fun initView(time : String, id : Long, type : RecordType, date: String){
         updateState(
             uiState.value.copy(pageType = type)
         )
-        getInjectionDetail(time, id)
+        getInjectionDetail(time, id, type, date)
     }
 
-    private fun getInjectionDetail(time: String, id: Long){
+    private fun getInjectionDetail(time: String, id: Long, type : RecordType, date : String){
         val request = InjectionAlarmRequestVo(
             id = id,
-            time = time
+            time = time,
+            type = type.string,
+            date = date
         )
         viewModelScope.launch {
             dailyRecordRepository.getInjectionInfo(request).collect {
@@ -42,10 +44,11 @@ class InjMedDetailViewModel @Inject constructor(
     private fun handleSuccessGetInjectionInfo(result : InjectionInfoResponseVo){
         updateState(
             uiState.value.copy(
-                date = TimeFormatter.getDotsDate("2024-12-05"),
+                date = TimeFormatter.getDotsDate(result.date),
                 time = result.time,
                 image = result.image,
-                explain = result.description
+                explain = result.description,
+                name = result.name
             )
         )
     }
