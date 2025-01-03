@@ -2,6 +2,7 @@ package com.hugg.data.api
 
 import com.hugg.data.base.ApiResponse
 import com.hugg.data.dto.challenge.ChallengeListResponse
+import com.hugg.data.dto.challenge.ChallengeSupportResponse
 import com.hugg.data.dto.challenge.ChallengeSupportResponseItem
 import com.hugg.data.dto.challenge.MyChallengeResponse
 import com.hugg.domain.model.enums.CheerType
@@ -56,7 +57,7 @@ interface ChallengeApi {
     suspend fun getChallengeSupportList(
         @Path("challengeId") challengeId: Long,
         @Path("isSuccess") isSuccess: Boolean
-    ): Response<ApiResponse<List<ChallengeSupportResponseItem>>>
+    ): Response<ApiResponse<ChallengeSupportResponse>>
 
     @POST(Endpoints.Challenge.ACTION)
     suspend fun sendChallengeAction(

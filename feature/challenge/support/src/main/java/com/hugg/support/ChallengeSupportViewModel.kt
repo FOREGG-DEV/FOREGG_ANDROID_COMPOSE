@@ -25,8 +25,8 @@ class ChallengeSupportViewModel @Inject constructor(
             challengeRepository.getChallengeSupportList(
                 challengeId = challengeId,
                 isSuccess = isSuccess
-            ).collect {
-                resultResponse(it, { onSuccessGetChallengeSupportList(it, isSuccess) })
+            ).collect { it ->
+                resultResponse(it, { onSuccessGetChallengeSupportList(it.item, isSuccess) })
             }
         }
     }
