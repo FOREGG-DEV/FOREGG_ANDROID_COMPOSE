@@ -28,13 +28,10 @@ class ChallengeMainViewModel @Inject constructor(
     private val _showUnlockAnimationFlow: MutableSharedFlow<Boolean> = MutableSharedFlow()
     val showUnlockAnimationFlow = _showUnlockAnimationFlow.asSharedFlow()
 
-    fun getChallengeList() {
+    private fun getChallengeList() {
         viewModelScope.launch {
             challengeRepository.getAllCommonChallenge().collect {
                 resultResponse(it, ::onSuccessGetChallengeList)
-            }
-            challengeRepository.getMyChallenge().collect {
-                resultResponse(it, ::onSuccessGetMyChallenge)
             }
         }
     }
@@ -84,6 +81,11 @@ class ChallengeMainViewModel @Inject constructor(
                 currentTabType = type
             )
         )
+
+        when(type){
+            ChallengeTabType.COMMON -> getChallengeList()
+            ChallengeTabType.MY -> getMyChallenge()
+        }
     }
 
     fun createNickname(nickname: String) {
@@ -168,7 +170,7 @@ class ChallengeMainViewModel @Inject constructor(
         }
     }
 
-    fun getMyChallenge() {
+    private fun getMyChallenge() {
         viewModelScope.launch {
             challengeRepository.getMyChallenge().collect {
                 resultResponse(it, ::onSuccessGetMyChallenge)

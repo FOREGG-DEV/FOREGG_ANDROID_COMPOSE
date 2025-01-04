@@ -53,6 +53,7 @@ import com.hugg.feature.theme.INSUFFICIENT_POINT
 import com.hugg.feature.theme.MY_CHALLENGE
 import com.hugg.feature.theme.WORD_CHALLENGE
 import com.hugg.feature.theme.WORD_CONFIRM
+import com.hugg.feature.util.ForeggLog
 import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.UserInfo
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -81,7 +82,8 @@ fun ChallengeMainScreen(
     )
 
     LaunchedEffect(Unit) {
-        viewModel.updateTabType(challengeTabType)
+        val type = if(challengeTabType == uiState.currentTabType) challengeTabType else uiState.currentTabType
+        viewModel.updateTabType(type)
     }
 
     LaunchedEffect(Unit) {
@@ -104,11 +106,6 @@ fun ChallengeMainScreen(
                 }
             }
         }
-    }
-
-    LaunchedEffect(Unit) {
-        viewModel.getChallengeList()
-        viewModel.getMyChallenge()
     }
 
     LaunchedEffect(progress) {
