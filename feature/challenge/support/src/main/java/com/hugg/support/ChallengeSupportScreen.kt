@@ -95,8 +95,8 @@ fun ChallengeSupportScreen(
     ChallengeSupportContent(
         uiState = uiState,
         popScreen = popScreen,
-        onLoadMoreCompleted = {  },
-        onLoadMoreIncomplete = {  },
+        onLoadMoreCompleted = { viewModel.loadMoreChallengeSupportList(uiState.challengeId, true) },
+        onLoadMoreIncomplete = { viewModel.loadMoreChallengeSupportList(uiState.challengeId, false) },
         supportChallenge = { userId: Long, cheerType: CheerType ->
             challengeId?.let {
                 viewModel.supportChallenge(challengeId = challengeId, userId = userId, cheerType = cheerType)
@@ -138,13 +138,13 @@ fun ChallengeSupportContent(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            if (uiState.completedList.isNotEmpty()) {
-                items(uiState.completedList) { item ->
+            if (uiState.completedList.item.isNotEmpty()) {
+                items(uiState.completedList.item) { item ->
                     ChallengeItem(item = item, cheerType = CheerType.CLAP, supportChallenge = supportChallenge, interactionSource)
                 }
                 item {
                     Spacer(modifier = Modifier.height(8.dp))
-                    LoadMoreButton(onClick = onLoadMoreCompleted)
+                    if(uiState.completedList.currentPage < uiState.completedList.totalPage - 1 ) LoadMoreButton(onClick = onLoadMoreCompleted)
                 }
             }
 
@@ -152,13 +152,13 @@ fun ChallengeSupportContent(
                 Spacer(modifier = Modifier.height(8 .dp))
             }
 
-            if (uiState.incompleteList.isNotEmpty()) {
-                items(uiState.incompleteList) { item ->
+            if (uiState.incompleteList.item.isNotEmpty()) {
+                items(uiState.incompleteList.item) { item ->
                     ChallengeItem(item = item, cheerType = CheerType.SUPPORT, supportChallenge = supportChallenge, interactionSource)
                 }
                 item {
                     Spacer(modifier = Modifier.height(8.dp))
-                    LoadMoreButton(onClick = onLoadMoreIncomplete)
+                    if(uiState.incompleteList.currentPage < uiState.incompleteList.totalPage - 1 ) LoadMoreButton(onClick = onLoadMoreIncomplete)
                 }
             }
         }

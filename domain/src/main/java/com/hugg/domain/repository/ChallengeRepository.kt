@@ -23,7 +23,7 @@ interface ChallengeRepository {
     suspend fun participateChallenge(id: Long): Flow<ApiState<Unit>>
     suspend fun getAllChallenge(): Flow<ApiState<List<ChallengeCardVo>>>
     suspend fun createChallenge(request: CreateChallengeRequestVo): Flow<ApiState<Unit>>
-    suspend fun getChallengeSupportList(challengeId: Long, isSuccess: Boolean): Flow<ApiState<ChallengeSupportResponseVo>>
+    suspend fun getChallengeSupportList(challengeId: Long, isSuccess: Boolean, page : Long): Flow<ApiState<ChallengeSupportResponseVo>>
     suspend fun sendChallengeAction(challengeId: Long, cheerType: String, receiverId: Long): Flow<ApiState<Unit>>
     suspend fun getChallengeName(): Flow<ApiState<String>>
     suspend fun deleteChallenge(id: Long): Flow<ApiState<Unit>>

@@ -77,8 +77,8 @@ class ChallengeRepositoryImpl @Inject constructor(
         return apiLaunch(apiCall = { challengeApi.createChallenge(request = request) }, UnitResponseMapper)
     }
 
-    override suspend fun getChallengeSupportList(challengeId: Long, isSuccess: Boolean): Flow<ApiState<ChallengeSupportResponseVo>> {
-        return apiLaunch(apiCall = { challengeApi.getChallengeSupportList(challengeId, isSuccess) }, ChallengeSupportResponseMapper)
+    override suspend fun getChallengeSupportList(challengeId: Long, isSuccess: Boolean, page : Long): Flow<ApiState<ChallengeSupportResponseVo>> {
+        return apiLaunch(apiCall = { challengeApi.getChallengeSupportList(challengeId, isSuccess, page) }, ChallengeSupportResponseMapper)
     }
 
     override suspend fun sendChallengeAction(
