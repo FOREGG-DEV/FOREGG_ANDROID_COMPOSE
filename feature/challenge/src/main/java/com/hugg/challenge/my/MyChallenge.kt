@@ -288,7 +288,7 @@ fun MyChallengeItem(
                 if (currentChallengeState.isNotEmpty()) {
                     CurrentChallengeProgress(
                         currentChallengeState = currentChallengeState,
-                        dayOfWeek = currentChallengeDayOfWeek,
+                        successTimes = item.successDays.size,
                         interactionSource = interactionSource,
                         onClickStateItem = onClickStateItem
                     )
@@ -302,7 +302,7 @@ fun MyChallengeItem(
 @Composable
 fun CurrentChallengeProgress(
     currentChallengeState: List<MyChallengeState>,
-    dayOfWeek: Int,
+    successTimes: Int,
     interactionSource: MutableInteractionSource,
     onClickStateItem: (MyChallengeState) -> Unit
 ) {
@@ -324,7 +324,7 @@ fun CurrentChallengeProgress(
                 modifier = Modifier
                     .size(57.dp)
                     .offset(
-                        x = ((dayOfWeek - 1) * (boxWidth.value / 7)).dp,
+                        x = (successTimes * (boxWidth.value / 7)).dp,
                         y = 0.dp
                     )
             )
@@ -354,7 +354,7 @@ fun CurrentChallengeProgress(
                                 .weight(1f)
                                 .fillMaxHeight()
                                 .background(
-                                    if (i <= dayOfWeek) Sub else GsWhite
+                                    if (i <= successTimes) Sub else GsWhite
                                 )
                         )
                     }
