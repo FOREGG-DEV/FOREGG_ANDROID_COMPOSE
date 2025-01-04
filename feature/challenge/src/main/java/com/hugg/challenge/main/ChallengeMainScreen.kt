@@ -208,7 +208,7 @@ fun ChallengeMainContent(
             middleItemType = TopBarMiddleType.TEXT,
             middleText = WORD_CHALLENGE,
             rightItemType = TopBarRightType.POINT,
-            rightItemContent = String.format(CHALLENGE_POINT, UserInfo.challengePoint)
+            rightItemContent = String.format(CHALLENGE_POINT, uiState.challengePoint)
         )
 
         Spacer(modifier = Modifier.height(16.dp))

@@ -12,6 +12,7 @@ import com.hugg.domain.repository.ChallengeRepository
 import com.hugg.feature.base.BaseViewModel
 import com.hugg.feature.theme.CREATE_MY_CHALLENGE
 import com.hugg.feature.theme.CREATE_MY_CHALLENGE_DESCRIPTION
+import com.hugg.feature.util.ForeggLog
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UserInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,6 +29,15 @@ class ChallengeMainViewModel @Inject constructor(
     private val _showUnlockAnimationFlow: MutableSharedFlow<Boolean> = MutableSharedFlow()
     val showUnlockAnimationFlow = _showUnlockAnimationFlow.asSharedFlow()
 
+    companion object{
+        const val TODAY_SUCCESS_POINT = 100
+        const val YESTERDAY_SUCCESS_POINT = 50
+    }
+
+    init {
+        updateState(uiState.value.copy(challengePoint = UserInfo.challengePoint))
+    }
+
     private fun getChallengeList() {
         viewModelScope.launch {
             challengeRepository.getAllCommonChallenge().collect {
@@ -42,6 +52,7 @@ class ChallengeMainViewModel @Inject constructor(
 
         updateState(
             uiState.value.copy(
+                challengePoint = UserInfo.challengePoint,
                 commonChallengeList = updatedList
             )
         )
@@ -259,13 +270,20 @@ class ChallengeMainViewModel @Inject constructor(
     fun completeChallenge(id: Long, state: MyChallengeState, thoughts: String) {
         viewModelScope.launch {
             challengeRepository.completeChallenge(id = id, day = state.name, thoughts = ChallengeThoughtsVo(thoughts)).collect {
-                resultResponse(it, { onSuccessCompleteChallenge() })
+                resultResponse(it, { onSuccessCompleteChallenge(state) })
             }
         }
     }
 
-    private fun onSuccessCompleteChallenge() {
+    private fun onSuccessCompleteChallenge(state: MyChallengeState) {
+        val point = if(state == MyChallengeState.TODAY) UserInfo.challengePoint + TODAY_SUCCESS_POINT else UserInfo.challengePoint + YESTERDAY_SUCCESS_POINT
         updateShowChallengeSuccessAnimation(true)
+        updatePoint(point)
         getMyChallenge()
+    }
+
+    private fun updatePoint(point : Int){
+        UserInfo.updateChallengePoint(point)
+        updateState(uiState.value.copy(challengePoint = point))
     }
 }
