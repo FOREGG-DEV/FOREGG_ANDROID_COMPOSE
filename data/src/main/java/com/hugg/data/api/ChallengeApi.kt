@@ -80,7 +80,7 @@ interface ChallengeApi {
     @PATCH(Endpoints.Challenge.COMPLETE)
     suspend fun completeChallenge(
         @Path(PATH_ID) id: Long,
-        @Query("day") day: String,
+        @Query("date") date: String,
         @Body request: ChallengeThoughtsVo
     ): Response<ApiResponse<Unit>>
 
