@@ -179,8 +179,7 @@ class ChallengeMainViewModel @Inject constructor(
     private fun onSuccessGetMyChallenge(response: MyChallengeVo) {
         updateState(
             uiState.value.copy(
-                myChallengeList = response.dtos,
-                firstDateOfWeek = response.firstDateOfWeek
+                myChallengeList = response.dtos
             )
         )
         emitEventFlow(ChallengeMainEvent.GetMyChallengeSuccess)
@@ -200,6 +199,7 @@ class ChallengeMainViewModel @Inject constructor(
         )
         val today = TimeFormatter.getTodayDayOfWeek()
         val todayIndex = dayOfWeek.getOrDefault(today, -1)
+        var successCount = 0
 
         if (todayIndex == -1) return
 
@@ -208,6 +208,7 @@ class ChallengeMainViewModel @Inject constructor(
             when {
                 dayIndex < todayIndex -> {
                     if (dayOfWeek.entries.firstOrNull { it.value == dayIndex }?.key in successDays) {
+                        successCount++
                         MyChallengeState.SUCCESS
                     } else if (dayIndex == todayIndex - 1) {
                         MyChallengeState.YESTERDAY
@@ -217,6 +218,7 @@ class ChallengeMainViewModel @Inject constructor(
                 }
                 dayIndex == todayIndex -> {
                     if (dayOfWeek.entries.firstOrNull { it.value == dayIndex }?.key in successDays) {
+                        successCount++
                         MyChallengeState.SUCCESS
                     } else {
                         MyChallengeState.TODAY
@@ -229,7 +231,9 @@ class ChallengeMainViewModel @Inject constructor(
         updateState(
             uiState.value.copy(
                 currentChallengeState = weekState,
-                currentChallengeDayOfWeek = todayIndex + 1
+                currentChallengeDayOfWeek = todayIndex + 1,
+                successCount = successCount,
+                firstDateOfWeek = uiState.value.myChallengeList[currentPage].firstDate
             )
         )
     }
@@ -256,7 +260,7 @@ class ChallengeMainViewModel @Inject constructor(
 
     fun completeChallenge(id: Long, state: MyChallengeState, thoughts: String) {
         viewModelScope.launch {
-            challengeRepository.completeChallenge(id = id, day = state.name, thoughts = ChallengeThoughtsVo(thoughts)).collect {
+            challengeRepository.completeChallenge(id = id, date = TimeFormatter.getToday(), thoughts = ChallengeThoughtsVo(thoughts)).collect {
                 resultResponse(it, { onSuccessCompleteChallenge() })
             }
         }
