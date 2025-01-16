@@ -14,7 +14,7 @@ object ChallengeSupportResponseMapper: Mapper.ResponseMapper<ChallengeSupportRes
                     ChallengeSupportItemVo(
                         userId = item.id,
                         nickname = item.nickname,
-                        thoughts = item.thoughts,
+                        thoughts = item.thoughts ?: "",
                         supported = item.supported
                     )
                 },
