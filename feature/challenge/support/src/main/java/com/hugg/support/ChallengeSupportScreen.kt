@@ -45,6 +45,7 @@ import com.hugg.feature.theme.CHALLENGE_CLAP_SUCCESS
 import com.hugg.feature.theme.CHALLENGE_POINT
 import com.hugg.feature.theme.CHALLENGE_SUPPORT_SUCCESS
 import com.hugg.feature.theme.CHALLENGE_SUPPORT_TOP_BAR
+import com.hugg.feature.theme.EXCEED_PAGE_LIMIT
 import com.hugg.feature.theme.Gs80
 import com.hugg.feature.theme.Gs90
 import com.hugg.feature.theme.GsWhite
@@ -71,8 +72,8 @@ fun ChallengeSupportScreen(
 
     LaunchedEffect(Unit) {
         challengeId?.let {
-            viewModel.getChallengeSupportList(challengeId, isSuccess = true)
-            viewModel.getChallengeSupportList(challengeId, isSuccess = false)
+            viewModel.getChallengeSupportList(challengeId, isSuccess = true, page = 0, size = 5)
+            viewModel.getChallengeSupportList(challengeId, isSuccess = false, page = 0, size = 5)
         }
     }
 
@@ -88,6 +89,9 @@ fun ChallengeSupportScreen(
                 is ChallengeSupportEvent.ExceedSupportLimit -> {
                     HuggToast.createToast(context, SUPPORT_LIMIT_MESSAGE).show()
                 }
+                is ChallengeSupportEvent.ExceedPageLimit -> {
+                    HuggToast.createToast(context, EXCEED_PAGE_LIMIT).show()
+                }
             }
         }
     }
@@ -95,8 +99,8 @@ fun ChallengeSupportScreen(
     ChallengeSupportContent(
         uiState = uiState,
         popScreen = popScreen,
-        onLoadMoreCompleted = {  },
-        onLoadMoreIncomplete = {  },
+        onLoadMoreCompleted = { viewModel.getChallengeSupportList(uiState.challengeId, isSuccess = true, page = uiState.completedCurPage + 1, size = 5) },
+        onLoadMoreIncomplete = { viewModel.getChallengeSupportList(uiState.challengeId, isSuccess = false, page = uiState.incompleteCurPage + 1, size = 5) },
         supportChallenge = { userId: Long, cheerType: CheerType ->
             challengeId?.let {
                 viewModel.supportChallenge(challengeId = challengeId, userId = userId, cheerType = cheerType)

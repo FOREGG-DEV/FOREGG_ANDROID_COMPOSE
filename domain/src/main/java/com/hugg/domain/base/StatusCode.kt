@@ -39,4 +39,8 @@ object StatusCode {
         const val INSUFFICIENT_POINTS = "POINT4001"
         const val SUPPORT_LIMIT = "CHALLENGE4013"
     }
+
+    object ETC {
+        const val PAGE_LIMIT = "PAGE4001"
+    }
 }

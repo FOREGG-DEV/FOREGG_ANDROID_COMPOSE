@@ -415,3 +415,5 @@ const val DUPLICATE_CHALLENGE_NICKNAME = "챌린지 닉네임이 중복됩니다
 const val CHALLENGE_ALREADY_PARTICIPATED = "이미 참여하고 있는 챌린지입니다"
 const val INSUFFICIENT_POINT = "포인트가 부족합니다"
 const val SUPPORT_LIMIT_MESSAGE = "응원과 박수는 각각 하루 세번만 가능해요"
+
+const val EXCEED_PAGE_LIMIT = "마지막 페이지입니다."
