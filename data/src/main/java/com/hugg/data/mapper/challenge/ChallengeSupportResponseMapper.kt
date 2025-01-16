@@ -1,18 +1,27 @@
 package com.hugg.data.mapper.challenge
 
 import com.hugg.data.base.Mapper
+import com.hugg.data.dto.challenge.ChallengeSupportResponse
 import com.hugg.data.dto.challenge.ChallengeSupportResponseItem
 import com.hugg.domain.model.response.challenge.ChallengeSupportItemVo
+import com.hugg.domain.model.response.challenge.ChallengeSupportListVo
 
-object ChallengeSupportResponseMapper: Mapper.ResponseMapper<List<ChallengeSupportResponseItem>, List<ChallengeSupportItemVo>> {
-    override fun mapDtoToModel(type: List<ChallengeSupportResponseItem>?): List<ChallengeSupportItemVo> {
-        return type?.map {
-            ChallengeSupportItemVo(
-                userId = it.id,
-                nickname = it.nickname,
-                thoughts = it.thoughts,
-                supported = it.supported
+object ChallengeSupportResponseMapper: Mapper.ResponseMapper<ChallengeSupportResponse, ChallengeSupportListVo> {
+    override fun mapDtoToModel(type: ChallengeSupportResponse?): ChallengeSupportListVo {
+        return type?.let {
+            ChallengeSupportListVo(
+                items = it.dto.map { item ->
+                    ChallengeSupportItemVo(
+                        userId = item.id,
+                        nickname = item.nickname,
+                        thoughts = item.thoughts,
+                        supported = item.supported
+                    )
+                },
+                totalItems = it.totalItems,
+                currentPage = it.currentPage,
+                totalPage = it.totalPage
             )
-        } ?: emptyList()
+        } ?: ChallengeSupportListVo()
     }
 }
