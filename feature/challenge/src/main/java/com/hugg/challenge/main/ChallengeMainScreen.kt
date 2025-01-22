@@ -1,5 +1,6 @@
 package com.hugg.challenge.main
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -82,6 +83,7 @@ fun ChallengeMainScreen(
 
     LaunchedEffect(Unit) {
         viewModel.updateTabType(challengeTabType)
+        Log.d("TabType", uiState.currentTabType.toString())
     }
 
     LaunchedEffect(Unit) {
@@ -200,6 +202,8 @@ fun ChallengeMainContent(
     updateDeleteDialogVisibility: (Boolean) -> Unit,
     deleteChallenge: (Long) -> Unit
 ) {
+    val rememberedTabType = remember { mutableStateOf(uiState.currentTabType) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -221,9 +225,15 @@ fun ChallengeMainContent(
             interactionSource = interactionSource,
             leftText = WORD_CHALLENGE,
             rightText = MY_CHALLENGE,
-            onClickRightTab = { onClickBtnTab(ChallengeTabType.MY) },
-            onClickLeftTab = { onClickBtnTab(ChallengeTabType.COMMON) },
-            initialTabType = when(uiState.currentTabType) {
+            onClickRightTab = {
+                rememberedTabType.value = ChallengeTabType.MY
+                onClickBtnTab(ChallengeTabType.MY)
+            },
+            onClickLeftTab = {
+                rememberedTabType.value = ChallengeTabType.COMMON
+                onClickBtnTab(ChallengeTabType.COMMON)
+            },
+            initialTabType = when(rememberedTabType.value) {
                 ChallengeTabType.COMMON -> HuggTabClickedType.LEFT
                 ChallengeTabType.MY -> HuggTabClickedType.RIGHT
             }
@@ -231,7 +241,7 @@ fun ChallengeMainContent(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        when (uiState.currentTabType) {
+        when (rememberedTabType.value) {
             ChallengeTabType.COMMON -> CommonChallenge(
                 uiState = uiState,
                 pagerState = pagerState,
