@@ -19,6 +19,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import org.threeten.bp.LocalDate
+import org.threeten.bp.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
@@ -188,16 +190,13 @@ class ChallengeMainViewModel @Inject constructor(
     fun initializeChallengeState(currentPage: Int) {
         if (uiState.value.myChallengeList.isEmpty() || currentPage >= uiState.value.myChallengeList.size) return
         val challenge = uiState.value.myChallengeList[currentPage]
-        val dayOfWeek = mapOf(
-            "Sun" to 0,
-            "Mon" to 1,
-            "Tue" to 2,
-            "Wed" to 3,
-            "Thu" to 4,
-            "Fri" to 5,
-            "Sat" to 6
-        )
-        val today = TimeFormatter.getTodayDayOfWeek()
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val firstDate = LocalDate.parse(challenge.firstDate, formatter)
+        val dayOfWeek = (0..6).associateBy { offset ->
+            val date = firstDate.plusDays(offset.toLong())
+            date.toString()
+        }
+        val today = TimeFormatter.getToday()
         val todayIndex = dayOfWeek.getOrDefault(today, -1)
         var successCount = 0
 
@@ -259,8 +258,16 @@ class ChallengeMainViewModel @Inject constructor(
     }
 
     fun completeChallenge(id: Long, state: MyChallengeState, thoughts: String) {
+        val date = when (state) {
+            MyChallengeState.YESTERDAY -> TimeFormatter.getYesterday()
+            MyChallengeState.TODAY -> TimeFormatter.getToday()
+            else -> ""
+        }
+
+        if (date.isEmpty()) return
+
         viewModelScope.launch {
-            challengeRepository.completeChallenge(id = id, date = TimeFormatter.getToday(), thoughts = ChallengeThoughtsVo(thoughts)).collect {
+            challengeRepository.completeChallenge(id = id, date = date, thoughts = ChallengeThoughtsVo(thoughts)).collect {
                 resultResponse(it, { onSuccessCompleteChallenge() })
             }
         }
