@@ -98,8 +98,8 @@ class ChallengeRepositoryImpl @Inject constructor(
         return apiLaunch(apiCall = { challengeApi.deleteChallenge(id) }, UnitResponseMapper)
     }
 
-    override suspend fun completeChallenge(id: Long, date: String, thoughts: ChallengeThoughtsVo): Flow<ApiState<Unit>> {
-        return apiLaunch(apiCall = { challengeApi.completeChallenge(id, date, request = thoughts) }, UnitResponseMapper)
+    override suspend fun completeChallenge(id: Long, date: String, thoughts: ChallengeThoughtsVo): Flow<ApiState<String>> {
+        return apiLaunch(apiCall = { challengeApi.completeChallenge(id, date, request = thoughts) }, StringMapper)
     }
 
     override suspend fun supportChallenge(

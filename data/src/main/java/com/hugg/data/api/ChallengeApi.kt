@@ -82,7 +82,7 @@ interface ChallengeApi {
         @Path(PATH_ID) id: Long,
         @Query("date") date: String,
         @Body request: ChallengeThoughtsVo
-    ): Response<ApiResponse<Unit>>
+    ): Response<ApiResponse<String>>
 
     @POST(Endpoints.Challenge.SUPPORT)
     suspend fun supportChallenge(
