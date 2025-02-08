@@ -82,8 +82,8 @@ fun ChallengeMainScreen(
     )
 
     LaunchedEffect(Unit) {
-        viewModel.updateTabType(challengeTabType)
-        Log.d("TabType", uiState.currentTabType.toString())
+        val type = if(challengeTabType == uiState.currentTabType) challengeTabType else uiState.currentTabType
+        viewModel.updateTabType(type)
     }
 
     LaunchedEffect(Unit) {
@@ -110,7 +110,6 @@ fun ChallengeMainScreen(
 
     LaunchedEffect(Unit) {
         viewModel.getChallengeList()
-        viewModel.getMyChallenge()
     }
 
     LaunchedEffect(progress) {

@@ -58,6 +58,7 @@ fun InjMedDetailContainer(
     type : RecordType = RecordType.ETC,
     time : String,
     id : Long,
+    date : String,
     viewModel: InjMedDetailViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -71,7 +72,7 @@ fun InjMedDetailContainer(
     )
 
     LaunchedEffect(Unit){
-        viewModel.initView(time, id, type)
+        viewModel.initView(time, id, type, date)
     }
 
     LaunchedEffect(Unit) {
@@ -263,7 +264,7 @@ fun InjMedDetailScreen(
                 Spacer(modifier = Modifier.weight(1f))
 
                 HuggText(
-                    text = uiState.date,
+                    text = uiState.explain,
                     style = HuggTypography.p2,
                     color = Black
                 )

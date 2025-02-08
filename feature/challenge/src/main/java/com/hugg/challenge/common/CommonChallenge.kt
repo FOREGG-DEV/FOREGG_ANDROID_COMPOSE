@@ -329,6 +329,7 @@ fun CommonChallengeItem(
                 Spacer(modifier = Modifier.height(18.dp))
 
                 HuggText(
+                    modifier = Modifier.padding(horizontal = 12.dp),
                     text = item.description,
                     style = HuggTypography.p3_l,
                     color = Gs80,

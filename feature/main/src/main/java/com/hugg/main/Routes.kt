@@ -102,7 +102,7 @@ sealed class Routes(val route : String){
     data object HomeGraph : Routes("home_graph")
     data object HomeScreen : Routes("home")
     data object NotificationScreen : Routes("notification_history")
-    data object InjMedInfoScreen : Routes("inj_med_info_screen/{type}/{id}/{time}"){
-        fun createRoute(type : String, id : Long, time : String) = "inj_med_info_screen/$type/$id/$time"
+    data object InjMedInfoScreen : Routes("inj_med_info_screen/{type}/{id}/{date}/{time}") {
+        fun createRoute(type: String, id: Long, date: String, time: String) = "inj_med_info_screen/$type/$id/$date/$time"
     }
 }

@@ -23,6 +23,9 @@ interface ChallengeApi {
 
     companion object {
         const val PATH_ID = "id"
+        const val PATH_CHALLENGE_ID = "challengeId"
+        const val QUERY_CHEER_TYPE = "cheerType"
+        const val QUERY_RECEIVER_ID = "receiverId"
     }
 
     @GET(Endpoints.Challenge.CHALLENGE)
@@ -56,7 +59,7 @@ interface ChallengeApi {
 
     @GET(Endpoints.Challenge.GET_SUPPORT)
     suspend fun getChallengeSupportList(
-        @Path("challengeId") challengeId: Long,
+        @Path(PATH_CHALLENGE_ID) challengeId: Long,
         @Path("isSuccess") isSuccess: Boolean,
         @Query("page") page: Int,
         @Query("size") size: Int
@@ -64,9 +67,9 @@ interface ChallengeApi {
 
     @POST(Endpoints.Challenge.ACTION)
     suspend fun sendChallengeAction(
-        @Path("challengeId") id: Long,
-        @Query("cheerType") cheerType: String,
-        @Query("receiverId") receiverId: Long
+        @Path(PATH_CHALLENGE_ID) id: Long,
+        @Query(QUERY_CHEER_TYPE) cheerType: String,
+        @Query(QUERY_RECEIVER_ID) receiverId: Long
     ): Response<ApiResponse<Unit>>
 
     @GET(Endpoints.Challenge.NAME)
@@ -86,9 +89,9 @@ interface ChallengeApi {
 
     @POST(Endpoints.Challenge.SUPPORT)
     suspend fun supportChallenge(
-        @Path("challengeId") challengeId: Long,
-        @Query("cheerType") cheerType: CheerType,
-        @Query("receiverId") receiverId: Long
+        @Path(PATH_CHALLENGE_ID) challengeId: Long,
+        @Query(QUERY_CHEER_TYPE) cheerType: CheerType,
+        @Query(QUERY_RECEIVER_ID) receiverId: Long
     ): Response<ApiResponse<Unit>>
 
     @GET(Endpoints.Challenge.SEARCH)
@@ -98,6 +101,6 @@ interface ChallengeApi {
 
     @GET(Endpoints.Challenge.DETAIL)
     suspend fun getChallengeDetail(
-        @Path("challengeId") challengeId: Long
+        @Path(PATH_CHALLENGE_ID) challengeId: Long
     ): Response<ApiResponse<ChallengeResponseListItem>>
 }

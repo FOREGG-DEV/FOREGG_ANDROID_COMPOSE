@@ -11,7 +11,8 @@ object InjectionInfoResponseMapper: Mapper.ResponseMapper<InjectionInfoResponse,
                 name = name,
                 description = description ?: "",
                 image = image ?: "",
-                time = time
+                time = time,
+                date = date
             )
         } ?: InjectionInfoResponseVo()
     }

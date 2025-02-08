@@ -30,13 +30,15 @@ class ChallengeMainViewModel @Inject constructor(
     private val _showUnlockAnimationFlow: MutableSharedFlow<Boolean> = MutableSharedFlow()
     val showUnlockAnimationFlow = _showUnlockAnimationFlow.asSharedFlow()
 
+    companion object{
+        const val TODAY_SUCCESS_POINT = 100
+        const val YESTERDAY_SUCCESS_POINT = 50
+    }
+
     fun getChallengeList() {
         viewModelScope.launch {
             challengeRepository.getAllCommonChallenge().collect {
                 resultResponse(it, ::onSuccessGetChallengeList)
-            }
-            challengeRepository.getMyChallenge().collect {
-                resultResponse(it, ::onSuccessGetMyChallenge)
             }
         }
     }
@@ -47,6 +49,7 @@ class ChallengeMainViewModel @Inject constructor(
 
         updateState(
             uiState.value.copy(
+                challengePoint = UserInfo.challengePoint,
                 commonChallengeList = updatedList
             )
         )
@@ -86,6 +89,10 @@ class ChallengeMainViewModel @Inject constructor(
                 currentTabType = type
             )
         )
+        when(type){
+            ChallengeTabType.COMMON -> getChallengeList()
+            ChallengeTabType.MY -> getMyChallenge()
+        }
     }
 
     fun createNickname(nickname: String) {
@@ -170,7 +177,7 @@ class ChallengeMainViewModel @Inject constructor(
         }
     }
 
-    fun getMyChallenge() {
+    private fun getMyChallenge() {
         viewModelScope.launch {
             challengeRepository.getMyChallenge().collect {
                 resultResponse(it, ::onSuccessGetMyChallenge)
@@ -268,13 +275,20 @@ class ChallengeMainViewModel @Inject constructor(
 
         viewModelScope.launch {
             challengeRepository.completeChallenge(id = id, date = date, thoughts = ChallengeThoughtsVo(thoughts)).collect {
-                resultResponse(it, { onSuccessCompleteChallenge() })
+                resultResponse(it, { onSuccessCompleteChallenge(state) })
             }
         }
     }
 
-    private fun onSuccessCompleteChallenge() {
+    private fun onSuccessCompleteChallenge(state: MyChallengeState) {
+        val point = if(state == MyChallengeState.TODAY) UserInfo.challengePoint + TODAY_SUCCESS_POINT else UserInfo.challengePoint + YESTERDAY_SUCCESS_POINT
         updateShowChallengeSuccessAnimation(true)
+        updatePoint(point)
         getMyChallenge()
+    }
+
+    private fun updatePoint(point : Int){
+        UserInfo.updateChallengePoint(point)
+        updateState(uiState.value.copy(challengePoint = point))
     }
 }
