@@ -464,6 +464,7 @@ fun NavGraphBuilder.challengeGraph(navController: NavHostController) {
                 popScreen = { navController.popBackStack() },
                 challengeTabType = ChallengeTabType.COMMON,
                 goToChallengeList = { navController.navigate(Routes.ChallengeListScreen.route) },
+                goToCreateChallenge = { navController.navigate(Routes.CreateChallengeScreen.route) },
                 goToChallengeSupport = { navController.navigate(Routes.ChallengeSupportScreen.createRoute(it)) }
             )
         }
@@ -473,6 +474,7 @@ fun NavGraphBuilder.challengeGraph(navController: NavHostController) {
                 popScreen = { navController.popBackStack() },
                 challengeTabType = ChallengeTabType.MY,
                 goToChallengeList = { navController.navigate(Routes.ChallengeListScreen.route) },
+                goToCreateChallenge = { navController.navigate(Routes.CreateChallengeScreen.route) },
                 goToChallengeSupport = { navController.navigate(Routes.ChallengeSupportScreen.createRoute(it)) }
             )
         }

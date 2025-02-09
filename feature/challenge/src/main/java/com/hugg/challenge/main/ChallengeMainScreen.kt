@@ -65,6 +65,7 @@ fun ChallengeMainScreen(
     popScreen: () -> Unit,
     challengeTabType: ChallengeTabType,
     goToChallengeList: () -> Unit,
+    goToCreateChallenge : () -> Unit,
     goToChallengeSupport: (Long) -> Unit
 ) {
     val viewModel: ChallengeMainViewModel = hiltViewModel()
@@ -155,6 +156,7 @@ fun ChallengeMainScreen(
                 myChallengePagerState = myChallengePagerState,
                 showAnimationFlow = viewModel.showUnlockAnimationFlow,
                 goToChallengeList = goToChallengeList,
+                goToCreateChallenge = goToCreateChallenge,
                 goToChallengeSupport = goToChallengeSupport,
                 onPageChanged = { viewModel.initializeChallengeState(it) },
                 updateCommentDialogVisibility = { viewModel.updateCommentDialogVisibility(it) },
@@ -194,6 +196,7 @@ fun ChallengeMainContent(
     myChallengePagerState: PagerState,
     showAnimationFlow: SharedFlow<Boolean> = MutableSharedFlow(),
     goToChallengeList: () -> Unit = {},
+    goToCreateChallenge : () -> Unit = {},
     goToChallengeSupport: (Long) -> Unit,
     onPageChanged: (Int) -> Unit,
     updateCommentDialogVisibility: (Boolean) -> Unit,
@@ -247,7 +250,8 @@ fun ChallengeMainContent(
                 onClickBtnOpen = onClickBtnOpen,
                 onClickBtnParticipation = onCLickBtnParticipate,
                 showAnimationFlow = showAnimationFlow,
-                onClickBtnChallengeList = { goToChallengeList() }
+                onClickBtnChallengeList = { goToChallengeList() },
+                onClickCreateChallenge = { goToCreateChallenge() }
             )
             ChallengeTabType.MY -> MyChallenge(
                 uiState = uiState,

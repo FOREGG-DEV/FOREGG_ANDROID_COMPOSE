@@ -74,6 +74,7 @@ import com.hugg.feature.theme.Gs80
 import com.hugg.feature.theme.GsBlack
 import com.hugg.feature.theme.GsWhite
 import com.hugg.feature.theme.HuggTypography
+import com.hugg.feature.util.ForeggLog
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -88,6 +89,7 @@ fun CommonChallenge(
     onClickBtnOpen: (Long) -> Unit = {},
     onClickBtnParticipation: (Long) -> Unit = {},
     onClickBtnChallengeList: () -> Unit = {},
+    onClickCreateChallenge : () -> Unit = {},
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     showAnimationFlow: SharedFlow<Boolean> = MutableSharedFlow()
 ) {
@@ -233,7 +235,12 @@ fun CommonChallenge(
                         .padding(horizontal = 16.dp)
                         .align(Alignment.BottomCenter),
                     onClickBtn = {
-                        if (uiState.commonChallengeList[pagerState.currentPage].open) { onClickBtnParticipation(uiState.commonChallengeList[pagerState.currentPage].id) }
+                        if (uiState.commonChallengeList[pagerState.currentPage].open && !uiState.commonChallengeList[pagerState.currentPage].isCreateChallenge) {
+                            onClickBtnParticipation(uiState.commonChallengeList[pagerState.currentPage].id)
+                        }
+                        else if (uiState.commonChallengeList[pagerState.currentPage].isCreateChallenge) {
+                            onClickCreateChallenge()
+                        }
                         else {
                             onClickBtnOpen(uiState.commonChallengeList[pagerState.currentPage].id)
                         }
