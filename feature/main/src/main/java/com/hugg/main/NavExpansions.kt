@@ -573,7 +573,7 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController) {
 
         composable(Routes.HomeScreen.route) {
             HomeContainer(
-                navigateGoToCalendarDetail = { id -> navController.navigate(Routes.CalendarScheduleCreateOrEdit.getRouteCalendarScheduleCreateOrEdit(CreateOrEditType.EDIT.type, RecordType.ETC.type, id, TimeFormatter.getToday()))},
+                navigateGoToCalendarDetail = { id, type -> navController.navigate(Routes.CalendarScheduleCreateOrEdit.getRouteCalendarScheduleCreateOrEdit(CreateOrEditType.EDIT.type, type.type, id, TimeFormatter.getToday()))},
                 navigateGoToChallenge = { navController.navigate(Routes.ChallengeGraph.route) },
                 navigateGoToDailyHugg = { navController.navigate(Routes.DailyHuggGraph.route)},
                 navigateGoToNotification = { navController.navigate(Routes.NotificationScreen.route) },

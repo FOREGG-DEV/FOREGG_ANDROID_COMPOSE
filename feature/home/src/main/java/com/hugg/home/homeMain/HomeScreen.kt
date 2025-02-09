@@ -40,6 +40,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import com.hugg.domain.model.enums.GenderType
+import com.hugg.domain.model.enums.RecordType
 import com.hugg.domain.model.enums.TopBarLeftType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.domain.model.enums.TopBarRightType
@@ -66,7 +67,7 @@ import com.hugg.home.R
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun HomeContainer(
-    navigateGoToCalendarDetail : (Long) -> Unit = {},
+    navigateGoToCalendarDetail : (Long, RecordType) -> Unit = {_, _ -> },
     navigateGoToChallenge : () -> Unit = {},
     navigateGoToNotification : () -> Unit = {},
     navigateGoToDailyHugg : () -> Unit = {},
@@ -131,7 +132,7 @@ fun HomeScreen(
     uiState : HomePageState = HomePageState(),
     pagerState : PagerState = rememberPagerState(),
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    navigateGoToCalendarDetail : (Long) -> Unit = {},
+    navigateGoToCalendarDetail : (Long, RecordType) -> Unit = {_, _ -> },
     onClickTodo: (Long, String) -> Unit = {_, _ -> },
     navigateGoToChallenge : () -> Unit = {},
     navigateGoToNotification : () -> Unit = {},
@@ -210,7 +211,7 @@ fun TodayRecordHorizontalPager(
     pagerState: PagerState,
     interactionSource: MutableInteractionSource,
     onClickTodo : (Long, String) -> Unit = {_, _ -> },
-    onClickDetail : (Long) -> Unit = {},
+    onClickDetail : (Long, RecordType) -> Unit = {_, _ -> },
 ){
     val configuration = LocalConfiguration.current
     val screenWidthDp = configuration.screenWidthDp.dp

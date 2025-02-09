@@ -47,7 +47,7 @@ import com.hugg.feature.util.onThrottleClick
 fun HomeTodayScheduleItem(
     item : HomeTodayScheduleCardVo = HomeTodayScheduleCardVo(),
     onClickTodo : (Long, String) -> Unit = {_, _ -> },
-    onClickDetail : (Long) -> Unit = {},
+    onClickDetail : (Long, RecordType) -> Unit = {_, _ -> },
     interactionSource: MutableInteractionSource
 ){
     val boxColor = when(item.recordType){
@@ -135,7 +135,7 @@ fun HomeTodayScheduleItem(
                     .size(48.dp)
                     .padding(12.dp)
                     .onThrottleClick(
-                        onClick = { onClickDetail(item.id) },
+                        onClick = { onClickDetail(item.id, item.recordType) },
                         interactionSource = interactionSource
                     ),
                 painter = painterResource(id = R.drawable.ic_right_arrow_navigate_main_normal),
@@ -151,7 +151,7 @@ fun HomeTodayScheduleItem(
                     .padding(end = 12.dp)
                     .height(29.dp)
                     .fillMaxWidth(),
-                onClickBtn = { onClickDetail(item.id) },
+                onClickBtn = { onClickDetail(item.id, item.recordType) },
                 radius = 4.dp,
                 text = HOME_RECORD_MEDICAL,
                 textStyle = HuggTypography.p2,
