@@ -120,6 +120,8 @@ class AlarmService : Service() {
     }
 
     private fun LongArray.repeat(times: Int): LongArray {
-        return LongArray(this.size * times) { this[it % this.size] }
+        return LongArray(times * 2) { i ->
+            if (i % 2 == 0) DELAY_TIME else DELAY_TIME
+        }
     }
 }
