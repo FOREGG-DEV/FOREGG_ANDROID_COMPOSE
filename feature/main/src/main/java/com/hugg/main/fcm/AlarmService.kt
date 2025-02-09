@@ -9,18 +9,21 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.pm.ServiceInfo
 import android.media.Ringtone
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.os.IBinder
 import android.os.PowerManager
+import android.os.VibrationEffect
 import android.os.Vibrator
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.hugg.main.MainActivity
 import com.hugg.feature.R
+import com.hugg.feature.util.ForeggLog
 
 class AlarmService : Service() {
 
@@ -75,7 +78,11 @@ class AlarmService : Service() {
             .build()
 
         checkPermission()
-        startForeground(1, notificationBuilder)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) { // Android 14 이상
+            startForeground(1, notificationBuilder, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
+        } else {
+            startForeground(1, notificationBuilder)
+        }
 
         val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
         val wakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG")
@@ -88,9 +95,17 @@ class AlarmService : Service() {
 
     private fun startAlarm(){
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        val singlePattern = longArrayOf(DELAY_TIME, DELAY_TIME)
-        val pattern = longArrayOf(0) + singlePattern.repeat(REPEAT_TIME)
-        vibrator?.vibrate(pattern, -1)
+
+        val pattern = LongArray(REPEAT_TIME * 2) { i ->
+            if (i % 2 == 0) DELAY_TIME else 500L
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val effect = VibrationEffect.createWaveform(pattern, -1) // 반복 없음
+            vibrator?.vibrate(effect)
+        } else {
+            vibrator?.vibrate(pattern, -1)
+        }
 
         val alarmUri: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
         ringtone = RingtoneManager.getRingtone(this, alarmUri)
@@ -117,11 +132,5 @@ class AlarmService : Service() {
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
-    }
-
-    private fun LongArray.repeat(times: Int): LongArray {
-        return LongArray(times * 2) { i ->
-            if (i % 2 == 0) DELAY_TIME else DELAY_TIME
-        }
     }
 }
