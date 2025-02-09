@@ -41,6 +41,7 @@ class ChallengeMainViewModel @Inject constructor(
                 resultResponse(it, ::onSuccessGetChallengeList)
             }
         }
+        getMyChallenge()
     }
 
     private fun onSuccessGetChallengeList(response: List<ChallengeCardVo>) {
