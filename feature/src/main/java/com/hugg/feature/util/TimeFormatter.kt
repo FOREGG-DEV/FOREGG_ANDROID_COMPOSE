@@ -24,6 +24,12 @@ object TimeFormatter {
         return currentDate.format(formatter)
     }
 
+    fun getYesterday(): String {
+        val yesterday = LocalDate.now().minusDays(1)
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        return yesterday.format(formatter)
+    }
+
     fun getYear(date : String) : Int {
         val dates = date.split("-")
         return dates[YEAR_INDEX].toInt()

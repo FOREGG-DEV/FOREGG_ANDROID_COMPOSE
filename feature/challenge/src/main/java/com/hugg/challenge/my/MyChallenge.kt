@@ -145,6 +145,7 @@ fun MyChallenge(
                 currentChallengeState = uiState.currentChallengeState,
                 pagerState = pagerState,
                 currentChallengeDayOfWeek = uiState.currentChallengeDayOfWeek,
+                successCount = uiState.successCount,
                 interactionSource = interactionSource,
                 onPageChange = onPageChange,
                 onClickStateItem = { state ->
@@ -184,6 +185,7 @@ fun MyChallengeListPager(
     currentChallengeState: List<MyChallengeState>,
     pagerState: PagerState,
     currentChallengeDayOfWeek: Int,
+    successCount: Int,
     interactionSource: MutableInteractionSource,
     onPageChange: (Int) -> Unit,
     onClickStateItem: (MyChallengeState) -> Unit,
@@ -220,6 +222,7 @@ fun MyChallengeListPager(
             item = items[it],
             currentChallengeState = currentChallengeState,
             currentChallengeDayOfWeek = currentChallengeDayOfWeek,
+            successCount = successCount,
             interactionSource = interactionSource,
             onClickStateItem = onClickStateItem,
             onClickBtnDelete = onClickBtnDelete
@@ -233,6 +236,7 @@ fun MyChallengeItem(
     item: MyChallengeListItemVo,
     currentChallengeState: List<MyChallengeState>,
     currentChallengeDayOfWeek: Int,
+    successCount: Int,
     interactionSource: MutableInteractionSource,
     onClickStateItem: (MyChallengeState) -> Unit,
     onClickBtnDelete: () -> Unit
@@ -289,6 +293,7 @@ fun MyChallengeItem(
                     CurrentChallengeProgress(
                         currentChallengeState = currentChallengeState,
                         dayOfWeek = currentChallengeDayOfWeek,
+                        successCount = successCount,
                         interactionSource = interactionSource,
                         onClickStateItem = onClickStateItem
                     )
@@ -303,6 +308,7 @@ fun MyChallengeItem(
 fun CurrentChallengeProgress(
     currentChallengeState: List<MyChallengeState>,
     dayOfWeek: Int,
+    successCount: Int,
     interactionSource: MutableInteractionSource,
     onClickStateItem: (MyChallengeState) -> Unit
 ) {
@@ -324,7 +330,7 @@ fun CurrentChallengeProgress(
                 modifier = Modifier
                     .size(57.dp)
                     .offset(
-                        x = ((dayOfWeek - 1) * (boxWidth.value / 7)).dp,
+                        x = (successCount * (boxWidth.value / 7)).dp,
                         y = 0.dp
                     )
             )
@@ -354,7 +360,7 @@ fun CurrentChallengeProgress(
                                 .weight(1f)
                                 .fillMaxHeight()
                                 .background(
-                                    if (i <= dayOfWeek) Sub else GsWhite
+                                    if (i <= successCount) Sub else GsWhite
                                 )
                         )
                     }

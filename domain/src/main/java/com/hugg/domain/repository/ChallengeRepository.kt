@@ -7,6 +7,7 @@ import com.hugg.domain.model.request.challenge.ChallengeThoughtsVo
 import com.hugg.domain.model.request.challenge.CreateChallengeRequestVo
 import com.hugg.domain.model.response.challenge.ChallengeCardVo
 import com.hugg.domain.model.response.challenge.ChallengeSupportItemVo
+import com.hugg.domain.model.response.challenge.ChallengeSupportListVo
 import com.hugg.domain.model.response.challenge.MyChallengeListItemVo
 import com.hugg.domain.model.response.challenge.MyChallengeVo
 import kotlinx.coroutines.flow.Flow
@@ -22,11 +23,11 @@ interface ChallengeRepository {
     suspend fun participateChallenge(id: Long): Flow<ApiState<Unit>>
     suspend fun getAllChallenge(): Flow<ApiState<List<ChallengeCardVo>>>
     suspend fun createChallenge(request: CreateChallengeRequestVo): Flow<ApiState<Unit>>
-    suspend fun getChallengeSupportList(challengeId: Long, isSuccess: Boolean): Flow<ApiState<List<ChallengeSupportItemVo>>>
+    suspend fun getChallengeSupportList(challengeId: Long, isSuccess: Boolean, page: Int, size: Int): Flow<ApiState<ChallengeSupportListVo>>
     suspend fun sendChallengeAction(challengeId: Long, cheerType: String, receiverId: Long): Flow<ApiState<Unit>>
     suspend fun getChallengeName(): Flow<ApiState<String>>
     suspend fun deleteChallenge(id: Long): Flow<ApiState<Unit>>
-    suspend fun completeChallenge(id: Long, day: String, thoughts: ChallengeThoughtsVo): Flow<ApiState<Unit>>
+    suspend fun completeChallenge(id: Long, date: String, thoughts: ChallengeThoughtsVo): Flow<ApiState<String>>
     suspend fun supportChallenge(challengeId: Long, userId: Long, cheerType: CheerType): Flow<ApiState<Unit>>
     suspend fun searchChallenge(keyword: String): Flow<ApiState<List<ChallengeCardVo>>>
     suspend fun getChallengeDetail(challengeId: Long): Flow<ApiState<ChallengeCardVo>>

@@ -11,7 +11,6 @@ object MyChallengeResponseMapper: Mapper.ResponseMapper<MyChallengeResponse, MyC
     override fun mapDtoToModel(type: MyChallengeResponse?): MyChallengeVo {
         return type?.let {
             MyChallengeVo(
-                firstDateOfWeek = it.firstDateOfWeek,
                 dtos = it.dtos
             )
         } ?: MyChallengeVo()

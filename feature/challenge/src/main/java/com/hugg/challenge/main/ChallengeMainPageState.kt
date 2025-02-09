@@ -15,6 +15,7 @@ data class ChallengeMainPageState(
     val currentChallengeState: List<MyChallengeState> = emptyList(),
     val showChallengeCompleteDialog: Boolean = false,
     val currentChallengeDayOfWeek: Int = 0,
+    val successCount: Int = 0,
     val showCommentDialog: Boolean = false,
     val showDeleteDialog: Boolean = false,
     val showChallengeSuccessAnimation: Boolean = false

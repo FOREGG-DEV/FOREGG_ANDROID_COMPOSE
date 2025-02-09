@@ -11,4 +11,6 @@ data class InjectionInfoResponse(
     val image : String? = "",
     @SerializedName("time")
     val time : String = "",
+    @SerializedName("date")
+    val date : String = "",
 )

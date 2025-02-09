@@ -19,6 +19,7 @@ import com.hugg.domain.model.request.challenge.ChallengeThoughtsVo
 import com.hugg.domain.model.request.challenge.CreateChallengeRequestVo
 import com.hugg.domain.model.response.challenge.ChallengeCardVo
 import com.hugg.domain.model.response.challenge.ChallengeSupportItemVo
+import com.hugg.domain.model.response.challenge.ChallengeSupportListVo
 import com.hugg.domain.model.response.challenge.MyChallengeListItemVo
 import com.hugg.domain.model.response.challenge.MyChallengeVo
 import com.hugg.domain.repository.ChallengeRepository
@@ -77,8 +78,8 @@ class ChallengeRepositoryImpl @Inject constructor(
         return apiLaunch(apiCall = { challengeApi.createChallenge(request = request) }, UnitResponseMapper)
     }
 
-    override suspend fun getChallengeSupportList(challengeId: Long, isSuccess: Boolean): Flow<ApiState<List<ChallengeSupportItemVo>>> {
-        return apiLaunch(apiCall = { challengeApi.getChallengeSupportList(challengeId, isSuccess) }, ChallengeSupportResponseMapper)
+    override suspend fun getChallengeSupportList(challengeId: Long, isSuccess: Boolean, page: Int, size: Int): Flow<ApiState<ChallengeSupportListVo>> {
+        return apiLaunch(apiCall = { challengeApi.getChallengeSupportList(challengeId, isSuccess, page, size) }, ChallengeSupportResponseMapper)
     }
 
     override suspend fun sendChallengeAction(
@@ -97,8 +98,8 @@ class ChallengeRepositoryImpl @Inject constructor(
         return apiLaunch(apiCall = { challengeApi.deleteChallenge(id) }, UnitResponseMapper)
     }
 
-    override suspend fun completeChallenge(id: Long, day: String, thoughts: ChallengeThoughtsVo): Flow<ApiState<Unit>> {
-        return apiLaunch(apiCall = { challengeApi.completeChallenge(id, day, request = thoughts) }, UnitResponseMapper)
+    override suspend fun completeChallenge(id: Long, date: String, thoughts: ChallengeThoughtsVo): Flow<ApiState<String>> {
+        return apiLaunch(apiCall = { challengeApi.completeChallenge(id, date, request = thoughts) }, StringMapper)
     }
 
     override suspend fun supportChallenge(

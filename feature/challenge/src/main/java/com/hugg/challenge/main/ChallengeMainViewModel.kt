@@ -19,6 +19,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import org.threeten.bp.LocalDate
+import org.threeten.bp.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,13 +30,15 @@ class ChallengeMainViewModel @Inject constructor(
     private val _showUnlockAnimationFlow: MutableSharedFlow<Boolean> = MutableSharedFlow()
     val showUnlockAnimationFlow = _showUnlockAnimationFlow.asSharedFlow()
 
+    companion object{
+        const val TODAY_SUCCESS_POINT = 100
+        const val YESTERDAY_SUCCESS_POINT = 50
+    }
+
     fun getChallengeList() {
         viewModelScope.launch {
             challengeRepository.getAllCommonChallenge().collect {
                 resultResponse(it, ::onSuccessGetChallengeList)
-            }
-            challengeRepository.getMyChallenge().collect {
-                resultResponse(it, ::onSuccessGetMyChallenge)
             }
         }
     }
@@ -45,6 +49,7 @@ class ChallengeMainViewModel @Inject constructor(
 
         updateState(
             uiState.value.copy(
+                challengePoint = UserInfo.challengePoint,
                 commonChallengeList = updatedList
             )
         )
@@ -84,6 +89,10 @@ class ChallengeMainViewModel @Inject constructor(
                 currentTabType = type
             )
         )
+        when(type){
+            ChallengeTabType.COMMON -> getChallengeList()
+            ChallengeTabType.MY -> getMyChallenge()
+        }
     }
 
     fun createNickname(nickname: String) {
@@ -168,7 +177,7 @@ class ChallengeMainViewModel @Inject constructor(
         }
     }
 
-    fun getMyChallenge() {
+    private fun getMyChallenge() {
         viewModelScope.launch {
             challengeRepository.getMyChallenge().collect {
                 resultResponse(it, ::onSuccessGetMyChallenge)
@@ -179,8 +188,7 @@ class ChallengeMainViewModel @Inject constructor(
     private fun onSuccessGetMyChallenge(response: MyChallengeVo) {
         updateState(
             uiState.value.copy(
-                myChallengeList = response.dtos,
-                firstDateOfWeek = response.firstDateOfWeek
+                myChallengeList = response.dtos
             )
         )
         emitEventFlow(ChallengeMainEvent.GetMyChallengeSuccess)
@@ -189,17 +197,15 @@ class ChallengeMainViewModel @Inject constructor(
     fun initializeChallengeState(currentPage: Int) {
         if (uiState.value.myChallengeList.isEmpty() || currentPage >= uiState.value.myChallengeList.size) return
         val challenge = uiState.value.myChallengeList[currentPage]
-        val dayOfWeek = mapOf(
-            "Sun" to 0,
-            "Mon" to 1,
-            "Tue" to 2,
-            "Wed" to 3,
-            "Thu" to 4,
-            "Fri" to 5,
-            "Sat" to 6
-        )
-        val today = TimeFormatter.getTodayDayOfWeek()
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val firstDate = LocalDate.parse(challenge.firstDate, formatter)
+        val dayOfWeek = (0..6).associateBy { offset ->
+            val date = firstDate.plusDays(offset.toLong())
+            date.toString()
+        }
+        val today = TimeFormatter.getToday()
         val todayIndex = dayOfWeek.getOrDefault(today, -1)
+        var successCount = 0
 
         if (todayIndex == -1) return
 
@@ -208,6 +214,7 @@ class ChallengeMainViewModel @Inject constructor(
             when {
                 dayIndex < todayIndex -> {
                     if (dayOfWeek.entries.firstOrNull { it.value == dayIndex }?.key in successDays) {
+                        successCount++
                         MyChallengeState.SUCCESS
                     } else if (dayIndex == todayIndex - 1) {
                         MyChallengeState.YESTERDAY
@@ -217,6 +224,7 @@ class ChallengeMainViewModel @Inject constructor(
                 }
                 dayIndex == todayIndex -> {
                     if (dayOfWeek.entries.firstOrNull { it.value == dayIndex }?.key in successDays) {
+                        successCount++
                         MyChallengeState.SUCCESS
                     } else {
                         MyChallengeState.TODAY
@@ -229,7 +237,9 @@ class ChallengeMainViewModel @Inject constructor(
         updateState(
             uiState.value.copy(
                 currentChallengeState = weekState,
-                currentChallengeDayOfWeek = todayIndex + 1
+                currentChallengeDayOfWeek = todayIndex + 1,
+                successCount = successCount,
+                firstDateOfWeek = uiState.value.myChallengeList[currentPage].firstDate
             )
         )
     }
@@ -255,15 +265,30 @@ class ChallengeMainViewModel @Inject constructor(
     }
 
     fun completeChallenge(id: Long, state: MyChallengeState, thoughts: String) {
+        val date = when (state) {
+            MyChallengeState.YESTERDAY -> TimeFormatter.getYesterday()
+            MyChallengeState.TODAY -> TimeFormatter.getToday()
+            else -> ""
+        }
+
+        if (date.isEmpty()) return
+
         viewModelScope.launch {
-            challengeRepository.completeChallenge(id = id, day = state.name, thoughts = ChallengeThoughtsVo(thoughts)).collect {
-                resultResponse(it, { onSuccessCompleteChallenge() })
+            challengeRepository.completeChallenge(id = id, date = date, thoughts = ChallengeThoughtsVo(thoughts)).collect {
+                resultResponse(it, { onSuccessCompleteChallenge(state) })
             }
         }
     }
 
-    private fun onSuccessCompleteChallenge() {
+    private fun onSuccessCompleteChallenge(state: MyChallengeState) {
+        val point = if(state == MyChallengeState.TODAY) UserInfo.challengePoint + TODAY_SUCCESS_POINT else UserInfo.challengePoint + YESTERDAY_SUCCESS_POINT
         updateShowChallengeSuccessAnimation(true)
+        updatePoint(point)
         getMyChallenge()
+    }
+
+    private fun updatePoint(point : Int){
+        UserInfo.updateChallengePoint(point)
+        updateState(uiState.value.copy(challengePoint = point))
     }
 }
