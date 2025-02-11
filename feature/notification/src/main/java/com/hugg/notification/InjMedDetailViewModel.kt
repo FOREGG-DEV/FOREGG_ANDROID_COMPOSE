@@ -53,8 +53,8 @@ class InjMedDetailViewModel @Inject constructor(
         )
     }
 
-    fun onClickShare(id: Long, time: String){
-        val request = InjectionAlarmRequestVo(id = id, time = time)
+    fun onClickShare(id: Long, date : String, time: String){
+        val request = InjectionAlarmRequestVo(id = id, date = date, time = time)
         viewModelScope.launch {
             dailyRecordRepository.postShareInjection(request).collect{
                 resultResponse(it, { handleShareSuccess() }, ::handleShareError)

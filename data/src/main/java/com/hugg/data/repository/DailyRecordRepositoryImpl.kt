@@ -23,7 +23,7 @@ class DailyRecordRepositoryImpl @Inject constructor(
     private val dailyRecordApi: DailyRecordApi
 ): DailyRecordRepository, BaseRepository() {
     override suspend fun postShareInjection(request : InjectionAlarmRequestVo): Flow<ApiState<Unit>> {
-        return apiLaunch(apiCall = { dailyRecordApi.shareInjection(request.id, request.time) }, UnitResponseMapper)
+        return apiLaunch(apiCall = { dailyRecordApi.shareInjection(request.id, request.date, request.time) }, UnitResponseMapper)
     }
 
     override suspend fun getInjectionInfo(request: InjectionAlarmRequestVo): Flow<ApiState<InjectionInfoResponseVo>> {

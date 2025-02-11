@@ -67,7 +67,7 @@ fun InjMedDetailContainer(
     InjMedDetailScreen(
         uiState = uiState,
         goToBack = goToBack,
-        onClickShareBtn = { viewModel.onClickShare(id, time) },
+        onClickShareBtn = { viewModel.onClickShare(id, date, time) },
         context = context
     )
 

@@ -28,6 +28,7 @@ interface DailyRecordApi {
     @POST(Endpoints.DailyRecord.SHARE_MEDICAL)
     suspend fun shareInjection(
         @Path(PATH_ID) id : Long,
+        @Query(QUERY_TIME) date : String,
         @Query(QUERY_TIME) time : String,
     ): Response<ApiResponse<Unit>>
     @GET(Endpoints.DailyRecord.GET_INJECTION_INFO)
