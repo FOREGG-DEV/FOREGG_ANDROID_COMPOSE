@@ -310,19 +310,13 @@ fun CommonChallengeItem(
                     }
 
                 } else {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_daily_condition_bad_selected),
+                    Image(
+                        painter = rememberAsyncImagePainter(model = item.image),
                         contentDescription = "",
                         modifier = Modifier.size(178.dp),
-                        tint = Color.Unspecified
+                        contentScale = ContentScale.Crop
                     )
                 }
-//                Image(
-//                    painter = rememberAsyncImagePainter(model = item.image),
-//                    contentDescription = "",
-//                    modifier = Modifier.size(178.dp),
-//                    contentScale = ContentScale.Crop
-//                )
 
                 Spacer(modifier = Modifier.height(30.dp))
 

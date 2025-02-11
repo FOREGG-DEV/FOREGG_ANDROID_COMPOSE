@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.hugg.feature.base.LoadingManager
 import com.hugg.feature.theme.HuggTheme
 import com.hugg.feature.util.ForeggLog
+import com.hugg.main.fcm.AlarmService
 import com.hugg.main.fcm.PendingExtraValue
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -25,10 +26,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val startKey = intent.getStringExtra("start_key")
         val navigation = intent.getStringExtra(PendingExtraValue.KEY) ?: ""
-
-        ForeggLog.D("네비게이션 인텐트 : $navigation")
+        AlarmService.stopAlarm()
 
         setContent {
             LaunchedEffect(Unit){
