@@ -253,6 +253,7 @@ internal fun InputKindView(
                 }
 
                 HuggTextField(
+                    modifier = Modifier.fillMaxWidth(),
                     value = kind,
                     onValueChange = { value ->
                         onChangedKind(value)
