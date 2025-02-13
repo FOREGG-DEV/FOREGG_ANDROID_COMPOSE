@@ -125,7 +125,7 @@ class HomeViewModel @Inject constructor(
     private fun getSortedByCompleteChallenge(list: List<MyChallengeListItemVo>) : List<MyChallengeListItemVo>{
         val newList = list.map {
             it.copy(
-                isCompleteToday = it.successDays?.any { it == TimeFormatter.getKoreanDayOfWeek(LocalDate.now().dayOfWeek) } == true
+                isCompleteToday = it.successDays?.any { day -> day == TimeFormatter.getToday() } == true
             )
         }
 
