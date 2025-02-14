@@ -42,7 +42,7 @@ const val WORD_INCOMPLETE = "미완료"
 const val WORD_CHALLENGE = "챌린지"
 const val WORD_SHOW_MORE = "더보기"
 const val WORD_SUCCESS = "성공"
-
+const val WORD_RETRY = "재시도"
 const val DIALOG_MAX_LENGTH = "최대 %d"
 
 // --------- 기타 --------- //
@@ -417,3 +417,8 @@ const val INSUFFICIENT_POINT = "포인트가 부족합니다"
 const val SUPPORT_LIMIT_MESSAGE = "응원과 박수는 각각 하루 세번만 가능해요"
 
 const val EXCEED_PAGE_LIMIT = "마지막 페이지입니다."
+
+const val ERROR_DIALOG_ASK_FOR_ADMIN_TITLE = "문제가 발생했어요"
+const val ERROR_DIALOG_ASK_FOR_ADMIN_CONTENT = "서버에 문제가 발생했습니다. 잠시 후 다시 시도해주세요"
+const val ERROR_DIALOG_INTERNET_TITLE = "인터넷 연결이 불안정해요"
+const val ERROR_DIALOG_INTERNET_CONTENT = "WIFI나 셀룰러 데이터 연결 상태를\n확인하고 다시 시도해주세요"

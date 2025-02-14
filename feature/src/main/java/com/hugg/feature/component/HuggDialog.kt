@@ -33,21 +33,29 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.hugg.domain.base.StatusCode
 import com.hugg.domain.model.enums.DialogType
 import com.hugg.feature.R
 import com.hugg.feature.theme.Black
 import com.hugg.feature.theme.CHALLENGE_COMPLETE
 import com.hugg.feature.theme.CHALLENGE_GET_POINT
 import com.hugg.feature.theme.DIALOG_MAX_LENGTH
+import com.hugg.feature.theme.ERROR_DIALOG_ASK_FOR_ADMIN_CONTENT
+import com.hugg.feature.theme.ERROR_DIALOG_ASK_FOR_ADMIN_TITLE
+import com.hugg.feature.theme.ERROR_DIALOG_INTERNET_CONTENT
+import com.hugg.feature.theme.ERROR_DIALOG_INTERNET_TITLE
 import com.hugg.feature.theme.Gs10
 import com.hugg.feature.theme.Gs30
+import com.hugg.feature.theme.Gs50
 import com.hugg.feature.theme.Gs70
 import com.hugg.feature.theme.Gs80
 import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.Gs90
 import com.hugg.feature.theme.MainNormal
 import com.hugg.feature.theme.Sunday
+import com.hugg.feature.theme.WORD_CONFIRM
 import com.hugg.feature.theme.WORD_NO
+import com.hugg.feature.theme.WORD_RETRY
 import com.hugg.feature.theme.WORD_YES
 import com.hugg.feature.theme.White
 
@@ -149,6 +157,96 @@ fun HuggDialog(
                         color = White
                     )
                 }
+            }
+
+            Spacer(modifier = Modifier.size(16.dp))
+        }
+    }
+}
+
+@Composable
+fun HuggErrorDialog(
+    errorCode : String = "",
+    onClickPositive : () -> Unit = {},
+    onDismiss: () -> Unit,
+){
+    val title = when(errorCode){
+        StatusCode.ERROR -> ERROR_DIALOG_INTERNET_TITLE
+        StatusCode.NETWORK_ERROR -> ERROR_DIALOG_ASK_FOR_ADMIN_TITLE
+        StatusCode.ERROR_404 -> ERROR_DIALOG_INTERNET_TITLE
+        else -> ERROR_DIALOG_ASK_FOR_ADMIN_TITLE
+    }
+
+    val message = when(errorCode){
+        StatusCode.ERROR -> ERROR_DIALOG_INTERNET_CONTENT
+        StatusCode.NETWORK_ERROR -> ERROR_DIALOG_ASK_FOR_ADMIN_CONTENT
+        StatusCode.ERROR_404 -> ERROR_DIALOG_INTERNET_CONTENT
+        else -> ERROR_DIALOG_ASK_FOR_ADMIN_CONTENT
+    }
+
+    val buttonText = when(errorCode){
+        StatusCode.ERROR -> WORD_RETRY
+        StatusCode.NETWORK_ERROR -> WORD_CONFIRM
+        StatusCode.ERROR_404 -> WORD_RETRY
+        else -> WORD_CONFIRM
+    }
+
+    Dialog(
+        onDismissRequest = onDismiss,
+        properties = DialogProperties(usePlatformDefaultWidth = false)
+    ){
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth()
+                .background(color = White, shape = RoundedCornerShape(12.dp))
+        ) {
+            Spacer(modifier = Modifier.size(24.dp))
+
+            HuggText(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+                maxLines = 1,
+                text = title,
+                style = HuggTypography.h2,
+                color = Black,
+                textAlign = TextAlign.Center
+            )
+
+            Spacer(modifier = Modifier.size(2.dp))
+
+            HuggText(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+                text = message,
+                style = HuggTypography.p1_l,
+                color = Gs50,
+                textAlign = TextAlign.Center
+            )
+
+            Spacer(modifier = Modifier.size(22.dp))
+
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth()
+                    .height(48.dp)
+                    .background(color = MainNormal, shape = RoundedCornerShape(4.dp))
+                    .clickable(
+                        onClick = {
+                            onDismiss()
+                            onClickPositive()
+                        },
+                    ),
+                contentAlignment = Alignment.Center
+            ){
+                HuggText(
+                    text = buttonText,
+                    style = HuggTypography.h2,
+                    color = White
+                )
             }
 
             Spacer(modifier = Modifier.size(16.dp))

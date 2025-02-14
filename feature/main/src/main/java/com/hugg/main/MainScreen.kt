@@ -31,6 +31,7 @@ import androidx.navigation.compose.rememberNavController
 import com.hugg.domain.model.enums.BottomNavType
 import com.hugg.feature.R
 import com.hugg.feature.base.LoadingManager
+import com.hugg.feature.component.HuggErrorDialog
 import com.hugg.feature.component.HuggText
 import com.hugg.feature.component.LoadingDialog
 import com.hugg.feature.theme.Gs50
@@ -55,6 +56,8 @@ fun MainScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val interactionSource = remember { MutableInteractionSource() }
     var showDialog by remember { mutableStateOf(false) }
+    var showErrorDialog by remember { mutableStateOf(false) }
+    var errorCode by remember { mutableStateOf("") }
 
     LaunchedEffect(navController) {
         navController.currentBackStackEntryFlow
@@ -78,8 +81,17 @@ fun MainScreen(
 
     LaunchedEffect(Unit){
         LoadingManager.errorState.collect {
-            ForeggLog.D(it)
+            errorCode = it
+            showErrorDialog = it.isNotEmpty()
         }
+    }
+
+    if(showErrorDialog){
+        HuggErrorDialog(
+            errorCode = errorCode,
+            onClickPositive = {},
+            onDismiss = { showErrorDialog = false } ,
+        )
     }
 
     HuggTheme {
