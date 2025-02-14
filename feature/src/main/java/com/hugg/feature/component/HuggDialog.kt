@@ -185,9 +185,9 @@ fun HuggErrorDialog(
     }
 
     val buttonText = when(errorCode){
-        StatusCode.ERROR -> WORD_RETRY
+        StatusCode.ERROR -> WORD_CONFIRM
         StatusCode.NETWORK_ERROR -> WORD_CONFIRM
-        StatusCode.ERROR_404 -> WORD_RETRY
+        StatusCode.ERROR_404 -> WORD_CONFIRM
         else -> WORD_CONFIRM
     }
 
