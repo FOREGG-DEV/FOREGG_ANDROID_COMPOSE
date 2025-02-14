@@ -54,7 +54,7 @@ class FcmNotification : FirebaseMessagingService() {
         } else NotificationCompat.Builder(this)
 
         builder
-            .setSmallIcon(R.drawable.ic_app_logo)
+            .setSmallIcon(R.drawable.ic_app_logo_alarm)
             .setContentTitle(title)
             .setContentText(body)
             .setContentIntent(pendingIntent)

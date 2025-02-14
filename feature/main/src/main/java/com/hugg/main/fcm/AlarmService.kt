@@ -74,7 +74,7 @@ class AlarmService : Service() {
             .setContentTitle(title)
             .setContentText(body)
             .setAutoCancel(true)
-            .setSmallIcon(R.drawable.ic_app_logo)
+            .setSmallIcon(R.drawable.ic_app_logo_alarm)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setDefaults(NotificationCompat.DEFAULT_ALL)
             .setContentIntent(pendingIntent)
