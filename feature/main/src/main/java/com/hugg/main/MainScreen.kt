@@ -17,8 +17,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -31,6 +32,7 @@ import com.hugg.domain.model.enums.BottomNavType
 import com.hugg.feature.R
 import com.hugg.feature.base.LoadingManager
 import com.hugg.feature.component.HuggText
+import com.hugg.feature.component.LoadingDialog
 import com.hugg.feature.theme.Gs50
 import com.hugg.feature.theme.Gs80
 import com.hugg.feature.theme.HuggTheme
@@ -52,8 +54,7 @@ fun MainScreen(
     val navController = rememberNavController()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val interactionSource = remember { MutableInteractionSource() }
-    val commonError by viewModel.commonError.observeAsState()
-
+    var showDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(navController) {
         navController.currentBackStackEntryFlow
@@ -61,6 +62,18 @@ fun MainScreen(
             .collect { backStackEntry ->
                 viewModel.changedRoute(backStackEntry.destination.route)
             }
+    }
+
+    LaunchedEffect(Unit) {
+        LoadingManager.loadingState.collect { isLoading ->
+            showDialog = isLoading
+        }
+    }
+
+    if (showDialog) {
+        LoadingDialog {
+            showDialog = false
+        }
     }
 
     LaunchedEffect(Unit){
