@@ -64,6 +64,7 @@ dependencies {
     implementation(AndroidX.NAVIGATION_COMPOSE)
     implementation(AndroidX.LIFECYCLE_VIEW_MODEL_KTX)
     implementation(AndroidX.LIFECYCLE_RUNTIME_KTX)
+    implementation(AndroidX.LIVE_DATA)
     implementation(AndroidX.LIFECYCLE_RUNTIME_COMPOSE)
     implementation(AndroidX.SPLASH)
     implementation(AndroidX.THREE_TEN)

@@ -47,14 +47,19 @@ abstract class BaseViewModel<STATE: PageState>(
         }
     }
 
+    private fun showCommonError(error : String){
+        viewModelScope.launch {
+            LoadingManager.setCommonErrorState(error)
+        }
+    }
+
     protected fun<D> resultResponse(response: ApiState<D>, successCallback : (D) -> Unit, errorCallback : ((String) -> Unit)? = null, needLoading : Boolean = true){
         when(response){
             is ApiState.Error -> {
                 if(response.errorCode == StatusCode.ERROR_404 ||
                     response.errorCode == StatusCode.ERROR ||
                     response.errorCode == StatusCode.NETWORK_ERROR) {
-                    //ForeggAnalytics.logEvent("error_${response.errorCode}_${response.data.toString()}", "apiScreen")
-                    _commonError.value = response.errorCode
+                    showCommonError(response.errorCode)
                 }
                 else errorCallback?.invoke(response.errorCode)
                 endLoading()

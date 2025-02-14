@@ -24,6 +24,10 @@ import androidx.core.app.NotificationManagerCompat
 import com.hugg.main.MainActivity
 import com.hugg.feature.R
 import com.hugg.feature.util.ForeggLog
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class AlarmService : Service() {
 
@@ -89,7 +93,23 @@ class AlarmService : Service() {
         wakeLock.acquire(3000)
         wakeLock.release()
         notificationManager.notify(1, notificationBuilder)
-        startAlarm()
+
+        CoroutineScope(Dispatchers.Main).launch {
+            while (true) {
+                val notifications = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    notificationManager.activeNotifications
+                } else {
+                    return@launch startAlarm() // API 23 미만에서는 바로 실행
+                }
+
+                if (notifications.any { it.id == 1 }) { // ID 1번 알림이 있으면 실행
+                    startAlarm()
+                    return@launch
+                }
+                delay(100)
+            }
+        }
+
         return START_STICKY
     }
 
