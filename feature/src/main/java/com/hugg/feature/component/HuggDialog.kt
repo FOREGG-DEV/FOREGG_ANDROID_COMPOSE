@@ -406,7 +406,7 @@ fun LoadingDialog(
             LottieAnimation(
                 composition = composition,
                 iterations = LottieConstants.IterateForever,
-                modifier = Modifier.size(150.dp)
+                modifier = Modifier.size(100.dp)
             )
         }
     }

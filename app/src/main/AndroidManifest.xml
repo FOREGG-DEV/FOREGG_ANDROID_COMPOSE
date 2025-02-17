@@ -26,6 +26,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Hugg"
+        android:enableOnBackInvokedCallback="true"
         tools:targetApi="31">
 
         <provider
