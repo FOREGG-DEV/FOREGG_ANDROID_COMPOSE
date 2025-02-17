@@ -9,25 +9,22 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.pm.ServiceInfo
 import android.media.Ringtone
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.os.PowerManager
 import android.os.VibrationEffect
 import android.os.Vibrator
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.hugg.main.MainActivity
 import com.hugg.feature.R
-import com.hugg.feature.util.ForeggLog
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class AlarmService : Service() {
 
@@ -45,6 +42,7 @@ class AlarmService : Service() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     @SuppressLint("InvalidWakeLockTag")
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent?.action == STOP_ALARM) {
@@ -81,40 +79,24 @@ class AlarmService : Service() {
             .setDeleteIntent(stopPendingIntent)
             .build()
 
-        checkPermission()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) { // Android 14 이상
-            startForeground(1, notificationBuilder, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
-        } else {
-            startForeground(1, notificationBuilder)
-        }
 
+        checkPermission()
         val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
         val wakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG")
         wakeLock.acquire(3000)
-        wakeLock.release()
         notificationManager.notify(1, notificationBuilder)
 
-        CoroutineScope(Dispatchers.Main).launch {
-            while (true) {
-                val notifications = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    notificationManager.activeNotifications
-                } else {
-                    return@launch startAlarm() // API 23 미만에서는 바로 실행
-                }
-
-                if (notifications.any { it.id == 1 }) { // ID 1번 알림이 있으면 실행
-                    startAlarm()
-                    return@launch
-                }
-                delay(100)
-            }
-        }
+        Handler(Looper.getMainLooper()).postDelayed({
+            startAlarm()
+            wakeLock.release()
+        }, 1000)
 
         return START_STICKY
     }
 
     private fun startAlarm(){
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        if(!checkPermission()) return
 
         val pattern = LongArray(REPEAT_TIME * 2) { i ->
             if (i % 2 == 0) DELAY_TIME else 500L
@@ -132,14 +114,8 @@ class AlarmService : Service() {
         ringtone?.play()
     }
 
-    private fun checkPermission(){
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return
-        }
+    private fun checkPermission() : Boolean{
+        return ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
     }
 
     private fun createNotificationChannel() {
