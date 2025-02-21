@@ -40,6 +40,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -299,6 +300,7 @@ fun CalendarDayItem(
                     text = text,
                     color = Gs70,
                     maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                     style = HuggTypography.p5,
                 )
             }

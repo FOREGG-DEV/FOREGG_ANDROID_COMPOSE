@@ -171,16 +171,16 @@ fun HuggErrorDialog(
     onDismiss: () -> Unit,
 ){
     val title = when(errorCode){
-        StatusCode.ERROR -> ERROR_DIALOG_INTERNET_TITLE
+        StatusCode.ERROR -> ERROR_DIALOG_ASK_FOR_ADMIN_TITLE
         StatusCode.NETWORK_ERROR -> ERROR_DIALOG_ASK_FOR_ADMIN_TITLE
-        StatusCode.ERROR_404 -> ERROR_DIALOG_INTERNET_TITLE
+        StatusCode.ERROR_404 -> ERROR_DIALOG_ASK_FOR_ADMIN_TITLE
         else -> ERROR_DIALOG_ASK_FOR_ADMIN_TITLE
     }
 
     val message = when(errorCode){
-        StatusCode.ERROR -> ERROR_DIALOG_INTERNET_CONTENT
+        StatusCode.ERROR -> ERROR_DIALOG_ASK_FOR_ADMIN_CONTENT
         StatusCode.NETWORK_ERROR -> ERROR_DIALOG_ASK_FOR_ADMIN_CONTENT
-        StatusCode.ERROR_404 -> ERROR_DIALOG_INTERNET_CONTENT
+        StatusCode.ERROR_404 -> ERROR_DIALOG_ASK_FOR_ADMIN_CONTENT
         else -> ERROR_DIALOG_ASK_FOR_ADMIN_CONTENT
     }
 

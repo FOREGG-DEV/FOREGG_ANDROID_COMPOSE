@@ -81,7 +81,6 @@ class AlarmService : Service() {
 
 
         checkPermission()
-        startForeground(1, notificationBuilder)
         val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
         val wakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG")
         wakeLock.acquire(3000)
