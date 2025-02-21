@@ -1,6 +1,7 @@
 package com.hugg.main.fcm
 
 import android.annotation.SuppressLint
+import android.app.ActivityManager
 import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -15,6 +16,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.hugg.main.MainActivity
 import com.hugg.feature.R
+import com.hugg.feature.util.ForeggLog
 
 class FcmNotification : FirebaseMessagingService() {
 
@@ -37,7 +39,7 @@ class FcmNotification : FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
         if(message.data.isEmpty()) return
-        if(message.data[VIBRATION].toBoolean() ?: false) setAlarm(message.data)
+        if(message.data[VIBRATION].toBoolean() && !isAppInForeground()) setAlarm(message.data)
         else sendNotification(message.data)
     }
     @SuppressLint("InvalidWakeLockTag")
@@ -107,10 +109,34 @@ class FcmNotification : FirebaseMessagingService() {
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), pendingIntent)
     }
 
-    private fun getPendingIntent(navigation : String) : PendingIntent{
-        val intent = Intent(applicationContext, MainActivity::class.java).apply {
-            putExtra(PendingExtraValue.KEY, navigation)
+    private fun getPendingIntent(navigation: String): PendingIntent {
+        val intent = if (isAppInForeground()) {
+            Intent(applicationContext, MainActivity::class.java).apply {
+                putExtra(PendingExtraValue.KEY, navigation)
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            }
+        } else {
+            Intent(applicationContext, MainActivity::class.java).apply {
+                putExtra(PendingExtraValue.KEY, navigation)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            }
         }
+
         return PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
     }
+
+    private fun isAppInForeground(): Boolean {
+        val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        val runningAppProcesses = activityManager.runningAppProcesses ?: return false
+
+        for (processInfo in runningAppProcesses) {
+            if (processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                if (processInfo.processName == packageName) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
 }
