@@ -162,8 +162,8 @@ fun cropImage(context: Context, uri: Uri, scale: Float, offsetX: Float, offsetY:
     val aspectRatio = 375f / 235f
     val visibleWidth = originalWidth / scale
     val visibleHeight = visibleWidth / aspectRatio
-    val cropX = ((originalWidth - visibleWidth) / 2 + offsetX / scale).toInt().coerceIn(0, originalWidth)
-    val cropY = ((originalHeight - visibleHeight) / 2 + offsetY / scale).toInt().coerceIn(0, originalHeight)
+    val cropX = ((originalWidth - visibleWidth) / 2 - (offsetX / scale * scale)).toInt().coerceIn(0, originalWidth - visibleWidth.toInt())
+    val cropY = ((originalHeight - visibleHeight) / 2 - (offsetY / scale * scale)).toInt().coerceIn(0, originalHeight - visibleHeight.toInt())
     val cropWidth = minOf(visibleWidth.toInt(), originalWidth - cropX)
     val cropHeight = minOf((cropWidth / aspectRatio).toInt(), originalHeight - cropY)
     val croppedBitmap = Bitmap.createBitmap(rotatedBitmap, cropX, cropY, cropWidth, cropHeight)
