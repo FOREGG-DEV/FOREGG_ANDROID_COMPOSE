@@ -11,7 +11,7 @@ object DailyHuggResponseMapper: Mapper.ResponseMapper<DailyHuggResponse, DailyHu
         return type?.let {
             DailyHuggItemVo(
                 id = it.id,
-                date = it.date,
+                time = getTime(it.modifiedAt),
                 day = it.day,
                 content = it.content,
                 imageUrl = it.imageUrl,
@@ -21,5 +21,10 @@ object DailyHuggResponseMapper: Mapper.ResponseMapper<DailyHuggResponse, DailyHu
                 dailyConditionType = it.dailyConditionType
             )
         } ?: DailyHuggItemVo()
+    }
+
+    fun getTime(modifiedTime : String) : String {
+        val regex = Regex("""T(\d{2}:\d{2}:\d{2})""")
+        return regex.find(modifiedTime)?.groups?.get(1)?.value ?: ""
     }
 }

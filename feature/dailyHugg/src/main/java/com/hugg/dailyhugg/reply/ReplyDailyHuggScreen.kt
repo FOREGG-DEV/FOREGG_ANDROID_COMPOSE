@@ -295,7 +295,7 @@ fun DailyHuggItem(
                     )
 
                     HuggText(
-                        text = item.date.split(' ').last().substring(0, 5),
+                        text = item.time,
                         style = HuggTypography.p3_l,
                         color = Gs70
                     )

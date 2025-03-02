@@ -485,7 +485,7 @@ fun DailyHuggItem(
                                 )
 
                                 HuggText(
-                                    text = item.date,
+                                    text = item.time,
                                     style = HuggTypography.p3_l,
                                     color = Gs70
                                 )

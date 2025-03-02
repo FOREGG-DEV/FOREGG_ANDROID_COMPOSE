@@ -1,7 +1,6 @@
 package com.hugg.main.fcm
 
 import android.content.*
-import android.os.Build
 
 class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
@@ -10,10 +9,6 @@ class AlarmReceiver : BroadcastReceiver() {
             putExtra(FcmNotification.BODY, intent.getStringExtra(FcmNotification.BODY))
             putExtra(FcmNotification.NAVIGATION, intent.getStringExtra(FcmNotification.NAVIGATION))
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            context.startForegroundService(serviceIntent)
-        } else {
-            context.startService(serviceIntent)
-        }
+        AlarmService.enqueueWork(context, serviceIntent)
     }
 }

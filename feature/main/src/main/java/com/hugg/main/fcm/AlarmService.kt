@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -14,21 +13,22 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.os.Handler
-import android.os.IBinder
 import android.os.Looper
 import android.os.PowerManager
 import android.os.VibrationEffect
 import android.os.Vibrator
-import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import androidx.core.app.JobIntentService
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.hugg.main.MainActivity
 import com.hugg.feature.R
+import com.hugg.feature.util.ForeggLog
 
-class AlarmService : Service() {
+class AlarmService : JobIntentService() {
 
-    companion object{
+    companion object {
+        private const val JOB_ID = 1001
         const val STOP_ALARM = "STOP_ALARM"
         const val CHANNEL_ID = "alarm_service_channel"
         const val REPEAT_TIME = 10
@@ -40,19 +40,22 @@ class AlarmService : Service() {
             ringtone?.stop()
             vibrator?.cancel()
         }
+
+        fun enqueueWork(context: Context, work: Intent) {
+            enqueueWork(context, AlarmService::class.java, JOB_ID, work)
+        }
     }
 
-    @RequiresApi(Build.VERSION_CODES.P)
-    @SuppressLint("InvalidWakeLockTag")
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (intent?.action == STOP_ALARM) {
-            stopAlarm()
-            stopSelf()
-            return START_NOT_STICKY
-        }
-        val title = intent?.getStringExtra(FcmNotification.TITLE) ?: ""
-        val body = intent?.getStringExtra(FcmNotification.BODY) ?: ""
+    override fun onHandleWork(intent: Intent) {
+        val title = intent.getStringExtra(FcmNotification.TITLE) ?: ""
+        val body = intent.getStringExtra(FcmNotification.BODY) ?: ""
         val navigation = intent?.getStringExtra(FcmNotification.NAVIGATION) ?: ""
+
+        showNotification(title, body, navigation)
+    }
+
+    @SuppressLint("InvalidWakeLockTag")
+    private fun showNotification(title: String, body: String, navigation : String) {
 
         createNotificationChannel()
 
@@ -90,8 +93,6 @@ class AlarmService : Service() {
             startAlarm()
             wakeLock.release()
         }, 1000)
-
-        return START_STICKY
     }
 
     private fun startAlarm(){
@@ -114,10 +115,6 @@ class AlarmService : Service() {
         ringtone?.play()
     }
 
-    private fun checkPermission() : Boolean{
-        return ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
-    }
-
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(CHANNEL_ID, "Alarm Service Channel", NotificationManager.IMPORTANCE_HIGH)
@@ -126,7 +123,7 @@ class AlarmService : Service() {
         }
     }
 
-    override fun onBind(intent: Intent?): IBinder? {
-        return null
+    private fun checkPermission() : Boolean{
+        return ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
     }
 }

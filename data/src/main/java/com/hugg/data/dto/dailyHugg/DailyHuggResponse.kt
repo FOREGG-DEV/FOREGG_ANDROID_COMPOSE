@@ -8,7 +8,9 @@ data class DailyHuggResponse(
     @SerializedName("id")
     val id: Long = -1,
     @SerializedName("date")
-    val date: String = "",
+    val date : String = "",
+    @SerializedName("modifiedAt")
+    val modifiedAt: String = "",
     @SerializedName("day")
     val day: String = "",
     @SerializedName("dailyConditionType")

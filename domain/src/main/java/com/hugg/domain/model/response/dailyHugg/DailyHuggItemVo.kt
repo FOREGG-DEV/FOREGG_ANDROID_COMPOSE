@@ -5,7 +5,7 @@ import com.hugg.domain.model.enums.DailyHuggReplyType
 
 data class DailyHuggItemVo(
     val id: Long = -1,
-    val date: String = "",
+    val time: String = "",
     val day: String = "",
     val dailyConditionType: DailyConditionType = DailyConditionType.DEFAULT,
     val content: String = "",
