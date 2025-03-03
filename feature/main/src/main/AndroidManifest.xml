@@ -20,8 +20,12 @@
         </service>
 
         <receiver android:name="com.hugg.main.fcm.AlarmReceiver" android:exported="true" />
-        <service android:name="com.hugg.main.fcm.AlarmService" android:exported="false"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name="com.hugg.main.fcm.AlarmService"
+            android:foregroundServiceType="mediaPlayback"
+            android:permission="android.permission.FOREGROUND_SERVICE"
+            android:exported="false"/>
+
 
 
         <activity

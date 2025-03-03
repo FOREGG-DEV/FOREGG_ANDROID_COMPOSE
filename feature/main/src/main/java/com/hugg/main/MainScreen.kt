@@ -44,7 +44,6 @@ import com.hugg.feature.theme.WORD_DAILY_HUGG
 import com.hugg.feature.theme.WORD_HOME
 import com.hugg.feature.theme.WORD_MY
 import com.hugg.feature.theme.White
-import com.hugg.feature.util.ForeggLog
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Composable
