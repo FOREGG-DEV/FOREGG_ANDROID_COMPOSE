@@ -121,7 +121,7 @@ fun HomeContainer(
     if(uiState.showCompleteChallengeDialog){
         ChallengeCompleteDialog(
             onClickCancel = { viewModel.updateShowChallengeCompleteDialog(false) },
-            points = 50
+            points = 100
         )
     }
 }

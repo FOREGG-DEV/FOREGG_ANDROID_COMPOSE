@@ -154,9 +154,14 @@ class HomeViewModel @Inject constructor(
         updateShowInputImpressionDialog(false)
         viewModelScope.launch {
             challengeRepository.completeChallenge(id = uiState.value.selectedChallengeId, date = TimeFormatter.getToday(), thoughts = ChallengeThoughtsVo(content)).collect {
-                resultResponse(it, { updateShowChallengeCompleteDialog(true) })
+                resultResponse(it, { handleSuccessCompleteChallenge() })
             }
         }
+    }
+
+    private fun handleSuccessCompleteChallenge(){
+        updateShowChallengeCompleteDialog(true)
+        getHome()
     }
 
     fun updateShowInputImpressionDialog(isShow : Boolean){

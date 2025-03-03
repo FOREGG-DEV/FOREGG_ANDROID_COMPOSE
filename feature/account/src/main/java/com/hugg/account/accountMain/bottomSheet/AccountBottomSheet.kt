@@ -77,6 +77,8 @@ fun DatePickBottomSheet(
             { _, year, month, day ->
                 if(isClickedStartDay) startDay = TimeFormatter.getDatePickerDashDate(year, month, day)
                 else endDay = TimeFormatter.getDatePickerDashDate(year, month, day)
+
+                if(TimeFormatter.isAfter(startDay, endDay)) startDay = endDay
             },
             calendar.get(Calendar.YEAR),
             calendar.get(Calendar.MONTH),

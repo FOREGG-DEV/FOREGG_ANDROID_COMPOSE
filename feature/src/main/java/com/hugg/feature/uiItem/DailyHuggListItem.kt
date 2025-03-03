@@ -27,6 +27,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.hugg.domain.model.enums.DailyConditionType
 import com.hugg.domain.model.response.dailyHugg.DailyHuggListItemVo
 import com.hugg.feature.R
 import com.hugg.feature.component.HuggText
@@ -67,7 +68,7 @@ fun DailyHuggListItem(
             Spacer(modifier = Modifier.width(60.dp))
 
             Icon(
-                painter = painterResource(R.drawable.ic_hugging_female),
+                painter = painterResource(getDailyHuggIcon(item.dailyConditionType)),
                 contentDescription = "",
                 modifier = Modifier
                     .size(20.dp),
@@ -98,5 +99,18 @@ fun DailyHuggListItem(
                 color = GsWhite,
             )
         }
+    }
+}
+
+fun getDailyHuggIcon(
+    dailyConditionType: DailyConditionType
+) : Int {
+    return when (dailyConditionType) {
+        DailyConditionType.MAD -> R.drawable.ic_daily_condition_worst_selected
+        DailyConditionType.SAD -> R.drawable.ic_daily_condition_bad_selected
+        DailyConditionType.ANXIOUS -> R.drawable.ic_daily_condition_soso_selected
+        DailyConditionType.HAPPY -> R.drawable.ic_daily_condition_good_selected
+        DailyConditionType.LOVE -> R.drawable.ic_daily_condition_perfect_selected
+        DailyConditionType.DEFAULT -> -1
     }
 }

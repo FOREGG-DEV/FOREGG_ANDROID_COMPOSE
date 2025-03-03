@@ -152,8 +152,7 @@ fun DailyHuggScreen(
 
     if (uiState.showEditDialog) {
         HuggDialog(
-            hasWarningText = true,
-            warningMessage = EDIT_DAILY_HUGG_DIALOG_WARNING,
+            hasWarningText = false,
             title = EDIT_DAILY_HUGG_DIALOG_TITLE,
             onClickNegative = { viewModel.updateShowEditDialog(false) },
             onClickPositive = {
@@ -162,7 +161,7 @@ fun DailyHuggScreen(
                         CreateEditDailyHuggPageState(
                             dailyHuggContent = it.content,
                             dailyConditionType = it.dailyConditionType,
-                            selectedImageUri = Uri.parse(it.imageUrl)
+                            selectedImageUri = if(it.imageUrl.isNullOrEmpty()) null else Uri.parse(it.imageUrl)
                         ),
                         it.id
                     )
@@ -456,7 +455,7 @@ fun DailyHuggItem(
                         .border(BorderStroke(1.dp, FEMALE), shape = RoundedCornerShape(8.dp))
                         .background(White)
                         .onThrottleClick(
-                            onClick = { onClickDailyHuggItem() },
+                            onClick = { if(UserInfo.info.genderType == GenderType.FEMALE) onClickDailyHuggItem() },
                             interactionSource = interactionSource
                         )
                 ) {
