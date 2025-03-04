@@ -356,6 +356,7 @@ const val ERROR_NEED_WEB = "웹 브라우저를 설치해주세요."
 // --------- 챌린지 --------- //
 const val CHALLENGE_DIALOG_INPUT_IMPRESSION_TITLE = "한 줄 소감을 입력해주세요"
 const val CHALLENGE_COMPLETE = "챌린지 성공"
+const val CHALLENGE_START = "챌린지 시작!"
 fun CHALLENGE_GET_POINT(points : Int) = buildAnnotatedString {
     withStyle(style = SpanStyle(color = Sub)) {
         append("${points}P")

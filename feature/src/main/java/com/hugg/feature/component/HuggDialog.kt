@@ -39,6 +39,7 @@ import com.hugg.feature.R
 import com.hugg.feature.theme.Black
 import com.hugg.feature.theme.CHALLENGE_COMPLETE
 import com.hugg.feature.theme.CHALLENGE_GET_POINT
+import com.hugg.feature.theme.CHALLENGE_START
 import com.hugg.feature.theme.DIALOG_MAX_LENGTH
 import com.hugg.feature.theme.ERROR_DIALOG_ASK_FOR_ADMIN_CONTENT
 import com.hugg.feature.theme.ERROR_DIALOG_ASK_FOR_ADMIN_TITLE
@@ -377,6 +378,56 @@ fun ChallengeCompleteDialog(
 
             HuggText(
                 text = CHALLENGE_GET_POINT(points),
+                color = White,
+                style = HuggTypography.challenge
+            )
+        }
+    }
+}
+
+@Composable
+fun ChallengeStartDialog(
+    onClickCancel : () -> Unit = {},
+){
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.challenge_complete))
+    val progress by animateLottieCompositionAsState(
+        composition,
+        iterations = 1
+    )
+
+    LaunchedEffect(progress) {
+        if (progress == 1f) {
+            onClickCancel()
+        }
+    }
+
+    Dialog(
+        onDismissRequest = onClickCancel,
+        properties = DialogProperties(usePlatformDefaultWidth = false)
+    ){
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ){
+            HuggText(
+                text = CHALLENGE_START,
+                color = White,
+                style = HuggTypography.challenge
+            )
+
+            Spacer(modifier = Modifier.size(8.dp))
+
+            LottieAnimation(
+                composition = composition,
+                progress = progress,
+                modifier = Modifier.size(258.dp)
+            )
+
+            Spacer(modifier = Modifier.size(8.dp))
+
+            HuggText(
+                text = CHALLENGE_GET_POINT(2000),
                 color = White,
                 style = HuggTypography.challenge
             )

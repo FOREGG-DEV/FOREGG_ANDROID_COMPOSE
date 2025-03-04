@@ -33,6 +33,7 @@ import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.domain.model.enums.TopBarRightType
 import com.hugg.feature.R
 import com.hugg.feature.component.ChallengeCompleteDialog
+import com.hugg.feature.component.ChallengeStartDialog
 import com.hugg.feature.component.HuggInputDialog
 import com.hugg.feature.component.HuggTabBar
 import com.hugg.feature.component.TopBar
@@ -126,9 +127,8 @@ fun ChallengeMainScreen(
     }
 
     if (uiState.showChallengeCompleteDialog) {
-        ChallengeCompleteDialog(
+        ChallengeStartDialog(
             onClickCancel = { viewModel.updateShowDialog(false) },
-            points = 2000
         )
     }
 
