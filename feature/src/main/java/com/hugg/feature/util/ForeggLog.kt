@@ -25,7 +25,6 @@ fun openBatteryOptimizationSettings(context: Context) {
     }
     try {
         context.startActivity(intent)
-        ForeggLog.D("배터리 최적화 예외 요청 화면 열기 성공")
     } catch (e: Exception) {
         ForeggLog.D("배터리 최적화 예외 요청 실패: ${e.message}")
     }
