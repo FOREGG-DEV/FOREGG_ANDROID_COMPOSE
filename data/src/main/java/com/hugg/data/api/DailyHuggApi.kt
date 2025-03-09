@@ -42,7 +42,7 @@ interface DailyHuggApi {
     @PUT(Endpoints.DailyHugg.EDIT)
     suspend fun editDailyHugg(
         @Path("id") id: Long,
-        @Part image: MultipartBody.Part,
+        @Part image: MultipartBody.Part?,
         @Part("dto") dto: RequestBody
     ): Response<ApiResponse<Unit>>
 

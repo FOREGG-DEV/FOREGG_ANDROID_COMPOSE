@@ -91,21 +91,19 @@ fun EditDailyHuggScreen(
         interactionSource = interactionSource,
         onClickBtnClose = onClickBtnClose,
         onClickBtnCreate = {
-            uiState.selectedImageUri?.let { uri ->
-                coroutineScope.launch {
-                    viewModel.createDailyHugg(
-                        getFilePartFromUri(context = context, uri = uri)
-                    )
+            coroutineScope.launch {
+                val imagePart = uiState.selectedImageUri?.let { uri ->
+                    getFilePartFromUri(context = context, uri = uri)
                 }
+                viewModel.createDailyHugg(imagePart)
             }
         },
         onClickBtnEdit = {
-            uiState.selectedImageUri?.let { uri ->
-                coroutineScope.launch {
-                    viewModel.editDailyHugg(
-                        getFilePartFromUri(context = context, uri = uri)
-                    )
+            coroutineScope.launch {
+                val imagePart = uiState.selectedImageUri?.let { uri ->
+                    getFilePartFromUri(context = context, uri = uri)
                 }
+                viewModel.editDailyHugg(imagePart)
             }
         },
         popScreen = popScreen,

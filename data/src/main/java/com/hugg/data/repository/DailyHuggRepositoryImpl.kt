@@ -34,7 +34,7 @@ class DailyHuggRepositoryImpl @Inject constructor(
 
     override suspend fun editDailyHugg(
         id: Long,
-        image: MultipartBody.Part,
+        image: MultipartBody.Part?,
         dto: RequestBody
     ): Flow<ApiState<Unit>> {
         return apiLaunch(apiCall = { dailyHuggApi.editDailyHugg(id = id, image = image, dto = dto) }, UnitResponseMapper)

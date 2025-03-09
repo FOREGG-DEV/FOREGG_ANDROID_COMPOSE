@@ -325,7 +325,7 @@ fun NavGraphBuilder.accountGraph(navController: NavHostController) {
             val id = it.arguments?.getLong("id") ?: -1
             val type = CreateOrEditType.getEnumType(it.arguments?.getString("type") ?: "")
             AccountCreateOrEditContainer(
-                navigateCreateSubsidy = { round -> navController.navigate(Routes.AccountSubsidyCreateOrEdit.getRouteAccountSubsidyCreateOrEdit(id, type.type, round))},
+                navigateCreateSubsidy = { round -> navController.navigate(Routes.AccountSubsidyCreateOrEdit.getRouteAccountSubsidyCreateOrEdit(id, CreateOrEditType.CREATE.type, round))},
                 id = id,
                 type = type,
                 goToBack = { navController.popBackStack() }
