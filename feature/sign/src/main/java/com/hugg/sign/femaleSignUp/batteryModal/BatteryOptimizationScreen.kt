@@ -22,6 +22,7 @@ import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
 import com.hugg.feature.component.FilledBtn
 import com.hugg.feature.component.HuggText
+import com.hugg.feature.util.checkAlreadyBatteryOptimization
 import com.hugg.feature.util.openBatteryOptimizationSettings
 
 
@@ -36,7 +37,7 @@ fun BatteryOptimizationContainer(
         onClickTopBarLeftBtn = goToBack,
         onClickNextBtn = {
             navigateGoToHome()
-            openBatteryOptimizationSettings(context)
+            if(!checkAlreadyBatteryOptimization(context)) openBatteryOptimizationSettings(context)
         }
     )
 }

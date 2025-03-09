@@ -120,7 +120,7 @@ class ScheduleCreateOrEditViewModel @Inject constructor(
         updateState(uiState.value.copy(endDate = date))
     }
 
-    fun onCheckedChange(checked : Boolean){
+    fun updateAlarmChecked(checked : Boolean){
         updateState(
             uiState.value.copy(isAlarmCheck = checked)
         )
@@ -224,7 +224,7 @@ class ScheduleCreateOrEditViewModel @Inject constructor(
         result.dose?.let { onChangedDose(it) }
         updateRepeatCount(result.repeatTimes.size)
         updateRepeatTimeList(convertKorTime(result.repeatTimes))
-        onCheckedChange(result.vibration)
+        updateAlarmChecked(result.vibration)
         result.date?.let { updateNormalDate(it) }
         result.startDate?.let { updateStartDate(it) }
         result.endDate?.let { updateEndDate(it) }

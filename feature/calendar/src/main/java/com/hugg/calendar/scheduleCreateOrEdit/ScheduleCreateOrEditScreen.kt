@@ -28,9 +28,10 @@ import com.hugg.domain.model.enums.TopBarRightType
 import com.hugg.feature.component.HuggDialog
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
-import com.hugg.feature.util.ForeggLog
 import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.TimeFormatter
+import com.hugg.feature.util.checkAlreadyBatteryOptimization
+import com.hugg.feature.util.openBatteryOptimizationSettings
 import java.util.Calendar
 
 @Composable
@@ -73,6 +74,10 @@ fun ScheduleCreateOrEditContainer(
 
     LaunchedEffect(Unit){
         viewModel.initView(pageType, recordType, id, selectDate)
+        if(!checkAlreadyBatteryOptimization(context)) {
+            viewModel.updateAlarmChecked(false)
+            openBatteryOptimizationSettings(context)
+        }
     }
 
     LaunchedEffect(Unit) {
@@ -112,7 +117,10 @@ fun ScheduleCreateOrEditContainer(
             viewModel.setTouchedTimePicker(index)
             timePickerDialog.show()
         },
-        onCheckedChange = { checked -> viewModel.onCheckedChange(checked) },
+        onCheckedChange = { checked ->
+            if(!checkAlreadyBatteryOptimization(context) && checked) openBatteryOptimizationSettings(context)
+            else viewModel.updateAlarmChecked(checked)
+        },
         onClickDatePickerBtn = { repeatType ->
             viewModel.setTouchedDatePicker(repeatType)
             datePickerDialog.show()

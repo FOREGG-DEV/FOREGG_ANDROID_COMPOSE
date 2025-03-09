@@ -19,23 +19,21 @@ object ForeggLog {
 }
 
 fun openBatteryOptimizationSettings(context: Context) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        val packageName = context.packageName
-        val pm = context.getSystemService(Context.POWER_SERVICE) as android.os.PowerManager
-
-        if (pm.isIgnoringBatteryOptimizations(packageName)) {
-            ForeggLog.D("이미 배터리 최적화 예외 설정됨")
-            return
-        }
-
-        val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
-            data = Uri.parse("package:$packageName")
-        }
-        try {
-            context.startActivity(intent)
-            ForeggLog.D("배터리 최적화 예외 요청 화면 열기 성공")
-        } catch (e: Exception) {
-            ForeggLog.D("배터리 최적화 예외 요청 실패: ${e.message}")
-        }
+    val packageName = context.packageName
+    val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
+        data = Uri.parse("package:$packageName")
     }
+    try {
+        context.startActivity(intent)
+        ForeggLog.D("배터리 최적화 예외 요청 화면 열기 성공")
+    } catch (e: Exception) {
+        ForeggLog.D("배터리 최적화 예외 요청 실패: ${e.message}")
+    }
+}
+
+fun checkAlreadyBatteryOptimization(context: Context) : Boolean {
+    val packageName = context.packageName
+    val pm = context.getSystemService(Context.POWER_SERVICE) as android.os.PowerManager
+
+    return pm.isIgnoringBatteryOptimizations(packageName)
 }
