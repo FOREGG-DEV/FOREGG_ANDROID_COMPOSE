@@ -34,7 +34,9 @@ import com.hugg.feature.component.HuggText
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.*
 import com.hugg.feature.util.UserInfo
+import com.hugg.feature.util.checkAlreadyBatteryOptimization
 import com.hugg.feature.util.onThrottleClick
+import com.hugg.feature.util.openBatteryOptimizationSettings
 
 
 @Composable
@@ -62,7 +64,8 @@ fun MyPageContainer(
         navigateGoToRegistration = navigateGoToRegistration,
         onClickNotice = { goToWebLink(context, MY_PAGE_NOTICE_LINK) },
         onClickFaq = { goToWebLink(context, MY_PAGE_FAQ_LINK) },
-        onClickTermsOfService = { goToWebLink(context, MY_PAGE_TERMS_OF_SERVICE_LINK) }
+        onClickTermsOfService = { goToWebLink(context, MY_PAGE_TERMS_OF_SERVICE_LINK) },
+        onClickBackgroundOptimization = { if(!checkAlreadyBatteryOptimization(context)) openBatteryOptimizationSettings(context) }
     )
 }
 
@@ -77,6 +80,7 @@ fun MyPageScreen(
     onClickNotice : () -> Unit = {},
     onClickFaq : () -> Unit = {},
     onClickTermsOfService : () -> Unit = {},
+    onClickBackgroundOptimization : () -> Unit = {},
 ) {
     Column(
         modifier = Modifier
@@ -217,6 +221,23 @@ fun MyPageScreen(
             ) {
                 HuggText(
                     text = MY_PAGE_TERMS_OF_SERVICE,
+                    style = HuggTypography.p2,
+                    color = Black,
+                )
+            }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp)
+                    .onThrottleClick(
+                        onClick = onClickBackgroundOptimization,
+                        interactionSource = interactionSource
+                    ),
+                contentAlignment = Alignment.CenterStart
+            ) {
+                HuggText(
+                    text = MY_PAGE_BACKGROUND_OPTIMIZATION_DIALOG,
                     style = HuggTypography.p2,
                     color = Black,
                 )
