@@ -595,7 +595,7 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController) {
 
         composable(Routes.NotificationScreen.route) {
             NotificationContainer(
-                navigateGoToChallengeCheer = { id -> },
+                navigateGoToChallengeCheer = { id -> navController.navigate(Routes.ChallengeSupportScreen.createRoute(id))},
                 navigateGoToDailyHuggDetail = { date -> navController.navigate(Routes.DailyHuggScreen.createRoute(date)) },
                 goToBack = { navController.popBackStack() }
             )
