@@ -48,7 +48,7 @@ import com.hugg.feature.component.HuggText
 
 @Composable
 fun SpouseCodeFemaleContainer(
-    navigateGoToHome : () -> Unit = {},
+    navigationGoToBatteryOptimization : () -> Unit = {},
     accessToken : String,
     signUpRequestVo: SignUpRequestVo,
     goToBack : () -> Unit = {},
@@ -61,7 +61,7 @@ fun SpouseCodeFemaleContainer(
     LaunchedEffect(Unit) {
         viewModel.eventFlow.collect { event ->
             when(event) {
-                SpouseCodeFemaleEvent.GoToMainEvent -> navigateGoToHome()
+                SpouseCodeFemaleEvent.GoToMainEvent -> navigationGoToBatteryOptimization()
             }
         }
     }

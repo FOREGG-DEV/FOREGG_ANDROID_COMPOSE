@@ -44,6 +44,7 @@ import com.hugg.mypage.profileManagement.MyPageProfileManagementContainer
 import com.hugg.mypage.spouse.MyPageSpouseContainer
 import com.hugg.notification.InjMedDetailContainer
 import com.hugg.sign.accessPermission.AccessPermissionContainer
+import com.hugg.sign.femaleSignUp.batteryModal.BatteryOptimizationContainer
 import com.hugg.sign.femaleSignUp.chooseSurgery.ChooseSurgeryContainer
 import com.hugg.sign.femaleSignUp.spouseCodeFemale.SpouseCodeFemaleContainer
 import com.hugg.sign.femaleSignUp.startSurgery.SurgeryStartContainer
@@ -187,12 +188,8 @@ fun NavGraphBuilder.signNavGraph(navController: NavHostController, initialNaviga
             val count = it.arguments?.getInt("count") ?: 0
             val date = it.arguments?.getString("date") ?: ""
             SpouseCodeFemaleContainer(
-                navigateGoToHome = {
-                    navController.navigate(route = Routes.HomeGraph.route) {
-                        popUpTo(navController.graph.id) { inclusive = true }
-                        launchSingleTop = true
-                    }
-                    if(initialNavigation.isNotEmpty()) navController.navigate(initialNavigation)
+                navigationGoToBatteryOptimization = {
+                    navController.navigate(route = Routes.SignUpBatteryOptimization.route)
                 },
                 accessToken = accessToken,
                 signUpRequestVo = SignUpRequestVo(
@@ -203,6 +200,21 @@ fun NavGraphBuilder.signNavGraph(navController: NavHostController, initialNaviga
                     ssn = ssn,
                     fcmToken = ""
                 ),
+                goToBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = Routes.SignUpBatteryOptimization.route
+        ) {
+            BatteryOptimizationContainer(
+                navigateGoToHome = {
+                    navController.navigate(route = Routes.HomeGraph.route) {
+                        popUpTo(navController.graph.id) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                    if(initialNavigation.isNotEmpty()) navController.navigate(initialNavigation)
+                },
                 goToBack = { navController.popBackStack() }
             )
         }

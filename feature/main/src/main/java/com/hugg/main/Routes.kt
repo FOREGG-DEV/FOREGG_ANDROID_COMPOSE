@@ -31,6 +31,8 @@ sealed class Routes(val route : String){
     data object FemaleSignUpSpouseCode : Routes("female_spouse_code/{accessToken}/{ssn}/{type}/{count}/{date}"){
         fun getRouteFemaleSpouseCode(accessToken : String, ssn : String, type : String, count : Int?, date : String?) = "female_spouse_code/$accessToken/$ssn/$type/${count ?: -1}/${date ?: "null"}\""
     }
+
+    data object SignUpBatteryOptimization : Routes("battery_optimization")
     data object MaleSignUp : Routes("male_sign_up/{accessToken}/{ssn}"){
         fun getRouteMaleSignUp(accessToken: String, ssn: String) = "male_sign_up/$accessToken/$ssn"
     }
