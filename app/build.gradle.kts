@@ -93,8 +93,8 @@ dependencies {
     implementation(Google.FCM)
     implementation(Google.FCM_KTX)
     implementation(Google.FIREBASE_BOM)
-    implementation("com.google.firebase:firebase-crashlytics")
-    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-crashlytics-ktx:18.3.7") // 최신 버전 확인
+    implementation("com.google.firebase:firebase-analytics-ktx:21.5.0")
 
     implementation(AndroidX.COMPOSE_BOM)
     implementation(AndroidX.COMPOSE_MATERIAL)

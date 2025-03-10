@@ -11,8 +11,6 @@ buildscript {
         classpath("com.google.gms:google-services:4.4.1")
         classpath("com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.0")
         classpath("com.google.firebase:firebase-crashlytics-gradle:2.4.1")
-
-
     }
 }
 
