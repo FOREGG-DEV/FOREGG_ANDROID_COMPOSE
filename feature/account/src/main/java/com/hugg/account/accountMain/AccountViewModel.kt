@@ -16,7 +16,6 @@ import com.hugg.feature.base.BaseViewModel
 import com.hugg.feature.theme.ACCOUNT_ALL
 import com.hugg.feature.theme.ACCOUNT_PERSONAL
 import com.hugg.feature.theme.ACCOUNT_SUBSIDY
-import com.hugg.feature.util.ForeggLog
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UnitFormatter.getMoneyFormatWithUnit
 import com.hugg.feature.util.UserInfo
@@ -218,8 +217,7 @@ class AccountViewModel @Inject constructor(
         val filterList = when {
             uiState.value.selectedFilterList.contains(ACCOUNT_ALL) -> result.ledgerDetailResponseDTOS
             uiState.value.tabType == AccountTabType.ROUND -> result.ledgerDetailResponseDTOS.filter { it.name in uiState.value.selectedFilterList }
-            uiState.value.selectedFilterList.contains(ACCOUNT_PERSONAL) -> result.ledgerDetailResponseDTOS.filter { it.color == AccountColorType.RED }
-            else -> result.ledgerDetailResponseDTOS.filter { it.color != AccountColorType.RED }
+            else -> getFilterList(result.ledgerDetailResponseDTOS)
         }
 
         updateState(
@@ -339,5 +337,12 @@ class AccountViewModel @Inject constructor(
                 resultResponse(it, {})
             }
         }
+    }
+
+    private fun getFilterList(list : List<AccountItemResponseVo>): List<AccountItemResponseVo> {
+        val filterList = mutableListOf<AccountItemResponseVo>()
+        if(uiState.value.selectedFilterList.contains(ACCOUNT_PERSONAL)) filterList.addAll(list.filter { it.color == AccountColorType.RED })
+        if(uiState.value.selectedFilterList.contains(ACCOUNT_SUBSIDY)) filterList.addAll(list.filter { it.color != AccountColorType.RED })
+        return filterList
     }
 }

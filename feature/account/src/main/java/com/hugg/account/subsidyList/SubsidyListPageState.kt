@@ -7,4 +7,5 @@ import com.hugg.feature.util.UserInfo
 data class SubsidyListPageState(
     val nowRound : Int = UserInfo.info.round,
     val subsidyList : List<SubsidyListResponseVo> = emptyList(),
+    val isShowCreateRoundDialog : Boolean = false,
 ) : PageState

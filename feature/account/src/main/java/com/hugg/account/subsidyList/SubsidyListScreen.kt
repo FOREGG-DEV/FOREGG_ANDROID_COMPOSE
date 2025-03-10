@@ -33,13 +33,17 @@ import com.hugg.feature.R
 import com.hugg.domain.model.enums.TopBarLeftType
 import com.hugg.domain.model.enums.TopBarMiddleType
 import com.hugg.feature.component.BlankBtnWithIcon
+import com.hugg.feature.component.HuggDialog
 import com.hugg.feature.component.HuggText
 import com.hugg.feature.component.TopBar
 import com.hugg.feature.theme.ACCOUNT_ADD_SUBSIDY
+import com.hugg.feature.theme.ACCOUNT_DIALOG_CREATE_ROUND
+import com.hugg.feature.theme.ACCOUNT_DIALOG_WARNING_CREATE_ROUND
 import com.hugg.feature.theme.ACCOUNT_SUBSIDY_MONEY
 import com.hugg.feature.theme.Background
 import com.hugg.feature.theme.Gs70
 import com.hugg.feature.theme.HuggTypography
+import com.hugg.feature.theme.WORD_ADD
 import com.hugg.feature.uiItem.RemoteRound
 import com.hugg.feature.uiItem.SubsidyDetailBox
 import com.hugg.feature.util.UserInfo
@@ -62,8 +66,21 @@ fun SubsidyListContainer(
         onClickTopBarLeftBtn = goToBack,
         onClickPrevRoundBtn = { viewModel.onClickPrevRound() },
         onClickNextRoundBtn = { viewModel.onClickNextRound() },
+        onClickCreateRoundBtn = { viewModel.showCreateRoundDialog(true) },
         onClickCreateEditSubsidyBtn = { id, type, _ -> onClickCreateEditSubsidyBtn(id, type, uiState.nowRound) }
     )
+
+    if(uiState.isShowCreateRoundDialog){
+        HuggDialog(
+            title = ACCOUNT_DIALOG_CREATE_ROUND,
+            warningMessage = ACCOUNT_DIALOG_WARNING_CREATE_ROUND,
+            positiveText = WORD_ADD,
+            hasWarningText = true,
+            onClickCancel = { viewModel.showCreateRoundDialog(false) },
+            onClickNegative = { viewModel.showCreateRoundDialog(false) },
+            onClickPositive = { viewModel.onClickCreateRoundBtn() },
+        )
+    }
 }
 
 @Composable
