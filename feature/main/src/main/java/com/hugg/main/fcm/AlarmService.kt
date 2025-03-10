@@ -9,6 +9,7 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.AudioAttributes
 import android.media.Ringtone
 import android.media.RingtoneManager
 import android.net.Uri
@@ -94,16 +95,17 @@ class AlarmService : Service() {
             if (i % 2 == 0) DELAY_TIME else 500L
         }
 
+        val audioAttributes = AudioAttributes.Builder()
+            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+            .setUsage(AudioAttributes.USAGE_ALARM)
+            .build()
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val effect = VibrationEffect.createWaveform(pattern, -1) // 반복 없음
-            vibrator?.vibrate(effect)
+            vibrator?.vibrate(effect, audioAttributes)
         } else {
-            vibrator?.vibrate(pattern, -1)
+            vibrator?.vibrate(pattern, -1, audioAttributes)
         }
-
-        val alarmUri: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
-        ringtone = RingtoneManager.getRingtone(this, alarmUri)
-        ringtone?.play()
     }
 
     private fun checkPermission() : Boolean{
