@@ -17,12 +17,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val navigation = intent.getStringExtra(PendingExtraValue.KEY) ?: ""
-        if(intent.getBooleanExtra(AlarmService.STOP_ALARM, false)) {
-            val stopIntent = Intent(this, AlarmService::class.java).apply {
-                action = AlarmService.STOP_ALARM
-            }
-            startService(stopIntent)
+        val stopIntent = Intent(this, AlarmService::class.java).apply {
+            action = AlarmService.STOP_ALARM
         }
+        startService(stopIntent)
 
         setContent {
             MainScreen(

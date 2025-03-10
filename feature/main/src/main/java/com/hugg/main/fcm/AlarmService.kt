@@ -21,8 +21,10 @@ import android.os.Vibrator
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import com.hugg.main.MainActivity
 import com.hugg.feature.R
+import okhttp3.internal.notify
 
 class AlarmService : Service() {
 
@@ -49,6 +51,8 @@ class AlarmService : Service() {
             return START_NOT_STICKY
         }
 
+        if(checkPermission()) return START_NOT_STICKY
+
         val title = intent?.getStringExtra(FcmNotification.TITLE) ?: ""
         val body = intent?.getStringExtra(FcmNotification.BODY) ?: ""
         val navigation = intent?.getStringExtra(FcmNotification.NAVIGATION) ?: ""
@@ -59,6 +63,7 @@ class AlarmService : Service() {
         val stopPendingIntent = PendingIntent.getService(this, 0, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         val mainPendingIntent = getPendingIntent(navigation)
 
+        val notificationManager = NotificationManagerCompat.from(applicationContext)
         val notification = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
             .setStyle(NotificationCompat.DecoratedCustomViewStyle())
             .setContentTitle(title)
@@ -71,12 +76,13 @@ class AlarmService : Service() {
             .setDeleteIntent(stopPendingIntent)
             .build()
 
-        startForeground(1, notification)
+        notificationManager.notify(1, notification)
+
         Handler(Looper.getMainLooper()).postDelayed({
             startAlarm()
         }, 1000)
 
-        return START_STICKY
+        return START_NOT_STICKY
     }
 
 

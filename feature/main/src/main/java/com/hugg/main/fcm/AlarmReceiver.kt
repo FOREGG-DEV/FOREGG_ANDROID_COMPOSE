@@ -10,10 +10,6 @@ class AlarmReceiver : BroadcastReceiver() {
             putExtra(FcmNotification.BODY, intent.getStringExtra(FcmNotification.BODY))
             putExtra(FcmNotification.NAVIGATION, intent.getStringExtra(FcmNotification.NAVIGATION))
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            context.startForegroundService(serviceIntent)
-        } else {
-            context.startService(serviceIntent)
-        }
+        context.startService(serviceIntent)
     }
 }

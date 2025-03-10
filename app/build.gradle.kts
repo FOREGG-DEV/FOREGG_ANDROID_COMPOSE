@@ -8,6 +8,7 @@ plugins {
     id("com.google.gms.google-services")
     id("dagger.hilt.android.plugin")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    id("com.google.firebase.crashlytics") // ✅ 여기에만 적용
 }
 
 android {
@@ -91,8 +92,9 @@ dependencies {
     implementation(Google.HILT_COMPOSE)
     implementation(Google.FCM)
     implementation(Google.FCM_KTX)
-    implementation(Google.FIREBASE_ANALYTICS)
-    implementation(platform(Google.FIREBASE_BOM))
+    implementation(Google.FIREBASE_BOM)
+    implementation("com.google.firebase:firebase-crashlytics")
+    implementation("com.google.firebase:firebase-analytics")
 
     implementation(AndroidX.COMPOSE_BOM)
     implementation(AndroidX.COMPOSE_MATERIAL)
