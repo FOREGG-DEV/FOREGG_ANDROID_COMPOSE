@@ -58,6 +58,7 @@ import com.hugg.feature.component.HuggDialog
 import com.hugg.feature.component.HuggText
 import com.hugg.feature.component.PlusBtn
 import com.hugg.feature.component.TopBar
+import com.hugg.feature.theme.ALREADY_EXIST_DAILY_HUGG
 import com.hugg.feature.theme.Background
 import com.hugg.feature.theme.Black
 import com.hugg.feature.theme.COMPLETE_DELETE_DAILY_HUGG
@@ -146,6 +147,8 @@ fun DailyHuggScreen(
             when(event) {
                 DailyHuggEvent.CompleteDeleteDailyHugg -> HuggToast.createToast(context, COMPLETE_DELETE_DAILY_HUGG).show()
                 DailyHuggEvent.GoToDailyHuggList -> goToDailyHuggList()
+                DailyHuggEvent.AlreadyExistEditDailyHugg -> HuggToast.createToast(context = context, message = ALREADY_EXIST_DAILY_HUGG).show()
+                DailyHuggEvent.GoToCreateDailyHugg -> onClickCreateDailyHugg()
             }
         }
     }
@@ -187,7 +190,7 @@ fun DailyHuggScreen(
     DailyHuggContent(
         uiState = uiState,
         interactionSource = interactionSource,
-        onClickCreateDailyHugg = onClickCreateDailyHugg,
+        onClickCreateDailyHugg = { viewModel.checkTodayDailyHuggEmpty()},
         onClickBtnNextDay = onClickBtnNextDay,
         onClickBtnPreviousDay = onClickBtnPreviousDay,
         dateText = dateText,

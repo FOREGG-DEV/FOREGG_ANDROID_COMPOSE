@@ -88,4 +88,12 @@ class DailyHuggViewModel @Inject constructor(
     fun onClickBtnDailyHuggList() {
         emitEventFlow(DailyHuggEvent.GoToDailyHuggList)
     }
+
+    fun checkTodayDailyHuggEmpty(){
+        viewModelScope.launch {
+            dailyHuggRepository.getDailyHuggByDate(TimeFormatter.getToday()).collect {
+                resultResponse(it, { emitEventFlow(DailyHuggEvent.AlreadyExistEditDailyHugg) }, { emitEventFlow(DailyHuggEvent.GoToCreateDailyHugg) }, needLoading = true)
+            }
+        }
+    }
 }

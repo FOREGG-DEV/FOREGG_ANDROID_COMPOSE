@@ -60,6 +60,8 @@ import com.hugg.feature.theme.Black
 import com.hugg.feature.theme.DAILY_HUGG
 import com.hugg.feature.theme.DAILY_HUGG_CONTENT_HINT
 import com.hugg.feature.theme.Gs10
+import com.hugg.feature.theme.Gs40
+import com.hugg.feature.theme.Gs70
 import com.hugg.feature.theme.GsWhite
 import com.hugg.feature.theme.HuggTypography
 import com.hugg.feature.theme.IMAGE_PERMISSION_TEXT
@@ -298,20 +300,32 @@ fun BtnDailyConditionItem(
         isSelected = selectedConditionType == dailyConditionType
     )
 
-    Box(
-        modifier = Modifier
-            .size(62.dp)
-            .clickable(
-                interactionSource = interactionSource,
-                indication = null,
-                onClick = { onSelectedDailyConditionType(dailyConditionType) }
-            ),
-        contentAlignment = Alignment.Center
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Icon(
-            painter = painterResource(id = resourceId),
-            contentDescription = "",
-            tint = Color.Unspecified
+        Box(
+            modifier = Modifier
+                .size(62.dp)
+                .clickable(
+                    interactionSource = interactionSource,
+                    indication = null,
+                    onClick = { onSelectedDailyConditionType(dailyConditionType) }
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                painter = painterResource(id = resourceId),
+                contentDescription = "",
+                tint = Color.Unspecified
+            )
+        }
+
+        Spacer(modifier = Modifier.size(1.dp))
+
+        HuggText(
+            text = dailyConditionType.value,
+            style = HuggTypography.p3_l,
+            color = if(selectedConditionType == dailyConditionType) Gs70 else Gs40
         )
     }
 }
