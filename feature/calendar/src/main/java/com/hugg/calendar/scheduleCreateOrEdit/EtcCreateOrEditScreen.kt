@@ -58,6 +58,7 @@ fun EtcCreateOrEditScreen(
     onChangedMemo : (String) -> Unit = {},
     onClickCreateOrChangeBtn : () -> Unit = {},
     isActiveBtn : Boolean = true,
+    showToastNotMine : () -> Unit = {},
 ){
     Column{
         InputEtcContentView(
@@ -89,7 +90,10 @@ fun EtcCreateOrEditScreen(
 
         InputMemoView(
             memo = uiState.memo,
-            onChangedMemo = onChangedMemo
+            onChangedMemo = onChangedMemo,
+            isMine = uiState.isMine,
+            showToastNotMine = showToastNotMine,
+            interactionSource = interactionSource
         )
 
         Spacer(modifier = Modifier.weight(1f))

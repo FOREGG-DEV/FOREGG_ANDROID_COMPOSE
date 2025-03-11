@@ -72,6 +72,7 @@ fun HospitalCreateOrEditScreen(
     onChangedMemo : (String) -> Unit = {},
     onClickCreateOrChangeBtn : () -> Unit = {},
     isActiveBtn : Boolean = true,
+    showToastNotMine : () -> Unit = {},
 ){
     Column(
         modifier = Modifier.padding(horizontal = 16.dp)

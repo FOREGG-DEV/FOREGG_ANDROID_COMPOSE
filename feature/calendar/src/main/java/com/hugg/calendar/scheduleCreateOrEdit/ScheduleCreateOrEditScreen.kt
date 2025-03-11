@@ -127,7 +127,8 @@ fun ScheduleCreateOrEditContainer(
                                },
         onRepeatBtnChanged = { checked -> viewModel.onRepeatChange(checked) },
         onChangedMemo = { memo -> viewModel.onChangedMemo(memo) },
-        onClickCreateOrChangeBtn = { viewModel.onClickCreateOrEdit() }
+        onClickCreateOrChangeBtn = { viewModel.onClickCreateOrEdit() },
+        showToastNotMine = { HuggToast.createToast(context, CALENDAR_TOAST_NOT_MINE).show() }
     )
 
     if(uiState.showDeleteDialog) {
@@ -162,6 +163,7 @@ fun ScheduleCreateOrEditScreen(
     onRepeatBtnChanged : (Boolean) -> Unit = {},
     onChangedMemo : (String) -> Unit = {},
     onClickCreateOrChangeBtn : () -> Unit = {},
+    showToastNotMine : () -> Unit = {},
 ) {
     val topBarText = when(recordType) {
         RecordType.MEDICINE -> CALENDAR_SCHEDULE_ABOUT_MEDICINE
@@ -205,7 +207,8 @@ fun ScheduleCreateOrEditScreen(
                     onRepeatBtnChanged = onRepeatBtnChanged,
                     onChangedMemo = onChangedMemo,
                     onClickCreateOrChangeBtn = onClickCreateOrChangeBtn,
-                    isActiveBtn = uiState.isActiveBtn
+                    isActiveBtn = uiState.isActiveBtn,
+                    showToastNotMine = showToastNotMine
                 )
             }
             RecordType.HOSPITAL ->{
@@ -219,7 +222,8 @@ fun ScheduleCreateOrEditScreen(
                     onClickDatePickerBtn = onClickDatePickerBtn,
                     onChangedMemo = onChangedMemo,
                     onClickCreateOrChangeBtn = onClickCreateOrChangeBtn,
-                    isActiveBtn = uiState.isActiveBtn
+                    isActiveBtn = uiState.isActiveBtn,
+                    showToastNotMine = showToastNotMine
                 )
             }
             RecordType.ETC -> {
@@ -232,7 +236,8 @@ fun ScheduleCreateOrEditScreen(
                     onRepeatBtnChanged = onRepeatBtnChanged,
                     onChangedMemo = onChangedMemo,
                     onClickCreateOrChangeBtn = onClickCreateOrChangeBtn,
-                    isActiveBtn = uiState.isActiveBtn
+                    isActiveBtn = uiState.isActiveBtn,
+                    showToastNotMine = showToastNotMine
                 )
             }
         }

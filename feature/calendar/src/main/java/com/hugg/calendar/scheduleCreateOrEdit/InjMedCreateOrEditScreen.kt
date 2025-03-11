@@ -99,7 +99,9 @@ import com.hugg.feature.theme.WORD_MODIFY
 import com.hugg.feature.theme.WORD_REGISTRATION
 import com.hugg.feature.theme.WORD_START
 import com.hugg.feature.theme.White
+import com.hugg.feature.util.ForeggLog
 import com.hugg.feature.util.TimeFormatter
+import com.hugg.feature.util.onThrottleClick
 
 @Composable
 fun InjMedCreateOrEditScreen(
@@ -118,6 +120,7 @@ fun InjMedCreateOrEditScreen(
     onChangedMemo : (String) -> Unit = {},
     onClickCreateOrChangeBtn : () -> Unit = {},
     isActiveBtn : Boolean = true,
+    showToastNotMine : () -> Unit = {},
 ) {
     LazyColumn{
         item {
@@ -128,7 +131,9 @@ fun InjMedCreateOrEditScreen(
                 interactionSource = interactionSource,
                 isExpandMenu = uiState.isExpandDropDown,
                 onClickKind = onClickKind,
-                onChangedKind = onChangedName
+                onChangedKind = onChangedName,
+                isMine = uiState.isMine,
+                showToastNotMine = showToastNotMine
             )
 
             Spacer(modifier = Modifier.size(32.dp))
@@ -139,7 +144,9 @@ fun InjMedCreateOrEditScreen(
                 type = uiState.recordType,
                 dose = uiState.dose,
                 onChangedDose = onChangedDose,
-                interactionSource = interactionSource
+                interactionSource = interactionSource,
+                isMine = uiState.isMine,
+                showToastNotMine = showToastNotMine
             )
 
             Spacer(modifier = Modifier.size(32.dp))
@@ -154,7 +161,9 @@ fun InjMedCreateOrEditScreen(
                 onClickPlusBtn = onClickPlusBtn,
                 onClickTimePickerBtn = onClickTimePickerBtn,
                 onCheckedChange = onCheckedChange,
-                interactionSource = interactionSource
+                interactionSource = interactionSource,
+                isMine = uiState.isMine,
+                showToastNotMine = showToastNotMine
             )
 
             Spacer(modifier = Modifier.size(32.dp))
@@ -168,7 +177,9 @@ fun InjMedCreateOrEditScreen(
                 isRepeat = uiState.isRepeatDay,
                 onClickDatePickerBtn = onClickDatePickerBtn,
                 onRepeatBtnChanged = onRepeatBtnChanged,
-                interactionSource = interactionSource
+                interactionSource = interactionSource,
+                isMine = uiState.isMine,
+                showToastNotMine = showToastNotMine
             )
 
             Spacer(modifier = Modifier.size(32.dp))
@@ -177,7 +188,10 @@ fun InjMedCreateOrEditScreen(
         item {
             InputMemoView(
                 memo = uiState.memo,
-                onChangedMemo = onChangedMemo
+                onChangedMemo = onChangedMemo,
+                isMine = uiState.isMine,
+                showToastNotMine = showToastNotMine,
+                interactionSource = interactionSource
             )
 
             Spacer(modifier = Modifier.size(24.dp))
@@ -207,6 +221,8 @@ internal fun InputKindView(
     isExpandMenu : Boolean = false,
     onClickKind : (String) -> Unit = {},
     onChangedKind : (String) -> Unit = {},
+    isMine : Boolean = true,
+    showToastNotMine : () -> Unit = {},
 ){
     val text = if(type == RecordType.INJECTION) CALENDAR_SCHEDULE_INJECTION_KIND else CALENDAR_SCHEDULE_MEDICINE_KIND
     val kindList = if(type == RecordType.INJECTION) CALENDAR_SCHEDULE_INJECTION_KIND_LIST else CALENDAR_SCHEDULE_MEDICINE_KIND_LIST
@@ -253,11 +269,17 @@ internal fun InputKindView(
                 }
 
                 HuggTextField(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .onThrottleClick(
+                            onClick = { if(!isMine) showToastNotMine() },
+                            interactionSource = interactionSource
+                        ),
                     value = kind,
                     onValueChange = { value ->
                         onChangedKind(value)
                     },
+                    enabled = isMine,
                     textStyle = HuggTypography.h3.copy(
                         color = Gs90,
                         textAlign = TextAlign.Start
@@ -269,7 +291,7 @@ internal fun InputKindView(
             Image(
                 modifier = Modifier
                     .clickable(
-                        onClick = onClickDropDown,
+                        onClick = { if(!isMine) showToastNotMine() else onClickDropDown() },
                         interactionSource = interactionSource,
                         indication = null
                     ),
@@ -311,7 +333,9 @@ internal fun InputDoseView(
     type: RecordType = RecordType.INJECTION,
     dose : String = "",
     onChangedDose : (String) -> Unit = {},
-    interactionSource: MutableInteractionSource
+    interactionSource: MutableInteractionSource,
+    isMine : Boolean = true,
+    showToastNotMine : () -> Unit = {},
 ){
     val title = if(type == RecordType.INJECTION) CALENDAR_SCHEDULE_INJECTION_DOSE else CALENDAR_SCHEDULE_MEDICINE_DOSE
     val doseUnit = if(type == RecordType.INJECTION) CALENDAR_INJECTION_UNIT else CALENDAR_MEDICINE_UNIT
@@ -355,8 +379,14 @@ internal fun InputDoseView(
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Number
                 ),
+                enabled = isMine,
                 singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .onThrottleClick(
+                        onClick = { if(!isMine) showToastNotMine() },
+                        interactionSource = interactionSource
+                    ),
             )
         }
 
@@ -380,7 +410,9 @@ internal fun InputDoseView(
                     dose = dose,
                     basicDose = it,
                     onClickDoseChip = onChangedDose,
-                    interactionSource = interactionSource
+                    interactionSource = interactionSource,
+                    isMine = isMine,
+                    showToastNotMine = showToastNotMine
                 )
 
                 Spacer(modifier = Modifier.size(8.dp))
@@ -394,7 +426,9 @@ internal fun InjectionDoseChipView(
     dose : String = "",
     basicDose : String = "",
     onClickDoseChip : (String) -> Unit = {},
-    interactionSource: MutableInteractionSource
+    interactionSource: MutableInteractionSource,
+    isMine : Boolean = true,
+    showToastNotMine : () -> Unit = {},
 ){
     Box(
         modifier = Modifier
@@ -405,10 +439,14 @@ internal fun InjectionDoseChipView(
             )
             .clickable(
                 onClick = {
+                    if(!isMine) {
+                        showToastNotMine()
+                        return@clickable
+                    }
                     if (dose == basicDose) onClickDoseChip("") else onClickDoseChip(basicDose)
                 },
                 interactionSource = interactionSource,
-                indication = null
+                indication = null,
             ),
         contentAlignment = Alignment.Center
     ){
@@ -431,6 +469,8 @@ internal fun SelectDailyTakeCount(
     isChecked : Boolean = true,
     onCheckedChange : (Boolean) -> Unit = {},
     interactionSource: MutableInteractionSource,
+    isMine : Boolean = true,
+    showToastNotMine : () -> Unit = {},
 ){
     val title = if(type == RecordType.INJECTION) CALENDAR_SCHEDULE_DAILY_ADMINISTER_COUNT else CALENDAR_SCHEDULE_DAILY_INTAKE_COUNT
 
@@ -468,9 +508,9 @@ internal fun SelectDailyTakeCount(
                             shape = RoundedCornerShape(topStart = 8.dp, bottomStart = 8.dp)
                         )
                         .clickable(
-                            onClick = onClickMinusBtn,
+                            onClick = if(!isMine) showToastNotMine else onClickMinusBtn,
                             interactionSource = interactionSource,
-                            indication = null
+                            indication = null,
                         ),
                     contentAlignment = Alignment.Center
                 ){
@@ -501,9 +541,9 @@ internal fun SelectDailyTakeCount(
                             shape = RoundedCornerShape(topEnd = 8.dp, bottomEnd = 8.dp)
                         )
                         .clickable(
-                            onClick = onClickPlusBtn,
+                            onClick = if(!isMine) showToastNotMine else onClickPlusBtn,
                             interactionSource = interactionSource,
-                            indication = null
+                            indication = null,
                         ),
                     contentAlignment = Alignment.Center
                 ) {
@@ -529,7 +569,7 @@ internal fun SelectDailyTakeCount(
 
     repeat(repeatCount){ index ->
         TimePickerView(
-            onClickTimePickerBtn = onClickTimePickerBtn,
+            onClickTimePickerBtn = { num -> if(!isMine) showToastNotMine() else onClickTimePickerBtn(num) },
             time = repeatTimeList[index].time,
             index = index,
             interactionSource = interactionSource
@@ -540,7 +580,7 @@ internal fun SelectDailyTakeCount(
 
     SelectAlarmOnAndOffView(
         isChecked = isChecked,
-        onCheckedChange = onCheckedChange
+        onCheckedChange = { checked -> if(!isMine) showToastNotMine() else onCheckedChange(checked) }
     )
 }
 
@@ -653,6 +693,8 @@ internal fun SelectRepeatDateView(
     isRepeat : Boolean = false,
     onRepeatBtnChanged : (Boolean) -> Unit = {},
     interactionSource: MutableInteractionSource,
+    isMine : Boolean = true,
+    showToastNotMine : () -> Unit = {},
 ){
     HuggText(
         modifier = Modifier.padding(start = 16.dp),
@@ -666,7 +708,7 @@ internal fun SelectRepeatDateView(
     DatePickerView(
         date = if(isRepeat) startDate else date,
         interactionSource = interactionSource,
-        onClickDatePickerBtn = onClickDatePickerBtn,
+        onClickDatePickerBtn = { repeatDayType ->  if(!isMine) showToastNotMine() else onClickDatePickerBtn(repeatDayType) },
         repeatDayType = if(isRepeat) RepeatDayType.START else RepeatDayType.NORMAL
     )
 
@@ -675,7 +717,7 @@ internal fun SelectRepeatDateView(
         DatePickerView(
             date = endDate,
             interactionSource = interactionSource,
-            onClickDatePickerBtn = onClickDatePickerBtn,
+            onClickDatePickerBtn = { repeatDayType ->  if(!isMine) showToastNotMine() else onClickDatePickerBtn(repeatDayType) },
             repeatDayType = RepeatDayType.END
         )
     }
@@ -684,7 +726,7 @@ internal fun SelectRepeatDateView(
 
     SelectRepeatEveryDayView(
         isChecked = isRepeat,
-        onCheckedChange = onRepeatBtnChanged
+        onCheckedChange = { checked -> if(!isMine) showToastNotMine() else onRepeatBtnChanged(checked) }
     )
 }
 
@@ -814,6 +856,9 @@ internal fun SelectRepeatEveryDayView(
 fun InputMemoView(
     memo : String = "",
     onChangedMemo : (String) -> Unit = {},
+    isMine : Boolean = true,
+    showToastNotMine : () -> Unit = {},
+    interactionSource: MutableInteractionSource
 ){
     HuggText(
         modifier = Modifier.padding(start = 16.dp),
@@ -851,8 +896,14 @@ fun InputMemoView(
                     color = Gs90,
                     textAlign = TextAlign.Start
                 ),
+                enabled = isMine,
                 singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .onThrottleClick(
+                        onClick = { if(!isMine) showToastNotMine() },
+                        interactionSource = interactionSource
+                    ),
             )
         }
     }

@@ -188,6 +188,7 @@ const val CALENDAR_SCHEDULE_DIALOG_DELETE = "일정을 삭제할까요?"
 const val CALENDAR_TOAST_SUCCESS_CREATE = "일정이 등록되었어요"
 const val CALENDAR_TOAST_SUCCESS_EDIT = "일정이 수정되었어요"
 const val CALENDAR_TOAST_SUCCESS_DELETE = "일정이 삭제되었어요"
+const val CALENDAR_TOAST_NOT_MINE = "본인이 등록한 일정만 수정할 수 있어요"
 
 // --------- 가계부 --------- //
 const val ACCOUNT_ALL = "전체"
