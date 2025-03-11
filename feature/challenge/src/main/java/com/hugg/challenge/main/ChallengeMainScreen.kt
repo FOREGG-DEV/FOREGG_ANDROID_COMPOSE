@@ -148,7 +148,9 @@ fun ChallengeMainScreen(
                 myChallengePagerState = myChallengePagerState,
                 showAnimationFlow = viewModel.showUnlockAnimationFlow,
                 goToChallengeList = goToChallengeList,
-                goToCreateChallenge = goToCreateChallenge,
+                goToCreateChallenge = {
+                    if(uiState.challengePoint < 3000)  HuggToast.createToast(context, INSUFFICIENT_POINT).show() else goToCreateChallenge()
+                },
                 goToChallengeSupport = goToChallengeSupport,
                 onPageChanged = { viewModel.initializeChallengeState(it) },
                 updateCommentDialogVisibility = { viewModel.updateCommentDialogVisibility(it) },
