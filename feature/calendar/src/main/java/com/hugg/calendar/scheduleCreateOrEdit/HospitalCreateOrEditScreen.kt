@@ -59,6 +59,7 @@ import com.hugg.feature.theme.WORD_MEMO
 import com.hugg.feature.theme.WORD_MODIFY
 import com.hugg.feature.theme.WORD_REGISTRATION
 import com.hugg.feature.theme.White
+import com.hugg.feature.util.onThrottleClick
 
 @Composable
 fun HospitalCreateOrEditScreen(
@@ -83,7 +84,9 @@ fun HospitalCreateOrEditScreen(
             interactionSource = interactionSource,
             isExpandMenu = uiState.isExpandDropDown,
             onClickKind = onClickKind,
-            onChangedKind = onChangedName
+            onChangedKind = onChangedName,
+            isMine = uiState.isMine,
+            showToastNotMine = showToastNotMine
         )
 
         Spacer(modifier = Modifier.size(32.dp))
@@ -93,14 +96,19 @@ fun HospitalCreateOrEditScreen(
             time = uiState.repeatTimeList[0].time,
             interactionSource = interactionSource,
             date = uiState.date,
-            onClickDatePickerBtn = onClickDatePickerBtn
+            onClickDatePickerBtn = onClickDatePickerBtn,
+            isMine = uiState.isMine,
+            showToastNotMine = showToastNotMine
         )
 
         Spacer(modifier = Modifier.size(32.dp))
 
         InputHospitalMemoView(
             memo = uiState.memo,
-            onChangedMemo = onChangedMemo
+            onChangedMemo = onChangedMemo,
+            isMine = uiState.isMine,
+            showToastNotMine = showToastNotMine,
+            interactionSource = interactionSource
         )
         
         Spacer(modifier = Modifier.weight(1f))
@@ -125,6 +133,8 @@ internal fun InputTreatmentView(
     isExpandMenu : Boolean = false,
     onClickKind : (String) -> Unit = {},
     onChangedKind : (String) -> Unit = {},
+    isMine : Boolean = true,
+    showToastNotMine: () -> Unit = {},
 ){
     var rowWidth by remember { mutableIntStateOf(0) }
 
@@ -166,7 +176,12 @@ internal fun InputTreatmentView(
                 }
 
                 HuggTextField(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .onThrottleClick(
+                            onClick = { if(!isMine) showToastNotMine() },
+                            interactionSource = interactionSource
+                        ),
                     value = kind,
                     onValueChange = { value ->
                         onChangedKind(value)
@@ -175,6 +190,7 @@ internal fun InputTreatmentView(
                         color = Gs90,
                         textAlign = TextAlign.Start
                     ),
+                    enabled = isMine,
                     singleLine = true,
                 )
             }
@@ -182,7 +198,7 @@ internal fun InputTreatmentView(
             Image(
                 modifier = Modifier
                     .clickable(
-                        onClick = onClickDropDown,
+                        onClick = { if(!isMine) showToastNotMine() else onClickDropDown() },
                         interactionSource = interactionSource,
                         indication = null
                     ),
@@ -193,7 +209,7 @@ internal fun InputTreatmentView(
 
         DropdownMenu(
             expanded = isExpandMenu,
-            onDismissRequest = onClickDropDown,
+            onDismissRequest = { if(!isMine) showToastNotMine() else onClickDropDown() },
             modifier = Modifier
                 .background(White, shape = RoundedCornerShape(8.dp))
                 .width(with(LocalDensity.current) { rowWidth.toDp() })
@@ -225,6 +241,8 @@ internal fun SelectDateAndTimeView(
     interactionSource: MutableInteractionSource,
     date : String = "",
     onClickDatePickerBtn : (RepeatDayType) -> Unit = {},
+    isMine : Boolean = true,
+    showToastNotMine: () -> Unit = {},
 ){
     HuggText(
         text = CALENDAR_SCHEDULE_DATE_AND_TIME_PICKER,
@@ -240,7 +258,7 @@ internal fun SelectDateAndTimeView(
             .height(48.dp)
             .background(color = White, shape = RoundedCornerShape(8.dp))
             .clickable(
-                onClick = { onClickDatePickerBtn(RepeatDayType.NORMAL) },
+                onClick = { if(!isMine) showToastNotMine() else onClickDatePickerBtn(RepeatDayType.NORMAL) },
                 interactionSource = interactionSource,
                 indication = null
             ),
@@ -283,7 +301,7 @@ internal fun SelectDateAndTimeView(
             .height(48.dp)
             .background(color = White, shape = RoundedCornerShape(8.dp))
             .clickable(
-                onClick = { onClickTimePickerBtn(0) },
+                onClick = { if(!isMine) showToastNotMine() else onClickTimePickerBtn(0) },
                 interactionSource = interactionSource,
                 indication = null
             ),
@@ -323,6 +341,9 @@ internal fun SelectDateAndTimeView(
 fun InputHospitalMemoView(
     memo : String = "",
     onChangedMemo : (String) -> Unit = {},
+    isMine : Boolean = true,
+    showToastNotMine: () -> Unit = {},
+    interactionSource: MutableInteractionSource
 ){
     HuggText(
         text = WORD_MEMO,
@@ -358,8 +379,14 @@ fun InputHospitalMemoView(
                     color = Gs90,
                     textAlign = TextAlign.Start
                 ),
+                enabled = isMine,
                 singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .onThrottleClick(
+                        onClick = { if(!isMine) showToastNotMine() },
+                        interactionSource = interactionSource
+                    ),
             )
         }
     }
