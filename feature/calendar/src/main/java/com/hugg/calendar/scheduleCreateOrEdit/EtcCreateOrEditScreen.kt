@@ -46,6 +46,7 @@ import com.hugg.feature.theme.MainNormal
 import com.hugg.feature.theme.WORD_MODIFY
 import com.hugg.feature.theme.WORD_REGISTRATION
 import com.hugg.feature.theme.White
+import com.hugg.feature.util.onThrottleClick
 
 @Composable
 fun EtcCreateOrEditScreen(
@@ -63,13 +64,16 @@ fun EtcCreateOrEditScreen(
     Column{
         InputEtcContentView(
             content = uiState.name,
-            onChangedName = onChangedName
+            onChangedName = onChangedName,
+            isMine = uiState.isMine,
+            showToastNotMine = showToastNotMine,
+            interactionSource = interactionSource
         )
 
         Spacer(modifier = Modifier.size(32.dp))
 
         SelectEtcTimePickerView(
-            onClickTimePickerBtn = onClickTimePickerBtn,
+            onClickTimePickerBtn = { index -> if(!uiState.isMine) showToastNotMine() else onClickTimePickerBtn(index) },
             time = uiState.repeatTimeList[0].time,
             interactionSource = interactionSource
         )
@@ -83,7 +87,9 @@ fun EtcCreateOrEditScreen(
             isRepeat = uiState.isRepeatDay,
             onClickDatePickerBtn = onClickDatePickerBtn,
             onRepeatBtnChanged = onRepeatBtnChanged,
-            interactionSource = interactionSource
+            interactionSource = interactionSource,
+            isMine = uiState.isMine,
+            showToastNotMine = showToastNotMine
         )
 
         Spacer(modifier = Modifier.size(32.dp))
@@ -115,6 +121,9 @@ fun EtcCreateOrEditScreen(
 fun InputEtcContentView(
     content : String = "",
     onChangedName : (String) -> Unit = {},
+    isMine : Boolean = true,
+    showToastNotMine: () -> Unit = {},
+    interactionSource : MutableInteractionSource
 ){
     HuggText(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -152,8 +161,14 @@ fun InputEtcContentView(
                     color = Gs90,
                     textAlign = TextAlign.Start
                 ),
+                enabled = isMine,
                 singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .onThrottleClick(
+                        onClick = { if(!isMine) showToastNotMine() },
+                        interactionSource = interactionSource
+                    ),
             )
         }
     }
