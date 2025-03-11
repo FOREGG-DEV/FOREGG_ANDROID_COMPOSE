@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Build
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -96,22 +97,14 @@ fun CreateDailyHuggScreen(
     val context = LocalContext.current
     val interactionSource = remember { MutableInteractionSource() }
     val galleryLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
+        contract = ActivityResultContracts.PickVisualMedia()
     ) { uri: Uri? ->
         uri?.let {
             viewModel.setSelectedImageUri(it)
             goToImgPreview(it)
         }
     }
-    val permissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        if (isGranted) {
-            galleryLauncher.launch("image/*")
-        } else {
-            HuggToast.createToast(context = context, message = IMAGE_PERMISSION_TEXT).show()
-        }
-    }
+
     val year = TimeFormatter.getYear(TimeFormatter.getToday())
     val formattedMDW = TimeFormatter.getDateFormattedMDWKor(TimeFormatter.getToday())
     val onClickBtnClose = { viewModel.setSelectedImageUri(null) }
@@ -135,7 +128,7 @@ fun CreateDailyHuggScreen(
     }
 
     CreateEditDailyHuggContent(
-        permissionLauncher = permissionLauncher,
+        galleryLauncher = galleryLauncher,
         uiState = uiState,
         onDailyHuggContentChanged = { viewModel.onDailyHuggContentChange(it) },
         year = year,
@@ -158,7 +151,7 @@ fun CreateDailyHuggScreen(
 
 @Composable
 fun CreateEditDailyHuggContent(
-    permissionLauncher: ManagedActivityResultLauncher<String, Boolean>? = null,
+    galleryLauncher: ManagedActivityResultLauncher<PickVisualMediaRequest, Uri?>? = null,
     uiState: CreateEditDailyHuggPageState = CreateEditDailyHuggPageState(),
     onDailyHuggContentChanged: (String) -> Unit = {},
     year: Int = 2024,
@@ -230,7 +223,7 @@ fun CreateEditDailyHuggContent(
 
                 if (uiState.selectedImageUri == null) {
                     BtnImageSelector(
-                        permissionLauncher = permissionLauncher,
+                        galleryLauncher = galleryLauncher,
                         interactionSource = interactionSource
                     )
                 } else {
@@ -367,7 +360,7 @@ fun DailyHuggInputField(
 
 @Composable
 fun BtnImageSelector(
-    permissionLauncher: ManagedActivityResultLauncher<String, Boolean>? = null,
+    galleryLauncher: ManagedActivityResultLauncher<PickVisualMediaRequest, Uri?>? = null,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
     Box(
@@ -379,11 +372,9 @@ fun BtnImageSelector(
                 interactionSource = interactionSource,
                 indication = null,
                 onClick = {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        permissionLauncher?.launch(Manifest.permission.READ_MEDIA_IMAGES)
-                    } else {
-                        permissionLauncher?.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-                    }
+                    galleryLauncher?.launch(
+                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                    )
                 }
             ),
         contentAlignment = Alignment.Center

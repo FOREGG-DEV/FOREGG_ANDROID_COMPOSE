@@ -27,8 +27,8 @@ android {
         applicationId = "com.hugg.presentation"
         minSdk = 24
         targetSdk = 34
-        versionCode = 23
-        versionName = "2.0.3"
+        versionCode = 1
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -93,7 +93,7 @@ dependencies {
     implementation(Google.FCM)
     implementation(Google.FCM_KTX)
     implementation(Google.FIREBASE_BOM)
-    implementation("com.google.firebase:firebase-crashlytics-ktx:18.3.7") // 최신 버전 확인
+    implementation("com.google.firebase:firebase-crashlytics-ktx:18.3.7")
     implementation("com.google.firebase:firebase-analytics-ktx:21.5.0")
 
     implementation(AndroidX.COMPOSE_BOM)

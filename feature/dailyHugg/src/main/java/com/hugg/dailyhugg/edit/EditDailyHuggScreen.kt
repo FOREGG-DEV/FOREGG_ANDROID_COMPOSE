@@ -39,20 +39,11 @@ fun EditDailyHuggScreen(
     val context = LocalContext.current
     val interactionSource = remember { MutableInteractionSource() }
     val galleryLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
+        contract = ActivityResultContracts.PickVisualMedia()
     ) { uri: Uri? ->
         uri?.let {
             viewModel.setSelectedImageUri(it)
             goToImgPreview(it)
-        }
-    }
-    val permissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        if (isGranted) {
-            galleryLauncher.launch("image/*")
-        } else {
-            HuggToast.createToast(context = context, message = IMAGE_PERMISSION_TEXT).show()
         }
     }
     val year = TimeFormatter.getYear(TimeFormatter.getToday())
@@ -82,7 +73,7 @@ fun EditDailyHuggScreen(
     }
 
     CreateEditDailyHuggContent(
-        permissionLauncher = permissionLauncher,
+        galleryLauncher = galleryLauncher,
         uiState = uiState,
         onDailyHuggContentChanged = { viewModel.onDailyHuggContentChange(it) },
         year = year,
