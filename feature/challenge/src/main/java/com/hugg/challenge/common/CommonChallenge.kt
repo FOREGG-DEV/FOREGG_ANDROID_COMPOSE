@@ -356,7 +356,8 @@ fun CommonChallengeItem(
                         painter = painterResource(id = R.drawable.ic_lock),
                         contentDescription = "",
                         modifier = Modifier
-                            .align(Alignment.Center),
+                            .padding(top = 50.dp)
+                            .align(Alignment.TopCenter),
                         tint = Color.Unspecified
                     )
                 }
