@@ -3,6 +3,7 @@ package com.hugg.data.repository
 import com.hugg.data.api.AuthApi
 import com.hugg.data.api.FcmApi
 import com.hugg.data.base.BaseRepository
+import com.hugg.data.mapper.StringResponseMapper
 import com.hugg.data.mapper.UnitResponseMapper
 import com.hugg.data.mapper.sign.ShareCodeResponseMapper
 import com.hugg.data.mapper.sign.SignResponseMapper
@@ -38,5 +39,9 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun renewalFcm(request: RenewalFcmRequestVo): Flow<ApiState<Unit>> {
         return apiLaunch(apiCall = { fcmApi.renewalFcm(request)}, UnitResponseMapper )
+    }
+
+    override suspend fun getAppVersion(): Flow<ApiState<String>> {
+        return apiLaunch(apiCall = { authApi.getVersion()}, StringResponseMapper )
     }
 }

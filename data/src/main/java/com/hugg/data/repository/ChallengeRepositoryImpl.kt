@@ -1,11 +1,9 @@
 package com.hugg.data.repository
 
-import android.content.Context
-import androidx.datastore.preferences.preferencesDataStore
 import com.hugg.data.api.ChallengeApi
 import com.hugg.data.base.BaseRepository
 import com.hugg.data.datastore.HuggDataStore
-import com.hugg.data.mapper.StringMapper
+import com.hugg.data.mapper.StringResponseMapper
 import com.hugg.data.mapper.UnitResponseMapper
 import com.hugg.data.mapper.challenge.AllChallengeResponseMapper
 import com.hugg.data.mapper.challenge.ChallengeDetailResponseMapper
@@ -18,26 +16,17 @@ import com.hugg.domain.model.request.challenge.ChallengeNicknameVo
 import com.hugg.domain.model.request.challenge.ChallengeThoughtsVo
 import com.hugg.domain.model.request.challenge.CreateChallengeRequestVo
 import com.hugg.domain.model.response.challenge.ChallengeCardVo
-import com.hugg.domain.model.response.challenge.ChallengeSupportItemVo
 import com.hugg.domain.model.response.challenge.ChallengeSupportListVo
-import com.hugg.domain.model.response.challenge.MyChallengeListItemVo
 import com.hugg.domain.model.response.challenge.MyChallengeVo
 import com.hugg.domain.repository.ChallengeRepository
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class ChallengeRepositoryImpl @Inject constructor(
-    @ApplicationContext private val context: Context,
     private val challengeApi: ChallengeApi,
     private val dataStore: HuggDataStore
 ) : ChallengeRepository, BaseRepository() {
 
-    companion object {
-        const val LAST_VIEWED = "lastViewed_"
-    }
-
-    private val Context.dataStore by preferencesDataStore(name = "foregg_challenge_data_store")
     override suspend fun getAllCommonChallenge(): Flow<ApiState<List<ChallengeCardVo>>> {
         return apiLaunch(apiCall = { challengeApi.getAllCommonChallenge() }, ChallengeResponseMapper)
     }
@@ -82,16 +71,8 @@ class ChallengeRepositoryImpl @Inject constructor(
         return apiLaunch(apiCall = { challengeApi.getChallengeSupportList(challengeId, isSuccess, page, size) }, ChallengeSupportResponseMapper)
     }
 
-    override suspend fun sendChallengeAction(
-        challengeId: Long,
-        cheerType: String,
-        receiverId: Long
-    ): Flow<ApiState<Unit>> {
-        return apiLaunch(apiCall = { challengeApi.sendChallengeAction(id = challengeId, cheerType = cheerType, receiverId = receiverId) }, UnitResponseMapper)
-    }
-
     override suspend fun getChallengeName(): Flow<ApiState<String>> {
-        return apiLaunch(apiCall = { challengeApi.getChallengeName() }, StringMapper)
+        return apiLaunch(apiCall = { challengeApi.getChallengeName() }, StringResponseMapper)
     }
 
     override suspend fun deleteChallenge(id: Long): Flow<ApiState<Unit>> {
@@ -99,7 +80,7 @@ class ChallengeRepositoryImpl @Inject constructor(
     }
 
     override suspend fun completeChallenge(id: Long, date: String, thoughts: ChallengeThoughtsVo): Flow<ApiState<String>> {
-        return apiLaunch(apiCall = { challengeApi.completeChallenge(id, date, request = thoughts) }, StringMapper)
+        return apiLaunch(apiCall = { challengeApi.completeChallenge(id, date, request = thoughts) }, StringResponseMapper)
     }
 
     override suspend fun supportChallenge(

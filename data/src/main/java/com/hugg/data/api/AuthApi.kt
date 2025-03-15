@@ -34,4 +34,7 @@ interface AuthApi {
 
     @GET(Endpoints.AUTH.GET_SHARE_CODE)
     suspend fun getShareCode() : Response<ApiResponse<SignResponse>>
+
+    @GET(Endpoints.AUTH.VERSION)
+    suspend fun getVersion() : Response<ApiResponse<String>>
 }

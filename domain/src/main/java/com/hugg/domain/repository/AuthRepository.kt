@@ -14,4 +14,5 @@ interface AuthRepository {
     suspend fun joinMale(request: SignUpWithTokenMaleRequestVo) : Flow<ApiState<SignResponseVo>>
     suspend fun getShareCode() : Flow<ApiState<ShareCodeResponseVo>>
     suspend fun renewalFcm(request: RenewalFcmRequestVo) : Flow<ApiState<Unit>>
+    suspend fun getAppVersion() : Flow<ApiState<String>>
 }

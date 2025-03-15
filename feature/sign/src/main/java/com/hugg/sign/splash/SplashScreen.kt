@@ -1,5 +1,9 @@
 package com.hugg.sign.splash
 
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -12,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -24,8 +29,11 @@ fun HuggSplashContainer(
     navigateToOnboarding : () -> Unit = {},
     navigateToHome : () -> Unit = {},
 ){
+
+    val context = LocalContext.current
+
     LaunchedEffect(Unit) {
-        viewModel.checkLogin()
+        viewModel.getVersion()
     }
 
     LaunchedEffect(Unit) {
@@ -33,6 +41,7 @@ fun HuggSplashContainer(
             when(event) {
                 SplashEvent.GoToMainEvent -> navigateToHome()
                 SplashEvent.GoToSignEvent -> navigateToOnboarding()
+                SplashEvent.GoToUpdateEvent -> goToPlayStore(context)
             }
         }
     }
@@ -73,5 +82,18 @@ fun HuggSplashScreen(){
         }
 
         Spacer(modifier = Modifier.size(75.dp))
+    }
+}
+
+private fun goToPlayStore(context : Context){
+    val packageName = context.packageName
+    try {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$packageName"))
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(intent)
+    } catch (e: ActivityNotFoundException) {
+        val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$packageName"))
+        webIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(webIntent)
     }
 }

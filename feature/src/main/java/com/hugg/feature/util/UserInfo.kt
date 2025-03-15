@@ -5,6 +5,7 @@ import com.hugg.domain.model.vo.challenge.ChallengeInfoVo
 import com.hugg.domain.model.vo.user.UserVo
 
 object UserInfo {
+    const val VERSION = "1.0.1"
     private var challengeInfo = ChallengeInfoVo()
     val challengeNickname: String get() = challengeInfo.nickname
     val challengePoint: Int get() = challengeInfo.point
