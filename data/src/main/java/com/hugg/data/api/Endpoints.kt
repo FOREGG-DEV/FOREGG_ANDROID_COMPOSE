@@ -37,13 +37,8 @@ object Endpoints {
 
     object DailyRecord {
         const val DAILY = "/daily"
-        const val WRITE = "$DAILY/write"
-        const val SIDEEFFECT = "$DAILY/sideEffect"
-        const val SIDEEFFECTLIST = "$DAILY/sideEffectList"
-        const val EMOTION = "$DAILY/{id}/emotion"
         const val SHARE_MEDICAL = "$DAILY/shareMedical/{id}"
-        const val GET_INJECTION_INFO = "$DAILY/injectionInfo/{id}"
-        const val ID = "$DAILY/{id}"
+        const val GET_INJECTION_INFO = "$DAILY/medicalInfo/{id}"
     }
 
     object DailyHugg {
@@ -99,10 +94,5 @@ object Endpoints {
         const val MY_INFO = "/myPage"
         const val MODIFY = "$MY_INFO/modifySurgery"
         const val GET_MEDICAL = "$MY_INFO/medicalInfo"
-    }
-
-    object INFORMATION{
-        const val ALL = "/information"
-        const val BY_TYPE = "$ALL/bySort"
     }
 }
