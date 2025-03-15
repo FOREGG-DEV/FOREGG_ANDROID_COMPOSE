@@ -18,7 +18,9 @@ import javax.inject.Inject
 class SplashViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
     private val authRepository: AuthRepository,
-) : BaseViewModel<PageState.Default>(PageState.Default) {
+) : BaseViewModel<SplashPageState>(
+    SplashPageState()
+) {
 
     fun getVersion(){
         viewModelScope.launch {
@@ -30,7 +32,7 @@ class SplashViewModel @Inject constructor(
 
     private fun handleSuccessGetVersion(version : String){
         if(version == UserInfo.VERSION) checkLogin()
-        else emitEventFlow(SplashEvent.GoToUpdateEvent)
+        else updateShowUpdateDialog(true)
     }
 
     private fun checkLogin(){
@@ -53,5 +55,9 @@ class SplashViewModel @Inject constructor(
 
     private fun goToSign(){
         emitEventFlow(SplashEvent.GoToSignEvent)
+    }
+
+    fun updateShowUpdateDialog(isShow : Boolean){
+        updateState(uiState.value.copy(showUpdateDialog = isShow))
     }
 }

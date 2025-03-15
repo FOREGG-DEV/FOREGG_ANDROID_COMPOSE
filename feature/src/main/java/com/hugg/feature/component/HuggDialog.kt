@@ -166,6 +166,73 @@ fun HuggDialog(
 }
 
 @Composable
+fun HuggExplainDialog(
+    title : String = "",
+    explain : String = "",
+    positiveText: String = "",
+    onClickPositive : () -> Unit = {},
+    onClickCancel : () -> Unit = {},
+){
+    Dialog(
+        onDismissRequest = onClickCancel,
+        properties = DialogProperties(usePlatformDefaultWidth = false)
+    ){
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth()
+                .background(color = White, shape = RoundedCornerShape(12.dp))
+                .padding(16.dp)
+        ) {
+            HuggText(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+                maxLines = 1,
+                text = title,
+                style = HuggTypography.h2,
+                color = Black,
+                textAlign = TextAlign.Center
+            )
+            
+            Spacer(modifier = Modifier.size(8.dp))
+
+            HuggText(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+                text = explain,
+                style = HuggTypography.p1_l_height,
+                color = Gs50,
+                textAlign = TextAlign.Center
+            )
+
+            Spacer(modifier = Modifier.size(8.dp))
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp)
+                    .background(color = MainNormal, shape = RoundedCornerShape(4.dp))
+                    .clickable(
+                        onClick = {
+                            onClickCancel()
+                            onClickPositive()
+                        },
+                    ),
+                contentAlignment = Alignment.Center
+            ){
+                HuggText(
+                    text = positiveText,
+                    style = HuggTypography.h2,
+                    color = White
+                )
+            }
+        }
+    }
+}
+
+@Composable
 fun HuggErrorDialog(
     errorCode : String = "",
     onClickPositive : () -> Unit = {},

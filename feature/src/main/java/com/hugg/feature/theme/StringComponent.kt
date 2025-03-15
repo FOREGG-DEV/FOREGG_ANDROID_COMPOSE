@@ -48,6 +48,9 @@ const val DIALOG_MAX_LENGTH = "최대 %d"
 // --------- 기타 --------- //
 const val COPY_COMPLETE_TEXT = "클립보드에 배우자 코드가 복사되었어요!"
 const val COPY_COMPLETE_MAIL_TEXT = "클립보드에 메일주소가 복사되었어요!"
+const val UPDATE_DIALOG_TITLE = "앱 업데이트가 필요해요"
+const val UPDATE_DIALOG_CONTENT = "안정적인 서비스 사용을 위해\n최신 버전으로 업데이트 해주세요!"
+const val UPDATE_DIALOG_BUTTON = "플레이스토어 가기"
 
 // --------- 온보딩 --------- //
 const val ONBOARDING_TITLE_1 = "주사 맞을 시간엔 알람이 울려요"

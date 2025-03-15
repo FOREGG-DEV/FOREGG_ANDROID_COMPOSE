@@ -15,13 +15,23 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hugg.feature.R
+import com.hugg.feature.component.HuggDialog
+import com.hugg.feature.component.HuggExplainDialog
+import com.hugg.feature.theme.ACCOUNT_LIST_DIALOG_DELETE
 import com.hugg.feature.theme.Background
+import com.hugg.feature.theme.Sunday
+import com.hugg.feature.theme.UPDATE_DIALOG_BUTTON
+import com.hugg.feature.theme.UPDATE_DIALOG_CONTENT
+import com.hugg.feature.theme.UPDATE_DIALOG_TITLE
+import com.hugg.feature.theme.WORD_DELETE
 
 @Composable
 fun HuggSplashContainer(
@@ -29,6 +39,7 @@ fun HuggSplashContainer(
     navigateToOnboarding : () -> Unit = {},
     navigateToHome : () -> Unit = {},
 ){
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
 
@@ -41,9 +52,18 @@ fun HuggSplashContainer(
             when(event) {
                 SplashEvent.GoToMainEvent -> navigateToHome()
                 SplashEvent.GoToSignEvent -> navigateToOnboarding()
-                SplashEvent.GoToUpdateEvent -> goToPlayStore(context)
             }
         }
+    }
+
+    if(uiState.showUpdateDialog){
+        HuggExplainDialog(
+            title = UPDATE_DIALOG_TITLE,
+            explain = UPDATE_DIALOG_CONTENT,
+            positiveText = UPDATE_DIALOG_BUTTON,
+            onClickCancel = { viewModel.updateShowUpdateDialog(false) },
+            onClickPositive = { goToPlayStore(context) },
+        )
     }
 
     HuggSplashScreen()
