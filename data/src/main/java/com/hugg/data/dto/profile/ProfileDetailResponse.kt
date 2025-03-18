@@ -20,4 +20,6 @@ data class ProfileDetailResponse(
     val ssn : String = "",
     @SerializedName("spouseCode")
     val spouseCode : String = "",
+    @SerializedName("challengeNickname")
+    val challengeNickname : String = "",
 )

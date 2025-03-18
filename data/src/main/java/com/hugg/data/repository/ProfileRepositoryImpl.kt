@@ -20,10 +20,6 @@ class ProfileRepositoryImpl @Inject constructor(
         return apiLaunch(apiCall = { profileApi.getMyInfo() }, ProfileDetailResponseMapper )
     }
 
-    override suspend fun editMyInfo(request: EditMyInfoRequestVo): Flow<ApiState<Unit>> {
-        return apiLaunch(apiCall = { profileApi.editMyInfo(request) }, UnitResponseMapper )
-    }
-
     override suspend fun getMyMedicineInjection(request: String): Flow<ApiState<List<MyMedicineInjectionResponseVo>>> {
         return apiLaunch(apiCall = { profileApi.getMyMedicineInjectionInfo(request) }, MyMedicineInjectionResponseMapper )
     }

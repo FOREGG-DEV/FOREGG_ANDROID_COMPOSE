@@ -65,13 +65,6 @@ interface ChallengeApi {
         @Query("size") size: Int
     ): Response<ApiResponse<ChallengeSupportResponse>>
 
-    @POST(Endpoints.Challenge.ACTION)
-    suspend fun sendChallengeAction(
-        @Path(PATH_CHALLENGE_ID) id: Long,
-        @Query(QUERY_CHEER_TYPE) cheerType: String,
-        @Query(QUERY_RECEIVER_ID) receiverId: Long
-    ): Response<ApiResponse<Unit>>
-
     @GET(Endpoints.Challenge.NAME)
     suspend fun getChallengeName(): Response<ApiResponse<String>>
 

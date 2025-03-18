@@ -24,7 +24,7 @@ import javax.inject.Inject
 
 class ChallengeRepositoryImpl @Inject constructor(
     private val challengeApi: ChallengeApi,
-    private val dataStore: HuggDataStore
+    //private val dataStore: HuggDataStore
 ) : ChallengeRepository, BaseRepository() {
 
     override suspend fun getAllCommonChallenge(): Flow<ApiState<List<ChallengeCardVo>>> {
@@ -35,17 +35,17 @@ class ChallengeRepositoryImpl @Inject constructor(
         return apiLaunch(apiCall = { challengeApi.getMyChallenge() }, MyChallengeResponseMapper)
     }
 
-    override suspend fun getNickname(): Flow<String?> {
-        return dataStore.challengeNickname
-    }
-
-    override suspend fun saveNickname(nickname: String) {
-        return dataStore.saveNickname(nickname)
-    }
-
-    override suspend fun removeNickname() {
-        dataStore.removeNickname()
-    }
+//    override suspend fun getNickname(): Flow<String?> {
+//        return dataStore.challengeNickname
+//    }
+//
+//    override suspend fun saveNickname(nickname: String) {
+//        return dataStore.saveNickname(nickname)
+//    }
+//
+//    override suspend fun removeNickname() {
+//        dataStore.removeNickname()
+//    }
 
     override suspend fun joinChallenge(request: ChallengeNicknameVo): Flow<ApiState<Unit>> {
         return apiLaunch(apiCall = { challengeApi.joinChallenge(request = request) }, UnitResponseMapper)

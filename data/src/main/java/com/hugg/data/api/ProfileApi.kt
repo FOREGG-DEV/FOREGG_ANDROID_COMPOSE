@@ -20,11 +20,6 @@ interface ProfileApi {
     @GET(Endpoints.PROFILE.MY_INFO)
     suspend fun getMyInfo() : Response<ApiResponse<ProfileDetailResponse>>
 
-    @PUT(Endpoints.PROFILE.MODIFY)
-    suspend fun editMyInfo(
-        @Body request : EditMyInfoRequestVo
-    ) : Response<ApiResponse<Unit>>
-
     @GET(Endpoints.PROFILE.GET_MEDICAL)
     suspend fun getMyMedicineInjectionInfo(
         @Query(QUERY_SORT) sort : String
