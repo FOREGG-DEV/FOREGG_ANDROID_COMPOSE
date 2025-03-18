@@ -8,7 +8,9 @@ import com.hugg.domain.model.request.challenge.ChallengeNicknameVo
 import com.hugg.domain.model.request.challenge.ChallengeThoughtsVo
 import com.hugg.domain.model.response.challenge.ChallengeCardVo
 import com.hugg.domain.model.response.challenge.MyChallengeVo
+import com.hugg.domain.model.response.profile.ProfileDetailResponseVo
 import com.hugg.domain.repository.ChallengeRepository
+import com.hugg.domain.repository.ProfileRepository
 import com.hugg.feature.base.BaseViewModel
 import com.hugg.feature.theme.CREATE_MY_CHALLENGE
 import com.hugg.feature.theme.CREATE_MY_CHALLENGE_DESCRIPTION
@@ -25,7 +27,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ChallengeMainViewModel @Inject constructor(
-    private val challengeRepository: ChallengeRepository
+    private val challengeRepository: ChallengeRepository,
+    private val profileRepository: ProfileRepository
 ) : BaseViewModel<ChallengeMainPageState>(ChallengeMainPageState()) {
     private val _showUnlockAnimationFlow: MutableSharedFlow<Boolean> = MutableSharedFlow()
     val showUnlockAnimationFlow = _showUnlockAnimationFlow.asSharedFlow()
@@ -101,19 +104,18 @@ class ChallengeMainViewModel @Inject constructor(
             challengeRepository.joinChallenge(
                 request = ChallengeNicknameVo(nickname)
             ).collect {
-                resultResponse(it, { onSuccessCreateChallenge(nickname) }, ::onFailedCreateChallenge)
+                resultResponse(it, { onSuccessCreateChallengeNickname(nickname) }, ::onFailedCreateChallengeNickname)
             }
         }
     }
 
-    private fun onSuccessCreateChallenge(nickname: String) {
+    private fun onSuccessCreateChallengeNickname(nickname: String) {
         updateShowDialog(true)
-        UserInfo.updateChallengeNickname(nickname)
-        saveChallengeNickname(nickname)
+        getMyInfo()
         getChallengeList()
     }
 
-    private fun onFailedCreateChallenge(e: String) {
+    private fun onFailedCreateChallengeNickname(e: String) {
         when (e) {
             StatusCode.CHALLENGE.DUPLICATE_NICKNAME -> {
                 emitEventFlow(ChallengeMainEvent.DuplicateNickname)
@@ -121,12 +123,6 @@ class ChallengeMainViewModel @Inject constructor(
             StatusCode.CHALLENGE.EXIST_NICKNAME -> {
                 emitEventFlow(ChallengeMainEvent.ExistNickname)
             }
-        }
-    }
-
-    private fun saveChallengeNickname(nickname: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            challengeRepository.saveNickname(nickname)
         }
     }
 
@@ -291,5 +287,17 @@ class ChallengeMainViewModel @Inject constructor(
     private fun updatePoint(point : Int){
         UserInfo.updateChallengePoint(point)
         updateState(uiState.value.copy(challengePoint = point))
+    }
+
+    private fun getMyInfo(){
+        viewModelScope.launch {
+            profileRepository.getMyInfo().collect{
+                resultResponse(it, ::handleSuccessGetMyInfo)
+            }
+        }
+    }
+
+    private fun handleSuccessGetMyInfo(result : ProfileDetailResponseVo){
+        UserInfo.updateInfo(result)
     }
 }

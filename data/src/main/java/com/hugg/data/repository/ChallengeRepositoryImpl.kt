@@ -2,7 +2,6 @@ package com.hugg.data.repository
 
 import com.hugg.data.api.ChallengeApi
 import com.hugg.data.base.BaseRepository
-import com.hugg.data.datastore.HuggDataStore
 import com.hugg.data.mapper.StringResponseMapper
 import com.hugg.data.mapper.UnitResponseMapper
 import com.hugg.data.mapper.challenge.AllChallengeResponseMapper
@@ -24,7 +23,6 @@ import javax.inject.Inject
 
 class ChallengeRepositoryImpl @Inject constructor(
     private val challengeApi: ChallengeApi,
-    //private val dataStore: HuggDataStore
 ) : ChallengeRepository, BaseRepository() {
 
     override suspend fun getAllCommonChallenge(): Flow<ApiState<List<ChallengeCardVo>>> {
@@ -34,18 +32,6 @@ class ChallengeRepositoryImpl @Inject constructor(
     override suspend fun getMyChallenge(): Flow<ApiState<MyChallengeVo>> {
         return apiLaunch(apiCall = { challengeApi.getMyChallenge() }, MyChallengeResponseMapper)
     }
-
-//    override suspend fun getNickname(): Flow<String?> {
-//        return dataStore.challengeNickname
-//    }
-//
-//    override suspend fun saveNickname(nickname: String) {
-//        return dataStore.saveNickname(nickname)
-//    }
-//
-//    override suspend fun removeNickname() {
-//        dataStore.removeNickname()
-//    }
 
     override suspend fun joinChallenge(request: ChallengeNicknameVo): Flow<ApiState<Unit>> {
         return apiLaunch(apiCall = { challengeApi.joinChallenge(request = request) }, UnitResponseMapper)

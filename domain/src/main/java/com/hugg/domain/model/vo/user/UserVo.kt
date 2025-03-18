@@ -9,4 +9,5 @@ data class UserVo(
     val genderType: GenderType = GenderType.FEMALE,
     val spouse : String = "",
     val round : Int = -1,
+    val challengeNickname : String = "",
 )

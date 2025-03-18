@@ -56,7 +56,6 @@ class MyPageProfileManagementViewModel @Inject constructor(
     }
 
     private fun onSuccessUnregister() {
-        viewModelScope.launch { challengeRepository.removeNickname() }
         emitEventFlow(MyPageProfileManagementEvent.SuccessUnregisterEvent)
     }
 }

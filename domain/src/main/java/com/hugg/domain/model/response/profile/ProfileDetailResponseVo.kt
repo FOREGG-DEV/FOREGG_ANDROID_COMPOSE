@@ -12,5 +12,6 @@ data class ProfileDetailResponseVo(
     val spouse : String = "",
     val genderType: GenderType = GenderType.FEMALE,
     val ssn : String = "",
-    val shareCode : String = ""
+    val shareCode : String = "",
+    val challengeNickname : String = "",
 )

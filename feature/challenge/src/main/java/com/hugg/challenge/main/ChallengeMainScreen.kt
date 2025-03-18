@@ -112,7 +112,7 @@ fun ChallengeMainScreen(
         }
     }
 
-    if (UserInfo.challengeNickname.isEmpty()) {
+    if (UserInfo.info.challengeNickname.isEmpty()) {
         HuggInputDialog(
             title = CHALLENGE_INPUT_DIALOG_TITLE,
             maxLength = 15,
