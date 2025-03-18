@@ -21,5 +21,5 @@ data class ProfileDetailResponse(
     @SerializedName("spouseCode")
     val spouseCode : String = "",
     @SerializedName("challengeNickname")
-    val challengeNickname : String = "",
+    val challengeNickname : String? = "",
 )

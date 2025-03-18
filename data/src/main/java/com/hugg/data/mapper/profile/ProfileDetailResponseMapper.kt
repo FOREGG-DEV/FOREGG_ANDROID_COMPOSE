@@ -19,7 +19,7 @@ object ProfileDetailResponseMapper: Mapper.ResponseMapper<ProfileDetailResponse,
                 genderType = if(ssn.split("-")[1].toInt() % 2 == 0) GenderType.FEMALE else GenderType.MALE,
                 ssn = ssn,
                 shareCode = spouseCode,
-                challengeNickname = challengeNickname
+                challengeNickname = challengeNickname ?: ""
             )
         }?: ProfileDetailResponseVo()
     }
