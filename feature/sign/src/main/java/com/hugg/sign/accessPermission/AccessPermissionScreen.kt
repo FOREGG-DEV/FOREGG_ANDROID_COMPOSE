@@ -247,16 +247,14 @@ fun AccessPermissionScreen(
     }
 }
 
-fun checkAndRequestPermissions(
+private fun checkAndRequestPermissions(
     context: Context,
     permissions: Array<String>,
     launcher: ManagedActivityResultLauncher<Array<String>, Map<String, Boolean>>,
 ) {
     if (permissions.all {
             ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
-        }){
-        ForeggLog.D("이미 모든 권한이 부여되었습니다.")
-    }
+        }){ return }
     else {
         launcher.launch(permissions)
     }

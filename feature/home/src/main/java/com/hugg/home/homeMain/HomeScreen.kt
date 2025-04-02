@@ -1,6 +1,12 @@
 package com.hugg.home.homeMain
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -33,6 +39,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -57,6 +64,7 @@ import com.hugg.feature.theme.*
 import com.hugg.feature.uiItem.DailyHuggListItem
 import com.hugg.feature.uiItem.HomeMyChallengeItem
 import com.hugg.feature.uiItem.HomeTodayScheduleItem
+import com.hugg.feature.util.ForeggLog
 import com.hugg.feature.util.HuggToast
 import com.hugg.feature.util.TimeFormatter
 import com.hugg.feature.util.UserInfo
@@ -78,6 +86,31 @@ fun HomeContainer(
     val pagerState = rememberPagerState()
     val interactionSource = remember { MutableInteractionSource() }
     val context = LocalContext.current
+
+    val permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        arrayOf(
+            Manifest.permission.POST_NOTIFICATIONS,
+            Manifest.permission.CAMERA
+        )
+    } else {
+        arrayOf(
+            Manifest.permission.CAMERA
+        )
+    }
+
+    val launcherMultiplePermissions = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissionsMap ->
+        val areGranted = permissionsMap.values.reduce { acc, next -> acc && next }
+    }
+
+    LaunchedEffect(Unit) {
+        checkAndRequestPermissions(
+            context,
+            permissions,
+            launcherMultiplePermissions
+        )
+    }
 
     LaunchedEffect(Unit){
         viewModel.getHome()
@@ -434,5 +467,18 @@ fun DailyHuggView(
                 Spacer(modifier = Modifier.size(8.dp))
             }
         }
+    }
+}
+
+private fun checkAndRequestPermissions(
+    context: Context,
+    permissions: Array<String>,
+    launcher: ManagedActivityResultLauncher<Array<String>, Map<String, Boolean>>,
+) {
+    if (permissions.all {
+            ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
+        }){ return }
+    else {
+        launcher.launch(permissions)
     }
 }
