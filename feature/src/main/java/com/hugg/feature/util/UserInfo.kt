@@ -5,7 +5,7 @@ import com.hugg.domain.model.vo.challenge.ChallengeInfoVo
 import com.hugg.domain.model.vo.user.UserVo
 
 object UserInfo {
-    const val VERSION = "1.0.1"
+    const val VERSION = "1.0.3" // 반드시 수정해야 함 업데이트 할 때
     private var challengeInfo = ChallengeInfoVo()
     val challengePoint: Int get() = challengeInfo.point
     var info: UserVo = UserVo()
