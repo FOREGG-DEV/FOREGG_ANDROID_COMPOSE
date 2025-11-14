@@ -12,4 +12,4 @@ inline fun <reified T : Serializable> Bundle.serializable(key: String): T? = whe
     else -> @Suppress("DEPRECATION") getSerializable(key) as? T
 }
 
-const val BASE_URL = "http://ec2-15-164-204-24.ap-northeast-2.compute.amazonaws.com:8080"
+const val BASE_URL = "http://3.35.84.188:8080"
