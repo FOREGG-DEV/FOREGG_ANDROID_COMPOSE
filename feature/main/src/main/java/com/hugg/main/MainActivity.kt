@@ -6,6 +6,7 @@ import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import com.hugg.feature.util.ForeggLog
 import com.hugg.main.fcm.AlarmService
 import com.hugg.main.fcm.PendingExtraValue
@@ -20,6 +21,7 @@ class MainActivity : ComponentActivity() {
         val stopIntent = Intent(this, AlarmService::class.java).apply {
             action = AlarmService.STOP_ALARM
         }
+        enableEdgeToEdge()
         startService(stopIntent)
 
         setContent {

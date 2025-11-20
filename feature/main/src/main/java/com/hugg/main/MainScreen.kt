@@ -10,8 +10,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -34,6 +37,7 @@ import com.hugg.feature.base.LoadingManager
 import com.hugg.feature.component.HuggErrorDialog
 import com.hugg.feature.component.HuggText
 import com.hugg.feature.component.LoadingDialog
+import com.hugg.feature.theme.Background
 import com.hugg.feature.theme.Gs50
 import com.hugg.feature.theme.Gs80
 import com.hugg.feature.theme.HuggTheme
@@ -95,8 +99,11 @@ fun MainScreen(
 
     HuggTheme {
         Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = Background)
+                .statusBarsPadding(),
+            color = Background
         ) {
             Column(
                 modifier = Modifier.fillMaxSize()
@@ -104,7 +111,10 @@ fun MainScreen(
                 Column(
                     modifier = Modifier.weight(1f)
                 ) {
-                    NavHost(navController = navController, startDestination = Routes.SignGraph.route) {
+                    NavHost(
+                        navController = navController,
+                        startDestination = Routes.SignGraph.route
+                    ) {
                         signNavGraph(navController, initialNavigation)
                         homeGraph(navController)
                         calendarGraph(navController)
@@ -138,6 +148,7 @@ fun BottomNavView(
         modifier = Modifier
             .fillMaxWidth()
             .background(color = White)
+            .navigationBarsPadding()
             .padding(horizontal = 20.dp, vertical = 4.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically

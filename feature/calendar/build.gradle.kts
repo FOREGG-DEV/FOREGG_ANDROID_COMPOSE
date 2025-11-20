@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.hugg.calendar"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 24
