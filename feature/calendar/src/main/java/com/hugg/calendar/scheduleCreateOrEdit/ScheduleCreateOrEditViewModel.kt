@@ -77,7 +77,9 @@ class ScheduleCreateOrEditViewModel @Inject constructor(
     fun onClickMinusBtn(){
         if(uiState.value.repeatCount == 1) return
         updateRepeatCount(uiState.value.repeatCount - 1)
-        val updatedList = uiState.value.repeatTimeList.toMutableList().apply { removeLast() }
+        val updatedList = uiState.value.repeatTimeList.toMutableList().apply {
+            removeAt(uiState.value.repeatTimeList.lastIndex)
+        }
         updateRepeatTimeList(updatedList)
     }
 
