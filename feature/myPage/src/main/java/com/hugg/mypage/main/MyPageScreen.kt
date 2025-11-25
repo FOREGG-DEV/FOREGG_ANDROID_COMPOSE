@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -64,6 +66,7 @@ fun MyPageContainer(
         navigateGoToRegistration = navigateGoToRegistration,
         onClickNotice = { goToWebLink(context, MY_PAGE_NOTICE_LINK) },
         onClickFaq = { goToWebLink(context, MY_PAGE_FAQ_LINK) },
+        onCheckedChange = { checked -> viewModel.alarmSetting(checked)},
         onClickTermsOfService = { goToWebLink(context, MY_PAGE_TERMS_OF_SERVICE_LINK) },
         onClickBackgroundOptimization = { if(!checkAlreadyBatteryOptimization(context)) openBatteryOptimizationSettings(context) }
     )
@@ -79,6 +82,7 @@ fun MyPageScreen(
     navigateGoToRegistration : () -> Unit = {},
     onClickNotice : () -> Unit = {},
     onClickFaq : () -> Unit = {},
+    onCheckedChange: (Boolean) -> Unit = {},
     onClickTermsOfService : () -> Unit = {},
     onClickBackgroundOptimization : () -> Unit = {},
 ) {
@@ -242,6 +246,43 @@ fun MyPageScreen(
                     color = Black,
                 )
             }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp)
+                    .onThrottleClick(
+                        onClick = onClickBackgroundOptimization,
+                        interactionSource = interactionSource
+                    ),
+                contentAlignment = Alignment.CenterStart
+            ) {
+
+                Row {
+                    HuggText(
+                        modifier = Modifier.weight(1f),
+                        text = NOTIFICATION_SETTING,
+                        style = HuggTypography.p2,
+                        color = Black,
+                    )
+
+                    Switch(
+                        modifier = Modifier
+                            .size(width = 49.dp, height = 28.dp),
+                        checked = uiState.alarmSetting,
+                        onCheckedChange = onCheckedChange,
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = White,
+                            checkedTrackColor = MainNormal,
+                            checkedBorderColor = MainNormal,
+                            uncheckedThumbColor = White,
+                            uncheckedTrackColor = Gs20,
+                            uncheckedBorderColor = Gs20,
+                        ),
+                        thumbContent = {}
+                    )
+                }
+            }
         }
 
         Spacer(modifier = Modifier.size(8.dp))
@@ -280,3 +321,4 @@ private fun goToWebLink(context: Context, url : String){
 internal fun PreviewMainContainer() {
     MyPageScreen()
 }
+

@@ -12,11 +12,18 @@ import android.os.Build
 import android.os.PowerManager
 import android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
 import androidx.core.app.NotificationCompat
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.hugg.domain.repository.ForeggJwtRepository
 import com.hugg.main.MainActivity
 import com.hugg.feature.R
 import com.hugg.feature.util.ForeggLog
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.runBlocking
 
 class FcmNotification : FirebaseMessagingService() {
 
@@ -27,9 +34,11 @@ class FcmNotification : FirebaseMessagingService() {
         const val BODY = "body"
         const val NAVIGATION = "navigation"
         const val VIBRATION = "vibration"
+        val ALARM_ON_KEY = booleanPreferencesKey("alarm_on")
     }
 
     private lateinit var notificationManager: NotificationManager
+    private val Context.tokenDataStore by preferencesDataStore("foregg_data_store")
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
@@ -38,7 +47,13 @@ class FcmNotification : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
+        val isAlarmOn = runBlocking {
+            applicationContext.tokenDataStore.data
+                .first()[ALARM_ON_KEY] ?: false
+        }
+        ForeggLog.D("isAlarmOn $isAlarmOn")
         if(message.data.isEmpty()) return
+        if(isAlarmOn) return
         if(message.data[VIBRATION].toBoolean() && !isAppInForeground()) setAlarm(message.data)
         else sendNotification(message.data)
     }

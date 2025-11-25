@@ -294,6 +294,7 @@ const val MY_PAGE_FAQ = "FAQ"
 const val MY_PAGE_CS_ASK = "문의사항"
 const val MY_PAGE_TERMS_OF_SERVICE = "이용약관"
 const val MY_PAGE_BACKGROUND_OPTIMIZATION_DIALOG = "백그라운드 허용 설정"
+
 const val MY_PAGE_PROFILE_MANAGEMENT = "계정관리"
 const val MY_PAGE_NOTICE_LINK = "https://abouthugg.notion.site/Hugg-c673654437704c938ec5d7762ca338a0?pvs=4"
 const val MY_PAGE_FAQ_LINK = "https://abouthugg.notion.site/Hugg-Q-A-1d703027d86d4dd2abafce3ad594927e?pvs=4"
@@ -349,6 +350,7 @@ const val NOTIFICATION_MEDICINE_SHARE = "약 기록을 남편에게 공유할 �
 
 const val NOTIFICATION_SHARE_BTN = "남편에게 공유"
 const val SUCCESS_SHARE_COMMENT = "성공적으로 알림을 전송했어요!"
+const val NOTIFICATION_SETTING = "알림 설정"
 
 // --------- 카카오 공유 --------- //
 const val KAKAO_SHARE_TITLE = "여보, 오늘 주사 잘 맞았어?"

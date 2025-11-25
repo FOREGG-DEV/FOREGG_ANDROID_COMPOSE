@@ -10,5 +10,7 @@ interface ForeggJwtRepository {
     suspend fun saveAccessTokenAndRefreshToken(request: SaveForeggJwtRequestVo): Flow<Boolean>
     fun getAccessToken(): Flow<String>
     fun getRefreshToken(): Flow<String>
+    fun setAlarmSetting(flag : Boolean): Flow<Boolean>
+    fun getAlarmSetting(): Flow<Boolean>
     suspend fun reIssueToken(request : String): Flow<ApiState<ForeggJwtResponseVo>>
 }

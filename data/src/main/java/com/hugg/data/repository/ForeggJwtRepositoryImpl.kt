@@ -1,6 +1,7 @@
 package com.hugg.data.repository
 
 import android.content.Context
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -25,6 +26,7 @@ class ForeggJwtRepositoryImpl @Inject constructor(
     private companion object {
         val ACCESS_TOKEN_KEY = stringPreferencesKey("access_token")
         val REFRESH_TOKEN_KEY = stringPreferencesKey("refresh_token")
+        val ALARM_ON_KEY = booleanPreferencesKey("alarm_on")
     }
 
     private val Context.tokenDataStore by preferencesDataStore("foregg_data_store")
@@ -47,6 +49,21 @@ class ForeggJwtRepositoryImpl @Inject constructor(
     override fun getRefreshToken(): Flow<String> {
         return context.tokenDataStore.data.map { prefs ->
             prefs[REFRESH_TOKEN_KEY]?.toString() ?: ""
+        }
+    }
+
+    override fun setAlarmSetting(flag: Boolean): Flow<Boolean> = flow {
+        flag.run {
+            context.tokenDataStore.edit { prefs ->
+                prefs[ALARM_ON_KEY] = flag
+                emit(true)
+            }
+        }
+    }.catch { emit(false) }
+
+    override fun getAlarmSetting(): Flow<Boolean> {
+        return context.tokenDataStore.data.map { prefs ->
+            prefs[ALARM_ON_KEY] ?: false
         }
     }
 
