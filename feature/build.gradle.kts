@@ -72,4 +72,6 @@ dependencies {
 
     implementation(Libraries.COIL_COMPOSE)
     implementation(Libraries.LOTTIE)
+
+    implementation(AndroidX.DATA_STORE_PREFERENCES)
 }

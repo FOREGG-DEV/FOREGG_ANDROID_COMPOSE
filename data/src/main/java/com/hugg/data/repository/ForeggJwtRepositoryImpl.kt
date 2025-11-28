@@ -1,10 +1,11 @@
 package com.hugg.data.repository
 
 import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
 import com.hugg.data.api.ForeggJwtTokenApi
 import com.hugg.data.base.BaseRepository
 import com.hugg.data.mapper.sign.ForeggJwtResponseMapper
@@ -22,6 +23,7 @@ import javax.inject.Inject
 class ForeggJwtRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val plubJwtTokenApi: ForeggJwtTokenApi,
+    private val dataStore: DataStore<Preferences>
 ) : ForeggJwtRepository, BaseRepository() {
     private companion object {
         val ACCESS_TOKEN_KEY = stringPreferencesKey("access_token")
@@ -29,10 +31,9 @@ class ForeggJwtRepositoryImpl @Inject constructor(
         val ALARM_ON_KEY = booleanPreferencesKey("alarm_on")
     }
 
-    private val Context.tokenDataStore by preferencesDataStore("foregg_data_store")
     override suspend fun saveAccessTokenAndRefreshToken(request: SaveForeggJwtRequestVo): Flow<Boolean> = flow {
         request.run {
-            context.tokenDataStore.edit { prefs ->
+            dataStore.edit { prefs ->
                 prefs[ACCESS_TOKEN_KEY] = request.accessToken
                 prefs[REFRESH_TOKEN_KEY] = request.refreshToken
             }
@@ -41,20 +42,20 @@ class ForeggJwtRepositoryImpl @Inject constructor(
     }.catch { emit(false) }
 
     override fun getAccessToken(): Flow<String> {
-        return context.tokenDataStore.data.map { prefs ->
+        return dataStore.data.map { prefs ->
             prefs[ACCESS_TOKEN_KEY]?.toString() ?: ""
         }
     }
 
     override fun getRefreshToken(): Flow<String> {
-        return context.tokenDataStore.data.map { prefs ->
+        return dataStore.data.map { prefs ->
             prefs[REFRESH_TOKEN_KEY]?.toString() ?: ""
         }
     }
 
     override fun setAlarmSetting(flag: Boolean): Flow<Boolean> = flow {
         flag.run {
-            context.tokenDataStore.edit { prefs ->
+            dataStore.edit { prefs ->
                 prefs[ALARM_ON_KEY] = flag
                 emit(true)
             }
@@ -62,7 +63,7 @@ class ForeggJwtRepositoryImpl @Inject constructor(
     }.catch { emit(false) }
 
     override fun getAlarmSetting(): Flow<Boolean> {
-        return context.tokenDataStore.data.map { prefs ->
+        return dataStore.data.map { prefs ->
             prefs[ALARM_ON_KEY] ?: false
         }
     }
